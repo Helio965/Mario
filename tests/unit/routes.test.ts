@@ -10,7 +10,8 @@ it('percorre a primeira fase usando corrida e saltos reais',()=>{
   if(p.grounded&&cooldown===0) {
    const wall=g.platforms.some(s=>s.alive&&s.kind!=='hidden'&&s.x>=p.x+p.w-2&&s.x<p.x+p.w+74&&s.y<p.y+p.h-3&&s.y+s.h>p.y);
    const groundAhead=g.platforms.some(s=>s.alive&&s.kind!=='hidden'&&p.x+p.w+12>=s.x&&p.x+p.w+12<=s.x+s.w&&s.y>=p.y+p.h-8&&s.y<=p.y+p.h+80);
-   if(wall||!groundAhead) {hold=0.4;cooldown=0.55;}
+   const enemy=g.enemies.some(e=>e.alive&&e.x>p.x&&e.x<p.x+p.w+125&&e.y<p.y+p.h+16&&e.y+e.h>p.y);
+   if(wall||!groundAhead||enemy) {hold=0.4;cooldown=0.55;}
   }
   g.update(1/120,{...EMPTY_INPUT,right:true,run:true,jump:hold>0});
  }

@@ -1,6 +1,8 @@
 import { LEVELS } from '../data/levels';
 import { approach, FIXED_DT, GRAVITY, JUMP_SPEED, moveBody, overlaps } from './physics';
-import { interactWorld, updatePlatforms } from './interactions';
+import { burst, interactWorld, updatePlatforms } from './interactions';
+import { updateEnemies } from './enemies';
+import { updatePowers } from './powers';
 import type { Coin, Enemy, GameEvent, GameStatus, InputState, Item, Level, Particle, Platform, Player, Projectile } from './types';
 export class Game {
   level!: Level;
@@ -79,7 +81,7 @@ export class Game {
     p.x = Math.max(0, Math.min(p.x, this.level.width - p.w));
     this.interactions(dt, input, collision.heads);
     if (p.y > this.level.height + 100 || this.time <= 0) this.die();
-    p.animation = p.invulnerable > 0 && p.power !== 'small' ? 'hurt' : !p.grounded ? p.vy < 0 ? 'jump' : 'fall' : Math.abs(p.vx) > 260 ? 'run' : Math.abs(p.vx) > 15 ? 'walk' : 'idle';
+    if(this.status==='playing') p.animation = p.invulnerable > 0 && p.invulnerable<1.2 ? 'hurt' : !p.grounded ? p.vy < 0 ? 'jump' : 'fall' : Math.abs(p.vx) > 260 ? 'run' : Math.abs(p.vx) > 15 ? 'walk' : 'idle';
     const targetX = Math.max(0, Math.min(this.level.width - 960, p.x - 310 + p.vx * 0.15));
     const targetY = Math.max(0, Math.min(this.level.height - 540, p.y - 250));
     this.camera.x += (targetX - this.camera.x) * (1 - Math.exp(-6 * dt));
@@ -87,10 +89,21 @@ export class Game {
   }
   protected interactions(dt: number, input: InputState, heads: Platform[]) {
     interactWorld(this,input,heads);
+    updateEnemies(this,dt);
+    updatePowers(this,dt,input);
     const exit={x:this.level.exit.x-12,y:this.level.exit.y-110,w:44,h:110};
     if(overlaps(this.player,exit)&&!this.enemies.some(e=>e.kind==='boss'&&e.alive)) this.finish();
     for(const particle of this.particles) {particle.life-=dt;particle.x+=particle.vx*dt;particle.y+=particle.vy*dt;particle.vy+=300*dt;}
     this.particles=this.particles.filter(v=>v.life>0);
+  }
+  hurt() {
+    const p=this.player;
+    if(this.status!=='playing'||p.invulnerable>0||p.star>0) return;
+    this.events.push({type:'hurt'});this.shake=0.12;burst(this,p.x,p.y,'#ef9473');
+    if(p.power==='small') {this.die();return;}
+    if(p.power==='fire') p.power='grown';
+    else {p.power='small';p.y+=p.h-30;p.h=30;}
+    p.invulnerable=2;p.vx=-p.facing*100;
   }
   finish() {
     if(this.status!=='playing') return;
@@ -105,6 +118,6 @@ export class Game {
   respawn() {
     if (this.lives <= 0) { this.status = 'gameover'; return; }
     const point = this.checkpointReached ? this.level.checkpoint : this.level.spawn;
-    this.spawn(point.x, point.y); this.status = 'playing'; this.time = Math.max(this.time, 90);
+    this.spawn(point.x, point.y); this.status = 'playing'; this.time = Math.max(this.time, 90);this.projectiles=[];this.pipeCooldown=0;
   }
 }
