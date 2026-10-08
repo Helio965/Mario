@@ -14,7 +14,7 @@ export class Renderer extends PixelPainter {
   constructor(canvas: HTMLCanvasElement) {
     const context = canvas.getContext('2d', { alpha: false });
     if (!context) throw new Error('Seu navegador precisa de Canvas 2D para jogar.');
-    super({ ctx: context, frame: 0, cameraX: 0, cameraY: 0, world: 1, theme: THEMES[0] });
+    super({ ctx: context, frame: 0, cameraX: 0, cameraY: 0, world: 1, theme: THEMES[0], effects: true });
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
     context.imageSmoothingEnabled = false;
@@ -23,6 +23,7 @@ export class Renderer extends PixelPainter {
   }
 
   public render(game: Game, now: number): void {
+    this.scene.effects = this.effects;
     this.frame = Number.isFinite(game.elapsed) ? game.elapsed : now / 1000;
     this.world = game.level.world;
     this.theme = THEMES[this.world - 1] || THEMES[0];
@@ -70,6 +71,7 @@ export class Renderer extends PixelPainter {
   }
 
   public backdrop(world = 1): void {
+    this.scene.effects = this.effects;
     this.world = Math.max(1, Math.min(THEMES.length, world));
     this.theme = THEMES[this.world - 1];
     this.frame = 2.4;
@@ -247,13 +249,14 @@ export class Renderer extends PixelPainter {
         x += Math.sin(game.elapsed * (hazard.speed || 1)) * (hazard.range || 30);
       }
       if (!this.visible(x, y, hazard.w, hazard.h)) continue;
-      if (hazard.kind === 'lava') {
-        this.rect(x, y + 6, hazard.w, hazard.h - 6, '#bd4e4b');
+      if (hazard.kind === 'lava' || hazard.kind === 'water') {
+        const water=hazard.kind==='water';
+        this.rect(x, y + 6, hazard.w, hazard.h - 6, water?'#347b94':'#bd4e4b');
         for (let i = 0; i < hazard.w; i += 16) {
           const offset = Math.round(Math.sin(this.frame * 3 + i / 21) * 3);
-          this.rect(x + i, y + offset, Math.min(16, hazard.w - i), 8, '#ffc176');
-          this.rect(x + i + 2, y + 9 + offset, Math.min(12, hazard.w - i - 2), 6, '#ec7957');
-          if (i % 48 === 0) this.rect(x + i + 5, y + 27 + Math.sin(this.frame + i) * 4, 7, 4, '#ec8e5f');
+          this.rect(x + i, y + offset, Math.min(16, hazard.w - i), 8, water?'#b4edf3':'#ffc176');
+          this.rect(x + i + 2, y + 9 + offset, Math.min(12, hazard.w - i - 2), 6, water?'#62b7cd':'#ec7957');
+          if (i % 48 === 0) this.rect(x + i + 5, y + 27 + Math.sin(this.frame + i) * 4, 7, 4, water?'#8dcbd5':'#ec8e5f');
         }
       } else if (hazard.kind === 'spikes') {
         this.rect(x, y + hazard.h - 5, hazard.w, 5, '#53616c');

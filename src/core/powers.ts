@@ -44,6 +44,6 @@ export function updatePowers(game:Game,dt:number,input:InputState) {
   game.items=game.items.filter(i=>i.alive);game.projectiles=game.projectiles.filter(s=>s.alive);
   for(const h of game.level.hazards) {
     const hazard=h.kind==='moving'?{...h,x:h.x+Math.sin(game.elapsed*(h.speed??1))*(h.range??30)}:h;
-    if(overlaps(p,hazard)) {if(h.kind==='lava')game.die();else game.hurt();}
+    if(overlaps(p,hazard)) {if(h.kind==='lava'||h.kind==='water')game.die();else game.hurt();}
   }
 }

@@ -30,3 +30,6 @@ it('estrela dá imunidade temporária e pausa preserva duração',()=>{
 it('atirador dispara ao detectar jogador na região',()=>{
  const g=new Game([arena('shooter')]);run(g,270);expect(g.projectiles.some(s=>s.hostile)).toBe(true);expect(g.events.some(e=>e.type==='shot')).toBe(true);
 });
+it('água e lava custam uma vida mesmo durante invencibilidade',()=>{
+ for(const kind of ['water','lava'] as const) {const l=arena();l.enemies=[];l.hazards=[{kind,x:50,y:410,w:100,h:40}];const g=new Game([l]);grantPower(g,'star');run(g,1);expect(g.status).toBe('dead');expect(g.lives).toBe(4);}
+});

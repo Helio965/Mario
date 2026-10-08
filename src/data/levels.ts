@@ -304,3 +304,11 @@ hint(citadel, 150, 'Tudo que aprendeu leva até a última chama.'); hint(citadel
 hint(citadel, 4510, 'O último guardião protege a saída. Observe e salte.');
 
 export const LEVELS: Level[] = [meadow, canals, orchard, dunes, canyon, temple, lake, summit, blizzard, canopy, ruins, guardian, basalt, furnace, citadel];
+// Water fills the valley's channels; falling in costs a life, just like lava.
+for(const level of LEVELS.filter(l=>l.world===1)) {
+  const grounds=level.platforms.filter(p=>p.kind==='ground').sort((a,b)=>a.x-b.x);
+  for(let i=1;i<grounds.length;i++) {
+    const x=grounds[i-1].x+grounds[i-1].w,w=grounds[i].x-x;
+    if(w>0) level.hazards.push({kind:'water',x,y:500,w,h:40});
+  }
+}

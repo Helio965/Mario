@@ -22,7 +22,7 @@ export interface Enemy extends EnemySpec {
 export interface Item extends Rect { id: string; kind: ItemKind; vx: number; vy: number; alive: boolean }
 export interface Projectile extends Rect { vx: number; vy: number; hostile: boolean; life: number; alive: boolean }
 export interface Particle extends Vec { vx: number; vy: number; life: number; color: string; size: number }
-export interface Hazard extends Rect { kind: 'lava' | 'spikes' | 'moving'; range?: number; speed?: number }
+export interface Hazard extends Rect { kind: 'lava' | 'water' | 'spikes' | 'moving'; range?: number; speed?: number }
 export interface Level {
   id: string; name: string; world: number; stage: number; width: number; height: number; time: number;
   spawn: Vec; checkpoint: Vec; exit: Vec; platforms: PlatformSpec[];

@@ -134,7 +134,7 @@ export class Sprites extends PixelPainter {
     }
     this.rect(8, 6, 3, 1, palette.W);
     c.restore();
-    if (player.grounded && Math.abs(player.vx) > 210 && Math.floor(this.frame * 12) % 2 === 0) {
+    if (this.scene.effects && player.grounded && Math.abs(player.vx) > 210 && Math.floor(this.frame * 12) % 2 === 0) {
       this.ctx.globalAlpha = 0.45;
       this.rect(player.x + (player.facing > 0 ? -7 : player.w + 4), player.y + player.h - 4, 6, 3, '#d5cab5');
       this.ctx.globalAlpha = 1;
