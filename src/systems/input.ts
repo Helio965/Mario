@@ -3,7 +3,7 @@ const KEYS: Record<string, keyof InputState> = { KeyA: 'left', ArrowLeft: 'left'
 export class Input {
   private keys = new Set<string>();
   constructor() {
-    window.addEventListener('keydown', e => { if (KEYS[e.code] && !(e.target instanceof HTMLInputElement)) { e.preventDefault(); this.keys.add(e.code); } });
+    window.addEventListener('keydown', e => { if (KEYS[e.code] && (e.code==='Escape'||!(e.target instanceof HTMLElement && e.target.closest('input, textarea, select, button')))) { e.preventDefault(); this.keys.add(e.code); } });
     window.addEventListener('keyup', e => this.keys.delete(e.code));
     window.addEventListener('blur', () => this.clear());
   }

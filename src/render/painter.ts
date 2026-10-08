@@ -12,6 +12,7 @@ export interface RenderScene {
   cameraY: number;
   world: number;
   theme: Theme;
+  effects: boolean;
 }
 
 /** Shared pixel geometry and deterministic variation for all original artwork. */
