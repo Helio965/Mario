@@ -1,4 +1,4 @@
-export const SAVE_KEY = 'lume-save-v1';
+export const SAVE_KEY = "lume-save-v1";
 
 export interface Settings {
   music: number;
@@ -17,7 +17,12 @@ export interface SaveData {
   settings: Settings;
 }
 
-const DEFAULT_SETTINGS: Settings = { music: 0.45, sfx: 0.75, effects: true, touch: false };
+const DEFAULT_SETTINGS: Settings = {
+  music: 0.45,
+  sfx: 0.75,
+  effects: true,
+  touch: false,
+};
 
 function freshSave(): SaveData {
   return {
@@ -32,21 +37,33 @@ function freshSave(): SaveData {
 }
 
 function record(value: unknown): Record<string, unknown> | null {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
-    ? value as Record<string, unknown>
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
     : null;
 }
 
-function number(value: unknown, fallback: number, maximum: number, integer = false): number {
-  if (typeof value !== 'number' || !Number.isFinite(value)) return fallback;
+function number(
+  value: unknown,
+  fallback: number,
+  maximum: number,
+  integer = false,
+): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) return fallback;
   const result = Math.min(maximum, Math.max(0, value));
   return integer ? Math.floor(result) : result;
 }
 
 function validId(value: unknown): value is string {
-  return typeof value === 'string' && value.length > 0 && value.length <= 128
-    && value.trim() === value && !/[\u0000-\u001f\u007f]/.test(value)
-    && value !== '__proto__' && value !== 'constructor' && value !== 'prototype';
+  return (
+    typeof value === "string" &&
+    value.length > 0 &&
+    value.length <= 128 &&
+    value.trim() === value &&
+    !/[\u0000-\u001f\u007f]/.test(value) &&
+    value !== "__proto__" &&
+    value !== "constructor" &&
+    value !== "prototype"
+  );
 }
 
 function ids(value: unknown): string[] {
@@ -61,7 +78,7 @@ function sanitize(value: unknown): SaveData {
   const records = record(source.records) ?? {};
   const cleanRecords: Record<string, number> = {};
   for (const [key, score] of Object.entries(records)) {
-    if (validId(key) && typeof score === 'number' && Number.isFinite(score)) {
+    if (validId(key) && typeof score === "number" && Number.isFinite(score)) {
       cleanRecords[key] = number(score, 0, Number.MAX_SAFE_INTEGER, true);
     }
   }
@@ -75,17 +92,27 @@ function sanitize(value: unknown): SaveData {
     settings: {
       music: number(settings.music, DEFAULT_SETTINGS.music, 1),
       sfx: number(settings.sfx, DEFAULT_SETTINGS.sfx, 1),
-      effects: typeof settings.effects === 'boolean' ? settings.effects : DEFAULT_SETTINGS.effects,
-      touch: typeof settings.touch === 'boolean' ? settings.touch : DEFAULT_SETTINGS.touch,
+      effects:
+        typeof settings.effects === "boolean"
+          ? settings.effects
+          : DEFAULT_SETTINGS.effects,
+      touch:
+        typeof settings.touch === "boolean"
+          ? settings.touch
+          : DEFAULT_SETTINGS.touch,
     },
   };
 }
 
 function browserStorage(): Storage | undefined {
-  try { return globalThis.localStorage; } catch { return undefined; }
+  try {
+    return globalThis.localStorage;
+  } catch {
+    return undefined;
+  }
 }
 
-export function loadSave(storage?: Pick<Storage, 'getItem'>): SaveData {
+export function loadSave(storage?: Pick<Storage, "getItem">): SaveData {
   try {
     const raw = (storage ?? browserStorage())?.getItem(SAVE_KEY);
     return raw ? sanitize(JSON.parse(raw)) : freshSave();
@@ -94,7 +121,10 @@ export function loadSave(storage?: Pick<Storage, 'getItem'>): SaveData {
   }
 }
 
-export function writeSave(data: SaveData, storage?: Pick<Storage, 'setItem'>): boolean {
+export function writeSave(
+  data: SaveData,
+  storage?: Pick<Storage, "setItem">,
+): boolean {
   try {
     const target = storage ?? browserStorage();
     if (!target) return false;
@@ -105,17 +135,37 @@ export function writeSave(data: SaveData, storage?: Pick<Storage, 'setItem'>): b
   }
 }
 
-export function resetSave(storage?: Pick<Storage, 'removeItem'>): SaveData {
-  try { (storage ?? browserStorage())?.removeItem(SAVE_KEY); } catch { /* Storage may be blocked. */ }
+export function resetSave(storage?: Pick<Storage, "removeItem">): SaveData {
+  try {
+    (storage ?? browserStorage())?.removeItem(SAVE_KEY);
+  } catch {
+    /* Storage may be blocked. */
+  }
   return freshSave();
 }
 
-export function completeLevel(data: SaveData, index: number, score: number, relic: boolean, levelId: string): SaveData {
+export function completeLevel(
+  data: SaveData,
+  index: number,
+  score: number,
+  relic: boolean,
+  levelId: string,
+): SaveData {
   const next = sanitize(data);
-  if (!validId(levelId) || !Number.isFinite(index) || index < 0 || index > 14 || !Number.isInteger(index)) return next;
+  if (
+    !validId(levelId) ||
+    !Number.isFinite(index) ||
+    index < 0 ||
+    index > 14 ||
+    !Number.isInteger(index)
+  )
+    return next;
   next.unlocked = Math.max(next.unlocked, Math.min(14, index + 1));
   next.completed = [...new Set([...next.completed, levelId])];
-  next.records[levelId] = Math.max(next.records[levelId] ?? 0, number(score, 0, Number.MAX_SAFE_INTEGER, true));
+  next.records[levelId] = Math.max(
+    next.records[levelId] ?? 0,
+    number(score, 0, Number.MAX_SAFE_INTEGER, true),
+  );
   if (relic) next.relics = [...new Set([...next.relics, levelId])];
   return next;
 }

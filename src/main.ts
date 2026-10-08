@@ -133,7 +133,7 @@ function frame(now: number) {
   previous = now;
   const state = input.read();
   if (active) {
-    if (state.pause && !pauseHeld) {
+    if (state.pausePressed || (state.pause && !pauseHeld)) {
       if (game.status === "paused") {
         game.resume();
         ui.hide();

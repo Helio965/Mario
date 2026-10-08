@@ -6,7 +6,7 @@ Arquivo analisado: `Screen_Recording_20261006_143029_Instagram.mp4`.
 
 O vídeo tem **19,618 segundos**, resolução **1080 × 2340**, orientação vertical e fluxo H.264 declarado a 120 quadros/s. Há um fluxo de áudio AAC estéreo, 48 kHz; a existência desse fluxo foi verificada, mas o conteúdo sonoro não foi interpretado. A inspeção visual cobriu o começo, o meio e o final: uma folha de contato da tela completa a 1 quadro/s e duas folhas da região de jogo a 2 quadros/s, com horários, além de um quadro ampliado. Isso identifica os segmentos e o comportamento visível, sem presumir acesso ao código ou à entrada do jogador.
 
-Artefatos de inspeção: `video-frames/contact.png`, `video-frames/time-01.png`, `video-frames/time-02.png` e `video-frames/detail.png`, todos nesta pasta `scratch`.
+Artefatos de inspeção: `video-frames/contact.png`, `video-frames/time-01.png`, `video-frames/time-02.png` e `video-frames/detail.png`, mantidos fora do repositório, na área de inspeção do ambiente.
 
 ## Conteúdo confirmado
 
@@ -24,17 +24,17 @@ Artefatos de inspeção: `video-frames/contact.png`, `video-frames/time-01.png`,
 
 Tempos aproximados, obtidos dos quadros amostrados:
 
-| Intervalo | O que aparece |
-| --- | --- |
-| 0–1 s | Corrida no chão; aproximação do primeiro cano e primeiro salto. |
-| 1–2 s | Salto perto de bloco dourado, transição do bloco para cinza e emissão de partículas; retorno ao chão. |
-| 2–4 s | Avanço com câmera lateral, saltos entre canos e plataformas; fragmentos marrons perto de tijolos. |
-| 4–5,5 s | Salto alto, descida junto/sobre inimigo e retorno ao chão. |
-| 5,5–6,5 s | Novo salto sob bloco, bloco cinza e partículas; aproximação da interrupção no piso. |
-| 6,5–8 s | Queda no fosso, personagem inclinado e retorno ao início. |
-| 8–10 s | Personagem próximo do início; breve espera antes de novo avanço. |
-| 10–18,5 s | Nova passagem pelo mesmo conjunto de obstáculos, com pequenos deslocamentos de tempo; nova queda e reinício. |
-| 18,5–19,618 s | Cena novamente no início. Não surge tela de vitória ou outro cenário. |
+| Intervalo     | O que aparece                                                                                                |
+| ------------- | ------------------------------------------------------------------------------------------------------------ |
+| 0–1 s         | Corrida no chão; aproximação do primeiro cano e primeiro salto.                                              |
+| 1–2 s         | Salto perto de bloco dourado, transição do bloco para cinza e emissão de partículas; retorno ao chão.        |
+| 2–4 s         | Avanço com câmera lateral, saltos entre canos e plataformas; fragmentos marrons perto de tijolos.            |
+| 4–5,5 s       | Salto alto, descida junto/sobre inimigo e retorno ao chão.                                                   |
+| 5,5–6,5 s     | Novo salto sob bloco, bloco cinza e partículas; aproximação da interrupção no piso.                          |
+| 6,5–8 s       | Queda no fosso, personagem inclinado e retorno ao início.                                                    |
+| 8–10 s        | Personagem próximo do início; breve espera antes de novo avanço.                                             |
+| 10–18,5 s     | Nova passagem pelo mesmo conjunto de obstáculos, com pequenos deslocamentos de tempo; nova queda e reinício. |
+| 18,5–19,618 s | Cena novamente no início. Não surge tela de vitória ou outro cenário.                                        |
 
 ## Características úteis para uma implementação original
 

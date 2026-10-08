@@ -1,0 +1,46 @@
+name: Validar e publicar Lume
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Instalar com lockfile
+        run: npm ci --ignore-scripts
+      - name: Testar lógica e campanha
+        run: npm test
+      - name: Compilar produção e verificar tipos
+        run: npm run build
+      - name: Preparar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Testar navegador, toque e produção
+        run: npm run test:e2e
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4

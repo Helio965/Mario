@@ -1,26 +1,26 @@
 # Lume — desenho e validação das 15 fases
 
-`levels.ts` exporta `THEMES` e `LEVELS`, prontos para `src/data/levels.ts`. O primeiro elemento é a fase completa de demonstração. Os helpers descrevem retângulos, filas de moedas, inimigos e salas; o traçado, as rotas altas e os encontros de cada fase são escritos explicitamente.
+`src/data/levels.ts` exporta `THEMES` e `LEVELS`. A primeira fase introduz a campanha. Os helpers descrevem retângulos, filas de moedas, inimigos e salas; o traçado, as rotas altas e os encontros de cada fase são escritos explicitamente.
 
 ## Percurso e progressão
 
-| Fase | Nome | Largura | Composição e recompensa | Vãos do caminho principal | Chefe |
-| --- | --- | ---: | --- | --- | --- |
-| 1-1 | Primeiros Passos | 3200 | Introdução ao salto, blocos luminosos, dois vãos, subida curta e primeiro cano | 100 / 120 | — |
-| 1-2 | Canais do Vale | 3500 | Margem elevada, plataforma ascendente e aqueduto com relíquia | 100 / 120 / 140 | — |
-| 1-3 | Guardião do Pomar | 3900 | Pomar, degraus de pedra, ponte frágil e arena aberta | 120 / 100 / 100 | 3 PV |
-| 2-1 | Dunas ao Vento | 3800 | Colunas de canos, escada de arenito, primeiro sentinela e espinhos | 120 / 130 / 130 | — |
-| 2-2 | Pontes do Cânion | 4100 | Terraços ascendentes e descendentes, rota frágil e chama móvel | 120 / 130 / 120 / 120 | — |
-| 2-3 | Templo das Areias | 4200 | Escadaria arqueológica, inimigo blindado e corredor para o templo | 110 / 110 / 120 | 4 PV |
-| 3-1 | Lago de Cristal | 3600 | Longas margens de gelo com frenagem, degraus gelados e abrigo central | 120 / 120 / 120 | — |
-| 3-2 | Escalada Azul | 4400 | Seis terraços, subida total de 80 px e descida em dois degraus | 110 / 120 / 120 / 110 / 120 | — |
-| 3-3 | Coração da Nevasca | 4600 | Gelo alternado com rocha, relíquia sobre plataforma e arena seca | 120 / 110 / 120 / 120 | 5 PV |
-| 4-1 | Copas Luminosas | 4000 | Copa frágil de três alturas, rota móvel e chão inferior contínuo por trecho | 110 / 120 / 120 | — |
-| 4-2 | Ruínas dos Vagalumes | 4500 | Bloco oculto, salão de canos, terraço com chama e segunda escadaria | 120 / 120 / 120 / 120 | — |
-| 4-3 | A Árvore Ancestral | 4700 | Duas subidas distintas, sentinela na aproximação e árvore guardiã | 120 / 120 / 120 / 120 | 6 PV |
-| 5-1 | Pontes de Basalto | 4300 | Quatro canais de lava, desvio alto da chama e abrigo antes da chegada | 110 / 120 / 120 / 120 | — |
-| 5-2 | Fornalha dos Ecos | 4800 | Terraços de fornalha, galeria frágil, chamas e aterrissagens largas | 120 / 120 / 120 / 120 / 120 | — |
-| 5-3 | A Última Chama | 5200 | Síntese das mecânicas, relíquias altas, descanso central e arena final | 120 / 120 / 120 / 120 / 120 | 7 PV |
+| Fase | Nome                 | Largura | Composição e recompensa                                                        | Vãos do caminho principal   | Chefe |
+| ---- | -------------------- | ------: | ------------------------------------------------------------------------------ | --------------------------- | ----- |
+| 1-1  | Primeiros Passos     |    3200 | Introdução ao salto, blocos luminosos, dois vãos, subida curta e primeiro cano | 100 / 120                   | —     |
+| 1-2  | Canais do Vale       |    3500 | Margem elevada, plataforma ascendente e aqueduto com relíquia                  | 100 / 120 / 140             | —     |
+| 1-3  | Guardião do Pomar    |    3900 | Pomar, degraus de pedra, ponte frágil e arena aberta                           | 120 / 100 / 100             | 3 PV  |
+| 2-1  | Dunas ao Vento       |    3800 | Colunas de canos, escada de arenito, primeiro sentinela e espinhos             | 120 / 130 / 130             | —     |
+| 2-2  | Pontes do Cânion     |    4100 | Terraços ascendentes e descendentes, rota frágil e chama móvel                 | 120 / 130 / 120 / 120       | —     |
+| 2-3  | Templo das Areias    |    4200 | Escadaria arqueológica, inimigo blindado e corredor para o templo              | 110 / 110 / 120             | 4 PV  |
+| 3-1  | Lago de Cristal      |    3600 | Longas margens de gelo com frenagem, degraus gelados e abrigo central          | 120 / 120 / 120             | —     |
+| 3-2  | Escalada Azul        |    4400 | Seis terraços, subida total de 80 px e descida em dois degraus                 | 110 / 120 / 120 / 110 / 120 | —     |
+| 3-3  | Coração da Nevasca   |    4600 | Gelo alternado com rocha, relíquia sobre plataforma e arena seca               | 120 / 110 / 120 / 120       | 5 PV  |
+| 4-1  | Copas Luminosas      |    4000 | Copa frágil de três alturas, rota móvel e chão inferior contínuo por trecho    | 110 / 120 / 120             | —     |
+| 4-2  | Ruínas dos Vagalumes |    4500 | Bloco oculto, salão de canos, terraço com chama e segunda escadaria            | 120 / 120 / 120 / 120       | —     |
+| 4-3  | A Árvore Ancestral   |    4700 | Duas subidas distintas, sentinela na aproximação e árvore guardiã              | 120 / 120 / 120 / 120       | 6 PV  |
+| 5-1  | Pontes de Basalto    |    4300 | Quatro canais de lava, desvio alto da chama e abrigo antes da chegada          | 110 / 120 / 120 / 120       | —     |
+| 5-2  | Fornalha dos Ecos    |    4800 | Terraços de fornalha, galeria frágil, chamas e aterrissagens largas            | 120 / 120 / 120 / 120 / 120 | —     |
+| 5-3  | A Última Chama       |    5200 | Síntese das mecânicas, relíquias altas, descanso central e arena final         | 120 / 120 / 120 / 120 / 120 | 7 PV  |
 
 Há 572 moedas declaradas, incluindo 29 relíquias, e 49 inimigos, incluindo os cinco chefes. A primeira fase tem uma relíquia na sala secreta; as outras têm uma nessa sala e outra em uma rota alta. Recompensas de blocos, itens de chão e dicas variam conforme o trecho. Nenhum salto do caminho principal depende de uma plataforma móvel ou frágil.
 
@@ -40,6 +40,6 @@ O maior vão é 140 px. Os demais ficam entre 100 e 130 px. A maior subida em um
 
 ## Limites da validação
 
-A simulação de saltos verifica colisões com o cenário e os extremos amostrados do movimento; ela não é uma partida completa. Combate, projéteis, perigo das chamas durante o movimento, tempo de resposta do jogador, sensação de frenagem no gelo e leitura visual das rotas precisam de teste jogável no navegador. As passagens principais têm chão para esperar antes dos encontros. As relíquias opcionais em plataformas móveis pressupõem que o jogador observe o ciclo e conserve uma plataforma inferior; nenhuma delas impede terminar a fase.
+A simulação de saltos verifica colisões com o cenário e os extremos amostrados do movimento; ela não é uma partida completa. A validação posterior de campanha percorreu as quinze fases com inimigos, perigos e chefes ativos por comandos normais; veja `docs/VALIDACAO.md`. A sensação de controle e leitura visual ainda depende da experiência de jogadores, e rotas opcionais não foram todas percorridas. As passagens principais têm chão para esperar antes dos encontros. As relíquias opcionais em plataformas móveis pressupõem que o jogador observe o ciclo e conserve uma plataforma inferior; nenhuma delas impede terminar a fase.
 
 As coordenadas de spawn/checkpoint/teleporte são o canto superior esquerdo do jogador; `exit.y = 448` é a base da bandeira. O chão alcança abaixo da tela para fechar visualmente o terreno. As câmaras usam a parte superior da tela padrão de 960 × 540, dispensando uma câmera vertical ou níveis mais altos.

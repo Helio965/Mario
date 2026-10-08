@@ -94,6 +94,7 @@ export class Input {
     const state = { ...EMPTY_INPUT };
     for (const key of this.keys) if (KEYS[key]) state[KEYS[key]] = true;
     for (const p of this.pointers.values()) state[p.action] = true;
+    state.pausePressed = this.taps.has("pause");
     // Keep a complete press/release between animation frames for one sample.
     for (const action of this.taps) state[action] = true;
     this.taps.clear();

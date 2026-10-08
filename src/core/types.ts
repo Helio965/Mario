@@ -144,6 +144,7 @@ export interface Player extends Rect {
     | "win";
 }
 export interface InputState {
+  pausePressed?: boolean;
   left: boolean;
   right: boolean;
   jump: boolean;
