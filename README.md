@@ -127,7 +127,9 @@ O [workflow pages.yml](.github/workflows/pages.yml) instala com lockfile, testa,
 
 Habilite **Settings → Pages → Build and deployment → Source: GitHub Actions**. Actions deve estar habilitado no repositório; aprove o ambiente `github-pages` se houver regra de revisão. Permissões de Pages/OIDC ficam no job de deploy.
 
-**Publicação pública ainda não confirmada.** O acesso à API foi verificado; o deploy ainda precisa ser concluído e validado. Não há link apresentado como demonstração funcional antes de verificar o deploy. Após workflow verde, use o endereço emitido pelo job e confira se o jogo inicia e responde aos comandos.
+**Publicação pública pendente.** O código está em `main`. O job de build passou na [execução remota](https://github.com/Helio965/Mario/actions/runs/37821366667), incluindo todos os testes e o artefato de produção. Pages continua desativado: a integração recusou a criação do site com HTTP 403 (`Resource not accessible by integration`), e o job de deploy falhou em `configure-pages`.
+
+Habilite **Settings → Pages → Source: GitHub Actions**, abra a execução em Actions e escolha **Re-run failed jobs**. Depois de concluir o deploy, use o endereço emitido pelo job e valide o jogo. Não há link apresentado como demonstração funcional antes dessa verificação.
 
 ## Créditos e licença
 
@@ -137,4 +139,4 @@ Habilite **Settings → Pages → Build and deployment → Source: GitHub Action
 - Ferramentas de desenvolvimento: TypeScript (Apache-2.0), Vite/Vitest (MIT) e Playwright (Apache-2.0). Nenhuma dependência de runtime é enviada ao jogador.
 - Super Mario e Nintendo pertencem a seus titulares. Este jogo não é afiliado ou endossado por eles.
 
-Veja [LICENSE](LICENSE) e [plano técnico](docs/ARQUITETURA.md). Desenvolvimento organizado em dez commits de etapa, com validação antes de avançar.
+Veja [LICENSE](LICENSE) e [plano técnico](docs/ARQUITETURA.md). Desenvolvimento organizado nas dez etapas solicitadas, com commits separados e validação antes de avançar.

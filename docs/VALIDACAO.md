@@ -28,4 +28,6 @@ Gamepad usa `navigator.getGamepads` simulado. Toque usa eventos Chrome DevTools 
 
 Typecheck, build, instalação com lockfile e reinício do fluxo foram verificados. Capturas em `docs/images` mostram o jogo renderizado no Chromium.
 
-Workflow Pages preparado e acesso à API verificado. Ainda não há confirmação de workflow remoto ou endereço público funcional. Publicar o ambiente de nuvem é uma ação separada nas configurações do ambiente.
+Código enviado para `main`. O job `build` da [execução remota](https://github.com/Helio965/Mario/actions/runs/37821366667) concluiu instalação, 88 testes de lógica, typecheck/build, 15 testes de navegador e upload do artefato. O job `deploy` falhou em `actions/configure-pages`; a publicação foi pulada. O repositório público ainda tem `has_pages: false`, e a API de criação do site retornou HTTP 403 (`Resource not accessible by integration`).
+
+Habilitar Pages com Source GitHub Actions e reexecutar o job de deploy é necessário. O endereço esperado respondeu 404 e não é apresentado como funcional. `install_script` e `start_skill` foram salvos no rascunho; revisar/salvar/publicar o ambiente de nuvem é uma ação separada. Não foi validado um novo ambiente restaurado do snapshot.
