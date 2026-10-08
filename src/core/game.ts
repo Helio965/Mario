@@ -1,5 +1,5 @@
 import { LEVELS } from '../data/levels';
-import { approach, FIXED_DT, GRAVITY, JUMP_SPEED, moveBody } from './physics';
+import { approach, FIXED_DT, GRAVITY, JUMP_SPEED, moveBody, overlaps } from './physics';
 import { interactWorld, updatePlatforms } from './interactions';
 import type { Coin, Enemy, GameEvent, GameStatus, InputState, Item, Level, Particle, Platform, Player, Projectile } from './types';
 export class Game {
@@ -87,8 +87,15 @@ export class Game {
   }
   protected interactions(dt: number, input: InputState, heads: Platform[]) {
     interactWorld(this,input,heads);
+    const exit={x:this.level.exit.x-12,y:this.level.exit.y-110,w:44,h:110};
+    if(overlaps(this.player,exit)&&!this.enemies.some(e=>e.kind==='boss'&&e.alive)) this.finish();
     for(const particle of this.particles) {particle.life-=dt;particle.x+=particle.vx*dt;particle.y+=particle.vy*dt;particle.vy+=300*dt;}
     this.particles=this.particles.filter(v=>v.life>0);
+  }
+  finish() {
+    if(this.status!=='playing') return;
+    this.status='complete';this.player.animation='win';this.score+=Math.floor(this.time)*10;
+    this.events.push({type:'complete',text:'Fase concluída!',value:this.score});
   }
   die() {
     if (this.status !== 'playing') return;
