@@ -5,6 +5,7 @@ const game = new Game();
 const input = new Input();
 const renderer = new Renderer(document.querySelector<HTMLCanvasElement>('#game')!);
 const ui = document.querySelector<HTMLElement>('#ui')!;
+if(import.meta.env.DEV) Object.assign(window,{__lume:{game,input}});
 ui.innerHTML = '<h1>Lume — As Cinco Fronteiras</h1><p>A/D: andar · Espaço: saltar · Shift: correr · Esc: pausar</p>';
 let previous = performance.now(), pauseHeld = false;
 function frame(now: number) {

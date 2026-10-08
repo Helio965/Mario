@@ -1,5 +1,6 @@
 import { LEVELS } from '../data/levels';
 import { approach, FIXED_DT, GRAVITY, JUMP_SPEED, moveBody } from './physics';
+import { interactWorld, updatePlatforms } from './interactions';
 import type { Coin, Enemy, GameEvent, GameStatus, InputState, Item, Level, Particle, Platform, Player, Projectile } from './types';
 export class Game {
   level!: Level;
@@ -25,7 +26,7 @@ export class Game {
   protected accumulator = 0;
   protected previousJump = false;
   protected transition = 0;
-  protected pipeCooldown = 0;
+  pipeCooldown = 0;
   constructor(public levels: Level[] = LEVELS) { this.load(0); }
   start(index = 0) { this.lives = 5; this.score = 0; this.coinsTotal = 0; this.load(index); }
   load(index: number) {
@@ -56,6 +57,8 @@ export class Game {
     if (this.status === 'dead') { this.transition -= dt; if (this.transition <= 0) this.respawn(); return; }
     if (this.status !== 'playing') return;
     this.time = Math.max(0, this.time - dt);
+    this.pipeCooldown = Math.max(0,this.pipeCooldown-dt);
+    updatePlatforms(this,dt);
     const p = this.player;
     p.invulnerable = Math.max(0, p.invulnerable - dt); p.star = Math.max(0, p.star - dt); p.shootCooldown = Math.max(0, p.shootCooldown - dt);
     this.shake = Math.max(0, this.shake - dt);
@@ -82,7 +85,11 @@ export class Game {
     this.camera.x += (targetX - this.camera.x) * (1 - Math.exp(-6 * dt));
     this.camera.y += (targetY - this.camera.y) * (1 - Math.exp(-6 * dt));
   }
-  protected interactions(_dt: number, _input: InputState, _heads: Platform[]) {}
+  protected interactions(dt: number, input: InputState, heads: Platform[]) {
+    interactWorld(this,input,heads);
+    for(const particle of this.particles) {particle.life-=dt;particle.x+=particle.vx*dt;particle.y+=particle.vy*dt;particle.vy+=300*dt;}
+    this.particles=this.particles.filter(v=>v.life>0);
+  }
   die() {
     if (this.status !== 'playing') return;
     this.lives--; this.status = 'dead'; this.player.animation = 'dead'; this.transition = 1.1;
