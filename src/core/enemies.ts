@@ -2,6 +2,7 @@ import type { Game } from './game';
 import type { Enemy } from './types';
 import { GRAVITY, moveBody, overlaps } from './physics';
 import { burst } from './interactions';
+import { updateBoss } from './bosses';
 export function hitEnemy(game: Game, e: Enemy, damage = 1): boolean {
   if(!e.alive||e.hitTimer>0||(e.kind==='boss'&&e.state!=='shell')) return false;
   e.health-=damage; e.hitTimer=0.65; burst(game,e.x+e.w/2,e.y,'#ffdc87');
@@ -21,19 +22,7 @@ export function updateEnemies(game:Game,dt:number) {
       e.vx=e.facing*(72+game.level.world*6);e.x+=e.vx*dt;e.y=e.originY+Math.sin(e.timer*2.2)*38;
     } else {
       if(e.kind==='boss') {
-        const aggressive=e.health<=(e.hp??4)/2;
-        const period=aggressive?3.8:4.8;
-        const phase=e.timer%period, oldPhase=oldTimer%period;
-        const vulnerable=phase<(aggressive?1.1:1.65);
-        e.state=vulnerable?'shell':'walk';e.vx=vulnerable?0:e.facing*(aggressive?135:85);
-        if(phase>=2&&oldPhase<2&&e.grounded) e.vy=-400;
-        for(const shotTime of game.level.world===5?[2.5,3,3.4]:[2.7]) {
-          if(phase>=shotTime&&oldPhase<shotTime) {
-            const dir=player.x<e.x?-1:1;
-            game.projectiles.push({x:e.x+e.w/2,y:e.y+24,w:14,h:14,vx:dir*(160+game.level.world*15),vy:aggressive?-40:0,hostile:true,life:4,alive:true});
-            game.events.push({type:'shot'});
-          }
-        }
+        updateBoss(game,e,oldTimer);
       } else if(e.kind==='shooter') {
         e.vx=0;e.facing=player.x<e.x?-1:1;
         if(Math.floor(e.timer/2.2)>Math.floor(oldTimer/2.2)&&Math.abs(player.x-e.x)<650) {

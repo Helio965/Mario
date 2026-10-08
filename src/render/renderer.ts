@@ -7,6 +7,7 @@ import { Sprites } from './sprites';
 
 /** Compose the scrolling world in a fixed 960 × 540 pixel-art viewport. */
 export class Renderer extends PixelPainter {
+  effects = true;
   private readonly background: Background;
   private readonly sprites: Sprites;
 
@@ -32,9 +33,9 @@ export class Renderer extends PixelPainter {
     c.imageSmoothingEnabled = false;
     this.background.sky();
     this.background.landscape();
-    this.background.weather(false);
+    if (this.effects) this.background.weather(false);
     c.save();
-    const shake = game.shake > 0 ? Math.min(5, game.shake * 22) : 0;
+    const shake = this.effects && game.shake > 0 ? Math.min(5, game.shake * 22) : 0;
     c.translate(-Math.round(this.cameraX) + Math.round(Math.sin(this.frame * 83) * shake),
       -Math.round(this.cameraY) + Math.round(Math.cos(this.frame * 97) * shake));
     this.landmarks(game);
@@ -56,13 +57,15 @@ export class Renderer extends PixelPainter {
       this.rect(x - projectile.vx / 100 - 9, y - 2, 5, 4, projectile.hostile ? '#d98dbc' : GOLD);
     }
     this.sprites.player(game.player);
-    for (const particle of game.particles) {
-      c.globalAlpha = Math.min(1, particle.life * 3);
-      this.rect(particle.x, particle.y, particle.size, particle.size, particle.color);
+    if (this.effects) {
+      for (const particle of game.particles) {
+        c.globalAlpha = Math.min(1, particle.life * 3);
+        this.rect(particle.x, particle.y, particle.size, particle.size, particle.color);
+      }
     }
     c.globalAlpha = 1;
     c.restore();
-    this.background.weather(true);
+    if (this.effects) this.background.weather(true);
     this.background.vignette();
   }
 
@@ -80,7 +83,7 @@ export class Renderer extends PixelPainter {
     this.platform(demo);
     this.background.shrub(70, 460, 1);
     this.background.shrub(816, 460, 2);
-    this.background.weather(true);
+    if (this.effects) this.background.weather(true);
     this.background.vignette();
   }
 
@@ -241,7 +244,7 @@ export class Renderer extends PixelPainter {
       let x = hazard.x;
       let y = hazard.y;
       if (hazard.kind === 'moving') {
-        x += Math.sin(game.elapsed * (hazard.speed || 1)) * (hazard.range || 60);
+        x += Math.sin(game.elapsed * (hazard.speed || 1)) * (hazard.range || 30);
       }
       if (!this.visible(x, y, hazard.w, hazard.h)) continue;
       if (hazard.kind === 'lava') {

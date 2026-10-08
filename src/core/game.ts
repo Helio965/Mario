@@ -20,6 +20,7 @@ export class Game {
   time = 300;
   lives = 5;
   score = 0;
+  levelStartScore = 0;
   coinsTotal = 0;
   checkpointReached = false;
   foundRelic = false;
@@ -32,6 +33,7 @@ export class Game {
   constructor(public levels: Level[] = LEVELS) { this.load(0); }
   start(index = 0) { this.lives = 5; this.score = 0; this.coinsTotal = 0; this.load(index); }
   load(index: number) {
+    this.levelStartScore=this.score;
     this.levelIndex = Math.max(0, Math.min(index, this.levels.length - 1));
     this.level = this.levels[this.levelIndex];
     this.platforms = this.level.platforms.map(p => ({ ...p, startX: p.x, startY: p.y, dx: 0, dy: 0, used: false, alive: true, bump: 0, crumble: 0, respawn: 0 }));
@@ -49,8 +51,17 @@ export class Game {
   }
   pause() { if (this.status === 'playing') this.status = 'paused'; }
   resume() { if (this.status === 'paused') this.status = 'playing'; }
+  next(): boolean {
+    if(this.status!=='complete'||this.levelIndex>=this.levels.length-1) return false;
+    this.load(this.levelIndex+1);return true;
+  }
   update(dt: number, input: InputState) {
-    if (this.status === 'paused' || this.status === 'complete' || this.status === 'gameover') return;
+    if (this.status === 'paused' || this.status === 'gameover') return;
+    if(this.status==='complete') {
+      this.elapsed+=Math.min(dt,0.25);
+      for(const v of this.particles) {v.life-=dt;v.x+=v.vx*dt;v.y+=v.vy*dt;}
+      this.particles=this.particles.filter(v=>v.life>0);return;
+    }
     this.accumulator += Math.min(dt, 0.25);
     while (this.accumulator >= FIXED_DT) { this.step(FIXED_DT, input); this.accumulator -= FIXED_DT; }
   }
@@ -108,7 +119,7 @@ export class Game {
   finish() {
     if(this.status!=='playing') return;
     this.status='complete';this.player.animation='win';this.score+=Math.floor(this.time)*10;
-    this.events.push({type:'complete',text:'Fase concluída!',value:this.score});
+    this.events.push({type:'complete',text:'Fase concluída!',value:this.score-this.levelStartScore});
   }
   die() {
     if (this.status !== 'playing') return;

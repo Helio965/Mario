@@ -241,38 +241,61 @@ export class Sprites extends PixelPainter {
 
   private boss(enemy: Enemy, gait: number): void {
     const c = this.ctx;
+    const [armor, panel, trim, face, gem] = [
+      ['#527e68', '#719582', '#c7bc8b', '#9dbe8e', '#f1cc6f'],
+      ['#b88b61', '#d0aa75', '#f4d49a', '#dec3a0', '#72dac5'],
+      ['#6f9cac', '#a3cbd4', '#d4f1ed', '#c1dce0', '#d9a4d7'],
+      ['#826e9f', '#a38aaa', '#c5aec9', '#b8a5bc', '#9de0b8'],
+      ['#8b6979', '#aa7e84', '#ce9a8c', '#b58b83', '#71cfbf'],
+    ][this.world - 1] || ['#8b6979', '#aa7e84', '#ce9a8c', '#b58b83', '#71cfbf'];
     c.save();
     c.scale(enemy.w / 76, enemy.h / 84);
     this.rect(-25 + gait * 2, -10, 18, 10, '#263b4c');
     this.rect(13 - gait * 2, -10, 19, 10, '#263b4c');
-    this.rect(-22 + gait * 2, -7, 14, 4, '#b58b7c');
-    this.rect(17 - gait * 2, -7, 14, 4, '#b58b7c');
+    this.rect(-22 + gait * 2, -7, 14, 4, trim);
+    this.rect(17 - gait * 2, -7, 14, 4, trim);
     this.polygon([-34, -17, -34, -49, -23, -66, 15, -69, 32, -53, 37, -22, 27, -13], '#293746');
-    this.polygon([-29, -20, -28, -48, -19, -60, 13, -62, 28, -51, 31, -24, 24, -18], '#8b6979');
-    this.rect(-20, -55, 11, 30, '#aa7e84');
-    this.rect(-5, -58, 11, 32, '#aa7e84');
-    this.rect(10, -55, 11, 30, '#aa7e84');
-    this.rect(-21, -51, 41, 4, '#ce9a8c');
+    this.polygon([-29, -20, -28, -48, -19, -60, 13, -62, 28, -51, 31, -24, 24, -18], armor);
+    this.rect(-20, -55, 11, 30, panel);
+    this.rect(-5, -58, 11, 32, panel);
+    this.rect(10, -55, 11, 30, panel);
+    this.rect(-21, -51, 41, 4, trim);
     this.rect(-24, -24, 50, 5, '#504a61');
     this.rect(-11, -37, 24, 13, '#514761');
-    this.sparkle(1, -33, 8, '#71cfbf');
+    this.sparkle(1, -33, 8, gem);
     this.sparkle(1, -34, 4, '#e4ffe0');
     this.polygon([-24, -57, -28, -77, -19, -73, -13, -84, -8, -76, 13, -76, 20, -84,
       22, -71, 31, -77, 30, -58], '#293746');
-    this.rect(-15, -73, 35, 24, '#b58b83');
+    this.rect(-15, -73, 35, 24, face);
     this.rect(-10, -68, 13, 4, '#4c4058');
     this.rect(9, -68, 12, 4, '#4c4058');
     this.rect(-7, -66, 8, 3, '#ffe3a2');
     this.rect(11, -66, 7, 3, '#ffe3a2');
-    this.rect(1, -63, 9, 9, '#82636f');
+    this.rect(1, -63, 9, 9, armor);
     this.rect(-7, -53, 26, 4, '#433e51');
     this.rect(-4, -53, 4, 3, '#dfd6b6');
     this.rect(12, -53, 4, 3, '#dfd6b6');
     this.rect(-39, -49, 13, 28, '#574b63');
-    this.rect(-38, -46, 10, 6, '#aa8185');
+    this.rect(-38, -46, 10, 6, panel);
     this.rect(28, -46, 15, 26, '#574b63');
-    this.rect(32, -42, 9, 9, '#c59887');
+    this.rect(32, -42, 9, 9, face);
     for (let i = 0; i < 3; i++) this.rect(30 + i * 4, -23, 3, 6, '#e0c29c');
+    if (this.world === 1) {
+      this.polygon([-26, -61, -34, -72, -30, -83, -21, -74], '#9dc191');
+      this.polygon([25, -61, 33, -74, 27, -84, 20, -72], '#9dc191');
+    } else if (this.world === 2) {
+      this.rect(-23, -76, 50, 5, trim);
+      for (let i = 0; i < 4; i++) this.rect(-19 + i * 12, -71, 4, 12, armor);
+    } else if (this.world === 3) {
+      this.polygon([-37, -49, -40, -63, -31, -58, -23, -69, -24, -48], trim);
+      this.polygon([26, -46, 26, -64, 34, -57, 41, -64, 43, -46], trim);
+    } else if (this.world === 4) {
+      this.sparkle(-30, -69, 5, gem);
+      this.sparkle(30, -73, 6, gem);
+    } else {
+      this.polygon([-24, -71, -26, -81, -21, -94, -18, -85, -13, -90, -13, -75], '#e99a69');
+      this.polygon([18, -74, 19, -86, 24, -94, 26, -84, 30, -88, 29, -72], '#e99a69');
+    }
     c.restore();
     c.save();
     c.scale(enemy.facing < 0 ? -1 : 1, 1);
