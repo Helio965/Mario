@@ -99,6 +99,27 @@ def test_adsr_shape() -> None:
     assert len(synth.adsr(10, 1.0, 1.0, 0.5, 1.0)) == 10
 
 
+def test_synth_edge_cases_do_not_raise() -> None:
+    # envelopes mais curtos que uma amostra por fase (sons minúsculos, taxas baixas)
+    for samples in range(1, 12):
+        assert len(synth.adsr(samples, 0.004, 0.0, 1.0, 0.0072)) == samples
+        assert len(synth.adsr(samples, 0.001, 1.0, 0.5, 0.001)) == samples
+    assert synth.adsr(1, 0.01, 0.01, 0.5, 0.01).tolist() == [0.0]
+    # nível zero/negativo é silêncio, não divisão por zero no decaimento exponencial
+    assert synth.peak(synth.tone(69, 0.1, loudness=0.0)) == 0.0
+    assert synth.peak(synth.tone(69, 0.1, loudness=-1.0)) == 0.0
+    assert synth.envelope_ad(0, 0.008, 0.5).size == 0
+    # rampa exponencial com ponta em zero cai para linear
+    assert synth.frequency_ramp(0.0, 100.0, 4).tolist() == [0.0, 25.0, 50.0, 75.0]
+    assert np.all(np.isfinite(synth.frequency_ramp(100.0, 0.0, 4)))
+    # taxas de amostragem alternativas do mixer continuam coerentes
+    for sample_rate in (22050, 48000):
+        loop = synth.render_track(synth.BOSS_TRACK, sample_rate)
+        assert len(loop) == round(synth.BOSS_TRACK.loop_duration * sample_rate)
+        assert len(synth.render_ambient("lava", sample_rate, 1.0)) == sample_rate
+        assert synth.peak(synth.render_voice(synth.VOICES["jump"], sample_rate)) > 0.1
+
+
 def test_mix_at_wraps_around_loop_boundary() -> None:
     target = np.zeros(10)
     synth.mix_at(target, np.ones(4), 8)
@@ -139,14 +160,31 @@ def test_track_tables_match_original_and_render_full_loops() -> None:
 def test_cues_cover_all_event_types() -> None:
     assert set(synth.CUES) == set(EVENT_TYPES)
     assert len(synth.CUES) == len(EVENT_TYPES)  # 14 cues originais + 4 dos eventos novos
+    assert len(synth.PORTED_CUE_NAMES) == 14
+    assert all(synth.CUES[name].gain == 1.0 for name in synth.PORTED_CUE_NAMES)
     assert synth.CUES["jump"].slide == 14
     assert synth.CUES["hurt"].wave == "sawtooth"
     assert synth.CUES["complete"].notes == (72, 76, 79, 84, 79, 84, 88, 91)
     for name, cue in synth.CUES.items():
         rendered = synth.render_cue(cue)
         assert len(rendered) == round(cue.total_duration * SR), name
-        assert 0.2 < synth.peak(rendered) < 1.0, name
+        assert 0.1 < synth.peak(rendered) < 1.0, name
         assert synth.rms(rendered) > 0.02, name
+    # blips de fala são mais discretos que os efeitos de jogo
+    assert synth.peak(synth.render_cue(synth.CUES["talk"])) < synth.peak(
+        synth.render_cue(synth.CUES["coin"])
+    )
+
+
+def test_default_mix_leaves_headroom_for_sdl_mixer_sum() -> None:
+    """O SDL_mixer satura a soma dos canais: com os volumes padrão, música + ambiente +
+    um efeito + uma voz com picos alinhados precisam caber em 1,0."""
+    music = max(synth.peak(synth.render_track(track)) for track in synth.ALL_TRACKS) * 0.45
+    cue = max(synth.peak(synth.render_cue(cue)) for cue in synth.CUES.values()) * 0.75
+    voice = max(synth.peak(synth.render_voice(spec)) for spec in synth.VOICES.values()) * 0.8
+    ambient = synth.AMBIENT_PEAK * 0.6 * 0.6
+    assert music + ambient + cue + voice < 1.0
+    assert music > 0.1 and cue > 0.1  # mas não a ponto de ficar inaudível
 
 
 def test_voices_and_ambients_render_non_silent_without_clipping() -> None:
@@ -196,6 +234,44 @@ def test_cues_are_presynthesized_and_effects_play_on_sfx_bus(audio: AudioSystem)
     assert not any(channel.get_busy() for channel in audio.bus_channels("music"))
     audio.effect("not-a-cue")  # ignorado em silêncio
     assert audio.active_effects() == 1
+    # eventos novos do núcleo (chefe com fases, NPCs) também soam
+    for kind in ("boss_intro", "boss_phase", "talk", "npc_say"):
+        audio.effect(kind)
+        assert audio.active_effects(kind) == 1, kind
+    assert audio.active_effects() == 5
+
+
+class _BrokenChannel:
+    """Canal que falha ao ajustar volume: simula o mixer caindo durante o jogo."""
+
+    def __init__(self, channel: pygame.mixer.Channel) -> None:
+        self._channel = channel
+
+    def set_volume(self, _volume: float) -> None:
+        raise pygame.error("device lost")
+
+    def __getattr__(self, name: str) -> object:
+        return getattr(self._channel, name)
+
+
+def test_loop_slot_is_released_when_channel_fails(audio: AudioSystem) -> None:
+    audio.menu()
+    settle(audio, 1.0)
+    audio.set_world(4)  # crossfade em andamento nos dois canais
+    assert audio.fading
+    for slot in audio._music:
+        slot.channel = _BrokenChannel(slot.channel)  # type: ignore[assignment]
+    settle(audio, 1.0)  # set_volume falha → os dois slots são liberados, nada fica preso
+    assert not audio.fading
+    assert audio.music_weights == (0.0, 0.0)
+    audio.set_world(2)  # a nova trilha também falha ao iniciar: liberada, sem exceção
+    assert not audio.fading
+    assert audio.music_weights == (0.0, 0.0)
+    assert audio.track is not None
+    assert audio.track.name == "world-2"
+    audio.set_volumes(0.5, 0.5)  # ajustes de volume continuam inofensivos
+    audio.pause(True)
+    audio.pause(False)
 
 
 def test_bus_volumes_are_independent(audio: AudioSystem) -> None:

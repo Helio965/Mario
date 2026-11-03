@@ -236,7 +236,7 @@ Cada ficha segue a mesma grade: movimento · percepção · ataque · obstáculo
 | Bob-omb chutado | SMB3 | `±$28` (+½ vx do jogador) ; `vy = −$20` | 150 px/s ; −120 px/s | [D-SMB3] |
 | Bullet Bill | SMB1 / SMB3 / SMW | `$18` / `$18` (acel. 1 a cada 2 q) / `$20` | 90 / 90 / 120 px/s | [D-SMB1][D-SMB3][D-SMW] |
 | Zona morta do canhão | SMB1 | `dx + 40 < 80` | ±40 px (2,5 tiles) | [D-SMB1] |
-| Piranha: zona de "não sair" | SMB1 / SMB3 / SMW | `|dx| < $21` / `dx + $1B < $37` / idem | ±33 px / −27…+28 px / −27…+28 px | [D-SMB1][D-SMB3][D-SMW] |
+| Piranha: zona de "não sair" | SMB1 / SMB3 / SMW | `\|dx\| < $21` / `dx + $1B < $37` / idem | ±33 px / −27…+28 px / −27…+28 px | [D-SMB1][D-SMB3][D-SMW] |
 | Piranha: velocidade e percurso | SMB1 / SMB3 / SMW | 1 px a cada 2 q, 24 px / `$10` / `$10` | 30 px/s (0,8 s) / 60 px/s / 60 px/s (48 q) | idem |
 | Piranha: espera nos extremos | SMB1 / SMB3 / SMW | `$40` / `$30` (`$60` fogo) / `$20` dentro, `$20` fora | 1,07 s / 0,8 s (1,6 s) / 0,53 s | idem |
 | Thwomp: gatilho de queda | SMB3 / SMW | `dx + $24 < $50` | −36…+44 px (≈ ±40 px) | [D-SMB3][D-SMW] |
@@ -246,7 +246,7 @@ Cada ficha segue a mesma grade: movimento · percepção · ataque · obstáculo
 | Boo: atraso para perseguir | SMB3 | `$14` q sem ser olhado | 0,33 s | [D-SMB3] |
 | Boo: aceleração / máx. | SMB3 / SMW | 1 unid./q, `$10` / 1 unid. por 8 q, `$08` | 225 px/s², 60 px/s / 28 px/s², 30 px/s | [D-SMB3][D-SMW] |
 | Boo: decisão / giro | SMW | a cada `$20` q ; giro `$1F` q | 0,53 s ; 0,52 s | [D-SMW] |
-| Lakitu: velocidade-base por estado do jogador | SMB1 | 21 / 48 / 64 unid. − |dx|/4 (teto 60 px) | 79 / 180 / 240 px/s | [D-SMB1] |
+| Lakitu: velocidade-base por estado do jogador | SMB1 | 21 / 48 / 64 unid. − \|dx\|/4 (teto 60 px) | 79 / 180 / 240 px/s | [D-SMB1] |
 | Lakitu: acel. e máx. | SMB3 | 1 unid. a cada 2 q até `$20` | 112 px/s², 120 px/s | [D-SMB3] |
 | Lakitu: intervalo de lançamento / telegraph | SMB1 / SMB3 | 128 q / 16 q ; 64 q (128 em rampas) / ~15 q | 2,13 s / 0,27 s ; 1,07 s / 0,25 s | [D-SMB1][D-SMB3] |
 | Lakitu: reaparecimento | SMB1 | 7 × 128 q | ≈ 15 s | [D-SMB1] |
@@ -279,7 +279,7 @@ Cada ficha segue a mesma grade: movimento · percepção · ataque · obstáculo
 | Tipo | Quem usa | Como funciona | Rótulo |
 | --- | --- | --- | --- |
 | **Nenhuma** | Goomba, Koopa, Buzzy, Shy Guy, Cheep nadadora, Spiny | só paredes, bordas e outros inimigos mudam a direção | DOCUMENTADO [D-SMB1] |
-| **Janela horizontal fixa** | Piranha (±33/±27 px), Bill Blaster (±40 px), Thwomp (±40 px; SMW +±64 px), Chain Chomp (64 px), Hoppycat ("gets in range") | comparação de `|dx|` com uma constante; a janela vertical raramente existe (Thwomp exige só "em tela") | DOCUMENTADO [D-SMB1][D-SMB3][D-SMW] |
+| **Janela horizontal fixa** | Piranha (±33/±27 px), Bill Blaster (±40 px), Thwomp (±40 px; SMW +±64 px), Chain Chomp (64 px), Hoppycat ("gets in range") | comparação de `\|dx\|` com uma constante; a janela vertical raramente existe (Thwomp exige só "em tela") | DOCUMENTADO [D-SMB1][D-SMB3][D-SMW] |
 | **Janela X e Y** | Rip Van Fish (±48 px nos dois eixos), Chargin' Cheep (96 px × 24 px), Konk (jogador "beneath") | caixa em torno do inimigo | DOCUMENTADO [D-SMW][D-SMB3]; OBSERVADO [W-Konk] |
 | **Direção do olhar do jogador** | Boo (e Big Boo); negado em Boo Buddies/NSMB2 | compara `sign(dx)` com `player.facing`; atraso de 20 q (SMB3) ou decisão a cada 32 q (SMW) | DOCUMENTADO [D-SMB3][D-SMW] |
 | **Lado do jogador** | Hammer Bro, Bullet Bill, Venus, Dry Bones ao reviver, Koopas ao pousar, Bob-omb ao nascer, Spiny Cheep ao nascer | `EnemyFacePlayer`/`Level_ObjCalcXDiffs`: vira-se para o jogador em momentos discretos (nascer, pousar, reviver, atirar) | DOCUMENTADO [D-SMB1][D-SMB3] |
@@ -361,7 +361,7 @@ PATROL/STUNNED ──(fogo | casco | estrela | bloco por baixo | explosão)─�
 | `stun_time` (tombável) | 255 q = 4,25 s | **4,25 s**, telegraph nos últimos **0,8 s** | DOCUMENTADO |
 | `stomp_bounce` | −240 px/s (= salto parado SMB1) | manter **−390 px/s**; se o botão de salto estiver pressionado no instante do pisão, usar **−590 px/s** (pisão-salto) | ESTIMADO (design) |
 | `knockback_on_hit` | vy −180 px/s, vx ±60 px/s | **−440 px/s**, **±146 px/s** | DOCUMENTADO → ESTIMADO |
-| Expressão (Wonder) | olhar/pânico/sono | opcional: `ALERT` puramente visual quando |dx| < 150 px (não altera movimento) | OFICIAL [ATD-2] → ESTIMADO |
+| Expressão (Wonder) | olhar/pânico/sono | opcional: `ALERT` puramente visual quando \|dx\| < 150 px (não altera movimento) | OFICIAL [ATD-2] → ESTIMADO |
 
 ### 6.2 Casqueiro (com casco) — originais: Koopa Troopa verde/vermelho (SMB1), Buzzy Beetle (casco à prova de fogo)
 
@@ -384,7 +384,7 @@ PATROL ──(fogo, se não fireproof)──▶ DEFEATED
 | `shell_hits_player` | sim, sempre que em movimento | sim | OFICIAL [M-SMB1] |
 | `demote_paratroopa_keeps_edge_rule` | não (bug do ID $01) | **sim** | DOCUMENTADO → decisão |
 | `fireproof` (variante Buzzy) | sim | sim; o `armored` atual (44 px/s, 2 HP) vira esta variante | OFICIAL/DOCUMENTADO |
-| `ceiling_variant` (Buzzy de teto) | cai quando o jogador se aproxima (janela não extraída) | HIDDEN no teto → DROP quando |dx| < 60 px e jogador abaixo → SLIDE a 420 px/s em direção ao jogador | OBSERVADO → ESTIMADO |
+| `ceiling_variant` (Buzzy de teto) | cai quando o jogador se aproxima (janela não extraída) | HIDDEN no teto → DROP quando \|dx\| < 60 px e jogador abaixo → SLIDE a 420 px/s em direção ao jogador | OBSERVADO → ESTIMADO |
 | Pontos | 100 → cadeia | manter 200 por abate, cadeia ×2 até 1600 | ESTIMADO |
 
 Variante SMW ("sai do casco") fica fora do escopo: dobra a quantidade de estados e exige "pegar/carregar".
@@ -466,7 +466,7 @@ Ovo: cai; ao pousar vira Trotador com stomp_hurts=True (espinhos), 72 px/s, vira
 
 | Parâmetro | Original | Lume | Confiança |
 | --- | --- | --- | --- |
-| Velocidade-base parado / andando / correndo | 79 / 180 / 240 px/s − (|dx| & 60)/4 unid. | **190 / 440 / 590 px/s** − 0,8·|dx| (px/s, |dx| ≤ 112) | DOCUMENTADO → ESTIMADO |
+| Velocidade-base parado / andando / correndo | 79 / 180 / 240 px/s − (\|dx\| & 60)/4 unid. | **190 / 440 / 590 px/s** − 0,8·\|dx\| (px/s, \|dx\| ≤ 112) | DOCUMENTADO → ESTIMADO |
 | Teto de distância | 60 px | **112 px** | DOCUMENTADO → ESTIMADO |
 | Intervalo / telegraph | 2,13 s / 0,27 s (SMB1); 1,07 s / 0,25 s (SMB3) | **2,1 s / 0,27 s** | DOCUMENTADO |
 | Limite de "filhotes" | 4 (5 slots) | **3** por Arremessador aéreo | DOCUMENTADO → ESTIMADO |
@@ -721,3 +721,135 @@ def think(enemy, bb: Blackboard, prof):
 12. **Determinismo**: duas simulações com a mesma semente produzem a mesma `history` da `StateMachine` (os originais usam LFSR; o Lume usa `random.Random(seed)` por fase).
 
 ---
+## 9. Mapa: inimigo original → arquétipo do Lume
+
+| Original (título de referência) | Arquétipo do Lume | Variante / flags | Estados usados |
+| --- | --- | --- | --- |
+| Goomba (SMB1/SMB3) | Trotador | `stompable`, cai de bordas, não vira ao pousar | PATROL, DEFEATED |
+| Galoomba (SMW) | Trotador | tombável: `stun_time` 4,25 s, chutável sem ricochete | PATROL, STUNNED, SLIDE, DEFEATED |
+| Shy Guy (SMB2) | Trotador | `turn_at_edges` (rosa) / cai (vermelho); `stompable=False`, `blocks_player` | PATROL, HURT, DEFEATED |
+| Koopa verde / vermelho (SMB1) | Casqueiro | `turn_at_edges` só no vermelho; `face_player_on_land` | PATROL, SHELL, SLIDE, STUNNED, DEFEATED |
+| Buzzy Beetle (SMB1/SMB3) | Casqueiro | `fireproof`; variante de teto HIDDEN→DROP→SLIDE | idem + HIDDEN, DROP |
+| Paratroopa vermelho / verde (SMB1) | Planador | oscilação vertical/horizontal ou pulante; demote → Casqueiro | FLY (PATROL), LEAP, DEFEATED |
+| Bill Blaster + Bullet Bill (SMB1) | Arremessador (torre) | zona morta 75 px; projétil 220 px/s pisável e `fireproof` | IDLE, ATTACK |
+| Piranha Plant / Venus (SMB1/SMB3) | Arremessador (emboscada) | `stompable=False`; 0–2 projéteis | HIDDEN, EMERGE, ATTACK, RETREAT |
+| Hammer Bro (SMB1/SMB3) | Arremessador (saltador) | sem casco; avanço após 20 s | PATROL, PREPARE_ATTACK, ATTACK, RECOVER, LEAP, CHASE, DEFEATED |
+| Lakitu + Spiny (SMB1/SMB3) | Arremessador (aéreo) | velocidade por estado do jogador; filhote = Trotador `stomp_hurts` | CHASE, PREPARE_ATTACK, ATTACK, DEFEATED |
+| Thwomp (SMB3/SMW), Konk (SMBW) | Sentinela (esmagador) | `fireproof`, `stomp_hurts` ou `blocks_player` (Konk) | IDLE, ALERT, DROP, RECOVER, RISE |
+| Dry Bones (SMB3/SMW) | Sentinela (esqueleto) | `fireproof`, `turn_at_edges`, imortal salvo estrela/explosão | PATROL, STUNNED, RECOVER |
+| Chain Chomp (SMB3/NSMB) | Sentinela (acorrentado) | `fireproof`, `stomp_hurts`; corrente 90 px | IDLE, PREPARE_ATTACK, LEAP, RECOVER, FREE |
+| Boo (SMB3/SMW) | Sombra | `stompable=False`, `fireproof`; gatilho = olhar do jogador | IDLE, CHASE |
+| Bob-omb (SMB3/SMW/NSMB) | Faísca | pavio 4,25 s; chutável; quebra `brick` | PATROL, FUSE, SLIDE, EXPLODE, DEFEATED |
+| Cheep voadora (SMB1) | Saltador-do-lago | spawn de baixo da tela, máx. 3 | HIDDEN, LEAP, DEFEATED |
+| Rip Van Fish / Deep Cheep (SMW/NSMB) | Saltador-do-lago (perseguidor) | só com água navegável | IDLE, ALERT, CHASE, RETREAT |
+
+---
+
+## 10. Lacunas e incertezas
+
+1. **Valores de SMB1/SMB3/SMW são documentação comunitária derivada de análise de terceiros** (listagens anotadas publicadas em 6502disassembly.com, no repositório `captainsouthbird/smb3` e no `IsoFrieze/SMWDisX`). Não são valores oficiais; a leitura foi nossa e pode conter erros de interpretação (ex.: unidades de 1/16 px/q assumidas para todos os sprites de SMW com base no padrão de `$10 = 1 px/q`; a ordem exata dos frames de remontagem do Dry Bones em SMB3).
+2. **Discrepâncias wiki × código** registradas e resolvidas a favor do código, com a wiki citada: Hammer Bro avança após "100 time units (~50 s)" [W-Hammer] vs 128 ticks × 21 q ≈ 44,8 s [D-SMB1]; Lakitu "hiding in their clouds for about one second" [W-Lakitu] vs 16 q (0,27 s) de frame alternativo [D-SMB1]; Rip Van Fish volta a dormir "far enough" [W-RipVan] vs contador de ≈8,5 s [D-SMW]; Piranha de SMW "retreat into their pipe whenever the player is nearby" [W-Piranha] vs flag de "invisível/sem interação enquanto Mario estiver a ±27 px na troca de estado" [D-SMW].
+3. **Não extraídos**: janela exata do Buzzy Beetle de teto (SMB3/NSMB); velocidade/cadência do Lakitu e tempo de caminhada do Bob-omb em SMW; limites do voo do Paratroopa vermelho em SMB3; velocidade das bolas da Venus; duração do caído do Dry Bones em SMW (só o tremor dos últimos 64 q); valores de Deep Cheep, Hammer Bro e Thwomp nos NSMB (sem listagem pública consultada); qualquer número de Wonder. Esses itens estão marcados ESTIMADO ou OBSERVADO.
+4. **Fontes indisponíveis durante a pesquisa**: `iwataasks.nintendo.com` respondeu 503 em todas as tentativas (a citação de Tezuka/Nakago vem da reprodução do GoNintendo, que aponta para a página oficial); `tcrf.net` e `strategywiki.org` responderam 403 (o bug do ovo de Spiny foi confirmado na própria listagem e na Super Mario Wiki); as páginas da Super Mario Wiki foram lidas só nos primeiros 100 mil caracteres (seções de jogos tardios podem ter ficado de fora); o Mario Portal oficial lista inimigos apenas como imagens, sem texto.
+5. **PAL × NTSC**: todos os números assumem 60 Hz; SMW usa tabelas diferentes para PAL (cascos 3,44/3,875 px/q) — confirmando que a calibração-alvo é px/s, mas também mostrando que medições OBSERVADAS de vídeos PAL não são comparáveis.
+6. **Sons**: não há documentação oficial de efeitos sonoros; os nomes (`Sfx_EnemyStomp`, `Sfx_Blast`, `SND_LEVELBABOOM`, `SFX_KAPOW`) são rótulos dos autores das listagens. O Lume sintetiza áudio próprio; a pesquisa só informa **quando** soar algo.
+7. **Fatores de conversão da §6.0 são decisões de design (ESTIMADO)**; devem ser validados em playtests com o jogador real do Lume (22×30 px, 220/340 px/s). Em especial o teto do Esmagador (700 px/s) e a tabela de investidas do Acorrentado (600 px/s) podem exigir redução por legibilidade a 60 Hz de renderização.
+8. **Pisão-salto (−590 px/s)** é interpretação nossa do fato de o rebote de SMB1 ser igual ao v0 do salto e a gravidade depender do botão; não foi verificado se SMB1 realmente aplica a gravidade "baixa" após o pisão.
+
+## 11. Fontes
+
+Tipos: **oficial** (Nintendo/manuais/entrevistas), **entrevista**, **técnico** (listagem comunitária anotada, derivada de análise de terceiros), **comunitário** (wiki/blog), **docs** (documentação de biblioteca).
+
+| Chave | Fonte | Tipo |
+| --- | --- | --- |
+| [D-SMB1] | 6502disassembly.com — *Super Mario Bros.* listagem anotada (rotinas `InitNormalEnemy`, `MovePiranhaPlant`, `BulletBillHandler`, `LakituAndSpinyHandler`, `ProcHammerBro`, `EnemyStomped`, `SetStun`, `DecTimers`, tabelas `NormalXSpdData`, `KickedShellXSpdData`, `RevivalRateData`, `HammerThrowTmrData`, `LakituDiffAdj`, `SwimCCXMoveData`, `FlyCCXSpeedData`) | técnico |
+| [D-SMB3] | GitHub captainsouthbird/smb3 — *Super Mario Bros. 3* listagem anotada (`PRG/prg000.asm` atributos `OAT_/OA2_/OA3_`; `prg002.asm` Boo, Dry Bones, Cheeps; `prg003.asm` Bob-omb, Chain Chomp solto; `prg004.asm` Thwomp, Chain Chomp, Lakitu, Hammer Bro, Bullet Bill, GroundTroop; `prg005.asm` Piranha; `smb3.asm` "4.4 fixed point") | técnico |
+| [D-SMW] | GitHub IsoFrieze/SMWDisX — *Super Mario World* listagem anotada (`bank_01.asm`: `Spr0to13SpeedX`, `ShellSpeedX`, `SetStunnedTimer`, `Thwomp`, `ClassicPiranhas`, `BulletBill`, `Boo_BooBlock`, `DryBonesAndBeetle`, `Fish`, `Bobomb`; `bank_02.asm`: `RipVanFishMain`) | técnico |
+| [M-SMB1] | Manual *Super Mario Bros. + Duck Hunt* (EUA), Nintendo of America — scan com texto no Internet Archive (coleção NESManuals) | oficial |
+| [M-SMB3] | Manual *Super Mario Bros. 3* (EUA), Nintendo of America — Internet Archive (NESManuals) | oficial |
+| [M-SMW] | Manual *Super Mario All-Stars + Super Mario World* (EUA) — texto DjVu no Internet Archive | oficial |
+| [ATD-2] | Nintendo — *Ask the Developer Vol. 11, Super Mario Bros. Wonder — Part 2* (Tezuka, Mouri, Sato, Hayashida) | oficial/entrevista |
+| [ATD-3] | Nintendo — *Ask the Developer Vol. 11, Super Mario Bros. Wonder — Part 3* (Tezuka, Kondo, Mouri) | oficial/entrevista |
+| [IA-NSMBW] | Nintendo — *Iwata Asks: New Super Mario Bros. Wii*, Vol. 2 (Tezuka, Nakago), página sobre a criação do Goomba (indisponível — 503 — durante a pesquisa) | oficial/entrevista |
+| [GN] | GoNintendo — reprodução do trecho do Iwata Asks sobre o Goomba ("created at the very end") | comunitário |
+| [GD-GDC] | Game Developer — cobertura da palestra GDC 2024 "2D and Tomorrow" (Tezuka/Mouri): ideias rejeitadas, Gnawshers, 2 000 ideias | técnico/entrevista |
+| [W-Goomba] | Super Mario Wiki — Goomba | comunitário |
+| [W-Koopa] | Super Mario Wiki — Koopa Troopa | comunitário |
+| [W-Para] | Super Mario Wiki — Koopa Paratroopa | comunitário |
+| [W-Buzzy] | Super Mario Wiki — Buzzy Beetle | comunitário |
+| [W-Piranha] | Super Mario Wiki — Piranha Plant | comunitário |
+| [W-Venus] | Super Mario Wiki — Venus Fire Trap | comunitário |
+| [W-Boo] | Super Mario Wiki — Boo | comunitário |
+| [W-ShyGuy] | Super Mario Wiki — Shy Guy | comunitário |
+| [W-Hammer] | Super Mario Wiki — Hammer Bro | comunitário |
+| [W-Bullet] | Super Mario Wiki — Bullet Bill | comunitário |
+| [W-BillBlaster] | Super Mario Wiki — Bill Blaster | comunitário |
+| [W-Bobomb] | Super Mario Wiki — Bob-omb | comunitário |
+| [W-Lakitu] | Super Mario Wiki — Lakitu | comunitário |
+| [W-SpinyEgg] | Super Mario Wiki — Spiny Egg (bug do ovo que cai reto) | comunitário |
+| [W-Spiny] | Super Mario Wiki — Spiny | comunitário |
+| [W-Thwomp] | Super Mario Wiki — Thwomp | comunitário |
+| [W-Konk] | Super Mario Wiki — Konk | comunitário |
+| [W-Hoppycat] | Super Mario Wiki — Hoppycat | comunitário |
+| [W-DryBones] | Super Mario Wiki — Dry Bones | comunitário |
+| [W-Cheep] | Super Mario Wiki — Cheep Cheep | comunitário |
+| [W-RipVan] | Super Mario Wiki — Rip Van Fish | comunitário |
+| [W-DeepCheep] | Super Mario Wiki — Deep Cheep | comunitário |
+| [W-ChainChomp] | Super Mario Wiki — Chain Chomp | comunitário |
+| [W-Galoomba] | Super Mario Wiki — Galoomba | comunitário |
+| [W-GoombaProf] [W-KoopaProf] [W-ParaProf] [W-BuzzyProf] [W-PiranhaProf] [W-BooProf] [W-HammerProf] [W-BulletProf] [W-BobProf] [W-ShyProf] [W-LakituProf] [W-ThwompProf] [W-DryProf] [W-CheepProf] [W-ChompProf] | Super Mario Wiki — "List of … profiles and statistics" (transcrevem manuais oficiais e cartões licenciados de NSMBW) | comunitário (cita oficial) |
+| [PG-Rect] | pygame-ce — documentação de `pygame.Rect` | docs |
+| [FISICA] | `docs/research/FISICA.md` (este repositório) | interno |
+
+[D-SMB1]: https://6502disassembly.com/nes-smb/SuperMarioBros.html
+[D-SMB3]: https://github.com/captainsouthbird/smb3
+[D-SMW]: https://github.com/IsoFrieze/SMWDisX
+[M-SMB1]: https://archive.org/download/NESManuals/Super%20Mario%20Bros.%20%2B%20Duck%20Hunt%20%28USA%29_text.pdf
+[M-SMB3]: https://archive.org/download/NESManuals/Super%20Mario%20Bros.%203%20%28USA%29_text.pdf
+[M-SMW]: https://archive.org/stream/super-mario-all-stars-super-mario-world-usa/Super%20Mario%20All-Stars%20%2B%20Super%20Mario%20World%20%28USA%29_djvu.txt
+[ATD-2]: https://www.nintendo.com/us/whatsnew/ask-the-developer-vol-11-super-mario-bros-wonder-part-2/
+[ATD-3]: https://www.nintendo.com/us/whatsnew/ask-the-developer-vol-11-super-mario-bros-wonder-part-3/
+[IA-NSMBW]: https://iwataasks.nintendo.com/interviews/wii/nsmb/1/4/
+[GN]: https://www.gonintendo.com/archives/102481-goombas-the-walking-shiitake-mushrooms-was-created-at-the-very-end-of-super-mario
+[GD-GDC]: https://www.gamedeveloper.com/design/how-the-japanese-idea-of-mottainai-shaped-super-mario-bros-wonder
+[W-Goomba]: https://www.mariowiki.com/Goomba
+[W-Koopa]: https://www.mariowiki.com/Koopa_Troopa
+[W-Para]: https://www.mariowiki.com/Koopa_Paratroopa
+[W-Buzzy]: https://www.mariowiki.com/Buzzy_Beetle
+[W-Piranha]: https://www.mariowiki.com/Piranha_Plant
+[W-Venus]: https://www.mariowiki.com/Venus_Fire_Trap
+[W-Boo]: https://www.mariowiki.com/Boo
+[W-ShyGuy]: https://www.mariowiki.com/Shy_Guy
+[W-Hammer]: https://www.mariowiki.com/Hammer_Bro
+[W-Bullet]: https://www.mariowiki.com/Bullet_Bill
+[W-BillBlaster]: https://www.mariowiki.com/Bill_Blaster
+[W-Bobomb]: https://www.mariowiki.com/Bob-omb
+[W-Lakitu]: https://www.mariowiki.com/Lakitu
+[W-SpinyEgg]: https://www.mariowiki.com/Spiny_Egg
+[W-Spiny]: https://www.mariowiki.com/Spiny
+[W-Thwomp]: https://www.mariowiki.com/Thwomp
+[W-Konk]: https://www.mariowiki.com/Konk
+[W-Hoppycat]: https://www.mariowiki.com/Hoppycat
+[W-DryBones]: https://www.mariowiki.com/Dry_Bones
+[W-Cheep]: https://www.mariowiki.com/Cheep_Cheep
+[W-RipVan]: https://www.mariowiki.com/Rip_Van_Fish
+[W-DeepCheep]: https://www.mariowiki.com/Deep_Cheep
+[W-ChainChomp]: https://www.mariowiki.com/Chain_Chomp
+[W-Galoomba]: https://www.mariowiki.com/Galoomba
+[W-GoombaProf]: https://www.mariowiki.com/List_of_Goomba_profiles_and_statistics
+[W-KoopaProf]: https://www.mariowiki.com/List_of_Koopa_Troopa_profiles_and_statistics
+[W-ParaProf]: https://www.mariowiki.com/List_of_Koopa_Paratroopa_profiles_and_statistics
+[W-BuzzyProf]: https://www.mariowiki.com/List_of_Buzzy_Beetle_profiles_and_statistics
+[W-PiranhaProf]: https://www.mariowiki.com/List_of_Piranha_Plant_profiles_and_statistics
+[W-BooProf]: https://www.mariowiki.com/List_of_Boo_profiles_and_statistics
+[W-HammerProf]: https://www.mariowiki.com/List_of_Hammer_Bro_profiles_and_statistics
+[W-BulletProf]: https://www.mariowiki.com/List_of_Bullet_Bill_profiles_and_statistics
+[W-BobProf]: https://www.mariowiki.com/List_of_Bob-omb_profiles_and_statistics
+[W-ShyProf]: https://www.mariowiki.com/List_of_Shy_Guy_profiles_and_statistics
+[W-LakituProf]: https://www.mariowiki.com/List_of_Lakitu_profiles_and_statistics
+[W-ThwompProf]: https://www.mariowiki.com/List_of_Thwomp_profiles_and_statistics
+[W-DryProf]: https://www.mariowiki.com/List_of_Dry_Bones_profiles_and_statistics
+[W-CheepProf]: https://www.mariowiki.com/List_of_Cheep_Cheep_profiles_and_statistics
+[W-ChompProf]: https://www.mariowiki.com/List_of_Chain_Chomp_profiles_and_statistics
+[PG-Rect]: https://pyga.me/docs/ref/rect.html
+[FISICA]: ./FISICA.md
