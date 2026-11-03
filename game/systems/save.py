@@ -314,6 +314,9 @@ def user_data_dir(app: str = "Lume") -> Path:
     override = os.environ.get("LUME_SAVE_DIR")
     if override:
         return Path(override)
+    if sys.platform == "emscripten":
+        # Pygbag: /data/data é o ponto de montagem persistente (IDBFS) do navegador.
+        return Path("/data/data") / app.lower()
     if sys.platform.startswith("win"):
         base = os.environ.get("APPDATA") or str(Path.home() / "AppData" / "Roaming")
         return Path(base) / app

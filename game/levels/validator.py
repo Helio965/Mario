@@ -346,6 +346,15 @@ def validate_level(
                     e.id,
                 )
             )
+    for npc in level.npcs:
+        if not (0 <= npc.x < level.width):
+            issues.append(Issue("error", "npc.bounds", "NPC fora da largura da fase", npc.id))
+        elif _support_below(npc.x, npc.y, npc.w, platforms, reach=8, height=npc.h) is None:
+            issues.append(
+                Issue("warning", "npc.support", "NPC sem chão imediatamente abaixo", npc.id)
+            )
+        if npc.id in ids:
+            issues.append(Issue("error", "id.duplicate", "id de NPC repete outro id", npc.id))
     if check_jumps:
         grounds = main_grounds(level)
         for source, target in itertools.pairwise(grounds):
