@@ -13,3 +13,6 @@ __pycache__/
 build/
 .venv/
 artifacts/
+
+# local agent tooling (isolated git worktrees)
+.claude/worktrees/
