@@ -48,7 +48,7 @@ def render_all(sample_rate: int, ambient_seconds: float) -> dict[str, FloatArray
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[:1] or None)
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0] if __doc__ else None)
     parser.add_argument("--out", default=str(ROOT / "build" / "audio"), help="diretório de saída")
     parser.add_argument("--sample-rate", type=int, default=synth.SAMPLE_RATE)
     parser.add_argument("--ambient-seconds", type=float, default=synth.AMBIENT_SECONDS)
