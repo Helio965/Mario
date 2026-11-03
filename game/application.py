@@ -8,6 +8,7 @@ entrada, drenamos os eventos para áudio/interface/salvamento e desenhamos.
 from __future__ import annotations
 
 import argparse
+import asyncio
 import contextlib
 import os
 import sys
@@ -273,6 +274,22 @@ class Application:
         self.shutdown()
         return 0
 
+    async def run_async(self) -> int:
+        """Laço cooperativo para o navegador (Pygbag/Emscripten): cede o controle a cada quadro."""
+        previous = time.perf_counter()
+        while self.running:
+            limit = self.settings.fps_limit
+            self.clock.tick(limit) if limit else self.clock.tick()
+            now = time.perf_counter()
+            dt = min(now - previous, MAX_FRAME_TIME)
+            previous = now
+            self.frame(dt, now)
+            if self.options.headless_frames and self.frame_count >= self.options.headless_frames:
+                self.running = False
+            await asyncio.sleep(0)
+        self.shutdown()
+        return 0
+
     def shutdown(self) -> None:
         self.persist()
         self.audio.dispose()
@@ -401,3 +418,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     options = parse_args(sys.argv[1:] if argv is None else argv)
     app = Application(options)
     return app.run()
+
+
+async def main_async(argv: Sequence[str] | None = None) -> int:
+    """Entrada para o navegador: ``asyncio.run(main_async())`` em ``main.py``."""
+    options = parse_args(sys.argv[1:] if argv is None else argv)
+    app = Application(options)
+    return await app.run_async()
