@@ -1,0 +1,11 @@
+{
+  "id": "intro_1-1",
+  "skippable": true,
+  "auto_advance": false,
+  "on_end": "intro_seen",
+  "lines": [
+    { "speaker": "lume", "key": "dialogues.intro_1-1.0", "expression": "curious", "gesture": "look_around", "voice": "hello" },
+    { "speaker": "lume", "key": "dialogues.intro_1-1.1", "expression": "happy", "gesture": "point" },
+    { "speaker": "lume", "key": "dialogues.intro_1-1.2", "expression": "determined", "gesture": "nod", "voice": "surprise" }
+  ]
+}

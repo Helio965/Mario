@@ -1,1 +1,1 @@
-"""Lume — pacote npc."""
+"""NPCs, diálogos, reações e rotinas."""

@@ -1,0 +1,145 @@
+{
+  "game": {
+    "title": "LUME",
+    "subtitle": "AS CINCO FRONTEIRAS",
+    "tagline": "Há uma luz além de cada horizonte.\nSalte, explore e encontre a sua."
+  },
+  "menu": {
+    "play": "JOGAR",
+    "continue": "Continuar · {world}-{stage}",
+    "start_here": "Sua jornada começa aqui",
+    "map": "Selecionar mundo",
+    "controls": "Controles",
+    "settings": "Configurações",
+    "credits": "Créditos",
+    "quit": "Sair",
+    "saved_locally": "Seu progresso é salvo neste computador.",
+    "next_frontier": "SUA PRÓXIMA FRONTEIRA",
+    "first_destination": "SEU PRIMEIRO DESTINO"
+  },
+  "hud": {
+    "lives": "VIDAS",
+    "score": "PONTOS",
+    "coins": "MOEDAS",
+    "stage": "MUNDO / FASE",
+    "time": "TEMPO",
+    "guardian": "GUARDIÃO",
+    "power_small": "Explorador",
+    "power_grown": "Crescimento",
+    "power_fire": "Flor de fogo",
+    "power_star": "Invencível · {seconds}s",
+    "fps": "{fps} FPS"
+  },
+  "events": {
+    "checkpoint": "Checkpoint ativado",
+    "secret": "Uma passagem secreta!",
+    "relic": "Relíquia encontrada!",
+    "complete": "Fase concluída!",
+    "boss": "Guardião derrotado!",
+    "life_coins": "100 moedas: vida extra!",
+    "life_heart": "Uma vida extra!",
+    "power_grow": "Mais forte!",
+    "power_fire": "Chama ativa — pressione {button}",
+    "power_star": "12 segundos de invencibilidade",
+    "save_blocked": "Não foi possível gravar o progresso. Ele vale nesta sessão.",
+    "progress_reset": "Uma nova jornada começa. Progresso reiniciado.",
+    "audio_on": "Áudio ativado.",
+    "audio_off": "Áudio desligado."
+  },
+  "dialogues": {
+    "intro_1-1": {
+      "0": "Então é aqui que a luz começa... O vale inteiro está brilhando!",
+      "1": "Moedas, blocos com luz e canos antigos. Alguém deixou pistas para mim.",
+      "2": "Cinco fronteiras, cinco guardiões. Vamos descobrir o que há além do horizonte."
+    }
+  },
+  "reactions": {
+    "lume": {
+      "jump": [
+        "Hup!",
+        "Lá vou eu!",
+        "Mais alto!"
+      ],
+      "hurt": [
+        "Ai!",
+        "Isso doeu...",
+        "Preciso ter mais cuidado."
+      ],
+      "stomp": [
+        "Desculpe!",
+        "Peguei!",
+        "Fora do caminho!"
+      ],
+      "coin_streak": [
+        "Que brilho!",
+        "Isso vai render.",
+        "Mais uma para a coleção."
+      ],
+      "relic": [
+        "Uma relíquia! Ela está quente de luz.",
+        "Olha só o que estava escondido aqui!",
+        "Os antigos deixaram isso para alguém encontrar."
+      ],
+      "checkpoint": [
+        "Daqui eu não volto atrás.",
+        "Um fôlego, e seguimos.",
+        "A luz marcou este lugar."
+      ],
+      "secret": [
+        "Uma passagem! Eu sabia que esse cano escondia algo.",
+        "Quem construiu isso gostava de segredos.",
+        "Por aqui ninguém passou há muito tempo."
+      ],
+      "power_grow": [
+        "Sinto a luz crescer em mim!",
+        "Mais forte!",
+        "Agora aguento um tombo."
+      ],
+      "power_fire": [
+        "Chama na mão! Cuidado, guardiões.",
+        "Quente, quente, quente!",
+        "Vou iluminar o caminho... literalmente."
+      ],
+      "power_star": [
+        "Nada me para agora!",
+        "Estou brilhando!",
+        "Rápido, antes que passe!"
+      ],
+      "boss_intro": [
+        "Então você é quem guarda esta fronteira.",
+        "Não vim brigar. Mas também não vou embora.",
+        "Mostre o que sabe fazer, guardião."
+      ],
+      "boss_hit": [
+        "Achei a brecha!",
+        "Mais uma vez!",
+        "Está sentindo a luz?"
+      ],
+      "boss_defeated": [
+        "A fronteira está aberta.",
+        "Descanse, guardião. Eu cuido do resto.",
+        "Uma luz a menos apagada."
+      ],
+      "victory": [
+        "Mais um horizonte!",
+        "Conseguimos!",
+        "O que vem agora?"
+      ],
+      "defeat": [
+        "Tudo bem. Eu volto.",
+        "A luz continua aqui.",
+        "Da próxima vez, eu chego lá."
+      ],
+      "world_unlock": [
+        "Uma nova fronteira... o ar mudou.",
+        "Nunca estive tão longe de casa.",
+        "Cada mundo tem sua própria luz."
+      ],
+      "idle_long": [
+        "Hmm... por onde?",
+        "Esse vento traz um cheiro novo.",
+        "Será que ouvi alguma coisa?"
+      ]
+    }
+  }
+}
