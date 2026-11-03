@@ -47,6 +47,11 @@
    "id": "cp_mid",
    "x": 2460,
    "y": 414
+  },
+  {
+   "id": "cp_roots",
+   "x": 3760,
+   "y": 418
   }
  ],
  "exit": {
@@ -267,6 +272,42 @@
    "y": 760,
    "w": 291,
    "h": 136
+  },
+  {
+   "id": "crown_cap1",
+   "kind": "ledge",
+   "x": 2400,
+   "y": 360,
+   "w": 60,
+   "h": 20,
+   "style": "fungus"
+  },
+  {
+   "id": "crown_cap2",
+   "kind": "ledge",
+   "x": 2480,
+   "y": 290,
+   "w": 60,
+   "h": 20,
+   "style": "fungus"
+  },
+  {
+   "id": "crown_cap3",
+   "kind": "ledge",
+   "x": 2560,
+   "y": 220,
+   "w": 60,
+   "h": 20,
+   "style": "fungus"
+  },
+  {
+   "id": "crown_cap4",
+   "kind": "ledge",
+   "x": 2640,
+   "y": 160,
+   "w": 60,
+   "h": 20,
+   "style": "fungus"
   }
  ],
  "coin_groups": [
@@ -340,6 +381,12 @@
    "kind": "relic",
    "x": 2908,
    "y": 850
+  },
+  {
+   "id": "relic_crown",
+   "kind": "relic",
+   "x": 2668,
+   "y": 118
   }
  ],
  "items": [
@@ -393,10 +440,70 @@
    "x": 4200,
    "y": 448,
    "patrol": [
-    3980,
+    4090,
     4470
    ],
    "hp": 6
+  },
+  {
+   "id": "enemy_tree_hopper",
+   "species": "cogumelo_saltitante",
+   "x": 500,
+   "y": 448,
+   "patrol": [
+    420,
+    620
+   ]
+  },
+  {
+   "id": "enemy_tree_moth",
+   "species": "mariposa_lume",
+   "x": 800,
+   "y": 300,
+   "patrol": [
+    700,
+    900
+   ]
+  },
+  {
+   "id": "enemy_tree_snail",
+   "species": "caracol_musgo",
+   "x": 1450,
+   "y": 448,
+   "patrol": [
+    1380,
+    1560
+   ]
+  },
+  {
+   "id": "enemy_tree_plant",
+   "species": "planta_esporos",
+   "x": 1900,
+   "y": 448,
+   "patrol": [
+    1890,
+    1910
+   ]
+  },
+  {
+   "id": "enemy_tree_beetle",
+   "species": "besouro_casca",
+   "x": 3040,
+   "y": 448,
+   "patrol": [
+    3000,
+    3080
+   ]
+  },
+  {
+   "id": "enemy_tree_moth2",
+   "species": "mariposa_lume",
+   "x": 3200,
+   "y": 300,
+   "patrol": [
+    3100,
+    3350
+   ]
   }
  ],
  "hazards": [
@@ -425,6 +532,14 @@
    "clue": "Trilha de moedas sobe pelos blocos",
    "rewards": [
     "relic_high"
+   ]
+  },
+  {
+   "id": "crown_route",
+   "kind": "high_route",
+   "clue": "Chapéus de cogumelo luminosos formam uma escada até a copa",
+   "rewards": [
+    "relic_crown"
    ]
   }
  ],

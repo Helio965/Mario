@@ -235,6 +235,24 @@
    "y": 760,
    "w": 291,
    "h": 136
+  },
+  {
+   "id": "firefly_step_a",
+   "kind": "hidden",
+   "x": 2240,
+   "y": 360,
+   "w": 40,
+   "h": 24,
+   "secret": "firefly_steps"
+  },
+  {
+   "id": "firefly_step_b",
+   "kind": "hidden",
+   "x": 2300,
+   "y": 300,
+   "w": 40,
+   "h": 24,
+   "secret": "firefly_steps"
   }
  ],
  "coin_groups": [
@@ -316,6 +334,12 @@
    "kind": "relic",
    "x": 3508,
    "y": 850
+  },
+  {
+   "id": "relic_firefly",
+   "kind": "relic",
+   "x": 2312,
+   "y": 182
   }
  ],
  "items": [
@@ -356,6 +380,36 @@
     2450,
     2710
    ]
+  },
+  {
+   "id": "enemy_canopy_hopper",
+   "species": "cogumelo_saltitante",
+   "x": 3700,
+   "y": 448,
+   "patrol": [
+    3650,
+    3780
+   ]
+  },
+  {
+   "id": "enemy_canopy_snail",
+   "species": "caracol_musgo",
+   "x": 3090,
+   "y": 448,
+   "patrol": [
+    3050,
+    3140
+   ]
+  },
+  {
+   "id": "enemy_canopy_plant",
+   "species": "planta_esporos",
+   "x": 3400,
+   "y": 448,
+   "patrol": [
+    3380,
+    3420
+   ]
   }
  ],
  "hazards": [
@@ -385,6 +439,15 @@
    "rewards": [
     "relic_high"
    ]
+  },
+  {
+   "id": "firefly_steps",
+   "kind": "hidden_block",
+   "clue": "Vagalumes se reúnem sobre um ponto vazio: blocos ocultos formam degraus",
+   "rewards": [
+    "relic_firefly"
+   ],
+   "entry": "firefly_step_a"
   }
  ],
  "hints": [

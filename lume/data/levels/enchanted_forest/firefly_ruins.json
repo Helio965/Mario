@@ -47,6 +47,11 @@
    "id": "cp_mid",
    "x": 2320,
    "y": 414
+  },
+  {
+   "id": "cp_ruins",
+   "x": 3550,
+   "y": 418
   }
  ],
  "exit": {
@@ -270,6 +275,33 @@
    "y": 760,
    "w": 291,
    "h": 136
+  },
+  {
+   "id": "ivy_step1",
+   "kind": "ledge",
+   "x": 2800,
+   "y": 330,
+   "w": 70,
+   "h": 20,
+   "style": "floating"
+  },
+  {
+   "id": "ivy_step2",
+   "kind": "ledge",
+   "x": 2900,
+   "y": 262,
+   "w": 70,
+   "h": 20,
+   "style": "floating"
+  },
+  {
+   "id": "ivy_step3",
+   "kind": "ledge",
+   "x": 3000,
+   "y": 210,
+   "w": 80,
+   "h": 20,
+   "style": "floating"
   }
  ],
  "coin_groups": [
@@ -351,6 +383,12 @@
    "kind": "relic",
    "x": 2158,
    "y": 850
+  },
+  {
+   "id": "relic_ivy",
+   "kind": "relic",
+   "x": 3030,
+   "y": 170
   }
  ],
  "items": [
@@ -391,6 +429,46 @@
     4030,
     4270
    ]
+  },
+  {
+   "id": "enemy_ruins_hopper",
+   "species": "cogumelo_saltitante",
+   "x": 3950,
+   "y": 448,
+   "patrol": [
+    3900,
+    4020
+   ]
+  },
+  {
+   "id": "enemy_ruins_moth",
+   "species": "mariposa_lume",
+   "x": 4000,
+   "y": 250,
+   "patrol": [
+    3950,
+    4060
+   ]
+  },
+  {
+   "id": "enemy_ruins_beetle",
+   "species": "caracol_musgo",
+   "x": 1950,
+   "y": 448,
+   "patrol": [
+    1900,
+    2080
+   ]
+  },
+  {
+   "id": "enemy_ruins_moth2",
+   "species": "mariposa_lume",
+   "x": 1650,
+   "y": 220,
+   "patrol": [
+    1600,
+    1760
+   ]
   }
  ],
  "hazards": [
@@ -428,6 +506,14 @@
    "clue": "Trilha de moedas sobe pelos blocos",
    "rewards": [
     "relic_high"
+   ]
+  },
+  {
+   "id": "ivy_hall",
+   "kind": "high_route",
+   "clue": "Vagalumes sobem por degraus de pedra escondidos na hera sobre as ruínas",
+   "rewards": [
+    "relic_ivy"
    ]
   }
  ],
