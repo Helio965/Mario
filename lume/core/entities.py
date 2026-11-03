@@ -161,6 +161,7 @@ class Hazard:
     speed: float = 1.0
     phase: float = 0.0
     lethal: bool = False  # lava/water pits kill directly
+    style: str = ""  # art variant (e.g. "snowball")
 
     def position(self, elapsed: float) -> tuple[float, float]:
         if self.kind == "moving":
@@ -185,6 +186,7 @@ class Zone:
     period: float = 0.0  # >0: force pulses (wind gusts)
     duty: float = 1.0
     radius: float = 0.0  # visibility radius for dark zones
+    phase: float = 0.0  # clock offset for periodic zones
 
 
 @dataclass(slots=True)

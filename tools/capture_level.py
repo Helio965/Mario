@@ -46,8 +46,9 @@ def capture(level_id: str, out_dir: str, res: tuple[int, int], xs: list[float], 
         p.x = x
         floor = None
         for s in game.index.query(x - 1, x + 1):
-            if s.kind in ("ground", "ledge") and s.x <= x + 11 < s.x + s.w and s.y < 540:
-                floor = s.y if floor is None else min(floor, s.y)
+            # the walkable floor is the lowest surface on screen (ceilings start near y 0)
+            if s.kind in ("ground", "ledge") and s.x <= x + 11 < s.x + s.w and 120 <= s.y < 540:
+                floor = s.y if floor is None else max(floor, s.y)
         if floor is not None:
             p.y = floor - p.h
         game.camera.snap(game)

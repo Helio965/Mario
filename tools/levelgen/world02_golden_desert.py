@@ -118,7 +118,7 @@ l.hazard("moving", 600, 356, 26, 26, range=50, speed=1.5)
 l.coins("row", 140, 410, 4)
 l.plat("crumble", 712, 448, 96, 20)
 l.hazard("spikes", 700, 520, 120, 14)
-l.ground(820, 780, style=F)
+l.ground(820, 180, style=F)                         # 820..1000, then the quicksand trap
 quicksand(l, 1000, 80)
 l.ground(1080, 520, style=F)
 l.relic("relic_trap", 1030, 330)

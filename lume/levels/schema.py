@@ -118,6 +118,7 @@ class HazardSpec:
     range: float = 30.0
     speed: float = 1.0
     phase: float = 0.0
+    style: str = ""  # art variant, e.g. "snowball" for a rolling moving hazard
 
 
 @dataclass(frozen=True, slots=True)
@@ -133,6 +134,7 @@ class ZoneSpec:
     period: float = 0.0
     duty: float = 1.0
     radius: float = 0.0
+    phase: float = 0.0  # seconds added to the clock of a periodic zone (alternating gusts)
 
 
 @dataclass(frozen=True, slots=True)
@@ -440,13 +442,14 @@ def parse_level(data: Any, source: str = "<memória>") -> LevelSpec:
     for i, raw in enumerate(r.arr(root.get("hazards"), "$.hazards")):
         path = f"hazards[{i}]"
         h = r.obj(raw, path)
-        r.unknown_keys(h, {"id", "kind", "x", "y", "w", "h", "range", "speed", "phase"}, path)
+        r.unknown_keys(h, {"id", "kind", "x", "y", "w", "h", "range", "speed", "phase", "style"}, path)
         hazards.append(
             HazardSpec(
                 _local_id(r, h, path, seen), r.choice(h, "kind", path, HAZARD_KINDS),
                 r.number(h, "x", path), r.number(h, "y", path), r.number(h, "w", path, minimum=1), r.number(h, "h", path, minimum=1),
                 r.number(h, "range", path, 30.0, required=False), r.number(h, "speed", path, 1.0, required=False),
                 r.number(h, "phase", path, 0.0, required=False),
+                str(h.get("style", "")),
             )
         )
 
@@ -454,7 +457,7 @@ def parse_level(data: Any, source: str = "<memória>") -> LevelSpec:
     for i, raw in enumerate(r.arr(root.get("zones"), "$.zones")):
         path = f"zones[{i}]"
         z = r.obj(raw, path)
-        r.unknown_keys(z, {"id", "kind", "x", "y", "w", "h", "force_x", "force_y", "period", "duty", "radius"}, path)
+        r.unknown_keys(z, {"id", "kind", "x", "y", "w", "h", "force_x", "force_y", "period", "duty", "radius", "phase"}, path)
         zones.append(
             ZoneSpec(
                 _local_id(r, z, path, seen), r.choice(z, "kind", path, ZONE_KINDS),
@@ -464,6 +467,7 @@ def parse_level(data: Any, source: str = "<memória>") -> LevelSpec:
                 r.number(z, "period", path, 0.0, required=False, minimum=0, maximum=60),
                 r.number(z, "duty", path, 1.0, required=False, minimum=0, maximum=1),
                 r.number(z, "radius", path, 0.0, required=False, minimum=0, maximum=1000),
+                r.number(z, "phase", path, 0.0, required=False, minimum=0, maximum=60),
             )
         )
 

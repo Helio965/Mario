@@ -2652,6 +2652,55 @@
    "introduced_in": "scarab_pyramid",
    "boss": true,
    "params": {}
+  },
+  {
+   "id": "morsa_gelomar",
+   "name": "Morsa Gelomar",
+   "role_reference": "chefe de mundo com armadura removível",
+   "description": "Morsa enorme com elmo de gelo espinhoso. Bate as nadadeiras e desliza de barriga pelo salão; ao empinar, faz pingentes caírem em pontos marcados. A cada ciclo um caracol-de-cristal sai de um buraco no gelo: o casco chutado (ou três bolas de fogo) racha o elmo e abre a janela de pisão; bater na parede também a deixa tonta por um instante.",
+   "habitats": [
+    "snow",
+    "fortress"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 5,
+   "behavior": "ice_walrus",
+   "abilities": [
+    "slide",
+    "summon",
+    "crush",
+    "spiked_top",
+    "shield",
+    "arc_projectile"
+   ],
+   "weaknesses": [
+    "stomp"
+   ],
+   "size": [
+    96,
+    60
+   ],
+   "hp": 5,
+   "speed": 0,
+   "score": 5000,
+   "animation_set": "ice_walrus",
+   "animation_states": [
+    "intro",
+    "idle",
+    "flap",
+    "slide",
+    "dazed",
+    "rear",
+    "slam",
+    "stunned",
+    "hurt",
+    "defeat"
+   ],
+   "visual_theme": "snow",
+   "defeat": "cinco pisões com o elmo rachado (casco de cristal, fogo) ou tonta após bater na parede",
+   "introduced_in": "frost_citadel",
+   "boss": true,
+   "params": {}
   }
  ]
 }

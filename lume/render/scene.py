@@ -563,6 +563,12 @@ class Scene:
                     else:
                         self.store.register(ArtSpec(art, (lambda hw=h.w, hh=h.h: self.world.hazard("thorns", hw, hh)), 1.0, (0, 0), "world"))
                 self.draw_art(art, hx, hy - 4, pivot=False)
+            elif h.kind == "moving" and h.style == "snowball":
+                cx, cy = hx + h.w / 2, hy + h.h / 2
+                roll = math.degrees((hx - h.x) / max(8.0, h.w / 2))
+                self.draw_art("hazard.snowball", cx, cy, scale=h.w / 76, angle=roll % 360)
+                if self.effects and abs(math.cos(game.elapsed * h.speed + h.phase)) > 0.3:
+                    self.draw_art("particle.soft", cx, hy + h.h, scale=1.6, alpha=0.5, tint=(235, 245, 255))
             elif h.kind == "moving":
                 cx, cy = hx + h.w / 2, hy + h.h / 2
                 if self.effects:
@@ -589,7 +595,7 @@ class Scene:
                     y = z.y + ((k * 151.0) % max(1.0, z.h - 10)) + 5
                     if self.visible(x - 40, y - 4, 80, 8, margin=0):
                         self.draw_art("fx.wind", x, y, alpha=0.55 if z.kind == "wind" else 0.4, flip=z.force_x < 0,
-                                      tint=(255, 236, 200) if z.kind == "wind" else (200, 240, 255))
+                                      tint=self.world.wind_tint if z.kind == "wind" else (200, 240, 255))
 
     def _collectibles(self, game) -> None:
         t = self.time

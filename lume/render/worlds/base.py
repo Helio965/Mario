@@ -43,6 +43,7 @@ class WorldArt:
     terrain_headroom = 12.0
     ambient = (255, 255, 255)  # colour modulation for world sprites (dark worlds dim them)
     vignette = 0.28
+    wind_tint = (255, 236, 200)  # colour of the wind-zone streaks (sand by default)
 
     def sky(self) -> Svg:
         raise NotImplementedError

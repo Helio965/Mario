@@ -152,6 +152,22 @@ def play_route(level: LevelSpec, seconds: float = 100.0, *, run: bool = True, ga
             plant_out = next((e for e in game.enemies if e.alive and e.active and e.memory.get("family") == "emerger"
                               and e.state != "hidden" and e.x - (ahead) < 150 and e.x + e.w > p.x - 10
                               and abs((e.memory.get("base_y", e.y) + e.h) - (p.y + p.h)) < 40), None)
+            rolling = _rolling_hazard(game, p, 340.0 if run else 220.0) if p.grounded and goal is None else None
+            if rolling is None:
+                state["roll_wait"] = 0.0
+            else:
+                # wait for the rolling ball to pass, then follow right behind it; when
+                # it sweeps the whole lane (no way around), jump over it as it comes
+                state["roll_wait"] = state.get("roll_wait", 0.0) + step
+                reason = "esperando bola"
+                inp.right = False
+                inp.run = False
+                if state["roll_wait"] > 2.0 and _ball_close(game, p):
+                    reason = "saltando bola"
+                    inp.right, inp.run = True, True
+                    jump(0.64)
+                elif rolling == "retreat":
+                    inp.left = True
             if plant_out is not None and p.grounded and goal is None and p.power != "fire":
                 # wait outside the bite until the flower retreats, then walk past
                 reason = "esperando flor"
@@ -162,6 +178,8 @@ def play_route(level: LevelSpec, seconds: float = 100.0, *, run: bool = True, ga
             danger_ahead = False
             wide_danger = False
             for h in game.hazards:
+                if h.kind == "moving":
+                    continue  # rolling/oscillating hazards: timed by _rolling_hazard (go/no-go)
                 hx, hy = h.position(game.elapsed)
                 if hx + h.w > p.x and hx < ahead + 90 and hy < p.y + p.h and hy + h.h > p.y:
                     danger_ahead = True
@@ -460,6 +478,67 @@ def _fight_boar(game: Game, boss: Enemy, inp: InputState, steer, jump) -> None:
         steer(inp, middle + (200 if center < middle else -200))
 
 
+def _fight_walrus(game: Game, boss: Enemy, inp: InputState, steer, jump) -> None:
+    """Jump the belly-slides, step between the icicle marks, kick crystal shells
+    into it, and stomp only while it is dazed (wall crash) or stunned (cracked helmet)."""
+    p = game.player
+    center = boss.x + boss.w / 2
+    pc = p.x + p.w / 2
+    left, right = boss.patrol
+    middle = (left + right) / 2
+    state = boss.state
+    icicle = next((s for s in game.projectiles if s.hostile and s.kind == "icicle"
+                   and abs(s.x + s.w / 2 - pc) < 30 and s.y < p.y), None)
+    if not p.grounded:
+        if state in ("dazed", "stunned"):
+            steer(inp, center)
+        elif state == "slide":
+            steer(inp, center - boss.facing * 150)  # cross over it and land behind it
+        elif icicle is not None:
+            steer(inp, icicle.x + icicle.w / 2 + (56 if pc >= icicle.x + icicle.w / 2 else -56))
+        elif abs(center - pc) < 200:
+            steer(inp, pc + (50 if center < pc else -50))
+        return
+    window = state in ("dazed", "stunned") and boss.hit_timer < 0.05
+    if window:
+        # stomp from the side Lume is already on (never walk through it); use the
+        # other side only when the wall leaves no run-up
+        side = 1 if pc > center else -1
+        launch = center + side * 92
+        if launch < left + 16 or launch > right - 16:
+            side, launch = -side, center - side * 92
+        steer(inp, launch, running=True)
+        if abs(pc - launch) < 28:
+            jump(0.7)
+        return
+    if icicle is not None:
+        steer(inp, icicle.x + icicle.w / 2 + (56 if pc >= icicle.x + icicle.w / 2 else -56), running=True)
+        return
+    if state == "slide":
+        toward = (center < pc) == (boss.facing > 0)
+        if toward and abs(center - pc) < 170:
+            jump(0.75)
+        return
+    minions = [e for e in game.enemies if e.alive and e.id.startswith("spawn-")]
+    walker = next((e for e in minions if e.state == "walk" and abs(e.x + e.w / 2 - pc) < 90
+                   and abs((e.y + e.h) - (p.y + p.h)) < 12), None)
+    if walker is not None:
+        steer(inp, walker.x + walker.w / 2)
+        jump(0.5)  # stomp it into a shell
+        return
+    shell = next((e for e in minions if e.state == "shell"), None)
+    if shell is not None and state in ("idle", "rear", "slam", "intro") and abs((shell.y + shell.h) - (p.y + p.h)) < 12:
+        sc = shell.x + shell.w / 2
+        if (pc < sc < center) or (center < sc < pc):
+            steer(inp, sc, running=False)  # walk into it: the kick sends it at the walrus
+            return
+    if state == "flap":
+        spot = middle + (200 if center < middle else -200)
+        steer(inp, spot)
+        return
+    steer(inp, middle + (220 if center < middle else -220))
+
+
 def simulate_air(game: Game, direction: int, horizon: float = 1.4):
     """Continue the current airborne trajectory steering ``direction`` (-1/0/1).
     Returns (platform or None, outcome) with outcome land | pit | hazard | air."""
@@ -498,6 +577,76 @@ def _floor_below(game: Game, x: float, y: float, depth: float):
     return None
 
 
+def _ball_close(game: Game, p) -> bool:
+    """A low moving hazard right in front of Lume, at body height (jumpable)."""
+    for h in game.hazards:
+        if h.kind != "moving" or h.h > 64:
+            continue
+        hx, hy = h.position(game.elapsed)
+        if p.x + p.w + 16 <= hx <= p.x + p.w + 90 and hy < p.y + p.h and hy + h.h > p.y:
+            return True
+    return False
+
+
+def _rolling_hazard(game: Game, p, speed: float) -> Optional[str]:
+    """Go / no-go for hazards that roll back and forth (moving hazards).
+
+    Returns None when running on now stays clear of every moving hazard for
+    the next 1.6 s, "wait" when standing still is safe but running is not,
+    and "retreat" when the hazard would also reach Lume standing still.
+    A person watches the ball and goes right behind it; this does the same.
+    """
+    import math
+
+    horizon, dt = 1.6, 1 / 30
+    near = []
+    for h in game.hazards:
+        if h.kind != "moving":
+            continue
+        lo, hi = h.x - h.range, h.x + h.range + h.w
+        if hi < p.x - 40 or lo > p.x + p.w + speed * horizon:
+            continue
+        if not (h.y < p.y + p.h + 80 and h.y + h.h > p.y - 40):
+            continue
+        near.append(h)
+    if not near:
+        return None
+
+    feet_at: dict[int, float] = {}
+
+    def body_y(px: float) -> tuple[float, float]:
+        """Lume's body (top, bottom) when walking at x = px (follows drops)."""
+        key = int(px // 8)
+        if key not in feet_at:
+            floor = _floor_below(game, px + p.w / 2, p.y + p.h - 4, 140)
+            feet_at[key] = floor.y if floor is not None else p.y + p.h
+        feet = feet_at[key]
+        return feet - p.h, feet
+
+    def hits(move: float, until: float) -> bool:
+        t = 0.0
+        while t <= until:
+            px = p.x + move * t
+            top, bottom = body_y(px)
+            for h in near:
+                hx = h.x + math.sin((game.elapsed + t) * h.speed + h.phase) * h.range
+                if px < hx + h.w + 6 and px + p.w > hx - 6 and top < h.y + h.h + 4 and bottom > h.y - 4:
+                    return True
+            t += dt
+        return False
+
+    # only commit to passing the next ball: stop again in the pocket after it
+    ahead = [h for h in near if h.x + h.range + h.w > p.x]
+    if not ahead:
+        return None
+    first = min(ahead, key=lambda h: h.x - h.range)
+    target = first.x + first.range + first.w + 10
+    until = min(horizon, max(0.25, (target - p.x) / speed + 0.15))
+    if not hits(speed, until):
+        return None
+    return "retreat" if hits(0.0, 0.6) else "wait"
+
+
 def _threat(game: Game, e: Enemy) -> bool:
     if not e.alive or not e.active or game.profiles[e.species].boss:
         return False
@@ -516,6 +665,9 @@ def _fight_boss(game: Game, boss: Enemy, inp: InputState, steer, jump) -> None:
     behavior = game.behaviors[boss.species]
     if boss.memory.get("family") == "thorn_boar":
         _fight_boar(game, boss, inp, steer, jump)
+        return
+    if boss.memory.get("family") == "ice_walrus":
+        _fight_walrus(game, boss, inp, steer, jump)
         return
     if not p.grounded:
         steer(inp, center + boss.vx * 0.13)

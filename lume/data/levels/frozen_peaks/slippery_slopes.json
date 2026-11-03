@@ -1,0 +1,1005 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "slippery_slopes",
+ "name": "Encostas Escorregadias",
+ "world": "frozen_peaks",
+ "role": "special",
+ "difficulty": 4,
+ "art": {
+  "set": "frozen_peaks",
+  "variant": "slopes",
+  "weather": "auto"
+ },
+ "music": "frozen_peaks_main",
+ "bounds": {
+  "width": 5600,
+  "height": 1240
+ },
+ "time_limit": 360,
+ "spawn": {
+  "x": 72,
+  "y": 338
+ },
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 5500,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 368,
+   "w": 380,
+   "h": 232
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 220,
+   "y": 250,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 380,
+   "y": 384,
+   "w": 64,
+   "h": 216,
+   "surface": "ice"
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 444,
+   "y": 400,
+   "w": 64,
+   "h": 200,
+   "surface": "ice"
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 508,
+   "y": 416,
+   "w": 64,
+   "h": 184,
+   "surface": "ice"
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 572,
+   "y": 432,
+   "w": 64,
+   "h": 168,
+   "surface": "ice"
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 636,
+   "y": 448,
+   "w": 64,
+   "h": 152,
+   "surface": "ice"
+  },
+  {
+   "id": "ground07",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 700,
+   "y": 448,
+   "w": 360,
+   "h": 152
+  },
+  {
+   "id": "ground08",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1060,
+   "y": 408,
+   "w": 64,
+   "h": 192
+  },
+  {
+   "id": "ground09",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1124,
+   "y": 368,
+   "w": 64,
+   "h": 232
+  },
+  {
+   "id": "ground10",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1188,
+   "y": 328,
+   "w": 64,
+   "h": 272
+  },
+  {
+   "id": "ground11",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1252,
+   "y": 344,
+   "w": 64,
+   "h": 256,
+   "surface": "ice"
+  },
+  {
+   "id": "ground12",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1316,
+   "y": 360,
+   "w": 64,
+   "h": 240,
+   "surface": "ice"
+  },
+  {
+   "id": "ground13",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1380,
+   "y": 376,
+   "w": 64,
+   "h": 224,
+   "surface": "ice"
+  },
+  {
+   "id": "ground14",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1444,
+   "y": 392,
+   "w": 64,
+   "h": 208,
+   "surface": "ice"
+  },
+  {
+   "id": "ground15",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1508,
+   "y": 408,
+   "w": 64,
+   "h": 192,
+   "surface": "ice"
+  },
+  {
+   "id": "ground16",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1572,
+   "y": 424,
+   "w": 64,
+   "h": 176,
+   "surface": "ice"
+  },
+  {
+   "id": "ground17",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1636,
+   "y": 440,
+   "w": 64,
+   "h": 160,
+   "surface": "ice"
+  },
+  {
+   "id": "ground18",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1700,
+   "y": 448,
+   "w": 300,
+   "h": 152
+  },
+  {
+   "id": "snow_wall",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1700,
+   "y": 384,
+   "w": 40,
+   "h": 216
+  },
+  {
+   "id": "ledge01",
+   "kind": "ledge",
+   "x": 1290,
+   "y": 236,
+   "w": 90,
+   "h": 24,
+   "style": "floating"
+  },
+  {
+   "id": "ledge02",
+   "kind": "ledge",
+   "x": 1440,
+   "y": 190,
+   "w": 90,
+   "h": 24,
+   "style": "floating"
+  },
+  {
+   "id": "ground19",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2000,
+   "y": 448,
+   "w": 560,
+   "h": 152
+  },
+  {
+   "id": "shelter_a",
+   "kind": "ledge",
+   "x": 1780,
+   "y": 400,
+   "w": 40,
+   "h": 48,
+   "style": "floating"
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 2260,
+   "y": 330,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "ground20",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2560,
+   "y": 408,
+   "w": 64,
+   "h": 192
+  },
+  {
+   "id": "ground21",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2624,
+   "y": 368,
+   "w": 64,
+   "h": 232
+  },
+  {
+   "id": "ground22",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2688,
+   "y": 384,
+   "w": 64,
+   "h": 216,
+   "surface": "ice"
+  },
+  {
+   "id": "ground23",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2752,
+   "y": 396,
+   "w": 64,
+   "h": 204,
+   "surface": "ice"
+  },
+  {
+   "id": "ground24",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2816,
+   "y": 408,
+   "w": 64,
+   "h": 192,
+   "surface": "ice"
+  },
+  {
+   "id": "ground25",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2880,
+   "y": 420,
+   "w": 64,
+   "h": 180,
+   "surface": "ice"
+  },
+  {
+   "id": "ground26",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2944,
+   "y": 432,
+   "w": 176,
+   "h": 168,
+   "surface": "ice"
+  },
+  {
+   "id": "ground27",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3248,
+   "y": 448,
+   "w": 270,
+   "h": 152
+  },
+  {
+   "id": "ground28",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3518,
+   "y": 408,
+   "w": 64,
+   "h": 192
+  },
+  {
+   "id": "ground29",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3582,
+   "y": 368,
+   "w": 64,
+   "h": 232
+  },
+  {
+   "id": "ground30",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3646,
+   "y": 384,
+   "w": 64,
+   "h": 216,
+   "surface": "ice"
+  },
+  {
+   "id": "ground31",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3710,
+   "y": 396,
+   "w": 64,
+   "h": 204,
+   "surface": "ice"
+  },
+  {
+   "id": "ground32",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3774,
+   "y": 408,
+   "w": 64,
+   "h": 192,
+   "surface": "ice"
+  },
+  {
+   "id": "ground33",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3838,
+   "y": 420,
+   "w": 64,
+   "h": 180,
+   "surface": "ice"
+  },
+  {
+   "id": "ground34",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3902,
+   "y": 432,
+   "w": 64,
+   "h": 168,
+   "surface": "ice"
+  },
+  {
+   "id": "ground35",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3966,
+   "y": 444,
+   "w": 64,
+   "h": 156,
+   "surface": "ice"
+  },
+  {
+   "id": "ground36",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4030,
+   "y": 448,
+   "w": 270,
+   "h": 152
+  },
+  {
+   "id": "ledge03",
+   "kind": "ledge",
+   "x": 4330,
+   "y": 404,
+   "w": 96,
+   "h": 24,
+   "style": "ice_ledge",
+   "surface": "ice"
+  },
+  {
+   "id": "ledge04",
+   "kind": "ledge",
+   "x": 4440,
+   "y": 364,
+   "w": 96,
+   "h": 24,
+   "style": "ice_ledge",
+   "surface": "ice"
+  },
+  {
+   "id": "ledge05",
+   "kind": "ledge",
+   "x": 4550,
+   "y": 324,
+   "w": 96,
+   "h": 24,
+   "style": "ice_ledge",
+   "surface": "ice"
+  },
+  {
+   "id": "ledge06",
+   "kind": "ledge",
+   "x": 4660,
+   "y": 284,
+   "w": 120,
+   "h": 24,
+   "style": "ice_ledge",
+   "surface": "ice"
+  },
+  {
+   "id": "ground37",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4300,
+   "y": 448,
+   "w": 520,
+   "h": 152
+  },
+  {
+   "id": "ridge_top",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4780,
+   "y": 284,
+   "w": 140,
+   "h": 316
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 4840,
+   "y": 170,
+   "w": 40,
+   "h": 28,
+   "reward": "heart"
+  },
+  {
+   "id": "ground38",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4920,
+   "y": 300,
+   "w": 44,
+   "h": 300,
+   "surface": "ice"
+  },
+  {
+   "id": "ground39",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4964,
+   "y": 316,
+   "w": 44,
+   "h": 284,
+   "surface": "ice"
+  },
+  {
+   "id": "ground40",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5008,
+   "y": 332,
+   "w": 44,
+   "h": 268,
+   "surface": "ice"
+  },
+  {
+   "id": "ground41",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5052,
+   "y": 348,
+   "w": 44,
+   "h": 252,
+   "surface": "ice"
+  },
+  {
+   "id": "ground42",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5096,
+   "y": 364,
+   "w": 44,
+   "h": 236,
+   "surface": "ice"
+  },
+  {
+   "id": "ground43",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5140,
+   "y": 380,
+   "w": 44,
+   "h": 220,
+   "surface": "ice"
+  },
+  {
+   "id": "ground44",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5184,
+   "y": 396,
+   "w": 44,
+   "h": 204,
+   "surface": "ice"
+  },
+  {
+   "id": "ground45",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5228,
+   "y": 412,
+   "w": 112,
+   "h": 188,
+   "surface": "ice"
+  },
+  {
+   "id": "ground46",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5460,
+   "y": 448,
+   "w": 140,
+   "h": 152
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "x": 820,
+   "y": 400,
+   "w": 56,
+   "h": 48,
+   "style": "pipe",
+   "secret": "lost_sled",
+   "warp": {
+    "x": 1034,
+    "y": 846
+   },
+   "return": {
+    "x": 892,
+    "y": 402
+   }
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 679,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 679,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 679,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 1348,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "x": 1236,
+   "y": 864,
+   "w": 56,
+   "h": 32,
+   "style": "pipe",
+   "warp": {
+    "x": 892,
+    "y": 402
+   },
+   "return": {
+    "x": 1034,
+    "y": 846
+   }
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 120,
+   "y": 330,
+   "count": 4
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 400,
+   "y": 330,
+   "count": 5,
+   "spacing": 50,
+   "rise": 30
+  },
+  {
+   "id": "coins03",
+   "shape": "column",
+   "x": 1210,
+   "y": 250,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins04",
+   "shape": "row",
+   "x": 1300,
+   "y": 200,
+   "count": 3,
+   "spacing": 26
+  },
+  {
+   "id": "coins05",
+   "shape": "row",
+   "x": 2300,
+   "y": 410,
+   "count": 5
+  },
+  {
+   "id": "coins06",
+   "shape": "arc",
+   "x": 3130,
+   "y": 380,
+   "count": 4,
+   "spacing": 30,
+   "rise": 30
+  },
+  {
+   "id": "coins07",
+   "shape": "row",
+   "x": 3700,
+   "y": 330,
+   "count": 6,
+   "spacing": 48
+  },
+  {
+   "id": "coins08",
+   "shape": "row",
+   "x": 4360,
+   "y": 374,
+   "count": 2,
+   "spacing": 30
+  },
+  {
+   "id": "coins09",
+   "shape": "row",
+   "x": 4470,
+   "y": 334,
+   "count": 2,
+   "spacing": 30
+  },
+  {
+   "id": "coins10",
+   "shape": "row",
+   "x": 4580,
+   "y": 294,
+   "count": 2,
+   "spacing": 30
+  },
+  {
+   "id": "coins11",
+   "shape": "row",
+   "x": 4690,
+   "y": 254,
+   "count": 2,
+   "spacing": 30
+  },
+  {
+   "id": "coins12",
+   "shape": "row",
+   "x": 4960,
+   "y": 250,
+   "count": 6,
+   "spacing": 48
+  },
+  {
+   "id": "coins13",
+   "shape": "row",
+   "x": 1074,
+   "y": 852,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_pine",
+   "kind": "relic",
+   "x": 1478,
+   "y": 150
+  },
+  {
+   "id": "relic_slalom",
+   "kind": "relic",
+   "x": 5150,
+   "y": 220
+  },
+  {
+   "id": "relic_sled",
+   "kind": "relic",
+   "x": 1188,
+   "y": 850
+  }
+ ],
+ "items": [
+  {
+   "id": "item_star01",
+   "kind": "star",
+   "x": 1138,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "pinguim_patrulha",
+   "x": 900,
+   "y": 448,
+   "patrol": [
+    760,
+    1050
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "yeti_mirim",
+   "x": 1880,
+   "y": 412,
+   "patrol": [
+    1840,
+    1990
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "pinguim_patrulha",
+   "x": 2780,
+   "y": 408,
+   "patrol": [
+    2700,
+    2860
+   ]
+  },
+  {
+   "id": "enemy04",
+   "species": "caracol_cristal",
+   "x": 3460,
+   "y": 448,
+   "patrol": [
+    3390,
+    3512
+   ]
+  },
+  {
+   "id": "enemy05",
+   "species": "caracol_cristal",
+   "x": 3760,
+   "y": 396,
+   "patrol": [
+    3660,
+    4020
+   ]
+  },
+  {
+   "id": "enemy06",
+   "species": "pinguim_patrulha",
+   "x": 3950,
+   "y": 444,
+   "patrol": [
+    3800,
+    4020
+   ]
+  },
+  {
+   "id": "enemy07",
+   "species": "yeti_mirim",
+   "x": 4200,
+   "y": 412,
+   "patrol": [
+    4150,
+    4290
+   ]
+  },
+  {
+   "id": "enemy08",
+   "species": "pinguim_patrulha",
+   "x": 5200,
+   "y": 400,
+   "patrol": [
+    5000,
+    5300
+   ]
+  },
+  {
+   "id": "enemy09",
+   "species": "boneco_neve",
+   "x": 5060,
+   "y": 304,
+   "patrol": [
+    5040,
+    5080
+   ]
+  },
+  {
+   "id": "enemy10",
+   "species": "coruja_nevada",
+   "x": 2400,
+   "y": 320,
+   "patrol": [
+    2300,
+    2520
+   ]
+  },
+  {
+   "id": "enemy11",
+   "species": "boneco_neve",
+   "x": 2480,
+   "y": 416,
+   "patrol": [
+    2460,
+    2500
+   ]
+  },
+  {
+   "id": "enemy12",
+   "species": "coruja_nevada",
+   "x": 880,
+   "y": 300,
+   "patrol": [
+    740,
+    1040
+   ]
+  }
+ ],
+ "hazards": [],
+ "zones": [],
+ "secrets": [
+  {
+   "id": "twin_pine",
+   "kind": "high_route",
+   "clue": "Dois pinheiros iguais no topo da rampa; um tem fita vermelha",
+   "rewards": [
+    "relic_pine"
+   ]
+  },
+  {
+   "id": "slalom",
+   "kind": "optional_challenge",
+   "clue": "Bandeiras de slalom com moedas entre elas",
+   "rewards": [
+    "relic_slalom"
+   ]
+  },
+  {
+   "id": "lost_sled",
+   "kind": "hidden_area",
+   "clue": "Trilhas de trenó entram num cano coberto de neve",
+   "rewards": [
+    "relic_sled"
+   ],
+   "entry": "pipe_room_entry"
+  }
+ ],
+ "hints": [
+  {
+   "x": 150,
+   "text": "No gelo inclinado não há freio: o chão de pedra no fim da descida segura Lume."
+  },
+  {
+   "x": 1240,
+   "text": "A parede de neve no fim da encosta segura você. Depois, salte por cima."
+  },
+  {
+   "x": 1760,
+   "text": "O Yeti-Mirim ergue a bola de neve antes de arremessar: espere atrás da pedra."
+  },
+  {
+   "x": 3150,
+   "text": "Chute o casco de cristal: no gelo ele vai longe e derruba quem estiver na frente."
+  }
+ ],
+ "events": [
+  {
+   "id": "msg_guide",
+   "kind": "message",
+   "x": 2140,
+   "params": {
+    "text": "Tio Nevasco: na encosta não tem freio. Escolha onde pular antes de descer."
+   }
+  }
+ ],
+ "checkpoints": [
+  {
+   "id": "cp_slopes",
+   "x": 2140,
+   "y": 418
+  },
+  {
+   "id": "cp_final",
+   "x": 4800,
+   "y": 254
+  }
+ ],
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 5600,
+   "h": 540,
+   "variant": "slopes"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 679,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "notes": "Fase nova (Mundo 4-4): mecânica especial — encostas de gelo como terraços descendentes (o motor não tem rampas), vãos no fim das rampas, escada de gelo invertida; estreia do Yeti-Mirim."
+}

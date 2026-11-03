@@ -102,6 +102,10 @@ def projectile(kind: str) -> Svg:
                        (c + math.cos(a + 0.5) * 6, c + math.sin(a + 0.5) * 5.5)], fill="#f2e6c0", stroke=INK, width=0.7)
     elif kind == "snowball":
         s.circle(c, c, 8, fill=s.radial(c - 3, c - 3, 11, [(0, "#ffffff"), (1, "#bcd8ec")]), stroke="#5a7a9a", width=1.0)
+    elif kind == "icicle":
+        s.polygon([(5, 1), (19, 1), (12, 23)], fill=s.linear(5, 0, 19, 0, [(0, "#e8f8ff"), (0.5, "#a8dcf4"), (1, "#5aa6d0")]),
+                  stroke="#2f5a7a", width=1.0)
+        s.path("M9,3 L12,17", fill="none", stroke="#ffffff", width=1.2, opacity=0.8)
     elif kind == "bolt":
         s.path(rounded_rect_path(2, 6, 20, 12, 6), fill=s.linear(0, 6, 0, 18, [(0, "#9aa8b8"), (1, "#4a5568")]), stroke=INK, width=1.1)
         s.circle(18, 12, 3, fill="#ffd24a")
@@ -201,6 +205,23 @@ def flame_orb() -> Svg:
     return s
 
 
+def snowball_giant() -> Svg:
+    """Rolling giant snowball (moving hazard style "snowball"); 80×80, centre pivot.
+    Swirls and clumps make the rotation readable while it rolls."""
+    s = Svg(80, 80)
+    s.circle(40, 40, 38, fill=s.radial(30, 26, 52, [(0, "#ffffff"), (0.55, "#e4eef8"), (0.85, "#b9c9e0"), (1, "#8fa3c4")]),
+             stroke="#4a5a78", width=1.6)
+    for k in range(5):
+        a = k * 2 * math.pi / 5 + 0.4
+        cx, cy = 40 + math.cos(a) * 21, 40 + math.sin(a) * 21
+        s.path(blob(cx, cy, 9, 6, 0.25, seed=k + 3), fill="#cfdcee", opacity=0.75)
+        s.path(f"M{cx - 7:.1f},{cy:.1f} Q{cx:.1f},{cy - 8:.1f} {cx + 7:.1f},{cy:.1f}", fill="none", stroke="#9fb2cf", width=1.4)
+    s.path(f"M22,46 Q40,30 58,46", fill="none", stroke="#a7b9d6", width=1.6)
+    s.circle(28, 24, 6, fill="#ffffff", opacity=0.9)
+    s.circle(52, 58, 2.4, fill="#ffffff", opacity=0.8)
+    return s
+
+
 def liquid_surface(kind: str, width: float = 64) -> Svg:
     """Tileable animated surface strip (scrolls horizontally)."""
     s = Svg(width, 14)
@@ -251,7 +272,7 @@ def specs() -> list[ArtSpec]:
     out.append(ArtSpec("relic", relic, 1.0, (20, 22), "common"))
     for kind in ("grow", "fire", "star", "heart"):
         out.append(ArtSpec(f"item.{kind}", (lambda k=kind: item(k)), 1.0, (14, 14), "common"))
-    for kind in ("fireball", "spine", "seed", "thorn_acorn", "snowball", "bolt", "orb", "spore", "sand", "guardian_orb"):
+    for kind in ("fireball", "spine", "seed", "thorn_acorn", "snowball", "icicle", "bolt", "orb", "spore", "sand", "guardian_orb"):
         out.append(ArtSpec(f"shot.{kind}", (lambda k=kind: projectile(k)), 1.0, (12, 12), "common"))
     for kind in ("sparkle", "leaf", "petal", "debris", "soft"):
         out.append(ArtSpec(f"particle.{kind}", (lambda k=kind: particle(k)), 1.0, (8, 8), "common"))
@@ -259,6 +280,7 @@ def specs() -> list[ArtSpec]:
     out.append(ArtSpec("checkpoint.on", lambda: checkpoint(True), 1.0, (20, 111), "common"))
     out.append(ArtSpec("sign", sign, 1.0, (20, 48), "common"))
     out.append(ArtSpec("flame_orb", flame_orb, 1.0, (20, 20), "common"))
+    out.append(ArtSpec("hazard.snowball", snowball_giant, 1.0, (40, 40), "common"))
     out.append(ArtSpec("quicksand.surface", quicksand_surface, 1.0, (0, 4), "common"))
     out.append(ArtSpec("fx.wind", wind_streak, 1.0, (32, 3), "common"))
     for kind in ("water", "lava", "poison"):

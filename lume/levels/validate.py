@@ -53,16 +53,23 @@ def _platforms(level: LevelSpec) -> list[Platform]:
 def main_path_gaps(level: LevelSpec) -> list[Gap]:
     """Gaps between consecutive terrain bodies of the main area (y < 540)."""
     main = level.areas[0]
-    ground = sorted(
-        (p for p in _platforms(level) if p.kind == "ground" and main.y <= p.y < main.y + main.h and p.w >= 120),
-        key=lambda p: p.x,
-    )
-    # Keep only the top surface per x interval (ignore walls/pillars under other ground).
+    candidates = [p for p in _platforms(level) if p.kind == "ground" and main.y <= p.y < main.y + main.h]
+
+    def touches(p) -> bool:
+        return any(o is not p and (abs(o.x - (p.x + p.w)) < 2 or abs(p.x - (o.x + o.w)) < 2) for o in candidates)
+
+    # Narrow pieces count only when they join other ground (terrace steps,
+    # stairs); isolated narrow pillars/walls are ignored as before.
+    ground = sorted((p for p in candidates if p.w >= 120 or touches(p)), key=lambda p: p.x)
     gaps: list[Gap] = []
-    for a, b in zip(ground, ground[1:]):
-        width = b.x - (a.x + a.w)
-        if width > 0:
-            gaps.append(Gap(a, b, width, a.y - b.y))
+    last = None
+    for b in ground:
+        if last is not None:
+            width = b.x - (last.x + last.w)
+            if width > 0:
+                gaps.append(Gap(last, b, width, last.y - b.y))
+        if last is None or b.x + b.w >= last.x + last.w:
+            last = b
     return gaps
 
 

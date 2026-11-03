@@ -250,3 +250,164 @@ class ScarabKing(Behavior):
 
     def on_damaged(self, game, e, source):
         e.set_state("hurt")
+
+
+@register("ice_walrus")
+class IceWalrus(Behavior):
+    """Montanhas Geladas boss (Morsa Gelomar).
+
+    Wears a spiked ice helmet: its top is harmful and stomps bounce off
+    until the helmet cracks.  Cycle: idle (faces Lume) → flap telegraph →
+    belly-slide across the ice (a wall crash leaves it dazed for a short
+    stomp window) → idle → tusk slam (rears up, then three icicles fall on
+    spots marked around Lume) → idle ...  Each cycle a crystal snail
+    crawls out of an ice hole; kicking its shell into the walrus (or three
+    fireballs) cracks the helmet → stunned (long stomp window).
+    Second phase (health ≤ 2): faster telegraphs, the slide bounces off a
+    wall once more and the slam is followed by two arcing snowballs.
+    """
+
+    states = ("intro", "idle", "flap", "slide", "dazed", "rear", "slam", "stunned", "hurt", "defeat")
+
+    def spawn(self, game, e):
+        e.vx = 0.0
+        e.facing = -1
+        e.set_state("dormant")
+        e.memory["cycle"] = 0
+        e.memory["fire_hits"] = 0
+
+    def _angry(self, e) -> bool:
+        return e.health <= 2
+
+    def _spawn_snail(self, game, e) -> None:
+        holes = self.param(e, "holes", None)
+        if not holes:
+            return
+        species = str(self.param(e, "minion", "caracol_cristal"))
+        alive = [m for m in game.enemies if m.species == species and m.alive and m.id.startswith("spawn-")]
+        if alive:
+            return
+        hole = holes[e.memory["cycle"] % len(holes)]
+        child = game.spawn_enemy(species, float(hole[0]), float(hole[1]))
+        if child is not None:
+            child.facing = 1 if game.player.x > child.x else -1
+            child.patrol = (e.patrol[0], e.patrol[1])
+            game.emit("dust", x=child.x + child.w / 2, y=child.y + child.h)
+
+    def update(self, game, e, dt, old_timer):
+        p = game.player
+        dx, _ = player_distance(game, e)
+        angry = self._angry(e)
+        left, right = e.patrol
+        if e.state == "dormant":
+            e.vx = 0.0
+            if abs(dx) < float(self.param(e, "wake_range", 460.0)):
+                e.set_state("intro")
+                game.emit("boss_intro", x=e.x, y=e.y, ref=e.species)
+        elif e.state == "intro":
+            e.vx = 0.0
+            if e.state_time > 1.2:
+                e.set_state("idle")
+        elif e.state == "idle":
+            e.vx = 0.0
+            e.facing = 1 if dx > 0 else -1
+            if e.state_time > (0.6 if angry else 0.9):
+                e.memory["cycle"] += 1
+                self._spawn_snail(game, e)
+                e.set_state("flap" if e.memory["cycle"] % 2 else "rear")
+        elif e.state == "flap":
+            e.vx = 0.0
+            if e.state_time > (0.45 if angry else 0.6):
+                e.set_state("slide")
+                e.memory["bounces"] = 0
+                game.emit("dust", x=e.x + e.w / 2, y=e.y + e.h)
+        elif e.state == "slide":
+            e.vx = e.facing * (400.0 if angry else 320.0)
+        elif e.state == "dazed":
+            e.vx = 0.0
+            if e.state_time > 0.9:
+                e.set_state("idle")
+        elif e.state == "rear":
+            e.vx = 0.0
+            if e.state_time > (0.4 if angry else 0.55):
+                e.set_state("slam")
+                game.shake = max(game.shake, 0.25)
+                game.emit("crash", x=e.x + e.w / 2, y=e.y + e.h)
+                ceiling = float(self.param(e, "ceiling", e.y - 260))
+                target = p.x + p.w / 2
+                for k, off in enumerate((-110.0, 0.0, 110.0)):
+                    x = max(left + 12, min(right - 24, target + off))
+                    fire(game, e, vx=0.0, vy=40.0 * k, size=18, life=3.0, kind="icicle", gravity=1100.0, x=x, y=ceiling)
+        elif e.state == "slam":
+            e.vx = 0.0
+            if angry and e.state_time > 0.5 and not e.memory.get("thrown"):
+                e.memory["thrown"] = True
+                for vx in (-260.0, 260.0):
+                    fire(game, e, vx=vx, vy=-380.0, size=16, life=3.0, kind="snowball", gravity=900.0,
+                         x=e.x + e.w / 2, y=e.y + 6)
+            if e.state_time > (0.8 if angry else 1.0):
+                e.memory["thrown"] = False
+                e.set_state("idle")
+        elif e.state == "stunned":
+            e.vx = 0.0
+            if e.state_time > 2.0:
+                e.memory["fire_hits"] = 0
+                e.set_state("idle")
+        elif e.state == "hurt":
+            centre = (left + right) / 2
+            e.facing = 1 if centre > e.x + e.w / 2 else -1
+            e.vx = e.facing * (160.0 if e.state_time < 0.35 else 0.0)
+            if e.state_time > 0.9:
+                e.set_state("idle")
+        before = e.vx
+        ground_move(game, e, dt, edge_turn=False, gravity=e.state != "dormant")
+        if e.state == "slide" and before != 0 and e.vx == 0:
+            e.memory["bounces"] = e.memory.get("bounces", 0) + 1
+            game.shake = max(game.shake, 0.2)
+            game.emit("crash", x=e.x + e.w / 2, y=e.y + e.h / 2)
+            if angry and e.memory["bounces"] < 2:
+                e.facing = -e.facing
+            else:
+                e.set_state("dazed")
+        e.anim = e.state if e.state != "dormant" else "idle"
+
+    def tangible(self, game, e):
+        return e.state not in ("dormant", "hurt")
+
+    def spiked(self, game, e):
+        # the spiked helmet: only a cracked helmet (stunned) or a dazed walrus can be stomped
+        return e.state not in ("stunned", "dazed")
+
+    def stompable(self, game, e):
+        return e.state in ("stunned", "dazed")
+
+    def can_take_damage(self, game, e, source):
+        return e.state in ("stunned", "dazed") and source == "stomp"
+
+    def on_blocked(self, game, e, source):
+        if e.state in ("stunned", "hurt", "dormant", "intro"):
+            return
+        if source == "shell":
+            self._crack(game, e)
+        elif source == "fire":
+            e.memory["fire_hits"] = e.memory.get("fire_hits", 0) + 1
+            if e.memory["fire_hits"] >= 3:
+                self._crack(game, e)
+
+    def _crack(self, game, e) -> None:
+        e.set_state("stunned")
+        e.vx = 0.0
+        game.shake = max(game.shake, 0.2)
+        game.burst(e.x + e.w / 2, e.y + 6, "#bfe8ff", 14, kind="debris")
+        game.emit("crash", x=e.x + e.w / 2, y=e.y)
+
+    def on_stomp(self, game, e):
+        game.bounce_player(e)
+        if game.hit_enemy(e, 1, "stomp") and e.alive:
+            e.set_state("hurt")
+
+    def on_touch(self, game, e):
+        game.hurt()
+
+    def on_damaged(self, game, e, source):
+        e.set_state("hurt")

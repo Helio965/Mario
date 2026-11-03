@@ -97,10 +97,11 @@ class L:
             s["entry"] = entry
         self.d["secrets"].append(s)
 
-    def cave_room(self, entry_x, room_x, width, reward_item="heart", relic_id="relic_room", variant="cave"):
+    def cave_room(self, entry_x, room_x, width, reward_item="heart", relic_id="relic_room", variant="cave",
+                  secret_id="pipe_room", secret_kind="warp_room", clue="Cano com seta luminosa", ground_y=448):
         """Pipe on the main ground → underground chamber (+720 u) → pipe back."""
-        back = {"x": entry_x + 72, "y": 402}
-        self.plat("pipe", entry_x, 400, 56, 48, id="pipe_room_entry", style="pipe", secret="pipe_room",
+        back = {"x": entry_x + 72, "y": ground_y - 46}
+        self.plat("pipe", entry_x, ground_y - 48, 56, 48, id="pipe_room_entry", style="pipe", secret=secret_id,
                   warp={"x": room_x + 24, "y": 846}, **{"return": back})
         area_x = max(0, min(width - 960, room_x + 149 - 480))
         self.d.setdefault("areas", [])
@@ -113,15 +114,18 @@ class L:
         self.coins("row", room_x + 64, 852, 4, 34)
         self.relic(relic_id, room_x + 178, 850)
         self.item(reward_item, room_x + 128, 866)
-        self.secret("pipe_room", "warp_room", "Cano com seta luminosa", [relic_id], "pipe_room_entry")
+        self.secret(secret_id, secret_kind, clue, [relic_id], "pipe_room_entry")
 
 
 # ----------------------------------------------------------------------------- zone helpers
-def wind(l: L, x, w, force, period=0.0, duty=1.0, y=0, h=540):
-    """Horizontal wind (force_x is a drift velocity in u/s); optional gusts."""
+def wind(l: L, x, w, force, period=0.0, duty=1.0, y=0, h=540, phase=0.0):
+    """Horizontal wind (force_x is a drift velocity in u/s); optional gusts
+    (``phase`` shifts a gust's clock, e.g. half a period for alternating sides)."""
     z = {"id": l.nid("wind"), "kind": "wind", "x": x, "y": y, "w": w, "h": h, "force_x": force}
     if period:
         z.update(period=period, duty=duty)
+    if phase:
+        z["phase"] = phase
     l.d["zones"].append(z)
 
 
@@ -129,3 +133,15 @@ def quicksand(l: L, x, w, top=448, floor=520):
     """Quicksand pit: sinking zone over a solid sand bed (escape by hopping)."""
     l.d["zones"].append({"id": l.nid("quicksand"), "kind": "quicksand", "x": x, "y": top, "w": w, "h": floor - top})
     l.ground(x, w, floor, 80, style="terrain", id=l.nid("sandbed"))
+
+
+def terraces(l: L, x, y, steps, step_w=80, drop=16, surface="ice", last_w=None, **kw):
+    """Descending terraces (the engine has no slopes): ``steps`` grounds of
+    ``step_w``, each ``drop`` lower than the previous; ``last_w`` widens the
+    final step into a take-off runway.  Returns (end_x, last_y)."""
+    cx = x
+    for k in range(steps):
+        w = last_w if (last_w and k == steps - 1) else step_w
+        l.ground(cx, w, y + k * drop, surface=surface, **kw)
+        cx += w
+    return cx, y + (steps - 1) * drop

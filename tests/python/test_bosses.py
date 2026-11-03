@@ -240,3 +240,100 @@ def test_scarab_king_three_stomps_and_angry_sand_balls():
         if b2.state == "erupt":
             break
     assert len([s for s in g2.projectiles if s.kind == "sand"]) == 3
+
+
+def _walrus_level():
+    from .conftest import level
+
+    return level(
+        world="frozen_peaks",
+        bounds={"width": 1400, "height": 540},
+        exit={"id": "goal", "kind": "flag", "x": 1300, "y": 448},
+        checkpoints=[],
+        platforms=[
+            {"id": "floor", "kind": "ground", "x": 0, "y": 448, "w": 1400, "h": 92, "surface": "ice"},
+            {"id": "ceiling", "kind": "ground", "x": 0, "y": 0, "w": 1400, "h": 120},
+            {"id": "wall_l", "kind": "ground", "x": 100, "y": 120, "w": 40, "h": 328},
+            {"id": "wall_r", "kind": "ground", "x": 1000, "y": 120, "w": 40, "h": 328},
+        ],
+        spawn={"x": 500, "y": 418},
+        enemies=[{"id": "boss", "species": "morsa_gelomar", "x": 760, "y": 448, "patrol": [140, 1000],
+                  "params": {"holes": [[180, 420], [940, 420]], "ceiling": 130}}],
+        role="fortress",
+    )
+
+
+def test_ice_walrus_cycle_telegraphs_and_helmet_blocks_stomps():
+    g = Game([_walrus_level()])
+    boss = g.enemies[0]
+    beh = g.behaviors[boss.species]
+    g.player.invulnerable = 999
+    seen = []
+    icicles = snails = 0
+    for _ in range(int(16 * 120)):
+        g.update(FIXED_DT, InputState())
+        icicles = max(icicles, len([s for s in g.projectiles if s.kind == "icicle"]))
+        snails = max(snails, len([m for m in g.enemies if m.species == "caracol_cristal"]))
+        if not seen or seen[-1] != boss.state:
+            seen.append(boss.state)
+            if boss.state in ("idle", "flap", "slide", "rear", "slam"):
+                assert not beh.stompable(g, boss) and beh.spiked(g, boss)
+            if boss.state == "dazed":
+                assert beh.stompable(g, boss)
+    # the slide is always announced by the flap, the icicles by rearing up
+    for i, s in enumerate(seen):
+        if s == "slide":
+            assert seen[i - 1] == "flap"
+        if s == "slam":
+            assert seen[i - 1] == "rear"
+    assert "dazed" in seen and "slam" in seen  # wall crash → dazed window; slam happened
+    assert icicles == 3 and snails >= 1
+
+
+def test_ice_walrus_kicked_shell_cracks_helmet_then_five_stomps():
+    g = Game([_walrus_level()])
+    boss = g.enemies[0]
+    boss.active = True
+    boss.set_state("idle")
+    # a blocked shell hit (or three fireballs) cracks the helmet instead of dealing damage
+    assert not g.hit_enemy(boss, 2, "shell")
+    assert boss.state == "stunned" and boss.health == 5
+    boss.set_state("idle")
+    for _ in range(2):
+        g.hit_enemy(boss, 1, "fire")
+    assert boss.state == "idle"
+    g.hit_enemy(boss, 1, "fire")
+    assert boss.state == "stunned"
+    for hit in range(5):
+        boss.set_state("stunned")
+        boss.hit_timer = 0
+        g.player.x, g.player.y = boss.x + 30, boss.y - g.player.h - 2
+        g.player.vy, g.player.grounded = 400, False
+        ticks(g, 2)
+        if hit < 4:
+            assert boss.alive and boss.state == "hurt"
+    assert not boss.alive
+
+
+def test_ice_walrus_angry_slam_adds_snowballs_and_helmet_hurts():
+    g = Game([_walrus_level()])
+    boss = g.enemies[0]
+    boss.active = True
+    boss.health = 2
+    boss.set_state("rear")
+    for _ in range(240):
+        g.update(FIXED_DT, InputState())
+        if len([s for s in g.projectiles if s.kind == "snowball"]) == 2:
+            break
+    assert len([s for s in g.projectiles if s.kind == "snowball"]) == 2
+    # stomping the intact helmet hurts Lume
+    g2 = Game([_walrus_level()])
+    b2 = g2.enemies[0]
+    b2.active = True
+    b2.set_state("idle")
+    lives_before = g2.player.power, g2.lives
+    g2.player.x, g2.player.y = b2.x + 30, b2.y - g2.player.h - 2
+    g2.player.vy, g2.player.grounded = 400, False
+    ticks(g2, 2)
+    assert b2.health == 5
+    assert (g2.player.power, g2.lives) != lives_before or g2.player.invulnerable > 0

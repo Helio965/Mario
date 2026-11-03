@@ -95,6 +95,10 @@ class Behavior:
     def on_damaged(self, game: "Game", e: Enemy, source: str) -> None:
         """Called after health was reduced but the enemy survived."""
 
+    def on_blocked(self, game: "Game", e: Enemy, source: str) -> None:
+        """Called when a hit from ``source`` was refused (armour, helmets):
+        bosses use it to react to shells or fire without taking damage."""
+
     def on_defeated(self, game: "Game", e: Enemy, source: str) -> None:
         """Called once when health reaches zero."""
 

@@ -27,6 +27,9 @@ PINE_LIGHT, PINE, PINE_DARK, PINE_LINE = "#4d917f", "#2c6a63", "#1b4849", "#1232
 WOOD_LIGHT, WOOD, WOOD_DARK = "#c99366", "#93613f", "#5a3824"
 GLOW, GLOW_DEEP = "#ffd682", "#ff9f45"
 VALLEY = "#b8cbe1"  # misty valley floor: bottom of the sky and of the nearest layer (seen through pits)
+GRANITE_HI, GRANITE, GRANITE_DARK, MORTAR = "#dde4ee", "#b3bfcf", "#7b88a0", "#5d6a84"
+STAINED = ("#ff7fb0", "#ffc861", "#5fe3cf", "#a98bff", "#6fb8ff", "#ff9f6b")  # coloured ice of the citadel windows
+BANNER_BLUE, BANNER_DEEP = "#3d7ad0", "#1d3f80"
 
 
 # --------------------------------------------------------------------------- helpers
@@ -155,6 +158,7 @@ class FrozenPeaks(WorldArt):
     id = "frozen_peaks"
     name = "Montanhas Geladas"
     accent = "#4cb3e6"
+    wind_tint = (226, 238, 255)  # pale snow-blue gust streaks
     terrain_headroom = 12.0
     provisional = False
     SUN = (214.0, 128.0)
@@ -550,6 +554,8 @@ class FrozenPeaks(WorldArt):
         edges are outlined, never the chunk's vertical borders."""
         if style == "cave":
             return self._cave(w, h, seed, left, right, x0)
+        if style == "fortress":
+            return self._fortress(w, h, seed, left, right, top, x0, surface)
         hr = self.terrain_headroom
         s = Svg(w, h + hr)
         r = Rand(seed)
@@ -849,6 +855,136 @@ class FrozenPeaks(WorldArt):
                 _icicle(s, lx, bottom - ln - 0.5, ln, 3 + 2 * _hash(n, 43))
         return s
 
+    # ------------------------------------------------------------------ citadel masonry (fortress levels)
+    def _fortress(self, w: float, h: float, seed: int, left: bool, right: bool, top: bool, x0: float, surface: str) -> Svg:
+        """Frozen citadel masonry: pale granite courses with frosted beds and
+        translucent ice-brick inlays, under an icicle-trimmed coping. The
+        running bond, inlays, coping joints, trim and window light are all keyed
+        on the world x and use vertical gradients only, so chunks join without
+        seams (no outline is ever drawn on a chunk-clipped side). Ice floors keep
+        the world's glossy cyan cap; rock floors catch stained-glass light."""
+        hr = self.terrain_headroom
+        s = Svg(w, h + hr)
+        r = Rand(seed)
+        y0, bottom = hr, h + hr
+        ice = surface == "ice"
+        coping = (3.0 if ice else 8.0) if top else 0.0
+        s.rect(-1, y0, w + 2, h, fill=s.linear(0, y0, 0, bottom, [(0, MORTAR), (1, "#262e46")]))
+        row_h, bw = 22.0, 46.0
+        yy, row = y0 + coping, 0
+        while yy < bottom - 1:
+            rh = min(row_h, bottom - yy)
+            offset = (row % 2) * bw / 2
+            k = math.floor((x0 - offset) / bw)
+            while k * bw + offset - x0 < w + 1:
+                self._ashlar(s, k, row, k * bw + offset - x0, yy, bw, rh, w)
+                k += 1
+            yy += row_h
+            row += 1
+        s.rect(-1, y0 + 26, w + 2, max(0.0, h - 26), fill=s.linear(0, y0 + 26, 0, min(bottom, y0 + 190),
+                                                                   [(0, "#10162c", 0), (1, "#10162c", 0.55)]))
+        if left:
+            s.rect(0, y0, 5, h, fill=s.linear(0, y0, 0, bottom, [(0, "#eef3f9", 0.55), (1, "#eef3f9", 0.08)]))
+            s.line(0.7, y0, 0.7, bottom, ROCK_LINE, 1.4, 0.8)
+        if right:
+            s.rect(w - 6, y0, 6, h, fill="#0b1022", opacity=0.42)
+            s.line(w - 0.7, y0, w - 0.7, bottom, ROCK_LINE, 1.4, 0.8)
+        if top and ice:
+            self._ice_cap(s, r, w, y0, left, right, x0)
+        elif top:
+            s.rect(-1, y0 - 1.2, w + 2, coping + 1.2, fill=s.linear(0, y0 - 1.2, 0, y0 + coping, [(0, "#f6f9fc"), (0.35, GRANITE_HI), (1, "#a3b0c4")]))
+            for n in range(math.floor(x0 / 64), math.floor((x0 + w) / 64) + 1):
+                lx = n * 64 + 9 - x0
+                if -1 < lx < w + 1:
+                    s.line(lx, y0 + 1.5, lx, y0 + coping - 0.3, "#7c89a2", 0.9, 0.8)
+            s.line(-1, y0 + coping + 0.8, w + 1, y0 + coping + 0.8, "#141a30", 2.4, 0.4)
+            s.line(-1, y0 + coping, w + 1, y0 + coping, ROCK_LINE, 0.9, 0.75)
+            xs = _samples(w, 2.0)
+            frost_top = [(lx, y0 - 1.6 + 0.45 * math.sin((x0 + lx) * 0.23)) for lx in xs]
+            frost_low = [(lx, y0 + 1.2 + 0.9 * abs(math.sin((x0 + lx) * 0.11))) for lx in reversed(xs)]
+            s.path(_poly(frost_top + frost_low), fill="#ffffff", opacity=0.92)
+            s.path(_line(frost_top), stroke="#b9c8dc", width=0.8)
+            self._window_light(s, w, y0, coping, x0)
+            slot = 15.0
+            for n in range(math.floor(x0 / slot), math.floor((x0 + w) / slot) + 1):
+                lx = (n + 0.5) * slot - x0
+                if 3.0 < lx < w - 4.5:
+                    _icicle(s, lx, y0 + coping - 0.4, 3.5 + 6.5 * _hash(n, 61), 2.3 + 0.9 * _hash(n, 62))
+            if left:
+                s.line(0.7, y0 - 1.2, 0.7, y0 + coping, ROCK_LINE, 1.4)
+            if right:
+                s.line(w - 0.7, y0 - 1.2, w - 0.7, y0 + coping, ROCK_LINE, 1.4)
+        if h <= 100:
+            # a thin slab is a hanging edge: icicle trim on its underside
+            s.line(-1, bottom - 1.2, w + 1, bottom - 1.2, "#cfeaff", 1.6, 0.7)
+            slot = 13.0
+            for n in range(math.floor(x0 / slot), math.floor((x0 + w) / slot) + 1):
+                lx = (n + 0.5) * slot - x0
+                if _hash(n, 63) > 0.35 and 4 < lx < w - 5.5:
+                    ln = 6 + 9 * _hash(n, 64)
+                    _icicle(s, lx, bottom - ln - 0.5, ln, 2.8 + 1.4 * _hash(n, 65))
+        return s
+
+    def _ashlar(self, s: Svg, k: int, row: int, gx0: float, y: float, bw: float, rh: float, w: float) -> None:
+        """One granite block (or ice-brick inlay) of a course; ``gx0`` is its
+        local start, ``k``/``row`` its world-stable identity."""
+        bx0, bx1 = max(-1.0, gx0 + 1.0), min(w + 1.0, gx0 + bw - 1.0)
+        y1 = y + rh - 1.1
+        if bx1 <= bx0 or y1 <= y + 2:
+            return
+        ident = k * 7 + row * 131
+        inlay = _hash(ident, 5) < 0.1 and rh > 14
+        if inlay:
+            s.rect(bx0, y + 1.0, bx1 - bx0, y1 - y - 1.0, fill=s.linear(0, y, 0, y1, [(0, "#e8fbff"), (0.35, "#a4e2f8"), (1, "#3f97cd")]))
+            for gx, gw, op in ((gx0 + 7, 5.0, 0.55), (gx0 + 15, 2.2, 0.4), (gx0 + bw * 0.62, 3.0, 0.3)):
+                s.polygon([(gx, y + 2.2), (gx + gw, y + 2.2), (gx + gw - 5, y1 - 1.5), (gx - 5, y1 - 1.5)], fill="#ffffff", opacity=op)
+            s.line(bx0, y + 1.6, bx1, y + 1.6, "#ffffff", 1.0, 0.9)
+            s.line(bx0, y1 - 0.5, bx1, y1 - 0.5, ICE_LINE, 1.0, 0.8)
+            for ex in (gx0 + 1.5, gx0 + bw - 1.5):
+                if -1 < ex < w + 1:
+                    s.line(ex, y + 1.5, ex, y1 - 0.5, ICE_LINE, 0.9, 0.8)
+            cx = gx0 + bw * 0.3
+            if -2 < cx < w + 2:
+                _sparkle(s, cx, y + rh * 0.4, 2.0, 0.9)
+            return
+        tone = mix(GRANITE_DARK, GRANITE_HI, 0.45 + 0.4 * _hash(ident, 6))
+        s.rect(bx0, y + 1.0, bx1 - bx0, y1 - y - 1.0, fill=s.linear(0, y, 0, y1, [(0, shade(tone, 0.3)), (0.22, tone), (1, shade(tone, -0.16))]))
+        s.line(bx0 + 0.5, y + 1.7, bx1 - 0.5, y + 1.7, "#ffffff", 1.0, 0.6)
+        s.line(bx0, y1 - 0.4, bx1, y1 - 0.4, "#323c58", 1.0, 0.5)
+        if -1 < gx0 + 1.6 < w + 1:
+            s.line(gx0 + 1.7, y + 2.2, gx0 + 1.7, y1 - 1.0, "#f2f6fa", 0.9, 0.5)
+        if -1 < gx0 + bw - 1.7 < w + 1:
+            s.line(gx0 + bw - 1.7, y + 2.2, gx0 + bw - 1.7, y1 - 1.0, "#3a4560", 0.9, 0.45)
+        for j in range(5):
+            px = gx0 + 4 + (bw - 8) * _hash(ident, 20 + j)
+            if -1 < px < w + 1:
+                py = y + 3.5 + (rh - 7) * _hash(ident, 30 + j)
+                s.circle(px, py, 0.5 + 0.5 * _hash(ident, 40 + j), fill="#2c3550" if j % 2 else "#f4f7fb", opacity=0.55)
+        if _hash(ident, 7) > 0.55:
+            fx = gx0 + 6 + (bw - 20) * _hash(ident, 8)
+            if -6 < fx < w + 6:
+                s.path(blob(fx, y + 2.6, 5 + 4 * _hash(ident, 9), 1.5, 0.25, seed=ident % 97), fill="#ffffff", opacity=0.75)
+
+    def _window_light(self, s: Svg, w: float, y0: float, depth: float, x0: float) -> None:
+        """Coloured light from the citadel's ice windows lying on a rock floor:
+        slanted bands across the walking surface that fade down the coping and
+        rise as a faint haze (the level plan's 'stained-glass light marks the
+        floor that grips')."""
+        period = 150.0
+        for n in range(math.floor(x0 / period) - 1, math.floor((x0 + w) / period) + 1):
+            base = n * period + 46 * _hash(n, 71) - x0
+            first = int(_hash(n, 72) * len(STAINED))
+            for j in range(3):
+                bx, wd = base + j * 12.5, 11.0
+                if bx + wd + 8 < -1 or bx - 8 > w + 1:
+                    continue
+                c = STAINED[(first + j) % len(STAINED)]
+                s.polygon([(bx - 7, y0 - 10), (bx + wd - 7, y0 - 10), (bx + wd, y0 - 1.4), (bx, y0 - 1.4)],
+                          fill=s.linear(0, y0 - 10, 0, y0 - 1.4, [(0, c, 0), (1, c, 0.4)]))
+                s.polygon([(bx, y0 - 1.6), (bx + wd, y0 - 1.6), (bx + wd + 2.5, y0 + 2.4), (bx + 2.5, y0 + 2.4)], fill=c, opacity=0.62)
+                s.polygon([(bx + 2.5, y0 + 2.4), (bx + wd + 2.5, y0 + 2.4), (bx + wd + 4, y0 + depth), (bx + 4, y0 + depth)],
+                          fill=s.linear(0, y0 + 2.4, 0, y0 + depth, [(0, c, 0.36), (1, c, 0.08)]))
+
     def cave_sky(self) -> Svg:
         """Blue ice cave: translucent curtains, glowing crystals, stalactites."""
         s = Svg(960, 540)
@@ -904,6 +1040,297 @@ class FrozenPeaks(WorldArt):
                 _sparkle(s, px, py, r.uniform(2, 4), 0.6, "#dff8ff")
             else:
                 s.circle(px, py, r.uniform(0.8, 1.8), fill="#bfeaff", opacity=r.uniform(0.3, 0.7))
+        return s
+
+    # ------------------------------------------------------------------ citadel interiors and arena gate
+    def interior(self, variant: str):
+        """Indoor halls of the Cidadela de Geada. Only the citadel variants are
+        indoor; every outdoor variant of this world (lake, summit, blizzard...)
+        must keep returning None."""
+        if variant in ("fortress", "citadel"):
+            return (lambda: self._hall(False)), (lambda: self._colonnade(False))
+        if variant == "throne":
+            return (lambda: self._hall(True)), (lambda: self._colonnade(True))
+        return None
+
+    def _hall(self, throne: bool) -> Svg:
+        """960×540 backdrop: an ice-and-granite hall with stained-glass windows
+        of coloured ice (aurora outside), frozen banners and an icicle
+        chandelier; the throne hall is taller, with broken high windows and a
+        frozen throne."""
+        s = Svg(960, 540)
+        r = Rand(91 if throne else 93)
+        s.rect(0, 0, 960, 540, fill=s.linear(0, 0, 0, 540, [(0, "#1a2240"), (0.55, "#2c3858"), (1, "#18203a")]))
+        # back wall of large frosted granite blocks: a few tonal blocks, then the joints
+        for row in range(12):
+            y = row * 46 - 6
+            off = (row % 2) * 64
+            for col in range(-1, 9):
+                x = col * 128 + off
+                v = _hash(row * 17 + col, 81)
+                if v > 0.62:
+                    s.rect(x + 2, y + 2, 124, 42, fill="#3a4666" if v > 0.82 else "#222b48", opacity=0.55)
+                s.line(x + 1, y + 1, x + 1, y + 45, "#0c1124", 2.2, 0.55)
+            s.line(0, y + 1, 960, y + 1, "#0c1124", 2.2, 0.55)
+            s.line(0, y + 3.5, 960, y + 3.5, "#7f93bf", 1.0, 0.22)
+        windows = ((210.0, 22.0, 330.0, 132.0), (750.0, 22.0, 330.0, 132.0)) if throne else \
+            ((170.0, 70.0, 390.0, 118.0), (480.0, 50.0, 390.0, 132.0), (790.0, 70.0, 390.0, 118.0))
+        # coloured light shafts falling from the windows
+        for i, (cx, top, bottom, wd) in enumerate(windows):
+            for j, c in enumerate((STAINED[(i * 2) % 6], "#e6f6ff", STAINED[(i * 2 + 1) % 6])):
+                x0 = cx - wd / 2 + j * wd / 3
+                s.polygon([(x0, bottom - 70), (x0 + wd / 3, bottom - 70), (x0 + wd / 3 + 190, 540), (x0 + 130, 540)], fill=c,
+                          opacity=0.06 if j != 1 else 0.04)
+        for i, (cx, top, bottom, wd) in enumerate(windows):
+            self._ice_window(s, cx, top, bottom, wd, 7 + i * 5, broken=throne)
+        if throne:
+            for x in (480.0,):
+                s.circle(x, 300, 230, fill=s.radial(x, 300, 230, [(0, "#7fd8ff", 0.28), (1, "#7fd8ff", 0)]))
+            self._throne(s, 480, 470, 300)
+            for bx in (330.0, 630.0):
+                self._banner(s, bx, 40, 250, 46, torn=True)
+            for _ in range(26):  # snow blowing in through the broken windows
+                x, y = r.uniform(80, 900), r.uniform(60, 420)
+                ln = r.uniform(14, 40)
+                s.line(x, y, x + ln, y + ln * 0.35, "#ffffff", r.uniform(0.8, 1.6), r.uniform(0.25, 0.6))
+        else:
+            for bx in (325.0, 635.0):
+                self._banner(s, bx, 56, 230, 44, torn=False)
+            self._chandelier(s, 480, 150, 150)
+        # cold mist on the floor
+        s.rect(0, 380, 960, 160, fill=s.linear(0, 380, 0, 540, [(0, "#9fc4ea", 0), (1, "#9fc4ea", 0.22)]))
+        return s
+
+    def _ice_window(self, s: Svg, cx: float, top: float, bottom: float, wd: float, seed: int, broken: bool = False) -> None:
+        """Lancet window glazed with coloured ice; the aurora shows through
+        the clear central lights. ``broken`` knocks panes out (snow blows in)."""
+        r = Rand(seed)
+        x0, x1 = cx - wd / 2, cx + wd / 2
+        spring = top + wd * 0.62
+        outline = (f"M{x0:.1f} {bottom:.1f} L{x0:.1f} {spring:.1f} Q{x0:.1f} {top + wd * 0.12:.1f} {cx:.1f} {top:.1f} "
+                   f"Q{x1:.1f} {top + wd * 0.12:.1f} {x1:.1f} {spring:.1f} L{x1:.1f} {bottom:.1f} Z")
+        s.path(outline, fill=s.linear(0, top, 0, bottom, [(0, "#070e26"), (0.55, "#13265a"), (1, "#24477e")]))
+        for _ in range(16):
+            s.circle(r.uniform(x0 + 5, x1 - 5), r.uniform(spring - 20, bottom - 40), r.uniform(0.6, 1.3), fill="#ffffff", opacity=r.uniform(0.4, 0.9))
+        # aurora curtains (inside the straight part of the window)
+        for k, (hi, mid) in enumerate((("#c39bff", "#5dffc0"), ("#8fefff", "#45f0b0"))):
+            ytop = spring + 18 + k * 46
+            pts_t = [(x0 + 3 + (wd - 6) * i / 10, ytop + 12 * math.sin(i * 0.9 + seed + k)) for i in range(11)]
+            pts_b = [(px, py + 46 + 8 * math.sin(i * 1.3 + k)) for i, (px, py) in enumerate(pts_t)]
+            s.path(_poly(pts_t + list(reversed(pts_b))), fill=s.linear(0, ytop - 12, 0, ytop + 60, [(0, hi, 0), (0.25, hi, 0.5), (0.55, mid, 0.6), (1, mid, 0)]))
+            for i in range(1, 10, 2):
+                px, py = pts_t[i]
+                s.line(px, py, px, py + 40, "#d6fff0", 1.2, 0.25)
+        # stained ice lights: coloured side lights, clear centre light, rose in the head
+        side = wd * 0.27
+        rows = max(3, int((bottom - spring) / 34))
+        rh = (bottom - spring) / rows
+        lost = {(int(r.uniform(0, 3)), int(r.uniform(0, rows))) for _ in range(5)} if broken else set()
+        for row in range(rows):
+            y = spring + row * rh
+            for col, (px0, px1) in enumerate(((x0, x0 + side), (x0 + side, x1 - side), (x1 - side, x1))):
+                if (col, row) in lost:
+                    s.polygon([(px0, y), (px0 + (px1 - px0) * 0.35, y + rh * 0.4), (px0, y + rh * 0.7)], fill="#bfe6ff", opacity=0.55)
+                    continue
+                if col == 1:
+                    s.rect(px0, y, px1 - px0, rh, fill="#cfefff", opacity=0.1)
+                else:
+                    c = mix(STAINED[(row + col * 2 + seed) % 6], "#3a5a9a", 0.3)
+                    s.rect(px0, y, px1 - px0, rh, fill=s.linear(px0, y, px1, y + rh, [(0, shade(c, 0.3)), (0.6, c), (1, shade(c, -0.2))]), opacity=0.5)
+                    s.line(px0 + 2, y + 3, px0 + (px1 - px0) * 0.6, y + 3, "#ffffff", 1.0, 0.4)
+            s.line(x0, y, x1, y, "#0a0f22", 2.4)
+        for lx in (x0 + side, x1 - side):
+            s.line(lx, spring, lx, bottom, "#0a0f22", 2.6)
+        rx, ry, rr = cx, top + wd * 0.38, wd * 0.24
+        for k in range(8):
+            a0, a1 = k * math.pi / 4, (k + 1) * math.pi / 4
+            s.polygon([(rx, ry), (rx + math.cos(a0) * rr, ry + math.sin(a0) * rr), (rx + math.cos(a1) * rr, ry + math.sin(a1) * rr)],
+                      fill=mix(STAINED[(k + seed) % 6], "#3a5a9a", 0.25), opacity=0.6, stroke="#0a0f22", width=1.8)
+        s.circle(rx, ry, rr, stroke="#0a0f22", width=2.4)
+        s.circle(rx, ry, rr * 0.28, fill="#e8fbff", stroke="#0a0f22", width=1.6)
+        # granite frame, frosted sill and icicles
+        s.path(outline, stroke="#0b1022", width=12)
+        s.path(outline, stroke="#7c8aa8", width=8)
+        s.path(outline, stroke="#c9d5e8", width=1.6, opacity=0.8)
+        s.rect(x0 - 14, bottom - 1, wd + 28, 12, fill=s.linear(0, bottom, 0, bottom + 12, [(0, "#a9b6cc"), (1, "#56637f")]), stroke="#0b1022", width=1.6, rx=2)
+        s.path(blob(cx, bottom - 1, wd * 0.55, 3.2, 0.2, seed=seed, squash_top=1.3), fill="#f4f8fc")
+        for k in range(7):
+            ix = x0 - 8 + (wd + 16) * (k + 0.5) / 7
+            _icicle(s, ix, bottom + 10, 6 + (k * 7 % 5) * 2.4, 3.2)
+        if broken:
+            for k in range(4):  # jagged shards still stuck in the frame
+                bx = x0 + 4 if k % 2 == 0 else x1 - 4
+                by = spring + 20 + k * 38
+                d = 1 if k % 2 == 0 else -1
+                s.polygon([(bx, by), (bx + d * r.uniform(14, 26), by + r.uniform(4, 10)), (bx, by + r.uniform(16, 24))], fill="#d8f3ff",
+                          stroke="#ffffff", width=0.8, opacity=0.8)
+            s.path(f"M{x1 - 10:.1f} {top + 30:.1f} L{x1 - 22:.1f} {top + 52:.1f} L{x1 - 14:.1f} {top + 70:.1f} L{x1 - 30:.1f} {top + 96:.1f}",
+                   stroke="#0b1022", width=2.2)
+
+    def _banner(self, s: Svg, x: float, top: float, length: float, wd: float, torn: bool) -> None:
+        """Frozen blue banner with a white crystal emblem and icicle tails."""
+        s.line(x - wd * 0.72, top, x + wd * 0.72, top, "#0b1022", 5)
+        s.line(x - wd * 0.72, top - 1, x + wd * 0.72, top - 1, "#8fa3c4", 1.4, 0.8)
+        for ex in (x - wd * 0.72, x + wd * 0.72):
+            s.circle(ex, top, 3.6, fill="#c9d8ea", stroke="#0b1022", width=1.2)
+        tail = top + length
+        if torn:
+            d = (f"M{x - wd / 2:.1f} {top:.1f} L{x + wd / 2:.1f} {top:.1f} L{x + wd / 2:.1f} {tail - 30:.1f} L{x + wd * 0.2:.1f} {tail - 10:.1f} "
+                 f"L{x + wd * 0.05:.1f} {tail - 40:.1f} L{x - wd * 0.18:.1f} {tail:.1f} L{x - wd / 2:.1f} {tail - 22:.1f} Z")
+            tips = ((x + wd * 0.2, tail - 10), (x - wd * 0.18, tail))
+        else:
+            d = (f"M{x - wd / 2:.1f} {top:.1f} L{x + wd / 2:.1f} {top:.1f} L{x + wd / 2:.1f} {tail:.1f} L{x:.1f} {tail - wd * 0.5:.1f} "
+                 f"L{x - wd / 2:.1f} {tail:.1f} Z")
+            tips = ((x + wd / 2, tail), (x - wd / 2, tail))
+        s.path(d, fill=s.linear(x - wd / 2, 0, x + wd / 2, 0, [(0, "#2c5ea8"), (0.4, BANNER_BLUE), (1, BANNER_DEEP)]), stroke="#0b1022", width=2.2)
+        s.rect(x - wd / 2 + 2, top + 10, wd - 4, 6, fill="#d6e3f2", opacity=0.85)
+        cy = top + length * 0.42
+        for k in range(6):
+            a = k * math.pi / 3 - math.pi / 2
+            ex, ey = x + math.cos(a) * wd * 0.3, cy + math.sin(a) * wd * 0.3
+            s.line(x, cy, ex, ey, "#f2f8ff", 2.2)
+            for b in (-0.5, 0.5):
+                s.line(x + math.cos(a) * wd * 0.17, cy + math.sin(a) * wd * 0.17, x + math.cos(a + b) * wd * 0.24, cy + math.sin(a + b) * wd * 0.24,
+                       "#f2f8ff", 1.4)
+        s.circle(x, cy, 3, fill="#bff0ff", stroke="#f2f8ff", width=1.2)
+        s.path(_line([(x - wd / 2 + 1.5, top + 4), (x - wd / 2 + 1.5, tail - 26)]), stroke="#ffffff", width=2.0, opacity=0.35)
+        for tx, ty in tips:
+            _icicle(s, tx - 1, ty - 2, 9, 3.4)
+
+    def _chandelier(self, s: Svg, cx: float, cy: float, wd: float) -> None:
+        """Silhouette of an icicle chandelier with cold blue flames."""
+        for dx in (-0.38, 0.0, 0.38):
+            s.line(cx + dx * wd * 0.15, 0, cx + dx * wd, cy, "#0a1024", 2.2)
+        for k in range(7):
+            t = k / 6
+            fx, fy = cx - wd * 0.45 + wd * 0.9 * t, cy - 4 - 6 * math.sin(math.pi * t)
+            s.circle(fx, fy - 9, 11, fill=s.radial(fx, fy - 9, 11, [(0, "#e8fbff", 0.85), (0.4, "#7fe6ff", 0.4), (1, "#7fe6ff", 0)]))
+            s.polygon([(fx - 2.4, fy), (fx, fy - 10), (fx + 2.4, fy)], fill="#121a36")
+            s.path(blob(fx, fy - 12, 2.2, 4, 0.1, seed=k), fill="#f2feff")
+        s.ellipse(cx, cy, wd / 2, wd * 0.08, fill="#121a36", stroke="#3a5288", width=2.4)
+        for k in range(13):
+            t = k / 12
+            ix = cx - wd * 0.46 + wd * 0.92 * t
+            ln = 18 + 26 * math.sin(math.pi * t) + 6 * _hash(k, 91)
+            iy = cy + wd * 0.05
+            s.path(f"M{ix - 3.4:.1f} {iy:.1f} L{ix:.1f} {iy + ln:.1f} L{ix + 3.4:.1f} {iy:.1f} Z", fill="#121a36")
+            s.line(ix - 1.2, iy + 2, ix - 0.2, iy + ln * 0.8, "#6f90cc", 1.0, 0.55)
+
+    def _throne(self, s: Svg, cx: float, base: float, height: float) -> None:
+        """Frozen throne silhouette on a stepped dais, crowned with ice spikes."""
+        for k in range(3):
+            wd = 300 - k * 60
+            s.rect(cx - wd / 2, base - 18 * (k + 1), wd, 18, fill=mix("#1a2340", "#26325a", k / 3), stroke="#5a78b8", width=1.2)
+        seat = base - 54
+        back_top = seat - height * 0.62
+        for k in range(9):  # crown of ice spikes behind the backrest
+            a = math.radians(-90 + (k - 4) * 15)
+            ln = height * (0.42 - abs(k - 4) * 0.045)
+            bx, by = cx + math.cos(a) * 30, back_top + 40 + math.sin(a) * 10
+            tip = (bx + math.cos(a) * ln, by + math.sin(a) * ln)
+            nx, ny = -math.sin(a) * 9, math.cos(a) * 9
+            s.polygon([(bx + nx, by + ny), tip, (bx - nx, by - ny)], fill="#16203e", stroke="#6f95d8", width=1.2)
+        back = (f"M{cx - 62:.1f} {seat:.1f} L{cx - 58:.1f} {back_top + 30:.1f} Q{cx:.1f} {back_top - 40:.1f} {cx + 58:.1f} {back_top + 30:.1f} "
+                f"L{cx + 62:.1f} {seat:.1f} Z")
+        s.path(back, fill=s.linear(0, back_top, 0, seat, [(0, "#22305a"), (1, "#121a34")]), stroke="#7fa6e8", width=1.6)
+        s.path(f"M{cx - 30:.1f} {seat - 20:.1f} L{cx - 28:.1f} {back_top + 34:.1f} Q{cx:.1f} {back_top - 4:.1f} {cx + 28:.1f} {back_top + 34:.1f} "
+               f"L{cx + 30:.1f} {seat - 20:.1f} Z", fill="#0e1530", opacity=0.8)
+        s.circle(cx, back_top + 40, 12, fill=s.radial(cx, back_top + 40, 12, [(0, "#e8fbff"), (0.5, "#7fe6ff"), (1, "#2a6fc0")]), stroke="#0a1024", width=1.6)
+        s.rect(cx - 84, seat - 6, 168, 22, fill="#18223f", stroke="#6f95d8", width=1.4, rx=4)
+        for side in (-1, 1):
+            ax = cx + side * 74
+            s.rect(ax - 12, seat - 40, 24, 54, fill="#1a2444", stroke="#6f95d8", width=1.4, rx=5)
+            s.polygon([(ax - 10, seat - 40), (ax, seat - 62), (ax + 10, seat - 40)], fill="#1a2444", stroke="#6f95d8", width=1.2)
+        for k in range(9):
+            ix = cx - 80 + k * 20
+            _icicle(s, ix, seat + 16, 8 + (k * 5 % 4) * 3, 3.6, 0.85)
+
+    def _colonnade(self, throne: bool) -> Svg:
+        """900×420 layer (scrolls at 0.45×): frosted granite columns with
+        ice sconces carrying arches; tiles horizontally (the arch across the
+        strip edge is drawn on both sides)."""
+        w, h = 900.0, 420.0
+        s = Svg(w, h)
+        cols = (150.0, 600.0)
+        cw = 70.0 if throne else 62.0
+        cap = 36.0 if throne else 74.0
+        for a, b in ((-300.0, 150.0), (150.0, 600.0), (600.0, 1050.0)):
+            self._arch(s, a + cw / 2 + 8, b - cw / 2 - 8, cap, broken=throne and a == 150.0)
+        for x in cols:
+            self._column(s, x, cap, h, cw)
+        return s
+
+    def _arch(self, s: Svg, xa: float, xb: float, spring: float, broken: bool) -> None:
+        span = xb - xa
+        mid = (xa + xb) / 2
+        rise = spring - 4
+        thick = 22.0
+        outer = [(xa - 8 + (span + 16) * t, spring - (rise + 4) * math.sin(math.pi * t)) for t in [i / 24 for i in range(25)]]
+        inner = [(xa + span * t, spring + thick - (rise - thick + 8) * math.sin(math.pi * t)) for t in [i / 24 for i in range(25)]]
+        if broken:  # a stretch of the arch has fallen: keep the two stubs
+            for lo, hi in ((0, 9), (16, 25)):
+                part_o, part_i = outer[lo:hi], inner[lo:hi]
+                s.path(_poly(part_o + list(reversed(part_i))), fill=s.linear(0, 0, 0, spring + thick, [(0, "#6b7a9a"), (1, "#3a4562")]),
+                       stroke="#0b1022", width=1.8)
+            return
+        s.path(_poly(outer + list(reversed(inner))), fill=s.linear(0, 0, 0, spring + thick, [(0, "#6b7a9a"), (1, "#3a4562")]),
+               stroke="#0b1022", width=1.8)
+        for t in [i / 12 for i in range(1, 12)]:  # voussoir joints
+            ox, oy = xa - 8 + (span + 16) * t, spring - (rise + 4) * math.sin(math.pi * t)
+            ix, iy = xa + span * t, spring + thick - (rise - thick + 8) * math.sin(math.pi * t)
+            s.line(ox, oy, ix, iy, "#1e2640", 1.2, 0.8)
+        s.path(_line(outer[1:-1]), stroke="#e8f0fa", width=2.0, opacity=0.55)
+        for k in range(1, 12, 2):
+            t = k / 12
+            ix, iy = xa + span * t, spring + thick - (rise - thick + 8) * math.sin(math.pi * t)
+            _icicle(s, ix, iy - 1, 8 + 6 * _hash(k + int(xa), 93), 3.2, 0.9)
+        del mid
+
+    def _column(self, s: Svg, x: float, cap: float, h: float, cw: float) -> None:
+        shaft = s.linear(x - cw / 2, 0, x + cw / 2, 0, [(0, "#8b9aba"), (0.35, "#6b7a9a"), (1, "#323b56")])
+        s.rect(x - cw / 2, cap + 18, cw, h - cap - 18, fill=shaft, stroke="#0b1022", width=1.8)
+        for fx in (-0.25, 0.0, 0.25):
+            s.line(x + fx * cw, cap + 22, x + fx * cw, h - 34, "#232b44", 1.4, 0.5)
+        for y in range(int(cap) + 64, int(h) - 30, 52):
+            s.line(x - cw / 2 + 1, y, x + cw / 2 - 1, y, "#1e2640", 1.6, 0.8)
+            s.line(x - cw / 2 + 1, y + 2, x + cw / 2 - 1, y + 2, "#b9c6dc", 1.0, 0.35)
+        s.rect(x - cw / 2 - 10, cap, cw + 20, 18, fill=s.linear(0, cap, 0, cap + 18, [(0, "#a9b7cf"), (1, "#4e5a78")]), stroke="#0b1022", width=1.8, rx=2)
+        s.path(blob(x - 4, cap + 0.5, cw * 0.62, 3.4, 0.2, seed=x, squash_top=1.4), fill="#f2f7fc")
+        for k in range(6):
+            _icicle(s, x - cw / 2 - 6 + (cw + 12) * (k + 0.5) / 6, cap + 17, 5 + (k * 7 % 4) * 2.2, 3.0, 0.9)
+        s.rect(x - cw / 2 - 8, h - 34, cw + 16, 34, fill=s.linear(0, h - 34, 0, h, [(0, "#7f8dab"), (1, "#3a4562")]), stroke="#0b1022", width=1.8, rx=2)
+        # ice sconce with a cold flame
+        sy = cap + 110
+        s.circle(x, sy - 14, 30, fill=s.radial(x, sy - 14, 30, [(0, "#bff4ff", 0.5), (1, "#7fe6ff", 0)]))
+        s.path(f"M{x - 12:.1f} {sy:.1f} L{x + 12:.1f} {sy:.1f} L{x + 7:.1f} {sy + 10:.1f} L{x - 7:.1f} {sy + 10:.1f} Z", fill="#2a3452", stroke="#0b1022", width=1.4)
+        s.path(f"M{x:.1f} {sy - 26:.1f} Q{x + 9:.1f} {sy - 12:.1f} {x + 5:.1f} {sy - 1:.1f} Q{x:.1f} {sy + 1:.1f} {x - 5:.1f} {sy - 1:.1f} "
+               f"Q{x - 9:.1f} {sy - 12:.1f} {x:.1f} {sy - 26:.1f} Z", fill=s.linear(0, sy - 26, 0, sy, [(0, "#ffffff"), (0.5, "#9ff0ff"), (1, "#3fa8e8")]))
+
+    def gate(self, w: float, h: float) -> Svg:
+        """Arena portcullis: translucent ice bars with spiked tips held by a
+        frosted granite frame and cross rails."""
+        s = Svg(w, h)
+        frame = min(5.0, w * 0.13)
+        s.rect(frame, 0, w - 2 * frame, h - 8, fill="#121a34", opacity=0.55)
+        n = max(3, int((w - 2 * frame) // 8))
+        bar = 4.6
+        for i in range(n):
+            x = frame + 1.2 + i * (w - 2 * frame - 2.4 - bar) / max(1, n - 1)
+            s.rect(x, 2, bar, h - 11, fill=s.linear(x, 0, x + bar, 0, [(0, "#effcff"), (0.45, "#9adcf6"), (1, "#3c94cc")]), stroke=ICE_LINE, width=0.8)
+            s.line(x + 1.2, 4, x + 1.2, h - 12, "#ffffff", 0.9, 0.85)
+            s.polygon([(x - 0.4, h - 9.5), (x + bar / 2, h), (x + bar + 0.4, h - 9.5)],
+                      fill=s.linear(0, h - 10, 0, h, [(0, "#bfeeff"), (1, "#4aa6dc")]), stroke=ICE_LINE, width=0.8)
+        for fx in (0.0, w - frame):
+            s.rect(fx, 0, frame, h - 6, fill=s.linear(0, 0, 0, h, [(0, GRANITE_HI), (0.5, GRANITE), (1, GRANITE_DARK)]), stroke=INK, width=0.9)
+            for y in range(18, int(h) - 8, 22):
+                s.line(fx + 0.6, y, fx + frame - 0.6, y, "#5d6a84", 0.8, 0.8)
+        for y in (0.0, h * 0.34, h * 0.67):
+            s.rect(0, y, w, 7, fill=s.linear(0, y, 0, y + 7, [(0, GRANITE_HI), (1, GRANITE_DARK)]), stroke=INK, width=0.9, rx=1.5)
+            s.path(blob(w / 2, y + 0.8, w * 0.42, 1.6, 0.2, seed=int(y) + 3, squash_top=1.3), fill="#ffffff", opacity=0.9)
+            for k in range(3):
+                _icicle(s, w * (0.22 + 0.28 * k), y + 6.6, 3.5 + k % 2 * 2.5, 2.2)
+            for bx in (frame / 2, w - frame / 2):
+                s.circle(bx, y + 3.5, 1.1, fill="#2c3550")
         return s
 
     # ------------------------------------------------------------------ blocks and platforms
@@ -983,6 +1410,8 @@ class FrozenPeaks(WorldArt):
 
     def platform(self, kind: str, w: float, h: float, style: str = "") -> Svg:
         if kind == "ledge":
+            if "fortress" in style:  # citadel masonry ledge; "fortress_ice" gets the glossy ice cap
+                return self._fortress(w, h, int(w * 7 + h), True, True, True, 0.0, "ice" if "ice" in style else "normal")
             if "ice" in style:
                 return self._ice_ledge(w, h)
             return self.terrain("terrain", w, h, int(w * 7 + h), True, True)

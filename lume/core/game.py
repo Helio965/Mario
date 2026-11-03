@@ -97,11 +97,11 @@ class Game:
         self.coins += [Coin(c.id, c.x, c.y, *C.RELIC_SIZE, special=True, kind=c.kind) for c in level.collectibles]
         self.items = [Item(i.id, i.kind, i.x, i.y, C.ITEM_SIZE, C.ITEM_SIZE) for i in level.items]
         self.hazards = [
-            Hazard(h.id, h.kind, h.x, h.y, h.w, h.h, h.range, h.speed, h.phase, lethal=h.kind in ("lava", "water"))
+            Hazard(h.id, h.kind, h.x, h.y, h.w, h.h, h.range, h.speed, h.phase, lethal=h.kind in ("lava", "water"), style=h.style)
             for h in level.hazards
         ]
         self.zones = [
-            Zone(z.id, z.kind, z.x, z.y, z.w, z.h, z.force_x, z.force_y, z.period, z.duty, z.radius)
+            Zone(z.id, z.kind, z.x, z.y, z.w, z.h, z.force_x, z.force_y, z.period, z.duty, z.radius, z.phase)
             for z in level.zones
         ]
         self.checkpoints = [Checkpoint(c.id, c.x, c.y) for c in level.checkpoints]
@@ -409,7 +409,7 @@ class Game:
             if z.kind == "swim":
                 swim = z
             elif z.kind in ("wind", "current"):
-                if z.period > 0 and (self.elapsed % z.period) >= z.period * z.duty:
+                if not self.zone_active(z):
                     continue
                 fx += z.force_x
                 fy += z.force_y
@@ -434,7 +434,7 @@ class Game:
         return 64.0 if abs(self.player.vx) > 260 else 120.0
 
     def zone_active(self, z: Zone) -> bool:
-        return z.period <= 0 or (self.elapsed % z.period) < z.period * z.duty
+        return z.period <= 0 or ((self.elapsed + z.phase) % z.period) < z.period * z.duty
 
     # ------------------------------------------------------------------ platforms
     def _update_platforms(self, dt: float) -> None:
@@ -460,6 +460,10 @@ class Game:
             if s.kind == "crumble":
                 if s.alive and p.standing_on == s.id:
                     s.crumble += dt
+                elif s.alive and s.crumble > 0:
+                    # stress relaxes when nobody stands on it (the legacy game kept it
+                    # forever, so a bridge crossed once collapsed under a later runner)
+                    s.crumble = max(0.0, s.crumble - dt * 0.5)
                 if s.alive and s.crumble > 0.65:
                     s.alive = False
                     s.respawn = 3.0
@@ -699,6 +703,7 @@ class Game:
         if not behavior.can_take_damage(self, e, source) or not behavior.vulnerable_to(self, e, source):
             if source in ("fire", "shell"):
                 self.emit("deflect", x=e.x + e.w / 2, y=e.y)
+            behavior.on_blocked(self, e, source)
             return False
         profile = self.profiles[e.species]
         e.health -= damage
@@ -939,6 +944,12 @@ class Game:
         self.time = max(self.time, 90.0)
         self.projectiles = []
         self.pipe_cooldown = 0.0
+        # a fresh attempt: brittle platforms are whole again and minions spawned
+        # during the previous attempt (boss helpers, dropped seeds) are gone
+        for s in self.platforms:
+            if s.kind == "crumble":
+                s.alive, s.crumble, s.respawn = True, 0.0, 0.0
+        self.enemies = [e for e in self.enemies if not e.id.startswith("spawn-")]
 
     # ------------------------------------------------------------------ helpers for tools/tests
     def run(self, seconds: float, inp: InputState) -> None:
