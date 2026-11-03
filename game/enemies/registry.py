@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import game.bosses.boss  # registra o arquétipo 'guardian'
+import game.bosses.guardians  # registra os cinco guardiões
 import game.enemies.archetypes  # noqa: F401 - registra as famílias de arquétipos
 from game.core.types import ENEMY_KINDS
 from game.enemies.behaviors import ARCHETYPES

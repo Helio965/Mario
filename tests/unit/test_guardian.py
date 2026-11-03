@@ -159,8 +159,12 @@ def test_attacks_use_observable_player_position() -> None:
     shoot = shoot_attack(count=1)
     charge = charge_attack()
     assert shoot.start is not None and charge.start is not None
+    boss.behavior.target_x = g.player.x  # alvo congelado no 1.º quadro do aviso
     shoot.start(g, boss, boss.behavior)
     assert g.projectiles[-1].vx < 0, "atira na direção observada do jogador (à esquerda)"
     g.player.x = 1400
+    charge.start(g, boss, boss.behavior)
+    assert boss.facing == -1, "o ataque usa a posição observada no aviso, não a atual"
+    boss.behavior.target_x = g.player.x
     charge.start(g, boss, boss.behavior)
     assert boss.facing == 1

@@ -262,6 +262,7 @@ class Projectile:
     life: float
     alive: bool = True
     gravity: float = 0.0  # projéteis em arco (martelo, gota de magma); 0 = comportamento legado
+    owner: str | None = None  # id do inimigo/chefe que criou o projétil (orçamento de perigos)
 
 
 @dataclass(slots=True)
