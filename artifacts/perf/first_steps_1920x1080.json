@@ -1,0 +1,34 @@
+{
+ "level": "first_steps",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 718,
+ "status": "complete",
+ "update_ms": {
+  "avg": 0.655,
+  "p95": 1.125,
+  "max": 1.623
+ },
+ "submit_ms": {
+  "avg": 2.36,
+  "p95": 3.68
+ },
+ "frame_ms": {
+  "avg": 29.63,
+  "p95": 42.46,
+  "max": 58.04
+ },
+ "draw_calls": {
+  "avg": 67.9,
+  "max": 111
+ },
+ "entities": {
+  "avg": 33.9,
+  "max": 91
+ },
+ "texture_mb": 69.8,
+ "textures": 139,
+ "raster_ms_total": 750.4,
+ "preload_ms": 753.1,
+ "python_heap_peak_mb": 0.1
+}

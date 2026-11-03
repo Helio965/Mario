@@ -1,0 +1,462 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "first_steps",
+ "legacy_ids": [
+  "1-1"
+ ],
+ "name": "Primeiros Passos",
+ "world": "green_kingdom",
+ "role": "presentation",
+ "difficulty": 1,
+ "art": {
+  "set": "green_kingdom",
+  "variant": "meadow",
+  "weather": "auto"
+ },
+ "music": "green_kingdom_main",
+ "bounds": {
+  "width": 3200,
+  "height": 1240
+ },
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 3200,
+   "h": 540,
+   "variant": "meadow"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2169,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "time_limit": 367,
+ "spawn": {
+  "x": 72,
+  "y": 414
+ },
+ "checkpoints": [
+  {
+   "id": "cp_mid",
+   "x": 1510,
+   "y": 414
+  }
+ ],
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 3050,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 1040,
+   "h": 152
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1140,
+   "y": 448,
+   "w": 780,
+   "h": 152
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2040,
+   "y": 448,
+   "w": 1160,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 410,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "brick01",
+   "kind": "brick",
+   "x": 450,
+   "y": 350,
+   "w": 40,
+   "h": 28
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 490,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "coin"
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 570,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "heart"
+  },
+  {
+   "id": "brick02",
+   "kind": "brick",
+   "x": 780,
+   "y": 382,
+   "w": 92,
+   "h": 22
+  },
+  {
+   "id": "brick03",
+   "kind": "brick",
+   "x": 1680,
+   "y": 374,
+   "w": 100,
+   "h": 22
+  },
+  {
+   "id": "brick04",
+   "kind": "brick",
+   "x": 1830,
+   "y": 306,
+   "w": 112,
+   "h": 22
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 2524,
+    "y": 846
+   },
+   "return": {
+    "x": 2322,
+    "y": 402
+   },
+   "x": 2250,
+   "y": 400,
+   "w": 56,
+   "h": 48
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "style": "pipe",
+   "warp": {
+    "x": 2322,
+    "y": 402
+   },
+   "return": {
+    "x": 2524,
+    "y": 846
+   },
+   "x": 2726,
+   "y": 864,
+   "w": 56,
+   "h": 32
+  },
+  {
+   "id": "hidden01",
+   "kind": "hidden",
+   "x": 2460,
+   "y": 344,
+   "w": 40,
+   "h": 24,
+   "reward": "star",
+   "secret": "hidden_hidden01"
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2169,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2169,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2169,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2838,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "branch01",
+   "kind": "semisolid",
+   "style": "branch",
+   "x": 2560,
+   "y": 364,
+   "w": 120,
+   "h": 14
+  },
+  {
+   "id": "branch02",
+   "kind": "semisolid",
+   "style": "branch",
+   "x": 2730,
+   "y": 296,
+   "w": 120,
+   "h": 14
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 200,
+   "y": 410,
+   "count": 6,
+   "spacing": 34
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 1010,
+   "y": 374,
+   "count": 5,
+   "spacing": 32
+  },
+  {
+   "id": "coins03",
+   "shape": "arc",
+   "x": 1900,
+   "y": 374,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins04",
+   "shape": "row",
+   "x": 796,
+   "y": 347,
+   "count": 2,
+   "spacing": 34
+  },
+  {
+   "id": "coins05",
+   "shape": "row",
+   "x": 1700,
+   "y": 340,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins06",
+   "shape": "row",
+   "x": 1840,
+   "y": 270,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins07",
+   "shape": "row",
+   "x": 2840,
+   "y": 410,
+   "count": 6,
+   "spacing": 34
+  },
+  {
+   "id": "room_coins01",
+   "shape": "row",
+   "x": 2564,
+   "y": 852.0,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins_branch",
+   "shape": "diagonal",
+   "x": 2590,
+   "y": 330,
+   "count": 4,
+   "spacing": 40,
+   "rise": 18
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 2678,
+   "y": 850
+  },
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 1886,
+   "y": 232
+  },
+  {
+   "id": "relic_branch",
+   "kind": "relic",
+   "x": 2780,
+   "y": 246
+  }
+ ],
+ "items": [
+  {
+   "id": "item01_heart",
+   "kind": "heart",
+   "x": 2628,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "bolota",
+   "x": 700,
+   "y": 448,
+   "patrol": [
+    650,
+    900
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "bolota",
+   "x": 1250,
+   "y": 448,
+   "patrol": [
+    1220,
+    1390
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "caramujo",
+   "x": 2640,
+   "y": 448,
+   "patrol": [
+    2590,
+    2800
+   ]
+  },
+  {
+   "id": "enemy_cave_acorn",
+   "species": "bolota",
+   "x": 2420,
+   "y": 448,
+   "patrol": [
+    2330,
+    2510
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_water01",
+   "kind": "water",
+   "x": 1040,
+   "y": 468,
+   "w": 100,
+   "h": 132
+  },
+  {
+   "id": "hz_water02",
+   "kind": "water",
+   "x": 1920,
+   "y": 468,
+   "w": 120,
+   "h": 132
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "entry": "pipe_room_entry",
+   "clue": "Cano com seta luminosa e dica próxima",
+   "rewards": [
+    "relic_room"
+   ]
+  },
+  {
+   "id": "hidden_hidden01",
+   "kind": "hidden_block",
+   "entry": "hidden01",
+   "clue": "Moedas e luzes convergem para um ponto vazio no ar",
+   "rewards": []
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos tijolos",
+   "rewards": [
+    "relic_high"
+   ]
+  },
+  {
+   "id": "branch_route",
+   "kind": "optional_challenge",
+   "clue": "Galhos da macieira formam degraus acima do caramujo",
+   "rewards": [
+    "relic_branch"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 120,
+   "text": "Ande, pule e siga as moedas."
+  },
+  {
+   "x": 470,
+   "text": "Bata por baixo nos blocos com luz."
+  },
+  {
+   "x": 1000,
+   "text": "Corra para cruzar o vão."
+  },
+  {
+   "x": 2190,
+   "text": "Sobre o cano, pressione ↓ para explorar."
+  }
+ ],
+ "notes": "Convertida da edição TypeScript (fase 1-1) e revisada: canais visíveis, terceira relíquia na trilha dos tijolos e rota opcional de galhos. Sala secreta movida para câmara subterrânea (+720 u)."
+}

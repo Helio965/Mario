@@ -1,0 +1,468 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "glowing_canopy",
+ "legacy_ids": [
+  "4-1"
+ ],
+ "name": "Copas Luminosas",
+ "world": "enchanted_forest",
+ "role": "presentation",
+ "difficulty": 5,
+ "art": {
+  "set": "enchanted_forest",
+  "variant": "canopy",
+  "weather": "auto"
+ },
+ "music": "enchanted_forest_main",
+ "bounds": {
+  "width": 4000,
+  "height": 1240
+ },
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 4000,
+   "h": 540,
+   "variant": "canopy"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2999,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "time_limit": 393,
+ "spawn": {
+  "x": 72,
+  "y": 414
+ },
+ "checkpoints": [
+  {
+   "id": "cp_mid",
+   "x": 1950,
+   "y": 414
+  }
+ ],
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 3850,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 980,
+   "h": 152
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1090,
+   "y": 448,
+   "w": 960,
+   "h": 152
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2170,
+   "y": 448,
+   "w": 640,
+   "h": 152
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2930,
+   "y": 448,
+   "w": 1070,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 350,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "brick01",
+   "kind": "brick",
+   "x": 580,
+   "y": 376,
+   "w": 104,
+   "h": 24
+  },
+  {
+   "id": "crumble01",
+   "kind": "crumble",
+   "x": 750,
+   "y": 310,
+   "w": 102,
+   "h": 20
+  },
+  {
+   "id": "crumble02",
+   "kind": "crumble",
+   "x": 916,
+   "y": 258,
+   "w": 100,
+   "h": 20
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 1490,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "brick02",
+   "kind": "brick",
+   "x": 1600,
+   "y": 374,
+   "w": 108,
+   "h": 22
+  },
+  {
+   "id": "moving01",
+   "kind": "moving",
+   "x": 1770,
+   "y": 310,
+   "w": 106,
+   "h": 18,
+   "motion": {
+    "axis": "x",
+    "range": 28,
+    "speed": 1.4,
+    "phase": 0
+   }
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 3354,
+    "y": 846
+   },
+   "return": {
+    "x": 3232,
+    "y": 402
+   },
+   "x": 3160,
+   "y": 400,
+   "w": 56,
+   "h": 48
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "style": "pipe",
+   "warp": {
+    "x": 3232,
+    "y": 402
+   },
+   "return": {
+    "x": 3354,
+    "y": 846
+   },
+   "x": 3556,
+   "y": 864,
+   "w": 56,
+   "h": 32
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 3560,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "heart"
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2999,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2999,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2999,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3668,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "firefly_step_a",
+   "kind": "hidden",
+   "x": 2240,
+   "y": 360,
+   "w": 40,
+   "h": 24,
+   "secret": "firefly_steps"
+  },
+  {
+   "id": "firefly_step_b",
+   "kind": "hidden",
+   "x": 2300,
+   "y": 300,
+   "w": 40,
+   "h": 24,
+   "secret": "firefly_steps"
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 170,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins02",
+   "shape": "row",
+   "x": 762,
+   "y": 273,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins03",
+   "shape": "arc",
+   "x": 950,
+   "y": 366,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins04",
+   "shape": "row",
+   "x": 1780,
+   "y": 272,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins05",
+   "shape": "arc",
+   "x": 2020,
+   "y": 365,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins06",
+   "shape": "arc",
+   "x": 2780,
+   "y": 365,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins07",
+   "shape": "row",
+   "x": 3730,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "room_coins01",
+   "shape": "row",
+   "x": 3394,
+   "y": 852.0,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 949,
+   "y": 220
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 3508,
+   "y": 850
+  },
+  {
+   "id": "relic_firefly",
+   "kind": "relic",
+   "x": 2312,
+   "y": 182
+  }
+ ],
+ "items": [
+  {
+   "id": "item01_star",
+   "kind": "star",
+   "x": 3458,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "caracol_musgo",
+   "x": 840,
+   "y": 448,
+   "patrol": [
+    760,
+    920
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "planta_esporos",
+   "x": 1320,
+   "y": 448,
+   "patrol": [
+    1260,
+    1410
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "mariposa_lume",
+   "x": 2580,
+   "y": 318,
+   "patrol": [
+    2450,
+    2710
+   ]
+  },
+  {
+   "id": "enemy_canopy_hopper",
+   "species": "cogumelo_saltitante",
+   "x": 3700,
+   "y": 448,
+   "patrol": [
+    3650,
+    3780
+   ]
+  },
+  {
+   "id": "enemy_canopy_snail",
+   "species": "caracol_musgo",
+   "x": 3090,
+   "y": 448,
+   "patrol": [
+    3050,
+    3140
+   ]
+  },
+  {
+   "id": "enemy_canopy_plant",
+   "species": "planta_esporos",
+   "x": 3400,
+   "y": 448,
+   "patrol": [
+    3380,
+    3420
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_spikes01",
+   "kind": "spikes",
+   "x": 2400,
+   "y": 434,
+   "w": 52,
+   "h": 14
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "entry": "pipe_room_entry",
+   "clue": "Cano com seta luminosa e dica próxima",
+   "rewards": [
+    "relic_room"
+   ]
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos blocos",
+   "rewards": [
+    "relic_high"
+   ]
+  },
+  {
+   "id": "firefly_steps",
+   "kind": "hidden_block",
+   "clue": "Vagalumes se reúnem sobre um ponto vazio: blocos ocultos formam degraus",
+   "rewards": [
+    "relic_firefly"
+   ],
+   "entry": "firefly_step_a"
+  }
+ ],
+ "hints": [
+  {
+   "x": 150,
+   "text": "Siga o chão ou aventure-se pelas copas."
+  },
+  {
+   "x": 690,
+   "text": "As folhas frágeis pedem saltos sem demora."
+  },
+  {
+   "x": 2390,
+   "text": "Ouça o ritmo dos sentinelas e avance."
+  }
+ ],
+ "notes": "Convertida da edição TypeScript (fase 4-1). Sala secreta movida para câmara subterrânea (+720 u)."
+}

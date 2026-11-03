@@ -1,0 +1,36 @@
+{
+ "level": "blizzard_heart",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.916,
+  "p95": 1.548,
+  "max": 6.646
+ },
+ "submit_ms": {
+  "avg": 2.99,
+  "p95": 4.77
+ },
+ "frame_ms": {
+  "avg": 54.41,
+  "p95": 71.22,
+  "max": 117.72
+ },
+ "draw_calls": {
+  "avg": 85.3,
+  "max": 150
+ },
+ "entities": {
+  "avg": 53.6,
+  "max": 120
+ },
+ "texture_mb": 78.1,
+ "textures": 193,
+ "raster_ms_total": 1107.5,
+ "preload_ms": 1109.3,
+ "python_heap_peak_mb": 0.2,
+ "load_avg_1m": 1.44,
+ "cpus": 4
+}

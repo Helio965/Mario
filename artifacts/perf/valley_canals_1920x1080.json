@@ -1,0 +1,34 @@
+{
+ "level": "valley_canals",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 740,
+ "status": "complete",
+ "update_ms": {
+  "avg": 0.854,
+  "p95": 1.432,
+  "max": 2.911
+ },
+ "submit_ms": {
+  "avg": 2.46,
+  "p95": 3.74
+ },
+ "frame_ms": {
+  "avg": 31.74,
+  "p95": 43.31,
+  "max": 62.91
+ },
+ "draw_calls": {
+  "avg": 70.8,
+  "max": 140
+ },
+ "entities": {
+  "avg": 36.5,
+  "max": 104
+ },
+ "texture_mb": 85.8,
+ "textures": 148,
+ "raster_ms_total": 872.3,
+ "preload_ms": 875.1,
+ "python_heap_peak_mb": 0.2
+}

@@ -1,0 +1,736 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "meadow_burrows",
+ "name": "Tocas do Prado",
+ "world": "green_kingdom",
+ "role": "advanced",
+ "difficulty": 3,
+ "art": {
+  "set": "green_kingdom",
+  "variant": "burrows",
+  "weather": "auto"
+ },
+ "music": "green_kingdom_main",
+ "bounds": {
+  "width": 6000,
+  "height": 1240
+ },
+ "time_limit": 360,
+ "spawn": {
+  "x": 72,
+  "y": 418
+ },
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 5850,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 1100,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 420,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1220,
+   "y": 448,
+   "w": 680,
+   "h": 152
+  },
+  {
+   "id": "spring01",
+   "kind": "spring",
+   "x": 1440,
+   "y": 432,
+   "w": 40,
+   "h": 16,
+   "bounce": 900
+  },
+  {
+   "id": "crumble01",
+   "kind": "crumble",
+   "x": 1520,
+   "y": 300,
+   "w": 100,
+   "h": 20
+  },
+  {
+   "id": "crumble02",
+   "kind": "crumble",
+   "x": 1680,
+   "y": 254,
+   "w": 100,
+   "h": 20
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "cave",
+   "x": 1880,
+   "y": 448,
+   "w": 20,
+   "h": 632
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3720,
+   "y": 540,
+   "w": 20,
+   "h": 540
+  },
+  {
+   "id": "ground07",
+   "kind": "ground",
+   "style": "cave",
+   "x": 1880,
+   "y": 1000,
+   "w": 720,
+   "h": 240
+  },
+  {
+   "id": "ground08",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2600,
+   "y": 960,
+   "w": 700,
+   "h": 280
+  },
+  {
+   "id": "ground09",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3300,
+   "y": 980,
+   "w": 440,
+   "h": 260
+  },
+  {
+   "id": "brick01",
+   "kind": "brick",
+   "x": 2300,
+   "y": 860,
+   "w": 120,
+   "h": 22
+  },
+  {
+   "id": "brick02",
+   "kind": "brick",
+   "x": 4100,
+   "y": 340,
+   "w": 160,
+   "h": 22
+  },
+  {
+   "id": "crumble03",
+   "kind": "crumble",
+   "x": 4440,
+   "y": 400,
+   "w": 80,
+   "h": 20
+  },
+  {
+   "id": "ground10",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4560,
+   "y": 448,
+   "w": 1440,
+   "h": 152
+  },
+  {
+   "id": "spring03",
+   "kind": "spring",
+   "x": 4800,
+   "y": 432,
+   "w": 40,
+   "h": 16,
+   "bounce": 950
+  },
+  {
+   "id": "semisolid06",
+   "kind": "semisolid",
+   "x": 4860,
+   "y": 300,
+   "w": 120,
+   "h": 14,
+   "style": "branch"
+  },
+  {
+   "id": "semisolid07",
+   "kind": "semisolid",
+   "x": 5010,
+   "y": 248,
+   "w": 110,
+   "h": 14,
+   "style": "branch"
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "x": 5560,
+   "y": 400,
+   "w": 56,
+   "h": 48,
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 5124,
+    "y": 846
+   },
+   "return": {
+    "x": 5632,
+    "y": 402
+   }
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4769,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4769,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4769,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 5438,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "x": 5326,
+   "y": 864,
+   "w": 56,
+   "h": 32,
+   "style": "pipe",
+   "warp": {
+    "x": 5632,
+    "y": 402
+   },
+   "return": {
+    "x": 5124,
+    "y": 846
+   }
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 5000,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "coin"
+  },
+  {
+   "id": "surface_tunnel_roof",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1990,
+   "y": 448,
+   "w": 1430,
+   "h": 92
+  },
+  {
+   "id": "hedge_wall",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 2080,
+   "y": 276,
+   "w": 60,
+   "h": 172
+  },
+  {
+   "id": "surface_after",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3540,
+   "y": 448,
+   "w": 2460,
+   "h": 152
+  },
+  {
+   "id": "root01",
+   "kind": "semisolid",
+   "style": "root",
+   "x": 3330,
+   "y": 880,
+   "w": 100,
+   "h": 14
+  },
+  {
+   "id": "root02",
+   "kind": "semisolid",
+   "style": "root",
+   "x": 3436,
+   "y": 790,
+   "w": 100,
+   "h": 14
+  },
+  {
+   "id": "root03",
+   "kind": "semisolid",
+   "style": "root",
+   "x": 3330,
+   "y": 700,
+   "w": 100,
+   "h": 14
+  },
+  {
+   "id": "root04",
+   "kind": "semisolid",
+   "style": "root",
+   "x": 3436,
+   "y": 612,
+   "w": 100,
+   "h": 14
+  },
+  {
+   "id": "root05",
+   "kind": "semisolid",
+   "style": "root",
+   "x": 3436,
+   "y": 530,
+   "w": 100,
+   "h": 14
+  },
+  {
+   "id": "tunnel_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 1990,
+   "y": 540,
+   "w": 1310,
+   "h": 110
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 200,
+   "y": 410,
+   "count": 5
+  },
+  {
+   "id": "coins02",
+   "shape": "diagonal",
+   "x": 1530,
+   "y": 262,
+   "count": 4,
+   "spacing": 40,
+   "rise": 12
+  },
+  {
+   "id": "coins03",
+   "shape": "column",
+   "x": 1935,
+   "y": 640,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins04",
+   "shape": "row",
+   "x": 2640,
+   "y": 920,
+   "count": 5
+  },
+  {
+   "id": "coins05",
+   "shape": "column",
+   "x": 3480,
+   "y": 480,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins06",
+   "shape": "row",
+   "x": 5164,
+   "y": 852,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_crumble",
+   "kind": "relic",
+   "x": 1716,
+   "y": 208
+  },
+  {
+   "id": "relic_burrow",
+   "kind": "relic",
+   "x": 2346,
+   "y": 816
+  },
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 5050,
+   "y": 200
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 5278,
+   "y": 850
+  }
+ ],
+ "items": [
+  {
+   "id": "item_grow01",
+   "kind": "grow",
+   "x": 5228,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "ourico_espinho",
+   "x": 760,
+   "y": 448,
+   "patrol": [
+    640,
+    1090
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "flor_mordedora",
+   "x": 1620,
+   "y": 448,
+   "patrol": [
+    1610,
+    1650
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "flor_mordedora",
+   "x": 2160,
+   "y": 1000,
+   "patrol": [
+    2150,
+    2190
+   ]
+  },
+  {
+   "id": "enemy04",
+   "species": "bolota",
+   "x": 2420,
+   "y": 1000,
+   "patrol": [
+    2300,
+    2590
+   ]
+  },
+  {
+   "id": "enemy05",
+   "species": "ourico_espinho",
+   "x": 2880,
+   "y": 960,
+   "patrol": [
+    2700,
+    3290
+   ]
+  },
+  {
+   "id": "enemy06",
+   "species": "flor_mordedora",
+   "x": 3080,
+   "y": 960,
+   "patrol": [
+    3070,
+    3110
+   ]
+  },
+  {
+   "id": "enemy07",
+   "species": "caramujo",
+   "x": 2760,
+   "y": 960,
+   "patrol": [
+    2620,
+    3000
+   ]
+  },
+  {
+   "id": "enemy08",
+   "species": "ourico_espinho",
+   "x": 3960,
+   "y": 448,
+   "patrol": [
+    3800,
+    4140
+   ]
+  },
+  {
+   "id": "enemy09",
+   "species": "flor_mordedora",
+   "x": 4180,
+   "y": 448,
+   "patrol": [
+    4170,
+    4210
+   ]
+  },
+  {
+   "id": "enemy10",
+   "species": "bolota",
+   "x": 4320,
+   "y": 448,
+   "patrol": [
+    4260,
+    4390
+   ]
+  },
+  {
+   "id": "enemy11",
+   "species": "besouro_alado",
+   "x": 5200,
+   "y": 340,
+   "patrol": [
+    5080,
+    5380
+   ]
+  },
+  {
+   "id": "enemy12",
+   "species": "ourico_espinho",
+   "x": 5420,
+   "y": 448,
+   "patrol": [
+    5320,
+    5520
+   ]
+  },
+  {
+   "id": "enemy13",
+   "species": "caramujo",
+   "x": 5720,
+   "y": 448,
+   "patrol": [
+    5640,
+    5790
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_water01",
+   "kind": "water",
+   "x": 1100,
+   "y": 468,
+   "w": 120,
+   "h": 132
+  },
+  {
+   "id": "hz_water02",
+   "kind": "water",
+   "x": 4400,
+   "y": 468,
+   "w": 160,
+   "h": 132
+  }
+ ],
+ "zones": [],
+ "secrets": [
+  {
+   "id": "crumble_route",
+   "kind": "optional_challenge",
+   "clue": "Mola ao pé de tábuas rachadas",
+   "rewards": [
+    "relic_crumble"
+   ]
+  },
+  {
+   "id": "burrow_pocket",
+   "kind": "breakable_path",
+   "clue": "Tijolos no teto do túnel guardam um bolsão",
+   "rewards": [
+    "relic_burrow"
+   ]
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Galhos acima da mola",
+   "rewards": [
+    "relic_high"
+   ]
+  },
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "clue": "Cano com seta luminosa",
+   "rewards": [
+    "relic_room"
+   ],
+   "entry": "pipe_room_entry"
+  }
+ ],
+ "hints": [
+  {
+   "x": 560,
+   "text": "Espinhos dourados não podem ser pisados: use a chama ou salte por cima."
+  },
+  {
+   "x": 1760,
+   "text": "As tocas descem: siga o túnel até a saída iluminada."
+  },
+  {
+   "x": 3300,
+   "text": "Raízes formam degraus: atravesse-as por baixo e suba.",
+   "y": 980
+  },
+  {
+   "x": 1960,
+   "text": "A sebe bloqueia o caminho: desça pela toca."
+  }
+ ],
+ "events": [],
+ "checkpoints": [
+  {
+   "id": "cp_tunnel",
+   "x": 2640,
+   "y": 930
+  },
+  {
+   "id": "cp_surface",
+   "x": 3600,
+   "y": 418
+  }
+ ],
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 6000,
+   "h": 540,
+   "variant": "burrows"
+  },
+  {
+   "id": "burrows",
+   "x": 1880,
+   "y": 540,
+   "w": 1860,
+   "h": 540,
+   "variant": "cave",
+   "music": "green_kingdom_underground"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 4769,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "decor": [
+  {
+   "prop": "fence",
+   "x": 260,
+   "y": 450,
+   "layer": "mid"
+  },
+  {
+   "prop": "tree_oak",
+   "x": 980,
+   "y": 450,
+   "layer": "back"
+  },
+  {
+   "prop": "bush",
+   "x": 1300,
+   "y": 450,
+   "layer": "back"
+  },
+  {
+   "prop": "flowers",
+   "x": 1820,
+   "y": 450,
+   "layer": "mid"
+  },
+  {
+   "prop": "rock",
+   "x": 2050,
+   "y": 450,
+   "layer": "mid"
+  },
+  {
+   "prop": "tree_oak_b",
+   "x": 3100,
+   "y": 450,
+   "layer": "back"
+  },
+  {
+   "prop": "bush_b",
+   "x": 3900,
+   "y": 450,
+   "layer": "back"
+  },
+  {
+   "prop": "flowers_b",
+   "x": 4700,
+   "y": 450,
+   "layer": "mid"
+  },
+  {
+   "prop": "tree_oak",
+   "x": 5300,
+   "y": 450,
+   "layer": "back"
+  }
+ ],
+ "notes": "Fase nova (Mundo 1-5): desafio avançado — combina molas, plataformas frágeis, flores e o Ouriço-Espinho (apresentado com a flor de brasa logo antes) em um túnel subterrâneo obrigatório com subida vertical."
+}

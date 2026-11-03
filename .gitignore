@@ -5,3 +5,14 @@ playwright-report/
 .env
 .env.*
 !.env.example
+# Python edition
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+.venv/
+artifacts/
+
+# local agent tooling (isolated git worktrees)
+.claude/worktrees/

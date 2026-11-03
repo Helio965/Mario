@@ -1,0 +1,492 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "canyon_bridges",
+ "legacy_ids": [
+  "2-2"
+ ],
+ "name": "Pontes do Cânion",
+ "world": "golden_desert",
+ "role": "exploration",
+ "difficulty": 3,
+ "art": {
+  "set": "golden_desert",
+  "variant": "canyon",
+  "weather": "auto"
+ },
+ "music": "golden_desert_main",
+ "bounds": {
+  "width": 4100,
+  "height": 1240
+ },
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 4100,
+   "h": 540,
+   "variant": "canyon"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2929,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "time_limit": 397,
+ "spawn": {
+  "x": 72,
+  "y": 414
+ },
+ "checkpoints": [
+  {
+   "id": "cp_mid",
+   "x": 1480,
+   "y": 350
+  },
+  {
+   "id": "cp_canyon",
+   "x": 2960,
+   "y": 418
+  }
+ ],
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 3950,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 620,
+   "h": 152
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 740,
+   "y": 416,
+   "w": 550,
+   "h": 184
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1420,
+   "y": 384,
+   "w": 680,
+   "h": 216
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2220,
+   "y": 416,
+   "w": 520,
+   "h": 184
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2860,
+   "y": 448,
+   "w": 1240,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 430,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "crumble01",
+   "kind": "crumble",
+   "x": 770,
+   "y": 338,
+   "w": 90,
+   "h": 18
+  },
+  {
+   "id": "crumble02",
+   "kind": "crumble",
+   "x": 920,
+   "y": 288,
+   "w": 96,
+   "h": 18
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 1590,
+   "y": 288,
+   "w": 40,
+   "h": 28,
+   "reward": "coin"
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 1670,
+   "y": 288,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "moving01",
+   "kind": "moving",
+   "x": 1960,
+   "y": 307,
+   "w": 92,
+   "h": 18,
+   "motion": {
+    "axis": "x",
+    "range": 32,
+    "speed": 1.3,
+    "phase": 0
+   }
+  },
+  {
+   "id": "moving02",
+   "kind": "moving",
+   "x": 2550,
+   "y": 308,
+   "w": 110,
+   "h": 18,
+   "motion": {
+    "axis": "y",
+    "range": 27,
+    "speed": 1.25,
+    "phase": 0
+   }
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 3284,
+    "y": 846
+   },
+   "return": {
+    "x": 3202,
+    "y": 402
+   },
+   "x": 3130,
+   "y": 400,
+   "w": 56,
+   "h": 48
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "style": "pipe",
+   "warp": {
+    "x": 3202,
+    "y": 402
+   },
+   "return": {
+    "x": 3284,
+    "y": 846
+   },
+   "x": 3486,
+   "y": 864,
+   "w": 56,
+   "h": 32
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2929,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2929,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2929,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3598,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "vulture_nest_ledge",
+   "kind": "semisolid",
+   "x": 2760,
+   "y": 214,
+   "w": 90,
+   "h": 14,
+   "style": "ruin"
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 170,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 600,
+   "y": 348,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins03",
+   "shape": "arc",
+   "x": 1270,
+   "y": 319,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins04",
+   "shape": "arc",
+   "x": 2080,
+   "y": 302,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins05",
+   "shape": "arc",
+   "x": 2710,
+   "y": 335,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins06",
+   "shape": "row",
+   "x": 3830,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "room_coins01",
+   "shape": "row",
+   "x": 3324,
+   "y": 852.0,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins_nest",
+   "shape": "column",
+   "x": 2795,
+   "y": 300,
+   "count": 3,
+   "spacing": 40
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 954,
+   "y": 250
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 3438,
+   "y": 850
+  },
+  {
+   "id": "relic_nest",
+   "kind": "relic",
+   "x": 2785,
+   "y": 182
+  }
+ ],
+ "items": [
+  {
+   "id": "item01_star",
+   "kind": "star",
+   "x": 3388,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "tatu_bola",
+   "x": 1120,
+   "y": 416,
+   "patrol": [
+    1060,
+    1220
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "cacto_sentinela",
+   "x": 1840,
+   "y": 384,
+   "patrol": [
+    1770,
+    1980
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "abutre_filhote",
+   "x": 3690,
+   "y": 338,
+   "patrol": [
+    3570,
+    3820
+   ]
+  },
+  {
+   "id": "enemy_canyon_start",
+   "species": "escaravelho_areia",
+   "x": 300,
+   "y": 448,
+   "patrol": [
+    200,
+    520
+   ]
+  },
+  {
+   "id": "enemy_canyon_mid",
+   "species": "escaravelho_areia",
+   "x": 2380,
+   "y": 416,
+   "patrol": [
+    2330,
+    2440
+   ]
+  },
+  {
+   "id": "enemy_canyon_end",
+   "species": "tatu_bola",
+   "x": 3380,
+   "y": 448,
+   "patrol": [
+    3330,
+    3450
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_spikes01",
+   "kind": "spikes",
+   "x": 2470,
+   "y": 402,
+   "w": 52,
+   "h": 14
+  },
+  {
+   "id": "hz_moving02",
+   "kind": "moving",
+   "x": 3500,
+   "y": 361,
+   "w": 26,
+   "h": 26,
+   "range": 40,
+   "speed": 1.6
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "entry": "pipe_room_entry",
+   "clue": "Cano com seta luminosa e dica próxima",
+   "rewards": [
+    "relic_room"
+   ]
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos blocos",
+   "rewards": [
+    "relic_high"
+   ]
+  },
+  {
+   "id": "vulture_nest",
+   "kind": "hidden_area",
+   "clue": "Moedas sobem em coluna no vão: uma corrente de ar quente leva ao ninho do abutre",
+   "rewards": [
+    "relic_nest"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 140,
+   "text": "O cânion tem terraços e atalhos acima."
+  },
+  {
+   "x": 810,
+   "text": "Salte outra vez antes de a ponte ceder."
+  },
+  {
+   "x": 3430,
+   "text": "Espere a chama se afastar para passar."
+  }
+ ],
+ "notes": "Convertida da edição TypeScript (fase 2-2). Sala secreta movida para câmara subterrânea (+720 u). Revisão: plataformas frágeis afastadas da patrulha do Tatu-Bola para que o salto sobre ele não bata no teto antes do vão (problema detectado pela rota automatizada).",
+ "zones": [
+  {
+   "id": "nest_updraft",
+   "kind": "wind",
+   "x": 2745,
+   "y": 120,
+   "w": 110,
+   "h": 420,
+   "force_x": 0,
+   "force_y": -1800
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "level": "scarab_pyramid",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.818,
+  "p95": 1.452,
+  "max": 2.335
+ },
+ "submit_ms": {
+  "avg": 2.12,
+  "p95": 3.03
+ },
+ "frame_ms": {
+  "avg": 30.29,
+  "p95": 35.97,
+  "max": 77.11
+ },
+ "draw_calls": {
+  "avg": 35.3,
+  "max": 75
+ },
+ "entities": {
+  "avg": 16.3,
+  "max": 56
+ },
+ "texture_mb": 96.8,
+ "textures": 196,
+ "raster_ms_total": 1408.8,
+ "preload_ms": 1410.8,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 1.39,
+ "cpus": 4
+}

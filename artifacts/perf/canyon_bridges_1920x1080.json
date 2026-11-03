@@ -1,0 +1,36 @@
+{
+ "level": "canyon_bridges",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.865,
+  "p95": 1.423,
+  "max": 7.573
+ },
+ "submit_ms": {
+  "avg": 2.89,
+  "p95": 4.53
+ },
+ "frame_ms": {
+  "avg": 50.19,
+  "p95": 70.96,
+  "max": 101.25
+ },
+ "draw_calls": {
+  "avg": 86.7,
+  "max": 138
+ },
+ "entities": {
+  "avg": 52.5,
+  "max": 107
+ },
+ "texture_mb": 82.1,
+ "textures": 177,
+ "raster_ms_total": 388.6,
+ "preload_ms": 390.4,
+ "python_heap_peak_mb": 0.2,
+ "load_avg_1m": 1.1,
+ "cpus": 4
+}

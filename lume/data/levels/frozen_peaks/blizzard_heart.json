@@ -1,0 +1,497 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "blizzard_heart",
+ "legacy_ids": [
+  "3-3"
+ ],
+ "name": "Coração da Nevasca",
+ "world": "frozen_peaks",
+ "role": "movement",
+ "difficulty": 5,
+ "art": {
+  "set": "frozen_peaks",
+  "variant": "blizzard",
+  "weather": "auto"
+ },
+ "music": "frozen_peaks_main",
+ "bounds": {
+  "width": 4600,
+  "height": 1240
+ },
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 4600,
+   "h": 540,
+   "variant": "blizzard"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2109,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "time_limit": 413,
+ "spawn": {
+  "x": 72,
+  "y": 414
+ },
+ "checkpoints": [
+  {
+   "id": "cp_mid",
+   "x": 2270,
+   "y": 414
+  },
+  {
+   "id": "cp_blizzard",
+   "x": 3600,
+   "y": 418
+  }
+ ],
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 4450,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 780,
+   "h": 152
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "surface": "ice",
+   "x": 900,
+   "y": 416,
+   "w": 650,
+   "h": 184
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1660,
+   "y": 448,
+   "w": 850,
+   "h": 152
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "surface": "ice",
+   "x": 2630,
+   "y": 416,
+   "w": 730,
+   "h": 184
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3480,
+   "y": 448,
+   "w": 1120,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 430,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "ledge01",
+   "kind": "ledge",
+   "style": "ice_ledge",
+   "surface": "ice",
+   "x": 1060,
+   "y": 340,
+   "w": 94,
+   "h": 20
+  },
+  {
+   "id": "moving01",
+   "kind": "moving",
+   "x": 1240,
+   "y": 277,
+   "w": 104,
+   "h": 18,
+   "motion": {
+    "axis": "x",
+    "range": 28,
+    "speed": 1.45,
+    "phase": 0
+   }
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 2040,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 2464,
+    "y": 846
+   },
+   "return": {
+    "x": 2432,
+    "y": 402
+   },
+   "x": 2360,
+   "y": 400,
+   "w": 56,
+   "h": 48
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "style": "pipe",
+   "warp": {
+    "x": 2432,
+    "y": 402
+   },
+   "return": {
+    "x": 2464,
+    "y": 846
+   },
+   "x": 2666,
+   "y": 864,
+   "w": 56,
+   "h": 32
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 3090,
+   "y": 318,
+   "w": 40,
+   "h": 28,
+   "reward": "star"
+  },
+  {
+   "id": "moving02",
+   "kind": "moving",
+   "x": 3180,
+   "y": 320,
+   "w": 96,
+   "h": 18,
+   "motion": {
+    "axis": "y",
+    "range": 26,
+    "speed": 1.5,
+    "phase": 0
+   }
+  },
+  {
+   "id": "ledge02",
+   "kind": "ledge",
+   "style": "ice_ledge",
+   "surface": "ice",
+   "x": 3760,
+   "y": 376,
+   "w": 106,
+   "h": 20
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2109,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2109,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2109,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2778,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "core_block",
+   "kind": "hidden",
+   "x": 2250,
+   "y": 320,
+   "w": 40,
+   "h": 24,
+   "secret": "blizzard_core"
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 170,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 750,
+   "y": 349,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins03",
+   "shape": "arc",
+   "x": 1510,
+   "y": 330,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins04",
+   "shape": "arc",
+   "x": 2480,
+   "y": 345,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins05",
+   "shape": "arc",
+   "x": 3320,
+   "y": 341,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins06",
+   "shape": "row",
+   "x": 4420,
+   "y": 410,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "room_coins01",
+   "shape": "row",
+   "x": 2504,
+   "y": 852.0,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 1278,
+   "y": 238
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 2618,
+   "y": 850
+  },
+  {
+   "id": "relic_core",
+   "kind": "relic",
+   "x": 2262,
+   "y": 200
+  }
+ ],
+ "items": [
+  {
+   "id": "item01_heart",
+   "kind": "heart",
+   "x": 2568,
+   "y": 866
+  },
+  {
+   "id": "item02_heart",
+   "kind": "heart",
+   "x": 3650,
+   "y": 420
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "carneiro_glacial",
+   "x": 660,
+   "y": 448,
+   "patrol": [
+    575,
+    725
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "coruja_nevada",
+   "x": 1430,
+   "y": 320,
+   "patrol": [
+    1320,
+    1500
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "boneco_neve",
+   "x": 2870,
+   "y": 416,
+   "patrol": [
+    2810,
+    2970
+   ]
+  },
+  {
+   "id": "enemy04",
+   "species": "guardiao_nevasca",
+   "x": 4110,
+   "y": 448,
+   "patrol": [
+    3930,
+    4370
+   ],
+   "hp": 5
+  },
+  {
+   "id": "enemy_blizzard_start",
+   "species": "pinguim_patrulha",
+   "x": 250,
+   "y": 448,
+   "patrol": [
+    150,
+    380
+   ]
+  },
+  {
+   "id": "enemy_blizzard_snail",
+   "species": "caracol_cristal",
+   "x": 1000,
+   "y": 416,
+   "patrol": [
+    930,
+    1150
+   ]
+  },
+  {
+   "id": "enemy_blizzard_snail2",
+   "species": "caracol_cristal",
+   "x": 3200,
+   "y": 416,
+   "patrol": [
+    3150,
+    3290
+   ]
+  },
+  {
+   "id": "enemy_blizzard_owl",
+   "species": "coruja_nevada",
+   "x": 1750,
+   "y": 300,
+   "patrol": [
+    1680,
+    1850
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_spikes01",
+   "kind": "spikes",
+   "x": 1860,
+   "y": 434,
+   "w": 48,
+   "h": 14
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "entry": "pipe_room_entry",
+   "clue": "Cano com seta luminosa e dica próxima",
+   "rewards": [
+    "relic_room"
+   ]
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos blocos",
+   "rewards": [
+    "relic_high"
+   ]
+  },
+  {
+   "id": "blizzard_core",
+   "kind": "hidden_block",
+   "clue": "Flocos giram em volta de um ponto parado no ar, mesmo durante a rajada",
+   "rewards": [
+    "relic_core"
+   ],
+   "entry": "core_block"
+  }
+ ],
+ "hints": [
+  {
+   "x": 140,
+   "text": "A neve esconde rotas altas, não o caminho seguro."
+  },
+  {
+   "x": 3240,
+   "text": "Observe a plataforma antes de atravessar."
+  },
+  {
+   "x": 3660,
+   "text": "A rocha protege uma última arena de gelo."
+  }
+ ],
+ "notes": "Convertida da edição TypeScript (fase 3-3). Sala secreta movida para câmara subterrânea (+720 u).",
+ "zones": []
+}

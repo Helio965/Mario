@@ -1,0 +1,34 @@
+{
+ "level": "windmill_heights",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 840,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.831,
+  "p95": 1.398,
+  "max": 4.592
+ },
+ "submit_ms": {
+  "avg": 2.54,
+  "p95": 3.93
+ },
+ "frame_ms": {
+  "avg": 34.44,
+  "p95": 48.33,
+  "max": 64.41
+ },
+ "draw_calls": {
+  "avg": 65.0,
+  "max": 107
+ },
+ "entities": {
+  "avg": 27.1,
+  "max": 70
+ },
+ "texture_mb": 95.8,
+ "textures": 166,
+ "raster_ms_total": 1036.4,
+ "preload_ms": 1039.1,
+ "python_heap_peak_mb": 0.1
+}

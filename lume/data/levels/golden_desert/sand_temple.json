@@ -1,0 +1,490 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "sand_temple",
+ "legacy_ids": [
+  "2-3"
+ ],
+ "name": "Templo das Areias",
+ "world": "golden_desert",
+ "role": "movement",
+ "difficulty": 3,
+ "art": {
+  "set": "golden_desert",
+  "variant": "temple",
+  "weather": "auto"
+ },
+ "music": "golden_desert_main",
+ "bounds": {
+  "width": 4200,
+  "height": 1240
+ },
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 4200,
+   "h": 540,
+   "variant": "temple"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2179,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "time_limit": 400,
+ "spawn": {
+  "x": 72,
+  "y": 414
+ },
+ "checkpoints": [
+  {
+   "id": "cp_mid",
+   "x": 2190,
+   "y": 414
+  },
+  {
+   "id": "cp_temple",
+   "x": 3030,
+   "y": 418
+  }
+ ],
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 4050,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 770,
+   "h": 152
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 880,
+   "y": 448,
+   "w": 670,
+   "h": 152
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1660,
+   "y": 448,
+   "w": 1140,
+   "h": 152
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2920,
+   "y": 448,
+   "w": 1280,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 420,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "pipe01",
+   "kind": "pipe",
+   "style": "pipe",
+   "x": 610,
+   "y": 400,
+   "w": 64,
+   "h": 48
+  },
+  {
+   "id": "brick01",
+   "kind": "brick",
+   "x": 1010,
+   "y": 382,
+   "w": 86,
+   "h": 24
+  },
+  {
+   "id": "brick02",
+   "kind": "brick",
+   "x": 1130,
+   "y": 320,
+   "w": 90,
+   "h": 24
+  },
+  {
+   "id": "brick03",
+   "kind": "brick",
+   "x": 1270,
+   "y": 268,
+   "w": 104,
+   "h": 24
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 1980,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 2060,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "coin"
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 2534,
+    "y": 846
+   },
+   "return": {
+    "x": 2452,
+    "y": 402
+   },
+   "x": 2380,
+   "y": 400,
+   "w": 56,
+   "h": 48
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "style": "pipe",
+   "warp": {
+    "x": 2452,
+    "y": 402
+   },
+   "return": {
+    "x": 2534,
+    "y": 846
+   },
+   "x": 2736,
+   "y": 864,
+   "w": 56,
+   "h": 32
+  },
+  {
+   "id": "brick04",
+   "kind": "brick",
+   "x": 3070,
+   "y": 375,
+   "w": 100,
+   "h": 24
+  },
+  {
+   "id": "question04",
+   "kind": "question",
+   "x": 3200,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "star"
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2179,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2179,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2179,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2848,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "sun_brick1",
+   "kind": "brick",
+   "x": 2180,
+   "y": 330,
+   "w": 40,
+   "h": 22
+  },
+  {
+   "id": "sun_brick2",
+   "kind": "brick",
+   "x": 2220,
+   "y": 330,
+   "w": 40,
+   "h": 22
+  },
+  {
+   "id": "sun_brick3",
+   "kind": "brick",
+   "x": 2260,
+   "y": 330,
+   "w": 40,
+   "h": 22
+  },
+  {
+   "id": "sun_brick4",
+   "kind": "brick",
+   "x": 2300,
+   "y": 330,
+   "w": 40,
+   "h": 22
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 190,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 740,
+   "y": 367,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins03",
+   "shape": "row",
+   "x": 1278,
+   "y": 233,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins04",
+   "shape": "arc",
+   "x": 1520,
+   "y": 365,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins05",
+   "shape": "arc",
+   "x": 2770,
+   "y": 365,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins06",
+   "shape": "row",
+   "x": 4030,
+   "y": 410,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "room_coins01",
+   "shape": "row",
+   "x": 2574,
+   "y": 852.0,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 1332,
+   "y": 220
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 2688,
+   "y": 850
+  },
+  {
+   "id": "relic_sun",
+   "kind": "relic",
+   "x": 2230,
+   "y": 300
+  }
+ ],
+ "items": [
+  {
+   "id": "item01_heart",
+   "kind": "heart",
+   "x": 2638,
+   "y": 866
+  },
+  {
+   "id": "item02_heart",
+   "kind": "heart",
+   "x": 3340,
+   "y": 420
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "escorpiao_couraca",
+   "x": 1400,
+   "y": 448,
+   "patrol": [
+    1340,
+    1500
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "cacto_sentinela",
+   "x": 2650,
+   "y": 448,
+   "patrol": [
+    2600,
+    2730
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "guardiao_templo",
+   "x": 3700,
+   "y": 448,
+   "patrol": [
+    3440,
+    3980
+   ],
+   "hp": 4
+  },
+  {
+   "id": "enemy_temple_start",
+   "species": "escaravelho_areia",
+   "x": 300,
+   "y": 448,
+   "patrol": [
+    200,
+    400
+   ]
+  },
+  {
+   "id": "enemy_temple_tatu",
+   "species": "tatu_bola",
+   "x": 1030,
+   "y": 448,
+   "patrol": [
+    930,
+    1150
+   ]
+  },
+  {
+   "id": "enemy_temple_vulture",
+   "species": "abutre_filhote",
+   "x": 2620,
+   "y": 330,
+   "patrol": [
+    2520,
+    2760
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_spikes01",
+   "kind": "spikes",
+   "x": 1810,
+   "y": 434,
+   "w": 48,
+   "h": 14
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "entry": "pipe_room_entry",
+   "clue": "Cano com seta luminosa e dica próxima",
+   "rewards": [
+    "relic_room"
+   ]
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos blocos",
+   "rewards": [
+    "relic_high"
+   ]
+  },
+  {
+   "id": "sun_chamber",
+   "kind": "breakable_path",
+   "clue": "Tijolos rachados em forma de sol: crescido, quebre o de baixo da relíquia",
+   "rewards": [
+    "relic_sun"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 170,
+   "text": "As ruínas têm degraus para quem procura relíquias."
+  },
+  {
+   "x": 1360,
+   "text": "A armadura resiste; procure espaço para saltar."
+  },
+  {
+   "x": 3280,
+   "text": "A arena está adiante. Guarde sua luz."
+  }
+ ],
+ "notes": "Convertida da edição TypeScript (fase 2-3). Sala secreta movida para câmara subterrânea (+720 u).",
+ "zones": []
+}

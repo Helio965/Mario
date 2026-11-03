@@ -1,0 +1,36 @@
+{
+ "level": "frost_citadel",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.948,
+  "p95": 1.684,
+  "max": 4.526
+ },
+ "submit_ms": {
+  "avg": 2.76,
+  "p95": 4.35
+ },
+ "frame_ms": {
+  "avg": 42.41,
+  "p95": 68.36,
+  "max": 113.79
+ },
+ "draw_calls": {
+  "avg": 56.3,
+  "max": 106
+ },
+ "entities": {
+  "avg": 47.7,
+  "max": 123
+ },
+ "texture_mb": 119.3,
+ "textures": 250,
+ "raster_ms_total": 2999.9,
+ "preload_ms": 3002.4,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 1.89,
+ "cpus": 4
+}

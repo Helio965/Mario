@@ -1,0 +1,36 @@
+{
+ "level": "echo_furnace",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.985,
+  "p95": 1.537,
+  "max": 3.306
+ },
+ "submit_ms": {
+  "avg": 2.93,
+  "p95": 4.39
+ },
+ "frame_ms": {
+  "avg": 50.98,
+  "p95": 62.49,
+  "max": 99.87
+ },
+ "draw_calls": {
+  "avg": 89.5,
+  "max": 140
+ },
+ "entities": {
+  "avg": 50.9,
+  "max": 107
+ },
+ "texture_mb": 77.6,
+ "textures": 164,
+ "raster_ms_total": 1094.1,
+ "preload_ms": 1096.4,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 1.85,
+ "cpus": 4
+}

@@ -1,0 +1,36 @@
+{
+ "level": "basalt_bridges",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.871,
+  "p95": 1.299,
+  "max": 5.354
+ },
+ "submit_ms": {
+  "avg": 2.86,
+  "p95": 3.92
+ },
+ "frame_ms": {
+  "avg": 48.93,
+  "p95": 58.1,
+  "max": 85.35
+ },
+ "draw_calls": {
+  "avg": 89.2,
+  "max": 148
+ },
+ "entities": {
+  "avg": 50.0,
+  "max": 108
+ },
+ "texture_mb": 74.5,
+ "textures": 165,
+ "raster_ms_total": 1503.2,
+ "preload_ms": 1505.2,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 2.19,
+ "cpus": 4
+}

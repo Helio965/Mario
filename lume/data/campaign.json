@@ -1,0 +1,347 @@
+{
+ "format": "lume.campaign",
+ "format_version": 1,
+ "title": "Lume — As Dez Fronteiras",
+ "worlds": [
+  {
+   "id": "green_kingdom",
+   "name": "Reino Verde",
+   "subtitle": "Colinas, canais, moinhos e pomares",
+   "biome": "grassland",
+   "legacy_world": 1,
+   "color": "#5fb25a",
+   "levels": [
+    {
+     "id": "first_steps",
+     "name": "Primeiros Passos"
+    },
+    {
+     "id": "valley_canals",
+     "name": "Canais do Vale"
+    },
+    {
+     "id": "orchard_guardian",
+     "name": "Guardião do Pomar"
+    },
+    {
+     "id": "windmill_heights",
+     "name": "Colina dos Moinhos"
+    },
+    {
+     "id": "meadow_burrows",
+     "name": "Tocas do Prado"
+    },
+    {
+     "id": "bramble_fortress",
+     "name": "Fortaleza do Espinheiro"
+    }
+   ]
+  },
+  {
+   "id": "golden_desert",
+   "name": "Deserto Dourado",
+   "subtitle": "Dunas, cânions, vento e templos",
+   "biome": "desert",
+   "legacy_world": 2,
+   "color": "#e7b45c",
+   "levels": [
+    {
+     "id": "windswept_dunes",
+     "name": "Dunas ao Vento"
+    },
+    {
+     "id": "canyon_bridges",
+     "name": "Pontes do Cânion"
+    },
+    {
+     "id": "sand_temple",
+     "name": "Templo das Areias"
+    },
+    {
+     "id": "sandstorm_pass",
+     "name": "Passagem da Tempestade"
+    },
+    {
+     "id": "sunken_oasis",
+     "name": "Oásis Soterrado"
+    },
+    {
+     "id": "scarab_pyramid",
+     "name": "Pirâmide do Escaravelho"
+    }
+   ]
+  },
+  {
+   "id": "coral_coast",
+   "name": "Costa dos Corais",
+   "subtitle": "Praias, marés e recifes submersos",
+   "biome": "coast",
+   "legacy_world": null,
+   "color": "#3fb7c4",
+   "levels": [
+    {
+     "id": "shell_beach",
+     "name": "Praia das Conchas"
+    },
+    {
+     "id": "tide_pools",
+     "name": "Piscinas da Maré"
+    },
+    {
+     "id": "lighthouse_reef",
+     "name": "Recife do Farol"
+    },
+    {
+     "id": "current_depths",
+     "name": "Correntes Profundas"
+    },
+    {
+     "id": "coral_maze",
+     "name": "Labirinto de Coral"
+    },
+    {
+     "id": "sunken_galleon",
+     "name": "Galeão Submerso"
+    }
+   ]
+  },
+  {
+   "id": "frozen_peaks",
+   "name": "Montanhas Geladas",
+   "subtitle": "Lagos de cristal, encostas e nevascas",
+   "biome": "snow",
+   "legacy_world": 3,
+   "color": "#9fd3ef",
+   "levels": [
+    {
+     "id": "crystal_lake",
+     "name": "Lago de Cristal"
+    },
+    {
+     "id": "blue_ascent",
+     "name": "Escalada Azul"
+    },
+    {
+     "id": "blizzard_heart",
+     "name": "Coração da Nevasca"
+    },
+    {
+     "id": "slippery_slopes",
+     "name": "Encostas Escorregadias"
+    },
+    {
+     "id": "avalanche_ridge",
+     "name": "Cume da Avalanche"
+    },
+    {
+     "id": "frost_citadel",
+     "name": "Cidadela de Geada"
+    }
+   ]
+  },
+  {
+   "id": "enchanted_forest",
+   "name": "Floresta Encantada",
+   "subtitle": "Copas luminosas, ruínas e raízes antigas",
+   "biome": "forest",
+   "legacy_world": 4,
+   "color": "#58b98a",
+   "levels": [
+    {
+     "id": "glowing_canopy",
+     "name": "Copas Luminosas"
+    },
+    {
+     "id": "firefly_ruins",
+     "name": "Ruínas dos Vagalumes"
+    },
+    {
+     "id": "ancestral_tree",
+     "name": "A Árvore Ancestral"
+    },
+    {
+     "id": "vine_bridges",
+     "name": "Pontes de Cipó"
+    },
+    {
+     "id": "whispering_hollow",
+     "name": "Clareira dos Sussurros"
+    },
+    {
+     "id": "root_sanctum",
+     "name": "Santuário das Raízes"
+    }
+   ]
+  },
+  {
+   "id": "clockwork_city",
+   "name": "Cidade Mecânica",
+   "subtitle": "Engrenagens, vapor e esteiras",
+   "biome": "city",
+   "legacy_world": null,
+   "color": "#c58a4a",
+   "levels": [
+    {
+     "id": "gear_district",
+     "name": "Distrito das Engrenagens"
+    },
+    {
+     "id": "steam_works",
+     "name": "Usina de Vapor"
+    },
+    {
+     "id": "conveyor_line",
+     "name": "Linha de Montagem"
+    },
+    {
+     "id": "switch_factory",
+     "name": "Fábrica dos Interruptores"
+    },
+    {
+     "id": "clock_tower",
+     "name": "Torre do Relógio"
+    },
+    {
+     "id": "iron_foundry",
+     "name": "Fundição de Ferro"
+    }
+   ]
+  },
+  {
+   "id": "sky_archipelago",
+   "name": "Arquipélago Celeste",
+   "subtitle": "Ilhas suspensas, nuvens e vendavais",
+   "biome": "sky",
+   "legacy_world": null,
+   "color": "#8fc8ff",
+   "levels": [
+    {
+     "id": "cloud_harbor",
+     "name": "Porto das Nuvens"
+    },
+    {
+     "id": "floating_gardens",
+     "name": "Jardins Flutuantes"
+    },
+    {
+     "id": "updraft_falls",
+     "name": "Cachoeiras Ascendentes"
+    },
+    {
+     "id": "gale_bridges",
+     "name": "Pontes do Vendaval"
+    },
+    {
+     "id": "storm_spire",
+     "name": "Agulha da Tempestade"
+    },
+    {
+     "id": "griffin_aerie",
+     "name": "Ninho do Grifo"
+    }
+   ]
+  },
+  {
+   "id": "haunted_swamp",
+   "name": "Pântano Assombrado",
+   "subtitle": "Névoa, lanternas e casarões afundados",
+   "biome": "swamp",
+   "legacy_world": null,
+   "color": "#7d8fb0",
+   "levels": [
+    {
+     "id": "misty_marsh",
+     "name": "Brejo da Névoa"
+    },
+    {
+     "id": "lantern_bog",
+     "name": "Charco das Lanternas"
+    },
+    {
+     "id": "sunken_mansion",
+     "name": "Casarão Afundado"
+    },
+    {
+     "id": "lights_out",
+     "name": "Apagão no Pântano"
+    },
+    {
+     "id": "phantom_mire",
+     "name": "Lodaçal Fantasma"
+    },
+    {
+     "id": "lantern_keep",
+     "name": "Torre do Lanterneiro"
+    }
+   ]
+  },
+  {
+   "id": "volcanic_fortress",
+   "name": "Fortaleza Vulcânica",
+   "subtitle": "Basalto, brasa e magma ascendente",
+   "biome": "volcano",
+   "legacy_world": 5,
+   "color": "#e5734a",
+   "levels": [
+    {
+     "id": "basalt_bridges",
+     "name": "Pontes de Basalto"
+    },
+    {
+     "id": "echo_furnace",
+     "name": "Fornalha dos Ecos"
+    },
+    {
+     "id": "last_flame",
+     "name": "A Última Chama"
+    },
+    {
+     "id": "rising_magma",
+     "name": "Magma Ascendente"
+    },
+    {
+     "id": "ash_gauntlet",
+     "name": "Corredor de Cinzas"
+    },
+    {
+     "id": "magma_throne",
+     "name": "Trono de Magma"
+    }
+   ]
+  },
+  {
+   "id": "star_citadel",
+   "name": "Cidadela das Estrelas",
+   "subtitle": "Constelações, gravidade e o eclipse final",
+   "biome": "citadel",
+   "legacy_world": null,
+   "color": "#b79cff",
+   "levels": [
+    {
+     "id": "starlit_gate",
+     "name": "Portão Estrelado"
+    },
+    {
+     "id": "constellation_path",
+     "name": "Trilha das Constelações"
+    },
+    {
+     "id": "gravity_halls",
+     "name": "Salões da Gravidade"
+    },
+    {
+     "id": "mirror_sanctum",
+     "name": "Santuário dos Reflexos"
+    },
+    {
+     "id": "eclipse_bastion",
+     "name": "Bastião do Eclipse"
+    },
+    {
+     "id": "throne_of_eclipse",
+     "name": "Trono do Eclipse"
+    }
+   ]
+  }
+ ]
+}

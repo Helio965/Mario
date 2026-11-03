@@ -1,4 +1,76 @@
-# Lume — As Cinco Fronteiras
+# Lume — As Dez Fronteiras
+
+Plataforma 2D **original** em Python com arte vetorial em alta definição: Lume, uma jovem acendedora de lanternas, atravessa dez fronteiras — campos, desertos, costas de coral, montanhas geladas, florestas encantadas, uma cidade mecânica, ilhas no céu, um pântano assombrado, uma fortaleza vulcânica e a cidadela final.
+
+Projeto independente, **não oficial e sem vínculo com a Nintendo**. Os jogos Super Mario foram estudados apenas como referência de engenharia de fases (ver `docs/research/`); personagens, criaturas, cenários, músicas e efeitos são originais e gerados por código.
+
+> **Estado atual (honesto):** a campanha está organizada em **10 mundos e 60 fases** com IDs estáveis e uma ficha de planejamento individual para cada fase. **24 fases são jogáveis** (as 15 originais preservadas e revisadas + 9 novas) e **três mundos estão completos** — Reino Verde, Deserto Dourado e Montanhas Geladas (6 fases cada, arte HD dedicada e chefe exclusivo). Floresta Encantada e Fortaleza Vulcânica têm arte HD dedicada e 3 fases cada; os demais mundos estão planejados ou com arte em produção. A matriz de qualidade, calculada por verificações automáticas, está em [docs/RELATORIO_EXPANSAO.md](docs/RELATORIO_EXPANSAO.md).
+
+![Reino Verde em 1920 × 1080](docs/images/hd/first_steps_1080p.png)
+
+## Jogar (edição Python)
+
+Requer Python 3.11 ou mais recente.
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+```bash
+python -m lume
+```
+
+Opções úteis: `--res 1920x1080` (ou `3840x2160`), `--fullscreen`, `--level first_steps` (abre direto uma fase), `--show-fps`, `--import-save lume-save-v1.json` (traz o progresso da edição web), `--validate` (valida a campanha).
+
+| Ação | Teclado | Gamepad |
+| ---- | ------- | ------- |
+| Mover | A / D ou ← / → | analógico ou direcional |
+| Pular (segure para subir mais) | Espaço, W, ↑ ou Z | A / ✕ |
+| Correr | Shift ou X | X / □ ou gatilho direito |
+| Chama (com a Flor de Brasa) | J ou C | B / ○ |
+| Entrar em cano | S ou ↓ sobre o cano | baixo |
+| Pausa / menus | Esc · Enter confirma | Start · A confirma |
+
+Gráficos: a janela escolhe a maior resolução 16:9 que cabe na tela (até 4K quando a tela é 4K); toda a arte é rasterizada para a resolução de saída (720p, 1080p, 1440p, 4K) — nada é desenhado pequeno e ampliado. Sem aceleração de GPU, o jogo se limita a 1280 × 720. Configurações: música, efeitos, qualidade, resolução, tela cheia, sincronia vertical, FPS.
+
+Salvamento: `save.json` na pasta de dados do usuário, com cópia de segurança automática de arquivos ilegíveis. Progresso da edição web pode ser importado sem perdas (ver `docs/technical/MIGRACAO_SALVAMENTOS.md`).
+
+## Desenvolver e testar (edição Python)
+
+```bash
+python -m pytest
+```
+
+```bash
+python tools/quality_matrix.py --render
+```
+
+```bash
+python tools/capture_level.py first_steps artifacts/shots --res 1920x1080 --at 300,1500
+```
+
+```text
+lume/
+  core/        simulação de passo fixo, física, câmera, 23 famílias de comportamento de inimigos
+  levels/      formato declarativo lume.level, registro da campanha, validação semântica
+  data/        campaign.json (10 mundos, 60 IDs), enemies.json (63 espécies), fases em JSON
+  render/      pipeline vetorial HD: SVG→textura, rigs, mundos, cena, HUD
+  systems/     salvamento v2 e migração, áudio sintetizado, teclado e gamepad
+  ui/, app.py  menus, mapa dos mundos, pausa, resultados, configurações
+  qa/          robô de rotas e orçamentos de teste
+tests/python/  204 testes (lógica, fases, rotas completas, salvamento, gráficos)
+tools/         conversão das fases web, capturas, perfil de desempenho, matriz de qualidade
+docs/          pesquisa, planejamento das 60 fases, documentação técnica, relatório
+```
+
+Documentação: [pesquisa](docs/research/) · [planejamento das fases](docs/level_design/) · [arquitetura das fases](docs/technical/ARQUITETURA_FASES.md) · [sistema gráfico](docs/technical/SISTEMA_GRAFICO.md) · [animações](docs/technical/ANIMACOES.md) · [inimigos](docs/technical/REGISTRO_INIMIGOS.md) · [desempenho](docs/technical/PERFORMANCE.md) · [testes](docs/technical/TESTES_CAMPANHA.md) · [salvamentos](docs/technical/MIGRACAO_SALVAMENTOS.md).
+
+---
+
+# Edição web original — Lume, As Cinco Fronteiras
+
+A edição TypeScript para navegador continua no repositório (`src/`, `tests/unit`, `tests/browser`) e funcionando; as 15 fases dela foram convertidas para a edição Python sem perder conteúdo.
+
 
 Uma aventura de plataforma 2D para navegador com **cinco mundos, quinze fases e cinco guardiões**. Lume atravessa canais, ruínas, gelo, copas luminosas e pontes de lava para encontrar a luz além de cada horizonte.
 
@@ -134,6 +206,9 @@ Habilite **Settings → Pages → Source: GitHub Actions**, abra a execução em
 ## Créditos e licença
 
 - Repositório e licença MIT original: Hélio.
+- Edição Python: personagens, criaturas, cenários, interface e áudio originais gerados por código (MIT).
+- Fonte Inter (Rasmus Andersson e colaboradores), SIL Open Font License 1.1 — `lume/assets/fonts/OFL.txt`.
+- Dependências da edição Python: pygame-ce (LGPL 2.1) e NumPy (BSD).
 - Lume, pixel art, cenários, ícone, lógica e composições Web Audio: implementação original, sob a licença MIT deste repositório.
 - Referência visual: vídeo enviado de “Super Mario CSS”, analisado sem reutilizar assets.
 - Ferramentas de desenvolvimento: TypeScript (Apache-2.0), Vite/Vitest (MIT) e Playwright (Apache-2.0). Nenhuma dependência de runtime é enviada ao jogador.

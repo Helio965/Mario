@@ -1,0 +1,36 @@
+{
+ "level": "sand_temple",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.691,
+  "p95": 1.063,
+  "max": 1.856
+ },
+ "submit_ms": {
+  "avg": 2.74,
+  "p95": 3.85
+ },
+ "frame_ms": {
+  "avg": 49.38,
+  "p95": 60.18,
+  "max": 88.83
+ },
+ "draw_calls": {
+  "avg": 74.6,
+  "max": 125
+ },
+ "entities": {
+  "avg": 40.9,
+  "max": 88
+ },
+ "texture_mb": 81.7,
+ "textures": 182,
+ "raster_ms_total": 428.3,
+ "preload_ms": 430.1,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 1.1,
+ "cpus": 4
+}

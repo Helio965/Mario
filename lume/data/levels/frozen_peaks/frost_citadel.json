@@ -1,0 +1,923 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "frost_citadel",
+ "name": "Cidadela de Geada",
+ "world": "frozen_peaks",
+ "role": "fortress",
+ "difficulty": 5,
+ "art": {
+  "set": "frozen_peaks",
+  "variant": "citadel",
+  "weather": "auto"
+ },
+ "music": "frozen_peaks_main",
+ "bounds": {
+  "width": 6800,
+  "height": 1240
+ },
+ "time_limit": 400,
+ "spawn": {
+  "x": 72,
+  "y": 418
+ },
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 6560,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 520,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 300,
+   "y": 330,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "moat_floor",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 520,
+   "y": 520,
+   "w": 360,
+   "h": 80,
+   "surface": "ice"
+  },
+  {
+   "id": "crumble01",
+   "kind": "crumble",
+   "x": 520,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "crumble02",
+   "kind": "crumble",
+   "x": 640,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "crumble03",
+   "kind": "crumble",
+   "x": 760,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "moat_step",
+   "kind": "ledge",
+   "x": 836,
+   "y": 486,
+   "w": 40,
+   "h": 16,
+   "style": "floating"
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 880,
+   "y": 448,
+   "w": 520,
+   "h": 152
+  },
+  {
+   "id": "granite_block",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1240,
+   "y": 384,
+   "w": 50,
+   "h": 64
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 1400,
+   "y": 448,
+   "w": 800,
+   "h": 152
+  },
+  {
+   "id": "chandelier_beam",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 1520,
+   "y": 0,
+   "w": 460,
+   "h": 190
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 2200,
+   "y": 448,
+   "w": 200,
+   "h": 152
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 2330,
+   "y": 330,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 2400,
+   "y": 448,
+   "w": 240,
+   "h": 152,
+   "surface": "ice"
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 2640,
+   "y": 448,
+   "w": 120,
+   "h": 152
+  },
+  {
+   "id": "ground07",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 2760,
+   "y": 448,
+   "w": 240,
+   "h": 152,
+   "surface": "ice"
+  },
+  {
+   "id": "ground08",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 3000,
+   "y": 448,
+   "w": 120,
+   "h": 152
+  },
+  {
+   "id": "ground09",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 3120,
+   "y": 448,
+   "w": 160,
+   "h": 152
+  },
+  {
+   "id": "crumble04",
+   "kind": "crumble",
+   "x": 3280,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "crumble05",
+   "kind": "crumble",
+   "x": 3400,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "crumble06",
+   "kind": "crumble",
+   "x": 3520,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "crumble07",
+   "kind": "crumble",
+   "x": 3640,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "ground10",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 3760,
+   "y": 448,
+   "w": 300,
+   "h": 152
+  },
+  {
+   "id": "ground11",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 4060,
+   "y": 408,
+   "w": 100,
+   "h": 192
+  },
+  {
+   "id": "ground12",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 4160,
+   "y": 368,
+   "w": 100,
+   "h": 232
+  },
+  {
+   "id": "ground13",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 4260,
+   "y": 328,
+   "w": 240,
+   "h": 272
+  },
+  {
+   "id": "tower_roof",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 4300,
+   "y": 0,
+   "w": 160,
+   "h": 150
+  },
+  {
+   "id": "ground14",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 4500,
+   "y": 368,
+   "w": 100,
+   "h": 232
+  },
+  {
+   "id": "ground15",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 4600,
+   "y": 408,
+   "w": 100,
+   "h": 192
+  },
+  {
+   "id": "dungeon_floor",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 4700,
+   "y": 512,
+   "w": 500,
+   "h": 88
+  },
+  {
+   "id": "dungeon_bar",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 4960,
+   "y": 300,
+   "w": 60,
+   "h": 120
+  },
+  {
+   "id": "ground16",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 5200,
+   "y": 448,
+   "w": 160,
+   "h": 152
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 5300,
+   "y": 330,
+   "w": 40,
+   "h": 28,
+   "reward": "heart"
+  },
+  {
+   "id": "gate_left",
+   "kind": "switch",
+   "x": 5360,
+   "y": 300,
+   "w": 40,
+   "h": 148,
+   "style": "gate",
+   "active": false
+  },
+  {
+   "id": "ground17",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 5360,
+   "y": 448,
+   "w": 240,
+   "h": 152
+  },
+  {
+   "id": "ground18",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 5600,
+   "y": 448,
+   "w": 440,
+   "h": 152,
+   "surface": "ice"
+  },
+  {
+   "id": "ground19",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 6040,
+   "y": 448,
+   "w": 200,
+   "h": 152
+  },
+  {
+   "id": "gate_right",
+   "kind": "switch",
+   "x": 6160,
+   "y": 300,
+   "w": 40,
+   "h": 148,
+   "style": "gate",
+   "active": true
+  },
+  {
+   "id": "throne_ceiling",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 5300,
+   "y": 0,
+   "w": 960,
+   "h": 120
+  },
+  {
+   "id": "throne_ledge_l",
+   "kind": "ledge",
+   "x": 5420,
+   "y": 352,
+   "w": 80,
+   "h": 20,
+   "style": "fortress"
+  },
+  {
+   "id": "throne_ledge_r",
+   "kind": "ledge",
+   "x": 6060,
+   "y": 352,
+   "w": 80,
+   "h": 20,
+   "style": "fortress"
+  },
+  {
+   "id": "ground20",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 6240,
+   "y": 448,
+   "w": 560,
+   "h": 152
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "x": 2050,
+   "y": 400,
+   "w": 56,
+   "h": 48,
+   "style": "pipe",
+   "secret": "crypt",
+   "warp": {
+    "x": 2184,
+    "y": 846
+   },
+   "return": {
+    "x": 2122,
+    "y": 402
+   }
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 1829,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 1829,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 1829,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2498,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "x": 2386,
+   "y": 864,
+   "w": 56,
+   "h": 32,
+   "style": "pipe",
+   "warp": {
+    "x": 2122,
+    "y": 402
+   },
+   "return": {
+    "x": 2184,
+    "y": 846
+   }
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 1540,
+   "y": 410,
+   "count": 9,
+   "spacing": 36
+  },
+  {
+   "id": "coins02",
+   "shape": "row",
+   "x": 3300,
+   "y": 400,
+   "count": 10,
+   "spacing": 44
+  },
+  {
+   "id": "coins03",
+   "shape": "arc",
+   "x": 6360,
+   "y": 380,
+   "count": 6,
+   "spacing": 34,
+   "rise": 40
+  },
+  {
+   "id": "coins04",
+   "shape": "row",
+   "x": 2224,
+   "y": 852,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_window",
+   "kind": "relic",
+   "x": 3460,
+   "y": 300
+  },
+  {
+   "id": "relic_crypt",
+   "kind": "relic",
+   "x": 2338,
+   "y": 850
+  },
+  {
+   "id": "relic_bell",
+   "kind": "relic",
+   "x": 4380,
+   "y": 240
+  }
+ ],
+ "items": [
+  {
+   "id": "item_star01",
+   "kind": "star",
+   "x": 2288,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "pinguim_patrulha",
+   "x": 430,
+   "y": 448,
+   "patrol": [
+    370,
+    515
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "carneiro_glacial",
+   "x": 1150,
+   "y": 448,
+   "patrol": [
+    1040,
+    1390
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "pinguim_patrulha",
+   "x": 1450,
+   "y": 448,
+   "patrol": [
+    1410,
+    1540
+   ]
+  },
+  {
+   "id": "enemy04",
+   "species": "pingente_queda",
+   "x": 1560,
+   "y": 230,
+   "patrol": [
+    1556,
+    1598
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy05",
+   "species": "pingente_queda",
+   "x": 1680,
+   "y": 230,
+   "patrol": [
+    1676,
+    1718
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy06",
+   "species": "pingente_queda",
+   "x": 1800,
+   "y": 230,
+   "patrol": [
+    1796,
+    1838
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy07",
+   "species": "pingente_queda",
+   "x": 1930,
+   "y": 230,
+   "patrol": [
+    1926,
+    1968
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy08",
+   "species": "caracol_cristal",
+   "x": 1960,
+   "y": 448,
+   "patrol": [
+    1880,
+    2040
+   ]
+  },
+  {
+   "id": "enemy09",
+   "species": "pinguim_patrulha",
+   "x": 2560,
+   "y": 448,
+   "patrol": [
+    2420,
+    2630
+   ]
+  },
+  {
+   "id": "enemy10",
+   "species": "caracol_cristal",
+   "x": 2880,
+   "y": 448,
+   "patrol": [
+    2780,
+    2990
+   ]
+  },
+  {
+   "id": "enemy11",
+   "species": "coruja_nevada",
+   "x": 2700,
+   "y": 300,
+   "patrol": [
+    2600,
+    2900
+   ]
+  },
+  {
+   "id": "enemy12",
+   "species": "caracol_cristal",
+   "x": 3200,
+   "y": 448,
+   "patrol": [
+    3130,
+    3275
+   ]
+  },
+  {
+   "id": "enemy13",
+   "species": "coruja_nevada",
+   "x": 3900,
+   "y": 300,
+   "patrol": [
+    3800,
+    4040
+   ]
+  },
+  {
+   "id": "enemy14",
+   "species": "pinguim_patrulha",
+   "x": 3960,
+   "y": 448,
+   "patrol": [
+    3800,
+    4055
+   ]
+  },
+  {
+   "id": "enemy15",
+   "species": "pingente_queda",
+   "x": 4340,
+   "y": 190,
+   "patrol": [
+    4336,
+    4378
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy16",
+   "species": "yeti_mirim",
+   "x": 4440,
+   "y": 328,
+   "patrol": [
+    4400,
+    4495
+   ]
+  },
+  {
+   "id": "enemy17",
+   "species": "carneiro_glacial",
+   "x": 5100,
+   "y": 512,
+   "patrol": [
+    5040,
+    5195
+   ]
+  },
+  {
+   "id": "enemy18",
+   "species": "morsa_gelomar",
+   "x": 5920,
+   "y": 448,
+   "patrol": [
+    5400,
+    6160
+   ],
+   "params": {
+    "holes": [
+     [
+      5430,
+      420
+     ],
+     [
+      6100,
+      420
+     ]
+    ],
+    "ceiling": 130,
+    "wake_range": 520
+   }
+  },
+  {
+   "id": "enemy19",
+   "species": "pinguim_patrulha",
+   "x": 6400,
+   "y": 448,
+   "patrol": [
+    6300,
+    6500
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_moving01",
+   "kind": "moving",
+   "x": 4856.0,
+   "y": 464,
+   "w": 48,
+   "h": 48,
+   "range": 60,
+   "speed": 1.2,
+   "phase": 0.0,
+   "style": "snowball"
+  }
+ ],
+ "zones": [
+  {
+   "id": "wind01",
+   "kind": "wind",
+   "x": 3280,
+   "y": 0,
+   "w": 480,
+   "h": 540,
+   "force_x": 70,
+   "period": 4.0,
+   "duty": 0.4
+  },
+  {
+   "id": "wind02",
+   "kind": "wind",
+   "x": 3280,
+   "y": 0,
+   "w": 480,
+   "h": 540,
+   "force_x": -70,
+   "period": 4.0,
+   "duty": 0.4,
+   "phase": 2.0
+  }
+ ],
+ "secrets": [
+  {
+   "id": "window_relic",
+   "kind": "high_route",
+   "clue": "Um vitral com uma estrela aponta para o alto do corredor das janelas",
+   "rewards": [
+    "relic_window"
+   ]
+  },
+  {
+   "id": "crypt",
+   "kind": "hidden_area",
+   "clue": "Gelo rachado com bolhas de ar formando uma seta",
+   "rewards": [
+    "relic_crypt"
+   ],
+   "entry": "pipe_room_entry"
+  },
+  {
+   "id": "bell_relic",
+   "kind": "high_route",
+   "clue": "Sino de gelo tocando sozinho no alto da torre",
+   "rewards": [
+    "relic_bell"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 960,
+   "text": "O carneiro investe e fica tonto ao bater no bloco de granito: pise nele nessa hora."
+  },
+  {
+   "x": 2400,
+   "text": "Onde a luz do vitral pinta o chão, é pedra: ali dá para parar."
+  }
+ ],
+ "events": [
+  {
+   "id": "msg_helmet",
+   "kind": "message",
+   "x": 5240,
+   "params": {
+    "text": "Tio Nevasco: a morsa usa elmo de gelo. Casco de cristal chutado (ou três bolas de fogo) racha o elmo!"
+   }
+  },
+  {
+   "id": "arena",
+   "kind": "boss_arena",
+   "x": 5480,
+   "params": {
+    "lock": [
+     5300,
+     0,
+     960,
+     540
+    ],
+    "close": [
+     "gate_left"
+    ],
+    "open": [
+     "gate_right"
+    ],
+    "text": "A Morsa Gelomar guarda o salão do trono!"
+   }
+  }
+ ],
+ "checkpoints": [
+  {
+   "id": "cp_hall",
+   "x": 2260,
+   "y": 418
+  },
+  {
+   "id": "cp_ante",
+   "x": 5240,
+   "y": 418
+  }
+ ],
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 1400,
+   "h": 540,
+   "variant": "citadel_gate"
+  },
+  {
+   "id": "hall",
+   "x": 1400,
+   "y": 0,
+   "w": 3900,
+   "h": 540,
+   "variant": "fortress"
+  },
+  {
+   "id": "throne",
+   "x": 5300,
+   "y": 0,
+   "w": 1500,
+   "h": 540,
+   "variant": "throne"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 1829,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "notes": "Fase nova (Mundo 4-6): fortaleza — ponte levadiça de gelo, lustre de pingentes, salão dos vitrais (pedra marcada pela luz), corredor das janelas com rajadas alternadas, torre, masmorra com bolas de neve e salão do trono com a Morsa Gelomar."
+}

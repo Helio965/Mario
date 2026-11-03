@@ -1,0 +1,408 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "crystal_lake",
+ "legacy_ids": [
+  "3-1"
+ ],
+ "name": "Lago de Cristal",
+ "world": "frozen_peaks",
+ "role": "presentation",
+ "difficulty": 4,
+ "art": {
+  "set": "frozen_peaks",
+  "variant": "lake",
+  "weather": "auto"
+ },
+ "music": "frozen_peaks_main",
+ "bounds": {
+  "width": 3600,
+  "height": 1240
+ },
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 3600,
+   "h": 540,
+   "variant": "lake"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2139,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "time_limit": 380,
+ "spawn": {
+  "x": 72,
+  "y": 414
+ },
+ "checkpoints": [
+  {
+   "id": "cp_mid",
+   "x": 2040,
+   "y": 414
+  }
+ ],
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 3450,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 920,
+   "h": 152
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "surface": "ice",
+   "x": 1040,
+   "y": 448,
+   "w": 820,
+   "h": 152
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1980,
+   "y": 448,
+   "w": 640,
+   "h": 152
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "surface": "ice",
+   "x": 2740,
+   "y": 448,
+   "w": 860,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 400,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "ledge01",
+   "kind": "ledge",
+   "style": "ice_ledge",
+   "surface": "ice",
+   "x": 1220,
+   "y": 382,
+   "w": 100,
+   "h": 20
+  },
+  {
+   "id": "ledge02",
+   "kind": "ledge",
+   "style": "ice_ledge",
+   "surface": "ice",
+   "x": 1380,
+   "y": 314,
+   "w": 106,
+   "h": 20
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 1570,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "coin"
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 2494,
+    "y": 846
+   },
+   "return": {
+    "x": 2442,
+    "y": 402
+   },
+   "x": 2370,
+   "y": 400,
+   "w": 56,
+   "h": 48
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "style": "pipe",
+   "warp": {
+    "x": 2442,
+    "y": 402
+   },
+   "return": {
+    "x": 2494,
+    "y": 846
+   },
+   "x": 2696,
+   "y": 864,
+   "w": 56,
+   "h": 32
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 2940,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "star"
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2139,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2139,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2139,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2808,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 160,
+   "y": 410,
+   "count": 5,
+   "spacing": 34
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 900,
+   "y": 367,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins03",
+   "shape": "row",
+   "x": 1232,
+   "y": 345,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins04",
+   "shape": "arc",
+   "x": 1830,
+   "y": 367,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins05",
+   "shape": "arc",
+   "x": 2590,
+   "y": 365,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins06",
+   "shape": "row",
+   "x": 3310,
+   "y": 410,
+   "count": 5,
+   "spacing": 34
+  },
+  {
+   "id": "room_coins01",
+   "shape": "row",
+   "x": 2534,
+   "y": 852.0,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 1418,
+   "y": 278
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 2648,
+   "y": 850
+  },
+  {
+   "id": "relic_pier",
+   "kind": "relic",
+   "x": 1834,
+   "y": 330
+  }
+ ],
+ "items": [
+  {
+   "id": "item01_fire",
+   "kind": "fire",
+   "x": 2598,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "caracol_cristal",
+   "x": 700,
+   "y": 448,
+   "patrol": [
+    620,
+    860
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "coruja_nevada",
+   "x": 1580,
+   "y": 324,
+   "patrol": [
+    1480,
+    1750
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "pinguim_patrulha",
+   "x": 3160,
+   "y": 448,
+   "patrol": [
+    3070,
+    3300
+   ]
+  },
+  {
+   "id": "enemy_lake_start",
+   "species": "pinguim_patrulha",
+   "x": 300,
+   "y": 448,
+   "patrol": [
+    200,
+    480
+   ]
+  },
+  {
+   "id": "enemy_lake_owl",
+   "species": "coruja_nevada",
+   "x": 2500,
+   "y": 320,
+   "patrol": [
+    2420,
+    2600
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_spikes01",
+   "kind": "spikes",
+   "x": 2240,
+   "y": 434,
+   "w": 44,
+   "h": 14
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "entry": "pipe_room_entry",
+   "clue": "Cano com seta luminosa e dica próxima",
+   "rewards": [
+    "relic_room"
+   ]
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos blocos",
+   "rewards": [
+    "relic_high"
+   ]
+  },
+  {
+   "id": "frozen_pier",
+   "kind": "optional_challenge",
+   "clue": "Marcas de patins terminam na ponta do píer congelado: pare ali e salte",
+   "rewards": [
+    "relic_pier"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 140,
+   "text": "No gelo, solte a corrida antes de pousar."
+  },
+  {
+   "x": 1120,
+   "text": "A trilha de cima leva a uma relíquia."
+  },
+  {
+   "x": 2810,
+   "text": "Há espaço para frear depois de cada salto."
+  }
+ ],
+ "notes": "Convertida da edição TypeScript (fase 3-1). Sala secreta movida para câmara subterrânea (+720 u).",
+ "zones": []
+}

@@ -1,0 +1,816 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "avalanche_ridge",
+ "name": "Cume da Avalanche",
+ "world": "frozen_peaks",
+ "role": "advanced",
+ "difficulty": 5,
+ "art": {
+  "set": "frozen_peaks",
+  "variant": "ridge",
+  "weather": "auto"
+ },
+ "music": "frozen_peaks_main",
+ "bounds": {
+  "width": 6000,
+  "height": 1240
+ },
+ "time_limit": 380,
+ "spawn": {
+  "x": 72,
+  "y": 418
+ },
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 5850,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 1300,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 260,
+   "y": 330,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "overhang_a",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 520,
+   "y": 0,
+   "w": 220,
+   "h": 200
+  },
+  {
+   "id": "niche_ledge",
+   "kind": "ledge",
+   "x": 670,
+   "y": 252,
+   "w": 60,
+   "h": 16,
+   "style": "floating"
+  },
+  {
+   "id": "overhang_b",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 860,
+   "y": 0,
+   "w": 360,
+   "h": 210
+  },
+  {
+   "id": "valley_1",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1300,
+   "y": 512,
+   "w": 400,
+   "h": 88
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1700,
+   "y": 448,
+   "w": 300,
+   "h": 152
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2000,
+   "y": 448,
+   "w": 360,
+   "h": 152
+  },
+  {
+   "id": "shelter_wall",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2040,
+   "y": 340,
+   "w": 60,
+   "h": 108
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 2260,
+   "y": 330,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "crumble01",
+   "kind": "crumble",
+   "x": 2360,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "crumble02",
+   "kind": "crumble",
+   "x": 2480,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "crumble03",
+   "kind": "crumble",
+   "x": 2600,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "crumble04",
+   "kind": "crumble",
+   "x": 2720,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "crumble05",
+   "kind": "crumble",
+   "x": 2840,
+   "y": 448,
+   "w": 120,
+   "h": 20
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2960,
+   "y": 448,
+   "w": 520,
+   "h": 152
+  },
+  {
+   "id": "tunnel_roof",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3000,
+   "y": 0,
+   "w": 480,
+   "h": 230
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3480,
+   "y": 448,
+   "w": 400,
+   "h": 152,
+   "surface": "ice"
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3880,
+   "y": 448,
+   "w": 120,
+   "h": 152
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "x": 3560,
+   "y": 400,
+   "w": 56,
+   "h": 48,
+   "style": "pipe",
+   "secret": "crystal_cave",
+   "warp": {
+    "x": 3724,
+    "y": 846
+   },
+   "return": {
+    "x": 3632,
+    "y": 402
+   }
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3369,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3369,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3369,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4038,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "x": 3926,
+   "y": 864,
+   "w": 56,
+   "h": 32,
+   "style": "pipe",
+   "warp": {
+    "x": 3632,
+    "y": 402
+   },
+   "return": {
+    "x": 3724,
+    "y": 846
+   }
+  },
+  {
+   "id": "ground07",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4000,
+   "y": 448,
+   "w": 1000,
+   "h": 152
+  },
+  {
+   "id": "ledge01",
+   "kind": "ledge",
+   "x": 4300,
+   "y": 250,
+   "w": 60,
+   "h": 16,
+   "style": "floating"
+  },
+  {
+   "id": "ledge02",
+   "kind": "ledge",
+   "x": 4480,
+   "y": 210,
+   "w": 60,
+   "h": 16,
+   "style": "floating"
+  },
+  {
+   "id": "ground08",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5000,
+   "y": 448,
+   "w": 300,
+   "h": 152
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 5200,
+   "y": 330,
+   "w": 40,
+   "h": 28,
+   "reward": "heart"
+  },
+  {
+   "id": "ground09",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5300,
+   "y": 408,
+   "w": 100,
+   "h": 192
+  },
+  {
+   "id": "ground10",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5400,
+   "y": 368,
+   "w": 100,
+   "h": 232
+  },
+  {
+   "id": "ground11",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5500,
+   "y": 328,
+   "w": 200,
+   "h": 272
+  },
+  {
+   "id": "summit_roof",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5530,
+   "y": 0,
+   "w": 140,
+   "h": 160
+  },
+  {
+   "id": "ground12",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5700,
+   "y": 448,
+   "w": 300,
+   "h": 152
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 560,
+   "y": 410,
+   "count": 4,
+   "spacing": 30
+  },
+  {
+   "id": "coins02",
+   "shape": "row",
+   "x": 880,
+   "y": 410,
+   "count": 9,
+   "spacing": 34
+  },
+  {
+   "id": "coins03",
+   "shape": "arc",
+   "x": 1420,
+   "y": 380,
+   "count": 5,
+   "spacing": 40,
+   "rise": 40
+  },
+  {
+   "id": "coins04",
+   "shape": "row",
+   "x": 2400,
+   "y": 400,
+   "count": 12,
+   "spacing": 40
+  },
+  {
+   "id": "coins05",
+   "shape": "row",
+   "x": 3520,
+   "y": 410,
+   "count": 6,
+   "spacing": 40
+  },
+  {
+   "id": "coins06",
+   "shape": "row",
+   "x": 3764,
+   "y": 852,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins07",
+   "shape": "arc",
+   "x": 5720,
+   "y": 380,
+   "count": 5,
+   "spacing": 34,
+   "rise": 40
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_icicle",
+   "kind": "relic",
+   "x": 690,
+   "y": 228
+  },
+  {
+   "id": "relic_crystal",
+   "kind": "relic",
+   "x": 3878,
+   "y": 850
+  },
+  {
+   "id": "relic_avalanche",
+   "kind": "relic",
+   "x": 4500,
+   "y": 170
+  }
+ ],
+ "items": [
+  {
+   "id": "item_star01",
+   "kind": "star",
+   "x": 3828,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "pingente_queda",
+   "x": 600,
+   "y": 240,
+   "patrol": [
+    596,
+    638
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy02",
+   "species": "pinguim_patrulha",
+   "x": 400,
+   "y": 448,
+   "patrol": [
+    330,
+    500
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "pingente_queda",
+   "x": 900,
+   "y": 250,
+   "patrol": [
+    896,
+    938
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy04",
+   "species": "pingente_queda",
+   "x": 1010,
+   "y": 250,
+   "patrol": [
+    1006,
+    1048
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy05",
+   "species": "pingente_queda",
+   "x": 1120,
+   "y": 250,
+   "patrol": [
+    1116,
+    1158
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy06",
+   "species": "pinguim_patrulha",
+   "x": 1220,
+   "y": 448,
+   "patrol": [
+    1180,
+    1290
+   ]
+  },
+  {
+   "id": "enemy07",
+   "species": "caracol_cristal",
+   "x": 1850,
+   "y": 448,
+   "patrol": [
+    1760,
+    1990
+   ]
+  },
+  {
+   "id": "enemy08",
+   "species": "coruja_nevada",
+   "x": 1880,
+   "y": 300,
+   "patrol": [
+    1760,
+    1990
+   ]
+  },
+  {
+   "id": "enemy09",
+   "species": "pingente_queda",
+   "x": 3100,
+   "y": 270,
+   "patrol": [
+    3096,
+    3138
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy10",
+   "species": "pingente_queda",
+   "x": 3330,
+   "y": 270,
+   "patrol": [
+    3326,
+    3368
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy11",
+   "species": "caracol_cristal",
+   "x": 3220,
+   "y": 448,
+   "patrol": [
+    3170,
+    3290
+   ]
+  },
+  {
+   "id": "enemy12",
+   "species": "caracol_cristal",
+   "x": 3930,
+   "y": 448,
+   "patrol": [
+    3885,
+    3995
+   ]
+  },
+  {
+   "id": "enemy13",
+   "species": "pinguim_patrulha",
+   "x": 3760,
+   "y": 448,
+   "patrol": [
+    3640,
+    3900
+   ]
+  },
+  {
+   "id": "enemy14",
+   "species": "carneiro_glacial",
+   "x": 5940,
+   "y": 448,
+   "patrol": [
+    5900,
+    5995
+   ]
+  },
+  {
+   "id": "enemy15",
+   "species": "pingente_queda",
+   "x": 5570,
+   "y": 200,
+   "patrol": [
+    5566,
+    5608
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy16",
+   "species": "yeti_mirim",
+   "x": 5650,
+   "y": 328,
+   "patrol": [
+    5610,
+    5695
+   ]
+  },
+  {
+   "id": "enemy17",
+   "species": "coruja_nevada",
+   "x": 5250,
+   "y": 250,
+   "patrol": [
+    5150,
+    5350
+   ]
+  },
+  {
+   "id": "enemy18",
+   "species": "boneco_neve",
+   "x": 5420,
+   "y": 368,
+   "patrol": [
+    5405,
+    5440
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_moving01",
+   "kind": "moving",
+   "x": 1472.0,
+   "y": 456,
+   "w": 56,
+   "h": 56,
+   "range": 150,
+   "speed": 1.1,
+   "phase": 0.0,
+   "style": "snowball"
+  },
+  {
+   "id": "hz_moving02",
+   "kind": "moving",
+   "x": 4114.0,
+   "y": 396,
+   "w": 52,
+   "h": 52,
+   "range": 45,
+   "speed": 1.3,
+   "phase": 0.0,
+   "style": "snowball"
+  },
+  {
+   "id": "hz_moving03",
+   "kind": "moving",
+   "x": 4354.0,
+   "y": 396,
+   "w": 52,
+   "h": 52,
+   "range": 45,
+   "speed": 1.3,
+   "phase": 1.6,
+   "style": "snowball"
+  },
+  {
+   "id": "hz_moving04",
+   "kind": "moving",
+   "x": 4594.0,
+   "y": 396,
+   "w": 52,
+   "h": 52,
+   "range": 45,
+   "speed": 1.3,
+   "phase": 3.2,
+   "style": "snowball"
+  },
+  {
+   "id": "hz_moving05",
+   "kind": "moving",
+   "x": 4834.0,
+   "y": 396,
+   "w": 52,
+   "h": 52,
+   "range": 45,
+   "speed": 1.3,
+   "phase": 4.8,
+   "style": "snowball"
+  }
+ ],
+ "zones": [
+  {
+   "id": "wind01",
+   "kind": "wind",
+   "x": 2360,
+   "y": 0,
+   "w": 600,
+   "h": 540,
+   "force_x": -60,
+   "period": 3.5,
+   "duty": 0.35
+  }
+ ],
+ "secrets": [
+  {
+   "id": "icicle_niche",
+   "kind": "hidden_area",
+   "clue": "Moedas num nicho do teto, só alcançável usando o pingente caído como degrau",
+   "rewards": [
+    "relic_icicle"
+   ]
+  },
+  {
+   "id": "crystal_cave",
+   "kind": "hidden_area",
+   "clue": "Brilho azul atravessando rachaduras perto de um cano coberto de geada",
+   "rewards": [
+    "relic_crystal"
+   ],
+   "entry": "pipe_room_entry"
+  },
+  {
+   "id": "avalanche_ledges",
+   "kind": "high_route",
+   "clue": "Beirais estreitos com a bandeira do Tio Nevasco acima do corredor",
+   "rewards": [
+    "relic_avalanche"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 420,
+   "text": "O pingente treme antes de cair. Depois de cair, o topo dele é um degrau seguro."
+  },
+  {
+   "x": 1240,
+   "text": "Espere a bola gigante subir a outra encosta e passe atrás dela."
+  },
+  {
+   "x": 3960,
+   "text": "Corredor da avalanche: espere no vão entre duas bolas e avance logo atrás da próxima."
+  }
+ ],
+ "events": [
+  {
+   "id": "msg_horn",
+   "kind": "message",
+   "x": 2160,
+   "params": {
+    "text": "Tio Nevasco: ouviu a corneta? Procure a pedra grande. As cornijas se refazem depois de cair."
+   }
+  }
+ ],
+ "checkpoints": [
+  {
+   "id": "cp_shelter",
+   "x": 2160,
+   "y": 418
+  },
+  {
+   "id": "cp_summit",
+   "x": 5120,
+   "y": 418
+  }
+ ],
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 6000,
+   "h": 540,
+   "variant": "ridge"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 3369,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "notes": "Fase nova (Mundo 4-5): desafio avançado — pingentes (estreia), bolas de neve gigantes (perigo móvel com estilo snowball), cornijas frágeis sob rajadas, túnel de gelo e corredor da avalanche."
+}

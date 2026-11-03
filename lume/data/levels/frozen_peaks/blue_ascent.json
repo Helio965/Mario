@@ -1,0 +1,503 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "blue_ascent",
+ "legacy_ids": [
+  "3-2"
+ ],
+ "name": "Escalada Azul",
+ "world": "frozen_peaks",
+ "role": "exploration",
+ "difficulty": 4,
+ "art": {
+  "set": "frozen_peaks",
+  "variant": "summit",
+  "weather": "auto"
+ },
+ "music": "frozen_peaks_main",
+ "bounds": {
+  "width": 4400,
+  "height": 1240
+ },
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 4400,
+   "h": 540,
+   "variant": "summit"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 3440,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "time_limit": 407,
+ "spawn": {
+  "x": 72,
+  "y": 414
+ },
+ "checkpoints": [
+  {
+   "id": "cp_mid",
+   "x": 2280,
+   "y": 366
+  }
+ ],
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 4250,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 600,
+   "h": 152
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "surface": "ice",
+   "x": 710,
+   "y": 416,
+   "w": 560,
+   "h": 184
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1390,
+   "y": 368,
+   "w": 710,
+   "h": 232
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "surface": "ice",
+   "x": 2220,
+   "y": 400,
+   "w": 620,
+   "h": 200
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2950,
+   "y": 432,
+   "w": 560,
+   "h": 168
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3630,
+   "y": 448,
+   "w": 770,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 380,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "ledge01",
+   "kind": "ledge",
+   "style": "ice_ledge",
+   "surface": "ice",
+   "x": 910,
+   "y": 350,
+   "w": 90,
+   "h": 20
+  },
+  {
+   "id": "ledge02",
+   "kind": "ledge",
+   "style": "ice_ledge",
+   "surface": "ice",
+   "x": 1060,
+   "y": 286,
+   "w": 104,
+   "h": 20
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 1560,
+   "y": 270,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 1640,
+   "y": 270,
+   "w": 40,
+   "h": 28,
+   "reward": "coin"
+  },
+  {
+   "id": "moving01",
+   "kind": "moving",
+   "x": 2430,
+   "y": 321,
+   "w": 104,
+   "h": 18,
+   "motion": {
+    "axis": "x",
+    "range": 30,
+    "speed": 1.2,
+    "phase": 0
+   }
+  },
+  {
+   "id": "ledge03",
+   "kind": "ledge",
+   "style": "ice_ledge",
+   "surface": "ice",
+   "x": 2630,
+   "y": 286,
+   "w": 108,
+   "h": 20
+  },
+  {
+   "id": "question04",
+   "kind": "question",
+   "x": 3360,
+   "y": 335,
+   "w": 40,
+   "h": 28,
+   "reward": "heart"
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 3914,
+    "y": 846
+   },
+   "return": {
+    "x": 3842,
+    "y": 402
+   },
+   "x": 3770,
+   "y": 400,
+   "w": 56,
+   "h": 48
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "style": "pipe",
+   "warp": {
+    "x": 3842,
+    "y": 402
+   },
+   "return": {
+    "x": 3914,
+    "y": 846
+   },
+   "x": 4116,
+   "y": 864,
+   "w": 56,
+   "h": 32
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3440,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3440,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3440,
+   "y": 760,
+   "w": 410,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4228,
+   "y": 760,
+   "w": 172,
+   "h": 136
+  },
+  {
+   "id": "summit_ledge1",
+   "kind": "ledge",
+   "x": 2780,
+   "y": 220,
+   "w": 70,
+   "h": 20,
+   "style": "floating"
+  },
+  {
+   "id": "summit_ledge2",
+   "kind": "ledge",
+   "x": 2900,
+   "y": 170,
+   "w": 70,
+   "h": 20,
+   "style": "floating"
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 180,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 575,
+   "y": 348,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins03",
+   "shape": "arc",
+   "x": 1250,
+   "y": 295,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins04",
+   "shape": "arc",
+   "x": 2080,
+   "y": 296,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins05",
+   "shape": "row",
+   "x": 2638,
+   "y": 248,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins06",
+   "shape": "arc",
+   "x": 2820,
+   "y": 321,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins07",
+   "shape": "arc",
+   "x": 3480,
+   "y": 352,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins08",
+   "shape": "row",
+   "x": 4130,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "room_coins01",
+   "shape": "row",
+   "x": 3954,
+   "y": 852.0,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 1094,
+   "y": 248
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 4068,
+   "y": 850
+  },
+  {
+   "id": "relic_summit",
+   "kind": "relic",
+   "x": 2925,
+   "y": 128
+  }
+ ],
+ "items": [
+  {
+   "id": "item01_star",
+   "kind": "star",
+   "x": 4018,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "caracol_cristal",
+   "x": 1100,
+   "y": 416,
+   "patrol": [
+    1010,
+    1230
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "boneco_neve",
+   "x": 1850,
+   "y": 368,
+   "patrol": [
+    1760,
+    1980
+   ]
+  },
+  {
+   "id": "enemy_ascent_start",
+   "species": "pinguim_patrulha",
+   "x": 300,
+   "y": 448,
+   "patrol": [
+    200,
+    520
+   ]
+  },
+  {
+   "id": "enemy_ascent_terrace",
+   "species": "pinguim_patrulha",
+   "x": 3100,
+   "y": 432,
+   "patrol": [
+    3000,
+    3200
+   ]
+  },
+  {
+   "id": "enemy_ascent_end",
+   "species": "caracol_cristal",
+   "x": 4000,
+   "y": 448,
+   "patrol": [
+    3900,
+    4150
+   ]
+  },
+  {
+   "id": "enemy_ascent_owl",
+   "species": "coruja_nevada",
+   "x": 2700,
+   "y": 300,
+   "patrol": [
+    2650,
+    2800
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_spikes01",
+   "kind": "spikes",
+   "x": 3230,
+   "y": 418,
+   "w": 48,
+   "h": 14
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "entry": "pipe_room_entry",
+   "clue": "Cano com seta luminosa e dica próxima",
+   "rewards": [
+    "relic_room"
+   ]
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos blocos",
+   "rewards": [
+    "relic_high"
+   ]
+  },
+  {
+   "id": "summit_route",
+   "kind": "high_route",
+   "clue": "Beirais acima do terraço de gelo levam ao pinheiro mais alto",
+   "rewards": [
+    "relic_summit"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 150,
+   "text": "A subida é feita em terraços seguros."
+  },
+  {
+   "x": 1710,
+   "text": "Use os blocos para ganhar altura."
+  },
+  {
+   "x": 3150,
+   "text": "Pouse antes dos espinhos e salte de novo."
+  }
+ ],
+ "notes": "Convertida da edição TypeScript (fase 3-2). Sala secreta movida para câmara subterrânea (+720 u).",
+ "zones": []
+}
