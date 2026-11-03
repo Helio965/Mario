@@ -427,6 +427,16 @@
     2780,
     2900
    ]
+  },
+  {
+   "id": "enemy_gate_beetle",
+   "species": "besouro_alado",
+   "x": 650,
+   "y": 230,
+   "patrol": [
+    520,
+    820
+   ]
   }
  ],
  "hazards": [
