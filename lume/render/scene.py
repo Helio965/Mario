@@ -118,6 +118,37 @@ class Scene:
         self.fx.items.clear()
         self.weather_seeded = False
 
+    def preload(self, game) -> int:
+        """Rasterize everything this level can show, so gameplay never stalls
+        on first use (called behind the level card / loading screen)."""
+        before = self.store.stats["loads"]
+        w = self.world
+        ids = [a.id for a in common.specs()] + [p.id for p in lume_parts()]
+        ids += [f"{w.id}.sky", f"{w.id}.cave_sky", "goal"] + list(w.sky_extras()) + list(w.layer_art())
+        ids += [t.art for t in self.terrain] + [d.art for d in self.decor]
+        if any(d.art.endswith("windmill") for d in self.decor):
+            ids.append(f"{w.id}.prop.windmill_blades")
+        for s in game.platforms:
+            if s.kind in ("question", "hidden"):
+                ids += [self._block_art("question", s.w, s.h), self._block_art("used", s.w, s.h)]
+            elif s.kind == "brick":
+                ids.append(self._block_art("brick", s.w, s.h))
+            elif s.kind == "pipe":
+                ids.append(self._pipe_art(s.w, s.h, s.destination is not None and s.secret is not None))
+            elif s.kind not in ("ground",):
+                ids.append(self._platform_art(s.kind, s.w, s.h, s.style))
+        for h in game.hazards:
+            if h.kind == "spikes":
+                ids.append(self._spikes_art(h.w))
+        for species in {e.species for e in game.enemies}:
+            rig = self._rig(species, game)
+            ids += [rig.part_id(n) for n in rig.parts()]
+        for form in ("big",):
+            del form
+        for art in ids:
+            self.store.get(art)
+        return self.store.stats["loads"] - before
+
     def _rig(self, species: str, game):
         rig = self.rigs.get(species)
         if rig is None:

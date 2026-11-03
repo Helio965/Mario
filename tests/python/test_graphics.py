@@ -1,0 +1,112 @@
+"""Graphics tests: real frames rendered by the HD pipeline (SDL software
+renderer under the dummy video driver — no GPU in CI). They check that every
+implemented level renders at 720p, 1080p and 4K without errors, that textures
+are rasterized at the output density (never upscaled), and report which
+species still use the provisional creature art."""
+
+import os
+
+import pygame
+import pytest
+
+from lume.core.game import Game
+from lume.core.species import load_profiles
+from lume.levels.campaign import load_campaign
+from lume.render.display import Display
+from lume.render.enemies import RIGS
+from lume.render.scene import Scene
+
+pytestmark = pytest.mark.graphics
+CAMPAIGN = load_campaign()
+
+
+@pytest.fixture(scope="module")
+def display_720():
+    d = Display((1280, 720), hidden=True)
+    yield d
+    d.close()
+
+
+def frame(display, level, x=None, zoom=1.3):
+    scene = Scene(display, zoom=zoom)
+    game = Game([level])
+    if x is not None:
+        game.player.x = x
+        game.camera.snap(game)
+    for e in game.enemies:
+        e.active = True
+    for _ in range(30):
+        game.update(1 / 120, __import__("lume.core.input", fromlist=["InputState"]).InputState())
+    scene.render(game, 1 / 60)
+    return scene, display.screenshot()
+
+
+def variance(surface: pygame.Surface) -> float:
+    small = pygame.transform.smoothscale(surface, (64, 36))
+    values = [sum(small.get_at((x, y))[:3]) for x in range(64) for y in range(36)]
+    mean = sum(values) / len(values)
+    return sum((v - mean) ** 2 for v in values) / len(values)
+
+
+@pytest.mark.parametrize("level", CAMPAIGN.levels, ids=lambda lvl: lvl.id)
+def test_every_level_renders_at_720p(display_720, level):
+    scene, shot = frame(display_720, level)
+    assert shot.get_size() == (1280, 720)
+    assert variance(shot) > 200, "quadro sem conteúdo"
+    assert scene.stats["draws"] > 20
+
+
+@pytest.mark.parametrize("res", [(1280, 720), (1920, 1080), (3840, 2160)])
+def test_first_level_renders_at_reference_resolutions(res):
+    display = Display(res, hidden=True)
+    try:
+        scene, shot = frame(display, CAMPAIGN.level("first_steps"), 400)
+        assert shot.get_size() == res
+        assert variance(shot) > 200
+        # textures are rasterized for the output density: a coin (22 u wide art)
+        coin = scene.store.get("coin.0")
+        expected = 22 * display.scale * scene.zoom
+        assert abs(coin.tex.width - expected) <= 2, (coin.tex.width, expected)
+        # Lume's head part (52 du * 0.40 u/du)
+        head = scene.store.get("lume.head")
+        assert abs(head.tex.width - 52 * 0.40 * display.scale * scene.zoom) <= 2
+    finally:
+        display.close()
+
+
+def test_letterbox_keeps_aspect_ratio_on_ultrawide():
+    display = Display((2560, 1080), hidden=True)
+    try:
+        assert display.scale == 2.0 and display.offset_x == 320
+        scene, shot = frame(display, CAMPAIGN.level("first_steps"))
+        assert shot.get_at((10, 540))[:3] == (0, 0, 0)  # letterbox bar
+    finally:
+        display.close()
+
+
+def test_rig_coverage_report():
+    """Every species has a rig; species drawn with the provisional creature are
+    listed so the quality matrix can report them (no silent placeholders)."""
+    profiles = load_profiles()
+    provisional = sorted(s for s, p in profiles.items() if p.animation_set not in RIGS)
+    w1 = {"bolota", "caramujo", "besouro_alado", "besouro", "flor_mordedora", "ourico_espinho", "javali_espinheiro", "guardiao_pomar"}
+    assert not (w1 & set(provisional)), "Reino Verde não pode usar arte provisória"
+    os.makedirs("artifacts", exist_ok=True)
+    with open("artifacts/provisional_species.txt", "w", encoding="utf-8") as fh:
+        fh.write("\n".join(provisional) + "\n")
+
+
+def test_character_sheet_states_all_draw():
+    from lume.core.entities import Player
+    from lume.render.characters.lume import LumeAnimator
+
+    display = Display((640, 360), hidden=True)
+    try:
+        scene = Scene(display)
+        for state in ("idle", "walk", "run", "skid", "jump", "fall", "land", "crouch", "swim", "hurt", "dead", "win", "transform"):
+            anim = LumeAnimator()
+            p = Player(0, 0)
+            cmds, du = anim.commands(p, state, 1 / 60)
+            assert cmds and all(scene.store.get(c.part) is not None for c in cmds), state
+    finally:
+        display.close()

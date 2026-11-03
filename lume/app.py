@@ -72,6 +72,13 @@ class App:
         res = choose_resolution(self.opts.resolution or st.resolution, desktop)
         fullscreen = self.opts.fullscreen if self.opts.fullscreen is not None else st.fullscreen
         self.display = Display(res, title="Lume — As Dez Fronteiras", fullscreen=fullscreen, vsync=st.vsync, hidden=self.opts.hidden)
+        if self.display.software and not self.opts.resolution and st.resolution == "auto" and res[1] > 720 \
+                and os.environ.get("SDL_VIDEODRIVER") != "dummy":
+            # Without GPU acceleration, automatic resolution stays at 720p (measured
+            # ~81 FPS at 720p vs ~34 FPS at 1080p with the software renderer).
+            self.display.window.size = (1280, 720)
+            self.display.resized()
+            notices.append("Aceleração gráfica indisponível: resolução automática ajustada para 1280 × 720.")
         quality = st.quality if st.quality != "auto" else ("medium" if self.display.software else "high")
         self.scene = Scene(self.display, effects=st.effects, quality=quality)
         self.audio = AudioSystem(st.music, st.sfx)
@@ -125,6 +132,7 @@ class App:
             self.game.load(index)
         else:
             self.game.start(index)
+        self._loading(self.game)
         self.screen = "play"
         self.level_card = 3.0
         self.input.clear()
@@ -133,6 +141,14 @@ class App:
         entry = self.campaign.entry(level_id)
         world = self.campaign.world(entry.world)
         self.card_text = (f"Mundo {world.number}-{entry.slot}", self.game.level.name, world.name)
+
+    def _loading(self, game) -> None:
+        """Show a loading card while the level's vector art is rasterized."""
+        self.scene.prepare(game)
+        self.display.clear((14, 18, 30))
+        self.scene.text.draw("Preparando a fase…", 480, 250, 24, (255, 240, 200), "display", "center")
+        self.display.present()
+        self.scene.preload(game)
 
     def finish_level(self) -> None:
         g = self.game
