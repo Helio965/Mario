@@ -396,6 +396,7 @@ class Scene:
         self._decor("back")
         self._terrain()
         self._platforms(game)
+        self._water_bodies(game)
         self._decor("mid")
         self._landmarks(game)
         self._hazards(game, liquids=False)
@@ -578,14 +579,21 @@ class Scene:
                     self.draw_art("particle.soft", cx, cy, scale=5.0, alpha=0.5, tint=(255, 150, 60), additive=True)
                 self.draw_art("flame_orb", cx, cy, scale=h.w / 26, angle=(self.time * 200) % 360)
 
+    def _water_bodies(self, game) -> None:
+        """Swim-zone water volume, drawn over terrain but behind creatures and
+        Lume, so swimmers keep their colours (the surface line is drawn in
+        front by _zones)."""
+        for z in game.zones:
+            if z.kind == "swim" and self.visible(z.x, z.y, z.w, z.h):
+                self.draw_art("liquid.water.body", z.x, z.y + 6, w=z.w, h=z.h, pivot=False, alpha=0.55)
+
     def _zones(self, game, dt: float) -> None:
-        """Visible cues for physics zones: water volumes, quicksand, wind gusts."""
+        """Visible cues for physics zones: water surfaces, quicksand, wind gusts."""
         t = self.time
         for z in game.zones:
             if not self.visible(z.x, z.y, z.w, z.h):
                 continue
             if z.kind == "swim":
-                self.draw_art("liquid.water.body", z.x, z.y + 6, w=z.w, h=z.h, pivot=False, alpha=0.55)
                 self._strips("liquid.water.surface", z.x, z.x + z.w, z.y - 2, t * 14, 0.8)
             elif z.kind == "quicksand":
                 self._strips("quicksand.surface", z.x, z.x + z.w, z.y - 4, t * 6)
