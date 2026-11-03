@@ -33,6 +33,9 @@ CHUNK = 320.0
 
 
 
+RISING_WEATHER = ("embers", "bubbles")  # weather kinds that drift upward
+
+
 def stable_seed(*parts) -> int:
     """Process-independent seed (``hash()`` of str is salted per process, which
     made decor/terrain differ between runs and defeated the raster disk cache)."""
@@ -153,7 +156,7 @@ class Scene:
             elif s.kind == "pipe":
                 ids.append(self._pipe_art(s.w, s.h, s.destination is not None and s.secret is not None))
             elif s.kind not in ("ground",):
-                ids.append(self._platform_art(s.kind, s.w, s.h, s.style))
+                ids.append(self._platform_art(s.kind, s.w, s.h, self._art_style(s)))
         for h in game.hazards:
             if h.kind == "spikes":
                 ids.append(self._spikes_art(h.w))
@@ -317,6 +320,13 @@ class Scene:
         if not self.store.has(art):
             self.store.register(ArtSpec(art, lambda: self.world.block(kind, w, h), 1.0, (0, 0), "world"))
         return art
+
+    @staticmethod
+    def _art_style(s) -> str:
+        """Platform style for the art, with the belt direction for conveyors."""
+        if s.kind == "conveyor" and (s.surface_speed or 0) < 0 and "left" not in (s.style or ""):
+            return f"{s.style}_left" if s.style else "left"
+        return s.style
 
     def _platform_art(self, kind: str, w: float, h: float, style: str) -> str:
         art = f"{self.world.id}.plat.{kind}.{style}.{w:g}x{h:g}"
@@ -510,7 +520,7 @@ class Scene:
                 self.draw_art(art, s.x, s.y - self.world.terrain_headroom, pivot=False)
             else:
                 shake = math.sin(self.time * 60) * 1.5 if s.kind == "crumble" and s.crumble > 0 else 0.0
-                art = self._platform_art(s.kind, s.w, s.h, s.style)
+                art = self._platform_art(s.kind, s.w, s.h, self._art_style(s))
                 self.draw_art(art, s.x + shake, s.y, pivot=False)
 
     def _landmarks(self, game) -> None:
@@ -728,12 +738,13 @@ class Scene:
         while len(current) < target:
             kind = wthr.kind
             f = Fx(r.choice(arts), r.uniform(-40, 1000), r.uniform(-40, 540) if not self.weather_seeded else -20,
-                   wthr.wind + r.uniform(-15, 15), r.uniform(18, 45) if kind != "embers" else -r.uniform(15, 40),
+                   wthr.wind + r.uniform(-15, 15), r.uniform(18, 45) if kind not in RISING_WEATHER else -r.uniform(15, 40),
                    r.uniform(8, 14), 14.0, r.uniform(4, 8), rot=r.uniform(0, 360), vrot=r.uniform(-90, 90), screen=True,
-                   tint={"snow": (255, 255, 255), "sand": (240, 210, 150), "embers": (255, 150, 70), "spores": (170, 255, 220)}
+                   tint={"snow": (255, 255, 255), "sand": (240, 210, 150), "embers": (255, 150, 70), "spores": (170, 255, 220),
+                         "ash": (190, 176, 162)}
                    .get(kind, (255, 255, 255)), alpha=0.8, additive=kind in ("embers", "spores"))
-            if kind == "embers":
-                f.y = 560
+            if kind in RISING_WEATHER and self.weather_seeded:
+                f.y = 560  # rising particles enter from below
             self.fx.items.append(f)
             current.append(f)
         self.weather_seeded = True

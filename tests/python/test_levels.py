@@ -102,3 +102,13 @@ def test_terraces_count_as_ground_when_measuring_gaps():
     lvl = level(platforms=[{"id": "a", "kind": "ground", "x": 0, "y": 368, "w": 400, "h": 232}, *steps,
                            {"id": "b", "kind": "ground", "x": 720, "y": 448, "w": 900, "h": 152}])
     assert main_path_gaps(lvl) == []
+
+
+def test_unreachable_relic_is_reported():
+    from tests.python.conftest import level
+
+    lvl = level(collectibles=[{"id": "relic_sky", "kind": "relic", "x": 700, "y": 100}])
+    problems = validate_level(lvl, PROFILES, simulate=False)
+    assert any("inalcançável" in p.message for p in problems)
+    near = level(collectibles=[{"id": "relic_low", "kind": "relic", "x": 700, "y": 330}])
+    assert not any("inalcançável" in p.message for p in validate_level(near, PROFILES, simulate=False))

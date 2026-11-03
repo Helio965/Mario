@@ -194,6 +194,24 @@ def validate_level(level: LevelSpec, profiles: dict[str, EnemyProfile], *, world
         for t in terrain:
             if q.x < t.x + t.w - 0.5 and q.x + q.w > t.x + 0.5 and q.y < t.y + t.h - 0.5 and q.y + q.h > t.y + 0.5:
                 err(f"platforms[{i}]", f"'{q.id}' ({q.kind}) está dentro do terreno '{t.id}'")
+    # --- relics should be within reach: a standable surface below (head reach
+    #     46 + 112 u), a spring, a moving platform's path or an updraft nearby
+    standable = [q for q in level.platforms if q.kind not in ("switch",)]
+    for i, c in enumerate(level.collectibles):
+        cx = c.x + 10
+        reachable = any(
+            q.x - 90 <= cx <= q.x + q.w + 90 and c.y - 4 <= q.y <= c.y + (300 if q.kind == "spring" else 175)
+            for q in standable
+        ) or any(
+            q.motion is not None and q.x - q.motion.range - 90 <= cx <= q.x + q.w + q.motion.range + 90
+            and c.y - 4 <= q.y + q.motion.range and q.y - q.motion.range <= c.y + 175
+            for q in level.platforms
+        ) or any(
+            z.kind in ("wind", "current", "lowgrav", "swim") and z.x - 40 <= cx <= z.x + z.w + 40 and z.y - 60 <= c.y <= z.y + z.h
+            for z in level.zones
+        )
+        if not reachable:
+            warn(f"collectibles[{i}]", f"relíquia '{c.id}' possivelmente inalcançável (nenhuma superfície, mola ou corrente ao alcance)")
     # --- blocks must not overlap each other (a brick resting inside a reward block
     #     makes the block unreachable from below and the brick unbreakable)
     blocks = [(i, q) for i, q in enumerate(level.platforms) if q.kind in ("brick", "question", "hidden") and q.motion is None]
