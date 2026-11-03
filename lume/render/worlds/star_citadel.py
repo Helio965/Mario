@@ -1457,6 +1457,188 @@ class StarCitadel(WorldArt):
         self._crystal_cap(s, w, y0, True, True, 0.0, hang=False)
         return s
 
+    # ------------------------------------------------------------------ props
+    def _crystal_cluster(self, seed: int) -> Svg:
+        """Cluster of chunky crystal prisms growing from a star-stone rock."""
+        r = Rand(seed)
+        s = Svg(64, 62)
+        teal = seed % 2 == 1
+        light, dark, glow = ("#e8fffb", "#3a9aa8", GLOW_TEAL) if teal else ("#f2f0ff", "#6a5ad0", GLOW_VIOLET)
+        _glow(s, 32, 40, 30, glow, 0.35)
+        shards = [(-26, 24, 9), (-4, 40, 12), (18, 30, 10), (34, 18, 7), (-44, 15, 6)]
+        for ang, ln, wd in sorted(shards[: 3 + seed % 3], key=lambda c: -c[1]):
+            a = ang + r.uniform(-5, 5)
+            _crystal(s, 32 + math.sin(math.radians(a)) * 3, 54, a, ln, wd, light, dark, INK, 1.0)
+        s.path(blob(32, 56, 24, 6.5, 0.15, seed=seed, squash_top=1.2), fill=s.linear(0, 49, 0, 62, [(0, "#5a66c2"), (0.5, "#2e3680"), (1, "#151946")]),
+               stroke=INK, width=1.0)
+        for k in range(3):
+            s.circle(20 + k * 11 + r.uniform(-2, 2), 56.5 + r.uniform(-1, 1), 0.8, fill=GOLD_LIGHT)
+        _sparkle(s, 26, 20, 3.2)
+        _sparkle(s, 40, 32, 2.2)
+        return s
+
+    def _star_lantern(self) -> Svg:
+        """Lamp post crowned by a star-shaped crystal lantern in a gold cradle."""
+        s = Svg(40, 106)
+        cx = 20.0
+        _glow(s, cx, 20, 21, "#fff0b8", 0.6)
+        s.path(rounded_rect_path(cx - 9, 98, 18, 8, 2), fill=s.linear(0, 98, 0, 106, [(0, "#5a66c2"), (1, "#1a1e52")]), stroke=INK, width=1.0)
+        s.rect(cx - 6.5, 95, 13, 3.4, fill=s.linear(0, 95, 0, 98.4, [(0, GOLD_LIGHT), (1, GOLD_DARK)]), stroke=INK, width=0.7)
+        s.path(rounded_rect_path(cx - 2.6, 36, 5.2, 60, 1.6), fill=s.linear(cx - 2.6, 0, cx + 2.6, 0, [(0, "#6a76d0"), (0.4, "#3a4496"), (1, "#151946")]),
+               stroke=INK, width=1.0)
+        for y in (48.0, 70.0):
+            s.rect(cx - 3.6, y, 7.2, 2.6, fill=s.linear(0, y, 0, y + 2.6, [(0, GOLD_HI), (1, GOLD_DARK)]), stroke=INK, width=0.6, rx=1)
+        # gold cradle with curled arms
+        s.path(f"M{cx - 9:.1f} 30 Q{cx - 9:.1f} 37 {cx:.1f} 37 Q{cx + 9:.1f} 37 {cx + 9:.1f} 30", stroke=INK, width=3.0)
+        s.path(f"M{cx - 9:.1f} 30 Q{cx - 9:.1f} 37 {cx:.1f} 37 Q{cx + 9:.1f} 37 {cx + 9:.1f} 30", stroke=GOLD, width=1.7)
+        for side in (-1, 1):
+            s.circle(cx + side * 9, 29.5, 1.4, fill=GOLD_LIGHT, stroke=INK, width=0.5)
+        # the star lantern
+        s.polygon(star_points(cx, 20, 11.5, 4.6, 4), fill=s.radial(cx, 20, 11.5, [(0, "#ffffff"), (0.35, "#fff2c4"), (1, GOLD)]), stroke=GOLD_DEEP,
+                  width=0.9)
+        s.polygon(star_points(cx, 20, 6.5, 2.6, 4, -45), fill="#ffffff", opacity=0.75)
+        s.circle(cx, 20, 2.0, fill="#ffffff")
+        s.line(cx, 31.5, cx, 37, GOLD_DARK, 1.0)
+        return s
+
+    def _orrery(self) -> Svg:
+        """Small brass orrery on a star-stone pedestal: a glowing sun, two tilted
+        orbits with planets and a meridian ring."""
+        s = Svg(68, 76)
+        cx, cy = 34.0, 28.0
+        s.path(rounded_rect_path(22, 66, 24, 10, 2), fill=s.linear(0, 66, 0, 76, [(0, "#5a66c2"), (1, "#1a1e52")]), stroke=INK, width=1.0)
+        s.path(f"M27 66 L29 50 L39 50 L41 66 Z", fill=s.linear(27, 0, 41, 0, [(0, "#6a76d0"), (0.4, "#3a4496"), (1, "#151946")]), stroke=INK, width=1.0)
+        s.rect(26, 47, 16, 3.6, fill=s.linear(0, 47, 0, 50.6, [(0, GOLD_HI), (1, GOLD_DARK)]), stroke=INK, width=0.7, rx=1)
+        s.line(cx, 47, cx, cy + 6, GOLD_DARK, 2.2)
+        # orbits: back halves first, then the sun, then the front halves and planets
+        orbits = ((26.0, 7.0, -12.0, "#ffd6ea", "#c0508a", 0.3), (17.0, 5.2, 18.0, "#c8fff6", "#2aa8a0", 2.4))
+        for rx, ry, tilt, *_ in orbits:
+            with s.group(transform=f"rotate({tilt:.1f} {cx:.1f} {cy:.1f})"):
+                s.path(f"M{cx - rx:.1f} {cy:.1f} A{rx:.1f} {ry:.1f} 0 0 1 {cx + rx:.1f} {cy:.1f}", stroke=GOLD_DARK, width=1.4)
+        s.circle(cx, cy, 14, stroke=GOLD_DARK, width=1.2, opacity=0.8)  # meridian ring
+        _glow(s, cx, cy, 13, "#fff0b0", 0.8)
+        s.circle(cx, cy, 5.6, fill=s.radial(cx - 1.6, cy - 1.6, 6.5, [(0, "#ffffff"), (0.4, GOLD_HI), (1, GOLD)]), stroke=GOLD_DEEP, width=0.8)
+        for rx, ry, tilt, hi, lo, a in orbits:
+            with s.group(transform=f"rotate({tilt:.1f} {cx:.1f} {cy:.1f})"):
+                s.path(f"M{cx + rx:.1f} {cy:.1f} A{rx:.1f} {ry:.1f} 0 0 1 {cx - rx:.1f} {cy:.1f}", stroke=GOLD, width=1.4)
+                px, py = cx + math.cos(a) * rx, cy + math.sin(a) * ry
+                s.circle(px, py, 3.1, fill=s.radial(px - 1, py - 1, 3.6, [(0, "#ffffff"), (0.35, hi), (1, lo)]), stroke=INK, width=0.6)
+        s.path(f"M{cx - 14:.1f} {cy:.1f} A14 14 0 0 1 {cx + 2:.1f} {cy - 13.9:.1f}", stroke=GOLD_LIGHT, width=1.0)
+        return s
+
+    def _broken_column(self, seed: int) -> Svg:
+        """Fluted star-stone column with gold inlay rings, snapped off; a chunk
+        of its drum lies at the foot."""
+        r = Rand(seed)
+        s = Svg(56, 100)
+        short = seed % 2 == 0
+        cx, cw = 24.0, 18.0
+        top = 40.0 if short else 14.0
+        shaft = s.linear(cx - cw / 2, 0, cx + cw / 2, 0, [(0, "#9aa6ec"), (0.35, "#6a76cc"), (1, "#262c6e")])
+        broken = [(cx - cw / 2, top + 6), (cx - cw * 0.2, top - 2), (cx + cw * 0.05, top + 4), (cx + cw * 0.3, top - 4), (cx + cw / 2, top + 3)]
+        s.path(_poly([(cx - cw / 2, 92)] + broken + [(cx + cw / 2, 92)]), fill=shaft, stroke=INK, width=1.1)
+        for fx in (-0.25, 0.0, 0.25):
+            s.line(cx + fx * cw, top + 6, cx + fx * cw, 90, "#2a3070", 1.0, 0.5)
+        for y in (top + 14, 74.0):
+            s.rect(cx - cw / 2 - 0.5, y, cw + 1, 3.0, fill=s.linear(0, y, 0, y + 3, [(0, GOLD_HI), (1, GOLD_DARK)]), stroke=INK, width=0.6)
+        pts = [(cx - 4, top + 26), (cx + 3, top + 31), (cx - 1, top + 40), (cx + 5, top + 46)]
+        if pts[-1][1] < 70:
+            _inlay(s, pts, [(0, 1), (1, 2), (2, 3)], 0.55, 0.3, groove=False)
+        s.path(rounded_rect_path(cx - cw / 2 - 4, 90, cw + 8, 8, 1.5), fill=s.linear(0, 90, 0, 98, [(0, "#7a86d8"), (1, "#262c6e")]), stroke=INK,
+               width=1.0)
+        s.line(cx - cw / 2 - 3, 91, cx + cw / 2 + 3, 91, GOLD, 1.0, 0.9)
+        # fallen drum piece
+        bx = 46.0
+        s.path(_poly([(bx - 9, 98), (bx - 8, 89), (bx - 2, 86), (bx + 6, 88), (bx + 9, 98)]), fill=s.linear(0, 86, 0, 98, [(0, "#8a96e0"), (1, "#2e3680")]),
+               stroke=INK, width=1.0)
+        s.line(bx - 7, 90, bx + 5, 89, GOLD, 0.9, 0.9)
+        s.circle(bx - 2 + r.uniform(-1, 1), 94, 0.8, fill=GOLD_LIGHT)
+        return s
+
+    def _constellation_stone(self, seed: int) -> Svg:
+        """Chipped standing stone (a menhir with a slanted top) of star-stone,
+        carrying a glowing gold constellation inlay."""
+        s = Svg(48, 72)
+        alt = seed % 2 == 1
+        outline = [(6, 70), (4, 40), (7, 18), (12, 9), (21, 4), (27, 7), (33, 6), (40, 16), (43, 38), (42, 70)] if not alt else \
+            [(6, 70), (5, 34), (9, 14), (16, 10), (24, 3), (31, 9), (38, 12), (42, 30), (43, 70)]
+        s.path(_poly(outline), fill=s.linear(4, 0, 43, 0, [(0, "#5a68c0"), (0.4, "#303a8a"), (1, "#141846")]), stroke=INK, width=1.3)
+        s.path(_poly([outline[0], outline[1], outline[2], outline[3], (16, 30), (13, 70)]), fill="#9aa8ff", opacity=0.16)
+        s.path(_line(outline[1:5]), stroke="#a6b2ff", width=1.1, opacity=0.6)
+        s.path(_poly([(outline[-3][0] - 4, outline[-3][1] + 4), outline[-2], outline[-1], (outline[-1][0] - 8, 70)]), fill="#05061a", opacity=0.3)
+        r = Rand(seed)
+        for _ in range(9):
+            s.circle(r.uniform(11, 37), r.uniform(18, 66), r.uniform(0.4, 0.8), fill=GOLD_LIGHT if r.next() < 0.5 else "#e6ecff", opacity=0.75)
+        if alt:
+            pts = [(13.0, 50.0), (18.0, 38.0), (25.0, 31.0), (33.0, 22.0), (31.0, 44.0), (22.0, 56.0)]
+            edges = [(0, 1), (1, 2), (2, 3), (2, 4), (4, 5)]
+        else:
+            pts = [(14.0, 22.0), (22.0, 18.0), (31.0, 27.0), (27.0, 39.0), (16.0, 45.0), (25.0, 57.0)]
+            edges = [(0, 1), (1, 2), (2, 3), (3, 4), (3, 5)]
+        _inlay(s, pts, edges, 0.9, 0.55)
+        s.path(blob(24, 70, 22, 3.6, 0.2, seed=seed, squash_top=1.3), fill="#1a1e52", opacity=0.9)
+        return s
+
+    def _telescope(self) -> Svg:
+        """Brass telescope with blue enamel bands on a tripod, aimed at the stars."""
+        s = Svg(80, 90)
+        hx, hy = 34.0, 46.0  # mount head
+        for fx in (14.0, 34.0, 56.0):
+            s.line(hx, hy, fx, 89, INK, 3.6)
+            s.line(hx, hy, fx, 89, "#8a6a3a" if fx != 34.0 else "#6a4e2a", 2.0)
+        s.circle(hx, hy, 3.6, fill=s.radial(hx - 1, hy - 1, 4, [(0, GOLD_HI), (1, GOLD_DARK)]), stroke=INK, width=0.8)
+        with s.group(transform=f"rotate(-32 {hx:.1f} {hy:.1f})"):
+            x0, x1 = hx - 22, hx + 34
+            s.path(f"M{x0:.1f} {hy - 3.4:.1f} L{x1:.1f} {hy - 5.2:.1f} L{x1:.1f} {hy + 5.2:.1f} L{x0:.1f} {hy + 3.4:.1f} Z",
+                   fill=s.linear(0, hy - 5, 0, hy + 5, [(0, GOLD_HI), (0.35, GOLD_LIGHT), (0.7, GOLD), (1, GOLD_DARK)]), stroke=INK, width=1.0)
+            for bx in (hx - 10, hx + 8, hx + 22):
+                s.rect(bx, hy - 5.4, 4, 10.8, fill=s.linear(0, hy - 5, 0, hy + 5, [(0, "#6a7ae0"), (1, "#1e246a")]), stroke=INK, width=0.6)
+            s.rect(x1, hy - 6.4, 4, 12.8, fill=s.linear(0, hy - 6, 0, hy + 6, [(0, GOLD_HI), (1, GOLD_DARK)]), stroke=INK, width=0.8, rx=1)
+            s.ellipse(x1 + 4, hy, 1.4, 5.4, fill=s.linear(0, hy - 5, 0, hy + 5, [(0, "#e8f6ff"), (1, "#5a7ad8")]), stroke=INK, width=0.6)
+            s.rect(x0 - 6, hy - 2.2, 6, 4.4, fill=GOLD_DARK, stroke=INK, width=0.7)
+            s.line(x0 + 2, hy - 2.4, x1 - 2, hy - 3.8, "#ffffff", 0.9, 0.7)
+        lx, ly = hx + 34 * math.cos(math.radians(-32)) + 4, hy + 34 * math.sin(math.radians(-32)) - 2
+        _glow(s, lx, ly, 8, "#dff2ff", 0.6)
+        _sparkle(s, lx, ly, 4, 0.95)
+        return s
+
+    def props(self) -> dict[str, PropSpec]:
+        return {
+            "crystal_cluster": PropSpec(lambda: self._crystal_cluster(4), (32, 60)),
+            "crystal_cluster_b": PropSpec(lambda: self._crystal_cluster(7), (32, 60)),
+            "star_lantern": PropSpec(self._star_lantern, (20, 105)),
+            "orrery": PropSpec(self._orrery, (34, 75)),
+            "broken_column": PropSpec(lambda: self._broken_column(3), (24, 97)),
+            "broken_column_b": PropSpec(lambda: self._broken_column(6), (24, 97)),
+            "constellation_stone": PropSpec(lambda: self._constellation_stone(5), (24, 70)),
+            "constellation_stone_b": PropSpec(lambda: self._constellation_stone(11), (24, 70)),
+            "telescope": PropSpec(self._telescope, (34, 89)),
+        }
+
+    def auto_decor(self, rng, surface_w: float) -> list[tuple[str, float, float, str]]:
+        out = []
+        x = rng.uniform(40, 120)
+        observatory = False
+        while x < surface_w - 40:
+            roll = rng.next()
+            if roll < 0.24:
+                out.append((rng.choice(["crystal_cluster", "crystal_cluster_b"]), x, rng.uniform(0.65, 0.95), "back"))
+            elif roll < 0.38:
+                out.append(("star_lantern", x, rng.uniform(0.9, 1.0), "back"))
+            elif roll < 0.53:
+                out.append((rng.choice(["broken_column", "broken_column_b"]), x, rng.uniform(0.85, 1.05), "back"))
+            elif roll < 0.65:
+                out.append((rng.choice(["constellation_stone", "constellation_stone_b"]), x, rng.uniform(0.8, 1.0), "back"))
+            elif roll < 0.74:
+                out.append(("orrery", x, rng.uniform(0.8, 0.95), "back"))
+            elif roll < 0.82 and surface_w > 300 and not observatory:
+                out.append(("telescope", x, rng.uniform(0.85, 1.0), "back"))
+                observatory = True
+            elif roll < 0.9:
+                out.append((rng.choice(["crystal_cluster", "crystal_cluster_b"]), x, rng.uniform(0.45, 0.6), "mid"))
+            x += rng.uniform(110, 220)
+        return out
+
     # ------------------------------------------------------------------ arena gate
     def gate(self, w: float, h: float) -> Svg:
         """Arena portcullis: translucent crystal bars between gilded posts,
