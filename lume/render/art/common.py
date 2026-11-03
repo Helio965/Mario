@@ -230,6 +230,22 @@ def liquid_body(kind: str) -> Svg:
     return s
 
 
+def quicksand_surface(width: float = 64) -> Svg:
+    s = Svg(width, 16)
+    pts = [(width * i / 8, 5 + 1.6 * math.sin(i / 8 * 2 * math.pi * 2)) for i in range(9)]
+    s.path(smooth_open(pts) + f"L{width} 16 L0 16 Z", fill=s.linear(0, 2, 0, 16, [(0, "#f2cf8a"), (1, "#b8833e")]))
+    for k in range(4):
+        x = 6 + k * 15
+        s.path(f"M{x} 9 q4 -3 8 0", stroke="#8a5a22", width=1.0, opacity=0.6)
+    return s
+
+
+def wind_streak() -> Svg:
+    s = Svg(64, 6)
+    s.path("M2 3 Q32 0 62 3", stroke="#fff4d6", width=2.2, opacity=0.85)
+    return s
+
+
 def specs() -> list[ArtSpec]:
     out = [ArtSpec(f"coin.{i}", (lambda i=i: coin_frame(i)), 1.0, (11, 13), "common") for i in range(8)]
     out.append(ArtSpec("relic", relic, 1.0, (20, 22), "common"))
@@ -243,6 +259,8 @@ def specs() -> list[ArtSpec]:
     out.append(ArtSpec("checkpoint.on", lambda: checkpoint(True), 1.0, (20, 111), "common"))
     out.append(ArtSpec("sign", sign, 1.0, (20, 48), "common"))
     out.append(ArtSpec("flame_orb", flame_orb, 1.0, (20, 20), "common"))
+    out.append(ArtSpec("quicksand.surface", quicksand_surface, 1.0, (0, 4), "common"))
+    out.append(ArtSpec("fx.wind", wind_streak, 1.0, (32, 3), "common"))
     for kind in ("water", "lava", "poison"):
         out.append(ArtSpec(f"liquid.{kind}.surface", (lambda k=kind: liquid_surface(k)), 1.0, (0, 4), "common"))
         out.append(ArtSpec(f"liquid.{kind}.body", (lambda k=kind: liquid_body(k)), 1.0, (0, 0), "common"))

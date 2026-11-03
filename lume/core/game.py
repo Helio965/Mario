@@ -264,6 +264,10 @@ class Game:
         was_swimming = p.swimming
         p.swimming = swim_zone is not None
         jump_pressed = inp.jump and not self.previous_jump
+        if was_swimming and not p.swimming and p.vy < 0 and inp.jump:
+            # breaking the surface while holding jump: hop out onto the bank
+            p.vy = -C.JUMP_SPEED * 0.75
+            self.emit("splash", x=p.x + p.w / 2, y=p.y + p.h)
         if gravity_scale < 0:
             self._quicksand(p, inp, direction, jump_pressed, dt)
             gravity_scale = 1.0

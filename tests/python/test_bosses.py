@@ -178,3 +178,65 @@ def test_thorn_boar_second_phase_drops_thorns():
             break
     assert boss.state == "stunned"
     assert len([s for s in g.projectiles if s.kind == "thorn_acorn"]) == 3
+
+
+def _scarab_level():
+    from .conftest import level
+
+    return level(
+        world="golden_desert",
+        bounds={"width": 1400, "height": 540},
+        exit={"id": "goal", "kind": "flag", "x": 1300, "y": 448},
+        checkpoints=[],
+        platforms=[
+            {"id": "floor", "kind": "ground", "x": 0, "y": 448, "w": 1400, "h": 92},
+            {"id": "wall_l", "kind": "ground", "x": 100, "y": 200, "w": 40, "h": 248},
+            {"id": "wall_r", "kind": "ground", "x": 1000, "y": 200, "w": 40, "h": 248},
+        ],
+        spawn={"x": 500, "y": 418},
+        enemies=[{"id": "boss", "species": "escaravelho_rei", "x": 760, "y": 448, "patrol": [140, 1000]}],
+        role="fortress",
+    )
+
+
+def test_scarab_king_cycle_has_telegraph_and_single_stomp_window():
+    g = Game([_scarab_level()])
+    boss = g.enemies[0]
+    beh = g.behaviors[boss.species]
+    g.player.invulnerable = 999
+    seen = []
+    for _ in range(int(14 * 120)):
+        g.update(FIXED_DT, InputState())
+        if not seen or seen[-1] != boss.state:
+            seen.append(boss.state)
+            if boss.state in ("burrow", "telegraph"):
+                assert not beh.tangible(g, boss)
+            if boss.state in ("erupt", "roll"):
+                assert beh.spiked(g, boss) and not beh.stompable(g, boss)
+            if boss.state == "dazed":
+                assert beh.stompable(g, boss)
+    order = [s for s in seen if s in ("burrow", "telegraph", "erupt", "dazed", "roll")]
+    assert order[:5] == ["burrow", "telegraph", "erupt", "dazed", "roll"]
+
+
+def test_scarab_king_three_stomps_and_angry_sand_balls():
+    g = Game([_scarab_level()])
+    boss = g.enemies[0]
+    for hit in range(3):
+        boss.set_state("dazed")
+        boss.hit_timer = 0
+        g.player.x, g.player.y = boss.x + 20, boss.y - g.player.h - 2
+        g.player.vy, g.player.grounded = 400, False
+        ticks(g, 2)
+        if hit < 2:
+            assert boss.alive and boss.state == "hurt"
+    assert not boss.alive
+    g2 = Game([_scarab_level()])
+    b2 = g2.enemies[0]
+    b2.health = 1
+    b2.set_state("telegraph")
+    for _ in range(120):
+        g2.update(FIXED_DT, InputState())
+        if b2.state == "erupt":
+            break
+    assert len([s for s in g2.projectiles if s.kind == "sand"]) == 3

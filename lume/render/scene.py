@@ -371,6 +371,7 @@ class Scene:
         self._projectiles(game)
         self._particles(game, dt)
         self._hazards(game, liquids=True)
+        self._zones(game, dt)
         self._decor("front")
         darkness = game.darkness() if hasattr(game, "darkness") else 0.0
         if darkness > 0:
@@ -539,6 +540,38 @@ class Scene:
                 if self.effects:
                     self.draw_art("particle.soft", cx, cy, scale=5.0, alpha=0.5, tint=(255, 150, 60), additive=True)
                 self.draw_art("flame_orb", cx, cy, scale=h.w / 26, angle=(self.time * 200) % 360)
+
+    def _zones(self, game, dt: float) -> None:
+        """Visible cues for physics zones: water volumes, quicksand, wind gusts."""
+        t = self.time
+        for z in game.zones:
+            if not self.visible(z.x, z.y, z.w, z.h):
+                continue
+            if z.kind == "swim":
+                self.draw_art("liquid.water.body", z.x, z.y + 6, w=z.w, h=z.h, pivot=False, alpha=0.55)
+                strip, off = 64.0, (t * 14) % 64.0
+                x = z.x - off
+                while x < z.x + z.w:
+                    self.draw_art("liquid.water.surface", max(x, z.x), z.y - 2, pivot=False, alpha=0.8,
+                                  w=min(64.0, z.x + z.w - max(x, z.x)))
+                    x += strip
+            elif z.kind == "quicksand":
+                off = (t * 6) % 64.0
+                x = z.x - off
+                while x < z.x + z.w:
+                    self.draw_art("quicksand.surface", max(x, z.x), z.y - 4, pivot=False, w=min(64.0, z.x + z.w - max(x, z.x)))
+                    x += 64.0
+                self.draw_art("liquid.lava.body", z.x, z.y + 10, w=z.w, h=z.h, pivot=False, alpha=0.0)
+            elif z.kind in ("wind", "current") and self.effects and game.zone_active(z) and z.force_x:
+                # streaks travel with the drift; deterministic positions so the effect never flickers
+                n = max(3, int(z.w * z.h / 26000))
+                for k in range(n):
+                    phase = (t * abs(z.force_x) * 1.6 + k * 397.0) % (z.w + 80)
+                    x = z.x + (phase if z.force_x > 0 else z.w - phase)
+                    y = z.y + ((k * 151.0) % max(1.0, z.h - 10)) + 5
+                    if self.visible(x - 40, y - 4, 80, 8, margin=0):
+                        self.draw_art("fx.wind", x, y, alpha=0.55 if z.kind == "wind" else 0.4, flip=z.force_x < 0,
+                                      tint=(255, 236, 200) if z.kind == "wind" else (200, 240, 255))
 
     def _collectibles(self, game) -> None:
         t = self.time

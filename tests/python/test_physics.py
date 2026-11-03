@@ -261,3 +261,16 @@ def test_switch_block_toggles_group_and_rising_lava_rises():
     assert not wall.active and any(e.type == "toggle" for e in g.events)
     lava = next(h for h in g.hazards if h.id == "lava")
     assert lava.y < 520
+
+
+def test_jump_out_of_water_onto_a_higher_bank():
+    pond = [{"id": "pond", "kind": "swim", "x": 0, "y": 470, "w": 400, "h": 150}]
+    plats = [{"id": "bottom", "kind": "ground", "x": 0, "y": 620, "w": 400, "h": 40},
+             {"id": "bank", "kind": "ground", "x": 400, "y": 448, "w": 800, "h": 152}]
+    g = game(zones=pond, platforms=plats, spawn={"x": 300, "y": 560}, exit={"id": "goal", "kind": "flag", "x": 1100, "y": 448},
+             checkpoints=[])
+    for _ in range(int(4 * 120)):
+        ticks(g, 1, right=True, jump=int(g.elapsed * 4) % 2 == 0)
+        if g.player.grounded and g.player.y + g.player.h <= 448:
+            break
+    assert g.player.y + g.player.h <= 448 and g.player.x > 400

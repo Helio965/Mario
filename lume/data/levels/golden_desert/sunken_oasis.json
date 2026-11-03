@@ -1,0 +1,556 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "sunken_oasis",
+ "name": "Oásis Soterrado",
+ "world": "golden_desert",
+ "role": "advanced",
+ "difficulty": 4,
+ "art": {
+  "set": "golden_desert",
+  "variant": "oasis",
+  "weather": "auto"
+ },
+ "music": "golden_desert_main",
+ "bounds": {
+  "width": 6000,
+  "height": 1240
+ },
+ "time_limit": 360,
+ "spawn": {
+  "x": 72,
+  "y": 418
+ },
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 5850,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 900,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 380,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "sandbed01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 900,
+   "y": 520,
+   "w": 80,
+   "h": 80
+  },
+  {
+   "id": "semisolid01",
+   "kind": "semisolid",
+   "x": 870,
+   "y": 360,
+   "w": 140,
+   "h": 14,
+   "style": "palm"
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 980,
+   "y": 448,
+   "w": 520,
+   "h": 152
+  },
+  {
+   "id": "pond_bed",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1500,
+   "y": 620,
+   "w": 400,
+   "h": 60
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1900,
+   "y": 448,
+   "w": 900,
+   "h": 152
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 2260,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "sandbed02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2800,
+   "y": 520,
+   "w": 80,
+   "h": 80
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2880,
+   "y": 448,
+   "w": 120,
+   "h": 152
+  },
+  {
+   "id": "sandbed03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3000,
+   "y": 520,
+   "w": 80,
+   "h": 80
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3080,
+   "y": 448,
+   "w": 120,
+   "h": 152
+  },
+  {
+   "id": "sandbed04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3200,
+   "y": 520,
+   "w": 80,
+   "h": 80
+  },
+  {
+   "id": "semisolid02",
+   "kind": "semisolid",
+   "x": 2820,
+   "y": 360,
+   "w": 120,
+   "h": 14,
+   "style": "palm"
+  },
+  {
+   "id": "semisolid03",
+   "kind": "semisolid",
+   "x": 3020,
+   "y": 340,
+   "w": 120,
+   "h": 14,
+   "style": "palm"
+  },
+  {
+   "id": "semisolid04",
+   "kind": "semisolid",
+   "x": 3220,
+   "y": 360,
+   "w": 120,
+   "h": 14,
+   "style": "palm"
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3280,
+   "y": 448,
+   "w": 920,
+   "h": 152
+  },
+  {
+   "id": "ground07",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4200,
+   "y": 400,
+   "w": 400,
+   "h": 200
+  },
+  {
+   "id": "ground08",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4600,
+   "y": 448,
+   "w": 700,
+   "h": 152
+  },
+  {
+   "id": "semisolid05",
+   "kind": "semisolid",
+   "x": 4650,
+   "y": 330,
+   "w": 110,
+   "h": 14,
+   "style": "palm"
+  },
+  {
+   "id": "semisolid06",
+   "kind": "semisolid",
+   "x": 4800,
+   "y": 270,
+   "w": 110,
+   "h": 14,
+   "style": "palm"
+  },
+  {
+   "id": "semisolid07",
+   "kind": "semisolid",
+   "x": 4950,
+   "y": 220,
+   "w": 110,
+   "h": 14,
+   "style": "palm"
+  },
+  {
+   "id": "ground09",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 5300,
+   "y": 448,
+   "w": 700,
+   "h": 152
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "x": 5420,
+   "y": 400,
+   "w": 56,
+   "h": 48,
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 5064,
+    "y": 846
+   },
+   "return": {
+    "x": 5492,
+    "y": 402
+   }
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4709,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4709,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4709,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 5378,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "x": 5266,
+   "y": 864,
+   "w": 56,
+   "h": 32,
+   "style": "pipe",
+   "warp": {
+    "x": 5492,
+    "y": 402
+   },
+   "return": {
+    "x": 5064,
+    "y": 846
+   }
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 1040,
+   "y": 410,
+   "count": 5
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 1560,
+   "y": 560,
+   "count": 6,
+   "spacing": 50,
+   "rise": 40
+  },
+  {
+   "id": "coins03",
+   "shape": "row",
+   "x": 2840,
+   "y": 320,
+   "count": 9,
+   "spacing": 48
+  },
+  {
+   "id": "coins04",
+   "shape": "row",
+   "x": 5104,
+   "y": 852,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_pond",
+   "kind": "relic",
+   "x": 1690,
+   "y": 586
+  },
+  {
+   "id": "relic_palms",
+   "kind": "relic",
+   "x": 4990,
+   "y": 172
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 5218,
+   "y": 850
+  }
+ ],
+ "items": [
+  {
+   "id": "item_star01",
+   "kind": "star",
+   "x": 5168,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "escaravelho_areia",
+   "x": 620,
+   "y": 448,
+   "patrol": [
+    520,
+    890
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "escaravelho_lancador",
+   "x": 2480,
+   "y": 448,
+   "patrol": [
+    2340,
+    2700
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "serpente_duna",
+   "x": 3620,
+   "y": 448,
+   "patrol": [
+    3320,
+    4190
+   ]
+  },
+  {
+   "id": "enemy04",
+   "species": "escaravelho_areia",
+   "x": 3950,
+   "y": 448,
+   "patrol": [
+    3860,
+    4190
+   ]
+  },
+  {
+   "id": "enemy05",
+   "species": "escaravelho_lancador",
+   "x": 4420,
+   "y": 400,
+   "patrol": [
+    4260,
+    4590
+   ]
+  },
+  {
+   "id": "enemy06",
+   "species": "tatu_bola",
+   "x": 4760,
+   "y": 448,
+   "patrol": [
+    4640,
+    4980
+   ]
+  },
+  {
+   "id": "enemy07",
+   "species": "abutre_filhote",
+   "x": 4980,
+   "y": 340,
+   "patrol": [
+    4800,
+    5200
+   ]
+  }
+ ],
+ "hazards": [],
+ "zones": [
+  {
+   "id": "quicksand01",
+   "kind": "quicksand",
+   "x": 900,
+   "y": 448,
+   "w": 80,
+   "h": 72
+  },
+  {
+   "id": "pond",
+   "kind": "swim",
+   "x": 1500,
+   "y": 470,
+   "w": 400,
+   "h": 150
+  },
+  {
+   "id": "quicksand02",
+   "kind": "quicksand",
+   "x": 2800,
+   "y": 448,
+   "w": 80,
+   "h": 72
+  },
+  {
+   "id": "quicksand03",
+   "kind": "quicksand",
+   "x": 3000,
+   "y": 448,
+   "w": 80,
+   "h": 72
+  },
+  {
+   "id": "quicksand04",
+   "kind": "quicksand",
+   "x": 3200,
+   "y": 448,
+   "w": 80,
+   "h": 72
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pond_relic",
+   "kind": "hidden_area",
+   "clue": "Brilho no fundo da lagoa",
+   "rewards": [
+    "relic_pond"
+   ]
+  },
+  {
+   "id": "palm_route",
+   "kind": "high_route",
+   "clue": "Copas de palmeiras em escada",
+   "rewards": [
+    "relic_palms"
+   ]
+  },
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "clue": "Cano com seta luminosa",
+   "rewards": [
+    "relic_room"
+   ],
+   "entry": "pipe_room_entry"
+  }
+ ],
+ "hints": [
+  {
+   "x": 800,
+   "text": "Areia movediça: não pare — pule várias vezes para sair."
+  },
+  {
+   "x": 1440,
+   "text": "A lagoa é segura: nade e salte para sair do outro lado."
+  },
+  {
+   "x": 2200,
+   "text": "O escaravelho ergue a bola de areia antes de arremessar."
+  }
+ ],
+ "events": [],
+ "checkpoints": [
+  {
+   "id": "cp_oasis",
+   "x": 2000,
+   "y": 418
+  }
+ ],
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 6000,
+   "h": 540,
+   "variant": "oasis"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 4709,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "notes": "Fase nova (Mundo 2-5): desafio avançado — areia movediça, lagoa do oásis com saída por salto, palmeiras como plataformas de mão única e o Escaravelho Lançador (apresentado aqui)."
+}

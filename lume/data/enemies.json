@@ -2606,6 +2606,52 @@
     "charge_speed": 320,
     "sight": 320
    }
+  },
+  {
+   "id": "escaravelho_rei",
+   "name": "Escaravelho-Rei",
+   "role_reference": "chefe de mundo com emboscada subterrânea",
+   "description": "Escaravelho colossal de carapaça dourada que nada sob a areia seguindo Lume, avisa com um jato de areia antes de irromper, cai de costas atordoado (única abertura para o pisão) e depois rola pela arena. Na segunda fase arremessa bolas de areia ao irromper.",
+   "habitats": [
+    "desert",
+    "fortress"
+   ],
+   "movement_type": "burrow",
+   "difficulty_tier": 4,
+   "behavior": "scarab_king",
+   "abilities": [
+    "burrow",
+    "emerge",
+    "spiked_top",
+    "arc_projectile"
+   ],
+   "weaknesses": [
+    "stomp"
+   ],
+   "size": [
+    78,
+    52
+   ],
+   "hp": 3,
+   "speed": 0,
+   "score": 5000,
+   "animation_set": "scarab_king",
+   "animation_states": [
+    "intro",
+    "burrow",
+    "telegraph",
+    "erupt",
+    "dazed",
+    "roll",
+    "recover",
+    "hurt",
+    "defeat"
+   ],
+   "visual_theme": "desert",
+   "defeat": "três pisões enquanto estiver de costas",
+   "introduced_in": "scarab_pyramid",
+   "boss": true,
+   "params": {}
   }
  ]
 }

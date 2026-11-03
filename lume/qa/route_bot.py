@@ -318,6 +318,24 @@ def play_route(level: LevelSpec, seconds: float = 100.0, *, run: bool = True, ga
                 inp.jump = int(game.elapsed * 3) % 2 == 0
         if not p.swimming or boss_mode:
             inp.jump = state["hold"] > 0 or (boss_mode and boss is not None and not p.grounded)
+        in_sand = any(z.kind == "quicksand" and z.x <= p.x + p.w / 2 < z.x + z.w and z.y - 4 <= p.y + p.h <= z.y + z.h + 4
+                      for z in game.zones)
+        if in_sand:
+            # quicksand: keep moving and hop repeatedly to climb out
+            inp.right, inp.left = True, False
+            inp.jump = int(game.elapsed * 6) % 2 == 0
+        if p.swimming and not boss_mode:
+            # swim toward the far bank: one stroke per press (release once the
+            # stroke is spent) and keep holding while rising, so breaking the
+            # surface with jump held hops onto the bank
+            inp.right, inp.left = True, False
+            inp.jump = p.vy < -40 or not game.previous_jump
+            state["surfacing"] = 0.5
+        elif state.get("surfacing", 0.0) > 0 and not boss_mode:
+            state["surfacing"] = 0.0 if p.grounded else state["surfacing"] - step
+            if p.vy < 0 and not p.grounded:
+                inp.jump = True
+                inp.right, inp.left = True, False
         if p.launched:
             inp.jump = True
             inp.right, inp.left = True, False

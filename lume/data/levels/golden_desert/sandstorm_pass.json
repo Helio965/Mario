@@ -1,0 +1,453 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "sandstorm_pass",
+ "name": "Passagem da Tempestade",
+ "world": "golden_desert",
+ "role": "special",
+ "difficulty": 3,
+ "art": {
+  "set": "golden_desert",
+  "variant": "storm",
+  "weather": "auto"
+ },
+ "music": "golden_desert_main",
+ "bounds": {
+  "width": 5600,
+  "height": 1240
+ },
+ "time_limit": 330,
+ "spawn": {
+  "x": 72,
+  "y": 418
+ },
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 5450,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 1100,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 480,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1220,
+   "y": 448,
+   "w": 300,
+   "h": 152
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1630,
+   "y": 448,
+   "w": 1370,
+   "h": 152
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3200,
+   "y": 448,
+   "w": 700,
+   "h": 152
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "x": 3740,
+   "y": 400,
+   "w": 56,
+   "h": 48,
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 3804,
+    "y": 846
+   },
+   "return": {
+    "x": 3812,
+    "y": 402
+   }
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3449,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3449,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3449,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4118,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "x": 4006,
+   "y": 864,
+   "w": 56,
+   "h": 32,
+   "style": "pipe",
+   "warp": {
+    "x": 3812,
+    "y": 402
+   },
+   "return": {
+    "x": 3804,
+    "y": 846
+   }
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3990,
+   "y": 448,
+   "w": 510,
+   "h": 152
+  },
+  {
+   "id": "ledge01",
+   "kind": "ledge",
+   "x": 4080,
+   "y": 330,
+   "w": 110,
+   "h": 24,
+   "style": "ruin"
+  },
+  {
+   "id": "ledge02",
+   "kind": "ledge",
+   "x": 4240,
+   "y": 262,
+   "w": 110,
+   "h": 24,
+   "style": "ruin"
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4610,
+   "y": 448,
+   "w": 990,
+   "h": 152
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 4720,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "coin"
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 340,
+   "y": 410,
+   "count": 8,
+   "spacing": 60
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 1520,
+   "y": 380,
+   "count": 4,
+   "spacing": 30,
+   "rise": 30
+  },
+  {
+   "id": "coins03",
+   "shape": "row",
+   "x": 2300,
+   "y": 410,
+   "count": 6,
+   "spacing": 70
+  },
+  {
+   "id": "coins04",
+   "shape": "diagonal",
+   "x": 3020,
+   "y": 380,
+   "count": 3,
+   "spacing": 40,
+   "rise": 20
+  },
+  {
+   "id": "coins05",
+   "shape": "row",
+   "x": 3844,
+   "y": 852,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins06",
+   "shape": "row",
+   "x": 4096,
+   "y": 296,
+   "count": 3
+  },
+  {
+   "id": "coins07",
+   "shape": "row",
+   "x": 5220,
+   "y": 410,
+   "count": 5
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_gust",
+   "kind": "relic",
+   "x": 3140,
+   "y": 312
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 3958,
+   "y": 850
+  },
+  {
+   "id": "relic_ruins",
+   "kind": "relic",
+   "x": 4282,
+   "y": 216
+  }
+ ],
+ "items": [
+  {
+   "id": "item_heart01",
+   "kind": "heart",
+   "x": 3908,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "escaravelho_areia",
+   "x": 760,
+   "y": 448,
+   "patrol": [
+    640,
+    1090
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "cacto_sentinela",
+   "x": 1820,
+   "y": 448,
+   "patrol": [
+    1790,
+    1850
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "serpente_duna",
+   "x": 2560,
+   "y": 448,
+   "patrol": [
+    2200,
+    2990
+   ]
+  },
+  {
+   "id": "enemy04",
+   "species": "escorpiao_couraca",
+   "x": 3520,
+   "y": 448,
+   "patrol": [
+    3360,
+    3700
+   ]
+  },
+  {
+   "id": "enemy05",
+   "species": "abutre_filhote",
+   "x": 4320,
+   "y": 340,
+   "patrol": [
+    4100,
+    4480
+   ]
+  },
+  {
+   "id": "enemy06",
+   "species": "serpente_duna",
+   "x": 4900,
+   "y": 448,
+   "patrol": [
+    4660,
+    5200
+   ]
+  }
+ ],
+ "hazards": [],
+ "zones": [
+  {
+   "id": "wind01",
+   "kind": "wind",
+   "x": 300,
+   "y": 0,
+   "w": 600,
+   "h": 540,
+   "force_x": 80
+  },
+  {
+   "id": "wind02",
+   "kind": "wind",
+   "x": 1100,
+   "y": 0,
+   "w": 900,
+   "h": 540,
+   "force_x": -120,
+   "period": 3.6,
+   "duty": 0.45
+  },
+  {
+   "id": "wind03",
+   "kind": "wind",
+   "x": 3000,
+   "y": 0,
+   "w": 600,
+   "h": 540,
+   "force_x": 140
+  },
+  {
+   "id": "wind04",
+   "kind": "wind",
+   "x": 3900,
+   "y": 0,
+   "w": 1000,
+   "h": 540,
+   "force_x": -130,
+   "period": 3.2,
+   "duty": 0.5
+  }
+ ],
+ "secrets": [
+  {
+   "id": "gust_relic",
+   "kind": "optional_challenge",
+   "clue": "Moedas soltas no ar sobre o vão do vento a favor",
+   "rewards": [
+    "relic_gust"
+   ]
+  },
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "clue": "Cano com seta luminosa",
+   "rewards": [
+    "relic_room"
+   ],
+   "entry": "pipe_room_entry"
+  },
+  {
+   "id": "ruins_route",
+   "kind": "high_route",
+   "clue": "Colunas caídas formam degraus contra o vento",
+   "rewards": [
+    "relic_ruins"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 200,
+   "text": "O vento empurra Lume: observe a areia voando antes de saltar."
+  },
+  {
+   "x": 1150,
+   "text": "Rajadas vêm e vão: salte nas calmarias."
+  },
+  {
+   "x": 2220,
+   "text": "Um rastro de areia se aproxima: pule quando ele tremer."
+  }
+ ],
+ "events": [],
+ "checkpoints": [
+  {
+   "id": "cp_dunes",
+   "x": 2150,
+   "y": 418
+  }
+ ],
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 5600,
+   "h": 540,
+   "variant": "storm"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 3449,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "notes": "Fase nova (Mundo 2-4): vento em rajadas (contra e a favor) é a mecânica especial; apresenta a Serpente-de-Duna."
+}

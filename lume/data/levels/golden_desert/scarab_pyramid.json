@@ -1,0 +1,497 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "scarab_pyramid",
+ "name": "Pirâmide do Escaravelho",
+ "world": "golden_desert",
+ "role": "fortress",
+ "difficulty": 4,
+ "art": {
+  "set": "golden_desert",
+  "variant": "fortress",
+  "weather": "none"
+ },
+ "music": "golden_desert_fortress",
+ "bounds": {
+  "width": 4600,
+  "height": 1240
+ },
+ "time_limit": 320,
+ "spawn": {
+  "x": 72,
+  "y": 418
+ },
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 4400,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 0,
+   "y": 448,
+   "w": 700,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 260,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "crumble01",
+   "kind": "crumble",
+   "x": 712,
+   "y": 448,
+   "w": 96,
+   "h": 20
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 820,
+   "y": 448,
+   "w": 780,
+   "h": 152
+  },
+  {
+   "id": "sandbed01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1000,
+   "y": 520,
+   "w": 80,
+   "h": 80
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 1080,
+   "y": 448,
+   "w": 520,
+   "h": 152
+  },
+  {
+   "id": "ledge01",
+   "kind": "ledge",
+   "x": 990,
+   "y": 372,
+   "w": 100,
+   "h": 22,
+   "style": "ruin"
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 1600,
+   "y": 448,
+   "w": 1360,
+   "h": 152
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 1760,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "brick01",
+   "kind": "brick",
+   "x": 2400,
+   "y": 372,
+   "w": 80,
+   "h": 22
+  },
+  {
+   "id": "brick02",
+   "kind": "brick",
+   "x": 2520,
+   "y": 304,
+   "w": 80,
+   "h": 22
+  },
+  {
+   "id": "brick03",
+   "kind": "brick",
+   "x": 2640,
+   "y": 236,
+   "w": 80,
+   "h": 22
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "x": 2860,
+   "y": 400,
+   "w": 56,
+   "h": 48,
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 2494,
+    "y": 846
+   },
+   "return": {
+    "x": 2932,
+    "y": 402
+   }
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2139,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2139,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2139,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2808,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "x": 2696,
+   "y": 864,
+   "w": 56,
+   "h": 32,
+   "style": "pipe",
+   "warp": {
+    "x": 2932,
+    "y": 402
+   },
+   "return": {
+    "x": 2494,
+    "y": 846
+   }
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 3000,
+   "y": 448,
+   "w": 880,
+   "h": 152
+  },
+  {
+   "id": "gate_left",
+   "kind": "switch",
+   "x": 3000,
+   "y": 300,
+   "w": 40,
+   "h": 148,
+   "style": "gate",
+   "active": false
+  },
+  {
+   "id": "arena_pillar_left",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 3000,
+   "y": 0,
+   "w": 40,
+   "h": 300
+  },
+  {
+   "id": "gate_right",
+   "kind": "switch",
+   "x": 3840,
+   "y": 300,
+   "w": 40,
+   "h": 148,
+   "style": "gate",
+   "active": true
+  },
+  {
+   "id": "arena_pillar_right",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 3840,
+   "y": 0,
+   "w": 40,
+   "h": 300
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 3880,
+   "y": 448,
+   "w": 720,
+   "h": 152
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 140,
+   "y": 410,
+   "count": 4
+  },
+  {
+   "id": "coins02",
+   "shape": "row",
+   "x": 2534,
+   "y": 852,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins03",
+   "shape": "row",
+   "x": 3920,
+   "y": 410,
+   "count": 6
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_trap",
+   "kind": "relic",
+   "x": 1030,
+   "y": 330
+  },
+  {
+   "id": "relic_gallery",
+   "kind": "relic",
+   "x": 2672,
+   "y": 190
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 2648,
+   "y": 850
+  }
+ ],
+ "items": [
+  {
+   "id": "item_heart01",
+   "kind": "heart",
+   "x": 2598,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "escorpiao_couraca",
+   "x": 1300,
+   "y": 448,
+   "patrol": [
+    1180,
+    1500
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "escaravelho_lancador",
+   "x": 1520,
+   "y": 448,
+   "patrol": [
+    1420,
+    1590
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "tatu_bola",
+   "x": 1960,
+   "y": 448,
+   "patrol": [
+    1840,
+    2200
+   ]
+  },
+  {
+   "id": "enemy04",
+   "species": "escaravelho_areia",
+   "x": 2760,
+   "y": 448,
+   "patrol": [
+    2700,
+    2950
+   ]
+  },
+  {
+   "id": "enemy05",
+   "species": "escaravelho_rei",
+   "x": 3460,
+   "y": 448,
+   "patrol": [
+    3040,
+    3840
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_spikes01",
+   "kind": "spikes",
+   "x": 420,
+   "y": 434,
+   "w": 48,
+   "h": 14
+  },
+  {
+   "id": "hz_moving01",
+   "kind": "moving",
+   "x": 600,
+   "y": 356,
+   "w": 26,
+   "h": 26,
+   "range": 50,
+   "speed": 1.5
+  },
+  {
+   "id": "hz_spikes02",
+   "kind": "spikes",
+   "x": 700,
+   "y": 520,
+   "w": 120,
+   "h": 14
+  },
+  {
+   "id": "hz_moving02",
+   "kind": "moving",
+   "x": 2260,
+   "y": 352,
+   "w": 26,
+   "h": 26,
+   "range": 46,
+   "speed": 1.7
+  }
+ ],
+ "zones": [
+  {
+   "id": "quicksand01",
+   "kind": "quicksand",
+   "x": 1000,
+   "y": 448,
+   "w": 80,
+   "h": 72
+  }
+ ],
+ "secrets": [
+  {
+   "id": "trap_relic",
+   "kind": "optional_challenge",
+   "clue": "Laje sobre a armadilha de areia",
+   "rewards": [
+    "relic_trap"
+   ]
+  },
+  {
+   "id": "gallery",
+   "kind": "high_route",
+   "clue": "Escada de tijolos sobe até a galeria",
+   "rewards": [
+    "relic_gallery"
+   ]
+  },
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "clue": "Cano com seta luminosa",
+   "rewards": [
+    "relic_room"
+   ],
+   "entry": "pipe_room_entry"
+  }
+ ],
+ "hints": [
+  {
+   "x": 2950,
+   "text": "Quando ele cair de costas, é a hora de pisar."
+  }
+ ],
+ "events": [
+  {
+   "id": "arena",
+   "kind": "boss_arena",
+   "x": 3090,
+   "params": {
+    "lock": [
+     2960,
+     0,
+     960,
+     540
+    ],
+    "close": [
+     "gate_left"
+    ],
+    "open": [
+     "gate_right"
+    ],
+    "text": "O Escaravelho-Rei emerge da areia!"
+   }
+  }
+ ],
+ "checkpoints": [
+  {
+   "id": "cp_hall",
+   "x": 1650,
+   "y": 418
+  }
+ ],
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 4600,
+   "h": 540,
+   "variant": "fortress"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2139,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "notes": "Fase nova (Mundo 2-6): interior da pirâmide com armadilhas de areia, chamas oscilantes, galeria de tijolos e a arena do Escaravelho-Rei (emboscada subterrânea, janela de pisão quando ele cai de costas)."
+}
