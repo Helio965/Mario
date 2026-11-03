@@ -42,6 +42,7 @@ class Behavior:
     """Base: guarda FSM, percepção e quadro-negro; subclasses definem estados e movimento."""
 
     kind = "base"
+    is_boss = False
     params = ArchetypeParams()
 
     def __init__(self, enemy: Enemy) -> None:

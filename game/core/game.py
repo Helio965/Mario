@@ -23,10 +23,17 @@ from game.core.types import (
 )
 from game.enemies.behaviors import create_behavior, update_modern
 from game.enemies.legacy import update_enemies
+from game.enemies.registry import known_enemy_kinds  # noqa: F401 - registra arquétipos
 from game.physics.collision import approach, move_body, overlaps
 from game.physics.movement import FIXED_DT, LEGACY_PROFILE, MovementProfile
 
 VIEW_WIDTH = 960
+
+
+def is_boss(enemy: Enemy) -> bool:
+    return enemy.kind == "boss" or bool(getattr(enemy.behavior, "is_boss", False))
+
+
 VIEW_HEIGHT = 540
 
 
@@ -295,9 +302,7 @@ class Game:
         update_modern(self, dt)
         update_powers(self, dt, input_state)
         exit_box = Rect(x=self.level.exit.x - 12, y=self.level.exit.y - 110, w=44, h=110)
-        if overlaps(self.player, exit_box) and not any(
-            e.kind == "boss" and e.alive for e in self.enemies
-        ):
+        if overlaps(self.player, exit_box) and self.boss() is None:
             self.finish()
         for particle in self.particles:
             particle.life -= dt
@@ -358,4 +363,5 @@ class Game:
 
     # -------------------------------------------------------------- consultas
     def boss(self) -> Enemy | None:
-        return next((e for e in self.enemies if e.kind == "boss" and e.alive), None)
+        """Guardião vivo (legado ``kind == "boss"`` ou arquétipo moderno marcado ``is_boss``)."""
+        return next((e for e in self.enemies if e.alive and is_boss(e)), None)

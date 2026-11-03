@@ -1,0 +1,22 @@
+{
+  "id": "lume",
+  "name": {
+    "pt-BR": "Lume",
+    "en-US": "Lume"
+  },
+  "palette": {
+    "primary": "#62ccb9",
+    "secondary": "#ddc394",
+    "accent": "#ffdfb0"
+  },
+  "delta": {},
+  "abilities": [
+    "fire"
+  ],
+  "damage_model": "standard",
+  "unlock": {
+    "world": 1
+  },
+  "voice_pitch": 1.0,
+  "description_key": "characters.lume.description"
+}

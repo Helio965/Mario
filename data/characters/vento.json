@@ -1,0 +1,37 @@
+{
+  "id": "vento",
+  "name": {
+    "pt-BR": "Vento",
+    "en-US": "Vento"
+  },
+  "palette": {
+    "primary": "#3fa34d",
+    "secondary": "#1d3557",
+    "accent": "#f1faee"
+  },
+  "delta": {
+    "jump_speed_mul": 1.1,
+    "ground_friction_mul": 0.6,
+    "ice_friction_mul": 0.75,
+    "ground_accel_mul": 0.9,
+    "air_accel_mul": 0.9
+  },
+  "abilities": [
+    "scuttle",
+    "fire"
+  ],
+  "damage_model": "standard",
+  "unlock": {
+    "world": 2
+  },
+  "voice_pitch": 0.85,
+  "clips": {
+    "fall": {
+      "frames": 4,
+      "fps": 14,
+      "loop": true,
+      "state": "scuttle"
+    }
+  },
+  "description_key": "characters.vento.description"
+}

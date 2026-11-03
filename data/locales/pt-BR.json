@@ -141,5 +141,27 @@
         "Será que ouvi alguma coisa?"
       ]
     }
+  },
+  "characters": {
+    "lume": {
+      "name": "Lume",
+      "description": "Portador da luz. Equilibrado em tudo: salto, corrida e coragem."
+    },
+    "vento": {
+      "name": "Vento",
+      "description": "Irmão mais alto e tímido. Salta mais alto, escorrega mais e desce devagar ao segurar o salto."
+    },
+    "fagulha": {
+      "name": "Fagulha",
+      "description": "Rápida e baixinha. Salta menos, mas, agachada por meio segundo, dispara um salto carregado."
+    },
+    "aurora": {
+      "name": "Aurora",
+      "description": "Planadora. Corre um pouco menos e pode flutuar por um instante no ar, uma vez por salto."
+    },
+    "pirilampo": {
+      "name": "Pirilampo",
+      "description": "Para quem está começando: inimigos não ferem, mas poços, lava e o tempo continuam valendo."
+    }
   }
 }

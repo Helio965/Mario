@@ -1,0 +1,26 @@
+{
+  "id": "aurora",
+  "name": {
+    "pt-BR": "Aurora",
+    "en-US": "Aurora"
+  },
+  "palette": {
+    "primary": "#b388eb",
+    "secondary": "#3a2d5c",
+    "accent": "#f7e3ff"
+  },
+  "delta": {
+    "run_speed_mul": 0.93,
+    "ground_accel_mul": 1.1
+  },
+  "abilities": [
+    "float",
+    "fire"
+  ],
+  "damage_model": "standard",
+  "unlock": {
+    "world": 4
+  },
+  "voice_pitch": 1.1,
+  "description_key": "characters.aurora.description"
+}

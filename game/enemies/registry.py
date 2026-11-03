@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import game.bosses.boss  # noqa: F401 - registra o arquétipo 'guardian'
 from game.core.types import ENEMY_KINDS
 from game.enemies.behaviors import ARCHETYPES
 
