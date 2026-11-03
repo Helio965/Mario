@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 from game.core.game import Game
 from game.core.types import Enemy, InputState, Level
 from game.physics.movement import LEGACY_PROFILE, MovementProfile
+from tests.support.fairness_bot import FairnessBot, arena_geometry
 
 STEP = 1 / 120
 
@@ -81,6 +82,7 @@ def play_campaign_route(
     deaths = powers = boss_hits = 0
     running = run
     plan: dict[str, object] = {}
+    bot: FairnessBot | None = None  # guardiões modernos: o robô de justiça assume o controle
 
     def steer(inp: InputState, center: float, run_now: bool = False) -> None:
         p = game.player
@@ -106,19 +108,37 @@ def play_campaign_route(
         state["jump_cooldown"] = max(0.0, state["jump_cooldown"] - STEP)
         inp = InputState(right=True, run=running, ability=True)
         reason = "corrida"
-        boss: Enemy | None = next((e for e in game.enemies if e.alive and e.kind == "boss"), None)
-        if boss is not None and p.x > boss.patrol[0] - 180:
-            boss_mode = True
+        boss: Enemy | None = game.boss()
+        modern = boss is not None and boss.behavior is not None
+        if boss is not None and not boss_mode:
+            if modern:
+                # O robô só assume com o jogador já sobre o chão da arena (o vão ou a lava
+                # antes dela são do condutor comum).
+                _, (arena_start, _) = arena_geometry(game, boss)
+                boss_mode = p.grounded and p.x >= arena_start
+            else:
+                boss_mode = p.x > boss.patrol[0] - 180
 
         if game.status == "dead":
             goal = None
             collecting = False
             boss_mode = False
+            bot = None
             state["jump_hold"] = 0.0
             state["jump_cooldown"] = 0.0
+        elif boss_mode and boss is not None and modern:
+            reason = "guardião"
+            if bot is None:
+                bot = FairnessBot.for_game(game, boss)
+            inp = bot.update()
         elif boss_mode and boss is not None:
             reason = "chefe"
             _fight_boss(game, boss, inp, steer, jump)
+        elif boss_mode and boss is None and p.x > level.exit.x + 30:
+            reason = "volta à saída"  # o guardião caiu com o jogador além da bandeira
+            steer(inp, level.exit.x + 8)
+            if p.grounded and abs(p.x + p.w / 2 - (level.exit.x + 8)) < 10:
+                inp.left = inp.right = False
         else:
             if goal is None and p.grounded:
                 goal = next(
@@ -242,7 +262,8 @@ def play_campaign_route(
             if state["jump_hold"] > 0 and goal is None:
                 inp.run = jump_run
 
-        inp.jump = state["jump_hold"] > 0 or (boss_mode and boss is not None and not p.grounded)
+        if not (boss_mode and boss is not None and modern):
+            inp.jump = state["jump_hold"] > 0 or (boss_mode and boss is not None and not p.grounded)
         if (
             smart_air
             and not boss_mode

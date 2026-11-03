@@ -149,7 +149,16 @@ Oculus flutuantes, 1 perigo na 1.ª fase.
   `pounce`, `slam`, `shoot`, `throw`, `call`, `teleport`, `dive`, `wave`,
   `charge`, `leap`, `retaliate`) para o futuro atlas de sprites.
 * O validador de fases exige exatamente um guardião na 3.ª fase de cada mundo
-  (`game/levels/validator.py`).
+  (`is_boss_kind`, `game/levels/validator.py`) e dispensa chão sob guardiões
+  flutuantes (`floats`).
+* **Campanha**: os cinco guardiões estão nas fases 1-3, 2-3, 3-3, 4-3 e 5-3
+  (`data/levels`), com as arenas ajustadas (ver `docs/FASES.md`). O condutor de
+  campanha (`tests/gameplay/route_player.py`) entrega o controle ao robô de
+  justiça ao pisar no chão da arena e o retoma quando o guardião cai. Resultado
+  com previsão de pouso: perfil legado 5/5 fases concluídas sem perder vida;
+  perfil calibrado 4/5 (2-3 fica presa na travessia antes da arena; 3-3 perde
+  uma vida no gelo antes da arena, não no combate). Tempo total das rotas de
+  guardião no legado: 1-3 46 s · 2-3 34 s · 3-3 113 s · 4-3 49 s · 5-3 33 s.
 
 ## 6. Como ajustar
 
@@ -170,9 +179,9 @@ indicam a semente e a fase em que levou dano ou não venceu em 150 s.
   ponte de basalto, lava cíclica, corredor e alavanca (Fornalho). Hoje estão
   substituídas por janelas de vulnerabilidade equivalentes e marcadas como
   PENDENTE nos comentários do módulo.
-* **Colocação na campanha**: as fases 1-3 … 5-3 ainda usam o chefe legado
-  (`kind: "boss"`); a troca pelos guardiões faz parte da reconstrução das
-  fases (câmera travada na arena, portão, placa com o nome).
+* **Encenação da arena**: câmera travada na arena, portão que fecha, placa com o
+  nome e cinemáticas de entrada/derrota (os guardiões já estão nas fases, mas a
+  arena ainda é o chão contínuo original com a patrulha alargada).
 * **Sprites e animações** próprias, **falas** (`bosses.*.intro`, `bosses.*.name`
   nos arquivos de localização) e cinemáticas de entrada/derrota.
 * Atordoamento de 0,5–0,6 s de quem está no chão quando a onda de choque passa

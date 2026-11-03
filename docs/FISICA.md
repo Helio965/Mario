@@ -61,9 +61,9 @@ O perfil calibrado **não é o padrão** ainda. As 15 fases foram desenhadas par
 | --- | --- | --- |
 | Original (port fiel do TS) | legado | 15/15 concluídas (4-2 com duas mortes, 5-3 com uma) — entradas idênticas às do condutor TS |
 | Com previsão de pouso (`smart_air`, simulação-sombra para escolher acelerar/soltar/frear no ar) | legado | **15/15 concluídas sem perder vidas** |
-| Com previsão de pouso | calibrado | 12/15; pendentes 2-3 (fica preso antes da arena), 3-3 (gelo + arena) e 5-3 (arena final) — o combate do condutor contra guardiões usa a temporização de arco do legado |
+| Com previsão de pouso | calibrado | 14/15 (3-3 com uma vida perdida no gelo); pendente 2-3 — o condutor fica preso na travessia antes da arena. Nas arenas o controle passa ao robô de justiça, que prevê a trajetória com a gravidade e a aceleração aérea do perfil em uso |
 
-Plano: adotar o calibrado como padrão junto com a reconstrução das fases e dos chefes (Marcos 7–8), quando o condutor de combate for atualizado e as três fases pendentes forem revalidadas. A opção de perfil fica exposta em `Game(levels, profile)`.
+Plano: adotar o calibrado como padrão junto com a reconstrução das fases (Marco 8), quando a travessia de 2-3 for revalidada. A opção de perfil fica exposta em `Game(levels, profile)`.
 
 ## Colisões
 

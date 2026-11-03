@@ -9,6 +9,7 @@ import pytest
 
 from game.core.game import Game
 from game.core.types import InputState
+from game.enemies.registry import is_boss_kind
 from game.levels.loader import THEMES, load_levels
 
 LEVELS = load_levels()
@@ -21,7 +22,7 @@ def test_five_worlds_with_three_distinct_maps_and_one_boss_each() -> None:
     for world in range(1, 6):
         levels = [lvl for lvl in LEVELS if lvl.world == world]
         assert len(levels) == 3
-        assert len([e for e in levels[2].enemies if e.kind == "boss"]) == 1
+        assert len([e for e in levels[2].enemies if is_boss_kind(e.kind)]) == 1
         assert len({json.dumps([[p.x, p.y, p.w] for p in lvl.platforms]) for lvl in levels}) == 3
 
 

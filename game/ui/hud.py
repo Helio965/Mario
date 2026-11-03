@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from game.core.game import Game
+from game.core.game import Game, is_boss
 from game.core.types import Enemy
 from game.rendering.sprites import PLAYER_PALETTE, PLAYER_UPPER
 from game.settings import VIEW_HEIGHT, VIEW_WIDTH
@@ -44,7 +44,7 @@ class Hud:
             (
                 enemy
                 for enemy in game.enemies
-                if enemy.kind == "boss" and enemy.alive and abs(enemy.x - px) < BOSS_RANGE
+                if is_boss(enemy) and enemy.alive and abs(enemy.x - px) < BOSS_RANGE
             ),
             None,
         )

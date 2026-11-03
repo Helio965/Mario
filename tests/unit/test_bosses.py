@@ -1,4 +1,8 @@
-"""Port de ``bosses.test.ts``: os cinco guardiões reais da campanha."""
+"""Port de ``bosses.test.ts``: o chefe legado (``kind: "boss"``) nas fases de referência.
+
+As fases atuais já usam os cinco guardiões (``tests/unit/test_guardians.py``); este port
+preserva o comportamento do chefe original sobre a cópia congelada das fases.
+"""
 
 from __future__ import annotations
 
@@ -9,10 +13,10 @@ import pytest
 from game.core.game import Game
 from game.core.types import InputState, ItemSpec, Level, Projectile, Vec
 from game.enemies.legacy import hit_enemy
-from game.levels.loader import load_levels
 from game.physics.movement import FIXED_DT
+from tests.unit.golden import reference_levels
 
-LEVELS = load_levels()
+LEVELS = reference_levels()  # chefe legado: fases como exportadas do TypeScript
 BOSS_LEVELS = [lvl for lvl in LEVELS if any(e.kind == "boss" for e in lvl.enemies)]
 
 

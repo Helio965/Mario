@@ -63,4 +63,4 @@ O resultado fica em `dist\Lume\` (ver `docs/DISTRIBUICAO.md`). O executável loc
 | --- | --- |
 | Instalação com `pip install -e ".[dev]"` | verificada em Linux (CI) e Windows (CI `windows-latest`) quando o workflow for executado |
 | Execução local com janela no Windows | **não verificada nesta sessão** (ambiente de desenvolvimento sem Windows nem tela); a execução headless é testada em CI |
-| Executável PyInstaller | ver `docs/DISTRIBUICAO.md` |
+| Executável PyInstaller | build e fumaça sem janela verificados no Linux; no Windows o job `windows-exe` do CI empacota e publica `dist/Lume` como artefato (ver `docs/DISTRIBUICAO.md`) |

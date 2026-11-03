@@ -1,0 +1,169 @@
+{
+ "format": "lume-level/1",
+ "reference_commit": "b40c39ca77026de4101817b8a8f7198f6e870ab9",
+ "source": "Exportado de src/data/levels.ts (TypeScript) no commit de referência; dados preservados sem alteração.",
+ "themes": [
+  {
+   "name": "Reino Verde",
+   "subtitle": "Colinas, canais e pomares",
+   "sky": "#88d5ed",
+   "far": "#70ad91",
+   "near": "#438568",
+   "ground": "#a97743",
+   "top": "#75bc4b",
+   "accent": "#ffda6b",
+   "weather": "none"
+  },
+  {
+   "name": "Deserto Dourado",
+   "subtitle": "Dunas e templos sob o sol",
+   "sky": "#f8ce8a",
+   "far": "#daae77",
+   "near": "#bb8b60",
+   "ground": "#be8652",
+   "top": "#edbc6e",
+   "accent": "#79d2c2",
+   "weather": "sand"
+  },
+  {
+   "name": "Montanhas Geladas",
+   "subtitle": "Encostas, pontes e neve",
+   "sky": "#b9d9ef",
+   "far": "#92b2cc",
+   "near": "#6989aa",
+   "ground": "#7f95ac",
+   "top": "#e0f7ff",
+   "accent": "#ffd775",
+   "weather": "snow"
+  },
+  {
+   "name": "Floresta Encantada",
+   "subtitle": "Copas luminosas e ruínas",
+   "sky": "#223a49",
+   "far": "#2e5260",
+   "near": "#24564b",
+   "ground": "#705847",
+   "top": "#66b887",
+   "accent": "#dcc178",
+   "weather": "spores"
+  },
+  {
+   "name": "Fortaleza Vulcânica",
+   "subtitle": "Basalto, brasa e a última luz",
+   "sky": "#302637",
+   "far": "#594050",
+   "near": "#7b4742",
+   "ground": "#53424b",
+   "top": "#a37666",
+   "accent": "#ffb45d",
+   "weather": "embers"
+  }
+ ],
+ "levels": [
+  {
+   "id": "1-1",
+   "name": "Primeiros Passos",
+   "world": 1,
+   "stage": 1,
+   "file": "1-1.json"
+  },
+  {
+   "id": "1-2",
+   "name": "Canais do Vale",
+   "world": 1,
+   "stage": 2,
+   "file": "1-2.json"
+  },
+  {
+   "id": "1-3",
+   "name": "Guardião do Pomar",
+   "world": 1,
+   "stage": 3,
+   "file": "1-3.json"
+  },
+  {
+   "id": "2-1",
+   "name": "Dunas ao Vento",
+   "world": 2,
+   "stage": 1,
+   "file": "2-1.json"
+  },
+  {
+   "id": "2-2",
+   "name": "Pontes do Cânion",
+   "world": 2,
+   "stage": 2,
+   "file": "2-2.json"
+  },
+  {
+   "id": "2-3",
+   "name": "Templo das Areias",
+   "world": 2,
+   "stage": 3,
+   "file": "2-3.json"
+  },
+  {
+   "id": "3-1",
+   "name": "Lago de Cristal",
+   "world": 3,
+   "stage": 1,
+   "file": "3-1.json"
+  },
+  {
+   "id": "3-2",
+   "name": "Escalada Azul",
+   "world": 3,
+   "stage": 2,
+   "file": "3-2.json"
+  },
+  {
+   "id": "3-3",
+   "name": "Coração da Nevasca",
+   "world": 3,
+   "stage": 3,
+   "file": "3-3.json"
+  },
+  {
+   "id": "4-1",
+   "name": "Copas Luminosas",
+   "world": 4,
+   "stage": 1,
+   "file": "4-1.json"
+  },
+  {
+   "id": "4-2",
+   "name": "Ruínas dos Vagalumes",
+   "world": 4,
+   "stage": 2,
+   "file": "4-2.json"
+  },
+  {
+   "id": "4-3",
+   "name": "A Árvore Ancestral",
+   "world": 4,
+   "stage": 3,
+   "file": "4-3.json"
+  },
+  {
+   "id": "5-1",
+   "name": "Pontes de Basalto",
+   "world": 5,
+   "stage": 1,
+   "file": "5-1.json"
+  },
+  {
+   "id": "5-2",
+   "name": "Fornalha dos Ecos",
+   "world": 5,
+   "stage": 2,
+   "file": "5-2.json"
+  },
+  {
+   "id": "5-3",
+   "name": "A Última Chama",
+   "world": 5,
+   "stage": 3,
+   "file": "5-3.json"
+  }
+ ]
+}

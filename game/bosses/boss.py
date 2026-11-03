@@ -635,7 +635,9 @@ DEFAULT_GUARDIAN = BossDefinition(
             [
                 leap_attack(),
                 charge_attack(telegraph=0.35, active=0.8),
-                shoot_attack(count=3, spread=70, telegraph=0.4, name="volley"),  # verbo novo da fase
+                shoot_attack(
+                    count=3, spread=70, telegraph=0.4, name="volley"
+                ),  # verbo novo da fase
             ],
             idle_time=0.6,
             speed_multiplier=1.3,
@@ -656,6 +658,8 @@ def register_guardian(
 
         def __init__(self, enemy: Enemy) -> None:
             super().__init__(enemy, definition)
+
+    _Bound.definition = definition  # consultável sem instanciar (validador de fases)
 
     ARCHETYPES[definition.kind] = _Bound
 

@@ -16,6 +16,7 @@ import pytest
 
 from game.core.game import Game
 from game.core.types import InputState, Level
+from game.enemies.registry import is_boss_kind
 from game.levels.loader import THEMES, level_from_dict, load_levels
 from game.rendering.painter import HEIGHT, WIDTH, Painter, Scene, hash01, parse_color, tint
 from game.rendering.renderer import QUALITY_PRESETS, Renderer
@@ -257,7 +258,7 @@ def test_first_level_draws_expected_elements() -> None:
 def test_boss_levels_draw_guardian_with_health_bar() -> None:
     for world in range(1, 6):
         level = LEVELS[LEVEL_IDS.index(f"{world}-3")]
-        boss = next(enemy for enemy in level.enemies if enemy.kind == "boss")
+        boss = next(enemy for enemy in level.enemies if is_boss_kind(enemy.kind))
         game = game_for(level.id, boss.x - 200)
         colors = packed_colors(render(game).surface)
         assert packed("#e6a07d") in colors, f"barra de vida do guardião ausente em {level.id}"

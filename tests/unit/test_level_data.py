@@ -1,10 +1,19 @@
-"""Os dados das 15 fases em JSON preservam exatamente o conteúdo do TypeScript."""
+"""A cópia de referência das 15 fases preserva exatamente o conteúdo do TypeScript;
+as fases atuais mantêm a estrutura da campanha (cinco mundos, um guardião por mundo)."""
 
 from __future__ import annotations
 
 import json
 
-from game.levels.loader import THEMES, level_to_dict, levels_dir, load_index, load_levels
+from game.enemies.registry import is_boss_kind
+from game.levels.loader import THEMES, level_from_dict, level_to_dict, load_levels
+from tests.unit.golden import REFERENCE_LEVELS, reference_levels
+
+
+def load_index() -> dict:  # type: ignore[type-arg]
+    with open(REFERENCE_LEVELS / "index.json", encoding="utf-8") as handle:
+        index: dict = json.load(handle)  # type: ignore[type-arg]
+    return index
 
 
 def test_index_matches_reference_commit() -> None:
@@ -17,7 +26,7 @@ def test_index_matches_reference_commit() -> None:
 
 
 def test_totals_match_original_export() -> None:
-    levels = load_levels()
+    levels = reference_levels()
     assert len(levels) == 15
     assert len(THEMES) == 5
     assert sum(len(level.platforms) for level in levels) == 238
@@ -32,10 +41,8 @@ def test_totals_match_original_export() -> None:
 
 def test_ids_unique_and_round_trip() -> None:
     for entry in load_index()["levels"]:
-        with open(levels_dir() / entry["file"], encoding="utf-8") as handle:
+        with open(REFERENCE_LEVELS / entry["file"], encoding="utf-8") as handle:
             raw = json.load(handle)
-        from game.levels.loader import level_from_dict
-
         level = level_from_dict(raw)
         ids = (
             [p.id for p in level.platforms]
@@ -60,3 +67,17 @@ def test_ids_unique_and_round_trip() -> None:
             assert again[key] == raw[key], f"{level.id}: campo {key} diverge"
         for key in ("platforms", "coins", "enemies", "items", "hazards", "hints"):
             assert again[key] == raw[key], f"{level.id}: lista {key} diverge após ida e volta"
+
+
+def test_current_campaign_keeps_structure_with_the_five_guardians() -> None:
+    levels = load_levels()
+    assert [level.id for level in levels] == [f"{w}-{s}" for w in range(1, 6) for s in range(1, 4)]
+    guardians = []
+    for level in levels:
+        bosses = [e for e in level.enemies if is_boss_kind(e.kind)]
+        if level.stage == 3:
+            assert len(bosses) == 1, level.id
+            guardians.append(bosses[0].kind)
+        else:
+            assert bosses == [], level.id
+    assert guardians == ["rolao", "oculus", "brumo", "lumia", "fornalho"]

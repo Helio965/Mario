@@ -23,7 +23,7 @@ from game.core.types import (
     PlatformSpec,
     Rect,
 )
-from game.enemies.registry import known_enemy_kinds
+from game.enemies.registry import floats, is_boss_kind, known_enemy_kinds
 from game.physics.collision import overlaps
 from game.physics.movement import FIXED_DT, LEGACY_PROFILE, MovementProfile
 
@@ -320,7 +320,7 @@ def validate_level(
             issues.append(
                 Issue("warning", "platform.bounds", "plataforma ultrapassa a largura da fase", p.id)
             )
-    bosses = [e for e in level.enemies if e.kind == "boss"]
+    bosses = [e for e in level.enemies if is_boss_kind(e.kind)]
     if level.stage == 3 and len(bosses) != 1:
         issues.append(
             Issue(
@@ -335,7 +335,7 @@ def validate_level(
         if not (e.patrol[0] <= e.x and e.x + e.w <= e.patrol[1]):
             issues.append(Issue("error", "enemy.patrol", "posição inicial fora da patrulha", e.id))
         if (
-            e.kind != "flyer"
+            not floats(e.kind)
             and _support_below(e.x, e.y, e.w, platforms, reach=4, height=e.h) is None
         ):
             issues.append(

@@ -1,7 +1,9 @@
 """Travessia das quinze fases por entradas normais (port de ``campaign-routes.test.ts``).
 
 Além das garantias originais, confere que o condutor Python gera exatamente a
-mesma sequência de entradas gravada com o condutor TypeScript.
+mesma sequência de entradas gravada com o condutor TypeScript. Usa a cópia
+congelada das fases de referência (``tests/fixtures/golden/levels``); as fases
+atuais, com os cinco guardiões, são percorridas em ``test_profiles_routes.py``.
 """
 
 from __future__ import annotations
@@ -12,12 +14,12 @@ from pathlib import Path
 
 import pytest
 
-from game.levels.loader import level_to_dict, load_levels
+from game.levels.loader import level_to_dict
 from tests.gameplay.route_player import play_campaign_route
-from tests.unit.golden import expand_inputs
+from tests.unit.golden import expand_inputs, reference_levels
 
 GOLDEN = Path(__file__).resolve().parent.parent / "fixtures" / "golden"
-LEVELS = load_levels()
+LEVELS = reference_levels()
 
 DEATH_BUDGET = {"4-2": 2, "5-3": 1}
 

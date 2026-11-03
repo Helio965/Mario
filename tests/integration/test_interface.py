@@ -14,6 +14,7 @@ import pygame
 import pytest
 
 from game.core.game import Game
+from game.enemies.registry import is_boss_kind
 from game.levels.loader import load_levels
 from game.paths import data_path
 from game.rendering.painter import parse_color
@@ -158,7 +159,7 @@ def game_at(level_id: str, x: float | None = None) -> Game:
 
 def boss_game(near: bool = True) -> Game:
     game = game_at("1-3")
-    boss = next(enemy for enemy in game.enemies if enemy.kind == "boss")
+    boss = next(enemy for enemy in game.enemies if is_boss_kind(enemy.kind))
     place(game, boss.x - 200 if near else 60)
     return game
 

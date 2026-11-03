@@ -14,7 +14,7 @@ from typing import Any
 
 from game.core.game import Game
 from game.core.types import InputState, Level
-from game.levels.loader import level_from_dict, load_levels
+from game.levels.loader import level_from_dict, load_level_file
 from game.physics.movement import FIXED_DT
 
 TOLERANCE = 1e-3
@@ -161,10 +161,24 @@ def _close(a: Any, b: Any) -> bool:
     return bool(a == b)
 
 
+REFERENCE_LEVELS = Path(__file__).resolve().parent.parent / "fixtures" / "golden" / "levels"
+
+
+def reference_levels() -> list[Level]:
+    """As 15 fases exatamente como exportadas do TypeScript (commit de referência).
+
+    ``data/levels`` evolui com a reconstrução das fases (guardiões novos, arenas);
+    os traces de ouro e o condutor diferencial continuam a usar esta cópia congelada.
+    """
+    with open(REFERENCE_LEVELS / "index.json", encoding="utf-8") as handle:
+        index = json.load(handle)
+    return [load_level_file(REFERENCE_LEVELS / entry["file"]) for entry in index["levels"]]
+
+
 def level_for(fixture: dict[str, Any]) -> Level:
     if fixture["level"] == "arena":
         return level_from_dict(ARENA)
-    level = next((lvl for lvl in load_levels() if lvl.id == fixture["level"]), None)
+    level = next((lvl for lvl in reference_levels() if lvl.id == fixture["level"]), None)
     assert level is not None, fixture["level"]
     return level
 
