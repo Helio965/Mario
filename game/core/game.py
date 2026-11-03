@@ -26,6 +26,7 @@ from game.core.types import (
     InputState,
     Item,
     Level,
+    Npc,
     Particle,
     Platform,
     Player,
@@ -36,6 +37,7 @@ from game.core.types import (
 from game.enemies.behaviors import create_behavior, update_modern
 from game.enemies.legacy import update_enemies
 from game.enemies.registry import known_enemy_kinds  # noqa: F401 - registra arquétipos
+from game.npc.npc import try_interact, update_npcs
 from game.physics.collision import approach, move_body, overlaps
 from game.physics.movement import FIXED_DT, LEGACY_PROFILE, MovementProfile
 
@@ -93,8 +95,12 @@ class Game:
         self.shake = 0.0
         self._accumulator = 0.0
         self._previous_jump = False
+        self._previous_down = False
         self._transition = 0.0
         self.pipe_cooldown = 0.0
+        self.npcs: list[Npc] = []
+        self.talking = False
+        self.talking_npc: Npc | None = None
         self.load(0)
 
     # ----------------------------------------------------------------- ciclo
@@ -138,6 +144,10 @@ class Game:
         ]
         for enemy in self.enemies:
             enemy.behavior = create_behavior(enemy)
+        self.npcs = [Npc.from_spec(n) for n in self.level.npcs]
+        self.talking = False
+        self.talking_npc = None
+        self._previous_down = False
         self.projectiles = []
         self.particles = []
         self.events = []
@@ -170,7 +180,7 @@ class Game:
         return True
 
     def update(self, dt: float, input_state: InputState) -> None:
-        if self.status == "paused" or self.status == "gameover":
+        if self.status == "paused" or self.status == "gameover" or self.talking:
             return
         if self.status == "complete":
             self.elapsed += min(dt, 0.25)
@@ -364,9 +374,15 @@ class Game:
             p.vx = approach(p.vx, 0.0, rate * dt)
 
     def interactions(self, dt: float, input_state: InputState, heads: list[Platform]) -> None:
+        on_pipe = self._on_pipe()
         interact_world(self, input_state, heads)
         update_enemies(self, dt)
         update_modern(self, dt)
+        if self.npcs:
+            update_npcs(self, dt)
+            if input_state.down and not self._previous_down and not on_pipe:
+                try_interact(self)
+        self._previous_down = input_state.down
         update_powers(self, dt, input_state)
         exit_box = Rect(x=self.level.exit.x - 12, y=self.level.exit.y - 110, w=44, h=110)
         if overlaps(self.player, exit_box) and self.boss() is None:
@@ -377,6 +393,25 @@ class Game:
             particle.y += particle.vy * dt
             particle.vy += 300 * dt
         self.particles = [v for v in self.particles if v.life > 0]
+
+    def _on_pipe(self) -> bool:
+        """Jogador sobre um cano com passagem (mesma condição de ``interact_world``)."""
+        p = self.player
+        return any(
+            s.kind == "pipe"
+            and s.destination is not None
+            and p.x + p.w > s.x
+            and p.x < s.x + s.w
+            and abs(p.y + p.h - s.y) < 10
+            for s in self.platforms
+        )
+
+    def end_talk(self) -> None:
+        """Encerra o diálogo iniciado por ``try_interact`` e devolve o NPC à rotina."""
+        if self.talking_npc is not None and self.talking_npc.state == "talk":
+            self.talking_npc.state = "routine"
+        self.talking_npc = None
+        self.talking = False
 
     # ---------------------------------------------------------------- estado
     def hurt(self) -> None:

@@ -15,7 +15,9 @@ from game.core.types import (
     ItemSpec,
     Level,
     Motion,
+    NpcSpec,
     PlatformSpec,
+    RoutineStep,
     Theme,
     Vec,
 )
@@ -108,7 +110,74 @@ def level_from_dict(d: dict[str, Any]) -> Level:
             for h in d.get("hazards", [])
         ],
         hints=[Hint(float(h["x"]), str(h["text"])) for h in d.get("hints", [])],
+        npcs=[npc_from_dict(n) for n in d.get("npcs", [])],
     )
+
+
+def npc_from_dict(d: dict[str, Any]) -> NpcSpec:
+    return NpcSpec(
+        id=str(d["id"]),
+        kind=str(d.get("kind", "guide")),
+        x=float(d["x"]),
+        y=float(d["y"]),
+        w=float(d.get("w", 24)),
+        h=float(d.get("h", 32)),
+        facing=int(d.get("facing", 1)),
+        routine=[
+            RoutineStep(
+                action=str(s["action"]),
+                x=float(s.get("x", 0)),
+                speed=float(s.get("speed", 60)),
+                seconds=float(s.get("seconds", 1)),
+                facing=int(s.get("facing", 1)),
+                expression=str(s.get("expression", "neutral")),
+                reaction=str(s.get("reaction", "")),
+            )
+            for s in d.get("routine", [])
+        ],
+        loop=bool(d.get("loop", True)),
+        dialogue=d.get("dialogue"),
+        talk_once=bool(d.get("talk_once", False)),
+        reactions=str(d.get("reactions", "")),
+        observe_distance=float(d.get("observe_distance", 90)),
+    )
+
+
+def npc_to_dict(n: NpcSpec) -> dict[str, Any]:
+    steps = []
+    for s in n.routine:
+        step: dict[str, Any] = {"action": s.action}
+        if s.action == "walk":
+            step.update({"x": s.x, "speed": s.speed})
+        elif s.action in ("wait", "emote"):
+            step["seconds"] = s.seconds
+        if s.action == "look":
+            step["facing"] = s.facing
+        if s.action == "emote":
+            step["expression"] = s.expression
+        if s.action == "say":
+            step["reaction"] = s.reaction
+        steps.append(step)
+    entry: dict[str, Any] = {
+        "id": n.id,
+        "kind": n.kind,
+        "x": n.x,
+        "y": n.y,
+        "w": n.w,
+        "h": n.h,
+        "facing": n.facing,
+        "routine": steps,
+        "loop": n.loop,
+    }
+    if n.dialogue is not None:
+        entry["dialogue"] = n.dialogue
+    if n.talk_once:
+        entry["talk_once"] = True
+    if n.reactions:
+        entry["reactions"] = n.reactions
+    if n.observe_distance != 90:
+        entry["observe_distance"] = n.observe_distance
+    return entry
 
 
 def level_to_dict(level: Level) -> dict[str, Any]:
@@ -184,6 +253,7 @@ def level_to_dict(level: Level) -> dict[str, Any]:
             for h in level.hazards
         ],
         "hints": [{"x": h.x, "text": h.text} for h in level.hints],
+        **({"npcs": [npc_to_dict(n) for n in level.npcs]} if level.npcs else {}),
     }
 
 

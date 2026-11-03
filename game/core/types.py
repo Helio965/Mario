@@ -37,6 +37,8 @@ EventType = Literal[
     "life",
     "boss_intro",
     "boss_phase",
+    "talk",
+    "npc_say",
 ]
 
 PLATFORM_KINDS: tuple[str, ...] = (
@@ -67,6 +69,10 @@ EVENT_TYPES: tuple[str, ...] = (
     "complete",
     "boss",
     "life",
+    "boss_intro",
+    "boss_phase",
+    "talk",
+    "npc_say",
 )
 
 
@@ -274,6 +280,82 @@ class Hint:
 
 
 @dataclass(slots=True)
+class RoutineStep:
+    """Passo de rotina de NPC: walk (x, speed), wait (seconds), look (facing), emote (expression, seconds), say (reaction)."""
+
+    action: str
+    x: float = 0.0
+    speed: float = 60.0
+    seconds: float = 1.0
+    facing: int = 1
+    expression: str = "neutral"
+    reaction: str = ""
+
+
+@dataclass(slots=True)
+class NpcSpec:
+    id: str
+    kind: str
+    x: float
+    y: float
+    w: float = 24.0
+    h: float = 32.0
+    facing: int = 1
+    routine: list[RoutineStep] = field(default_factory=list)
+    loop: bool = True
+    dialogue: str | None = None
+    talk_once: bool = False
+    reactions: str = ""  # personagem do banco de reações (data/locales)
+    observe_distance: float = 90.0
+
+
+@dataclass(slots=True)
+class Npc:
+    id: str
+    kind: str
+    x: float
+    y: float
+    w: float
+    h: float
+    facing: int
+    routine: list[RoutineStep]
+    loop: bool
+    dialogue: str | None
+    talk_once: bool
+    reactions: str
+    observe_distance: float
+    vx: float = 0.0
+    vy: float = 0.0
+    grounded: bool = False
+    state: str = "routine"  # routine | observe | talk | done
+    step_index: int = 0
+    step_clock: float = 0.0
+    expression: str = "neutral"
+    talked: bool = False
+    anim: str = "idle"
+    bubble: str | None = None  # contexto da última fala curta (para a interface)
+    bubble_time: float = 0.0
+
+    @classmethod
+    def from_spec(cls, spec: NpcSpec) -> Npc:
+        return cls(
+            id=spec.id,
+            kind=spec.kind,
+            x=spec.x,
+            y=spec.y,
+            w=spec.w,
+            h=spec.h,
+            facing=spec.facing,
+            routine=list(spec.routine),
+            loop=spec.loop,
+            dialogue=spec.dialogue,
+            talk_once=spec.talk_once,
+            reactions=spec.reactions,
+            observe_distance=spec.observe_distance,
+        )
+
+
+@dataclass(slots=True)
 class Level:
     id: str
     name: str
@@ -291,6 +373,7 @@ class Level:
     items: list[ItemSpec] = field(default_factory=list)
     hazards: list[Hazard] = field(default_factory=list)
     hints: list[Hint] = field(default_factory=list)
+    npcs: list[NpcSpec] = field(default_factory=list)
 
 
 @dataclass(slots=True)
