@@ -229,6 +229,7 @@ l.ground(1240, 50, 384, 64, id="granite_block")    # the ram stuns itself on the
 l.hint(960, "O carneiro investe e fica tonto ao bater no bloco de granito: pise nele nessa hora.")
 # 2. demonstration: courtyard with an icicle chandelier over rock floor
 l.ground(1400, 800, style=F)                       # 1400..2200 (rock)
+l.enemy("pinguim_patrulha", 1450, 448, 1410, 1540)
 l.ground(1520, 460, 0, 190, style=F, id="chandelier_beam")
 for x in (1560, 1680, 1800, 1930):
     icicle(l, x, 190)

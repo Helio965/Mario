@@ -1,0 +1,36 @@
+{
+ "level": "windswept_dunes",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.694,
+  "p95": 1.233,
+  "max": 5.138
+ },
+ "submit_ms": {
+  "avg": 2.76,
+  "p95": 4.35
+ },
+ "frame_ms": {
+  "avg": 49.64,
+  "p95": 73.5,
+  "max": 91.25
+ },
+ "draw_calls": {
+  "avg": 74.4,
+  "max": 122
+ },
+ "entities": {
+  "avg": 43.5,
+  "max": 89
+ },
+ "texture_mb": 78.6,
+ "textures": 179,
+ "raster_ms_total": 389.0,
+ "preload_ms": 390.8,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 1.19,
+ "cpus": 4
+}

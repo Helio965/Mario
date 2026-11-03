@@ -564,6 +564,16 @@
   },
   {
    "id": "enemy03",
+   "species": "pinguim_patrulha",
+   "x": 1450,
+   "y": 448,
+   "patrol": [
+    1410,
+    1540
+   ]
+  },
+  {
+   "id": "enemy04",
    "species": "pingente_queda",
    "x": 1560,
    "y": 230,
@@ -577,7 +587,7 @@
    }
   },
   {
-   "id": "enemy04",
+   "id": "enemy05",
    "species": "pingente_queda",
    "x": 1680,
    "y": 230,
@@ -591,7 +601,7 @@
    }
   },
   {
-   "id": "enemy05",
+   "id": "enemy06",
    "species": "pingente_queda",
    "x": 1800,
    "y": 230,
@@ -605,7 +615,7 @@
    }
   },
   {
-   "id": "enemy06",
+   "id": "enemy07",
    "species": "pingente_queda",
    "x": 1930,
    "y": 230,
@@ -619,7 +629,7 @@
    }
   },
   {
-   "id": "enemy07",
+   "id": "enemy08",
    "species": "caracol_cristal",
    "x": 1960,
    "y": 448,
@@ -629,7 +639,7 @@
    ]
   },
   {
-   "id": "enemy08",
+   "id": "enemy09",
    "species": "pinguim_patrulha",
    "x": 2560,
    "y": 448,
@@ -639,7 +649,7 @@
    ]
   },
   {
-   "id": "enemy09",
+   "id": "enemy10",
    "species": "caracol_cristal",
    "x": 2880,
    "y": 448,
@@ -649,7 +659,7 @@
    ]
   },
   {
-   "id": "enemy10",
+   "id": "enemy11",
    "species": "coruja_nevada",
    "x": 2700,
    "y": 300,
@@ -659,7 +669,7 @@
    ]
   },
   {
-   "id": "enemy11",
+   "id": "enemy12",
    "species": "caracol_cristal",
    "x": 3200,
    "y": 448,
@@ -669,7 +679,7 @@
    ]
   },
   {
-   "id": "enemy12",
+   "id": "enemy13",
    "species": "coruja_nevada",
    "x": 3900,
    "y": 300,
@@ -679,7 +689,7 @@
    ]
   },
   {
-   "id": "enemy13",
+   "id": "enemy14",
    "species": "pinguim_patrulha",
    "x": 3960,
    "y": 448,
@@ -689,7 +699,7 @@
    ]
   },
   {
-   "id": "enemy14",
+   "id": "enemy15",
    "species": "pingente_queda",
    "x": 4340,
    "y": 190,
@@ -703,7 +713,7 @@
    }
   },
   {
-   "id": "enemy15",
+   "id": "enemy16",
    "species": "yeti_mirim",
    "x": 4440,
    "y": 328,
@@ -713,7 +723,7 @@
    ]
   },
   {
-   "id": "enemy16",
+   "id": "enemy17",
    "species": "carneiro_glacial",
    "x": 5100,
    "y": 512,
@@ -723,7 +733,7 @@
    ]
   },
   {
-   "id": "enemy17",
+   "id": "enemy18",
    "species": "morsa_gelomar",
    "x": 5920,
    "y": 448,
@@ -747,7 +757,7 @@
    }
   },
   {
-   "id": "enemy18",
+   "id": "enemy19",
    "species": "pinguim_patrulha",
    "x": 6400,
    "y": 448,

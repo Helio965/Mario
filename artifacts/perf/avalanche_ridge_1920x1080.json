@@ -1,0 +1,36 @@
+{
+ "level": "avalanche_ridge",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.873,
+  "p95": 1.524,
+  "max": 3.886
+ },
+ "submit_ms": {
+  "avg": 3.27,
+  "p95": 4.96
+ },
+ "frame_ms": {
+  "avg": 57.62,
+  "p95": 74.59,
+  "max": 107.31
+ },
+ "draw_calls": {
+  "avg": 81.8,
+  "max": 134
+ },
+ "entities": {
+  "avg": 48.8,
+  "max": 96
+ },
+ "texture_mb": 89.4,
+ "textures": 249,
+ "raster_ms_total": 1546.4,
+ "preload_ms": 1550.2,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 1.3,
+ "cpus": 4
+}

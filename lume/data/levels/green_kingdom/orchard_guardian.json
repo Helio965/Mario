@@ -375,6 +375,16 @@
     3660
    ],
    "hp": 3
+  },
+  {
+   "id": "enemy_orchard_acorn",
+   "species": "bolota",
+   "x": 2500,
+   "y": 448,
+   "patrol": [
+    2420,
+    2600
+   ]
   }
  ],
  "hazards": [

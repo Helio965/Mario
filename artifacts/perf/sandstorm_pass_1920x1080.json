@@ -1,0 +1,36 @@
+{
+ "level": "sandstorm_pass",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.769,
+  "p95": 1.372,
+  "max": 5.624
+ },
+ "submit_ms": {
+  "avg": 3.01,
+  "p95": 4.6
+ },
+ "frame_ms": {
+  "avg": 52.8,
+  "p95": 72.53,
+  "max": 108.34
+ },
+ "draw_calls": {
+  "avg": 75.8,
+  "max": 128
+ },
+ "entities": {
+  "avg": 43.5,
+  "max": 100
+ },
+ "texture_mb": 87.2,
+ "textures": 209,
+ "raster_ms_total": 398.8,
+ "preload_ms": 400.5,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 1.33,
+ "cpus": 4
+}

@@ -1,0 +1,36 @@
+{
+ "level": "crystal_lake",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 700,
+ "status": "complete",
+ "update_ms": {
+  "avg": 0.626,
+  "p95": 1.051,
+  "max": 1.797
+ },
+ "submit_ms": {
+  "avg": 2.84,
+  "p95": 4.43
+ },
+ "frame_ms": {
+  "avg": 54.26,
+  "p95": 73.12,
+  "max": 102.13
+ },
+ "draw_calls": {
+  "avg": 82.4,
+  "max": 130
+ },
+ "entities": {
+  "avg": 50.6,
+  "max": 95
+ },
+ "texture_mb": 73.2,
+ "textures": 176,
+ "raster_ms_total": 1923.2,
+ "preload_ms": 1925.1,
+ "python_heap_peak_mb": 0.2,
+ "load_avg_1m": 1.57,
+ "cpus": 4
+}

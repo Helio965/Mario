@@ -370,6 +370,16 @@
     2830,
     3160
    ]
+  },
+  {
+   "id": "enemy_canal_snail",
+   "species": "caramujo",
+   "x": 2480,
+   "y": 448,
+   "patrol": [
+    2400,
+    2600
+   ]
   }
  ],
  "hazards": [

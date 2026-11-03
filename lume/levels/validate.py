@@ -194,6 +194,13 @@ def validate_level(level: LevelSpec, profiles: dict[str, EnemyProfile], *, world
         for t in terrain:
             if q.x < t.x + t.w - 0.5 and q.x + q.w > t.x + 0.5 and q.y < t.y + t.h - 0.5 and q.y + q.h > t.y + 0.5:
                 err(f"platforms[{i}]", f"'{q.id}' ({q.kind}) está dentro do terreno '{t.id}'")
+    # --- blocks must not overlap each other (a brick resting inside a reward block
+    #     makes the block unreachable from below and the brick unbreakable)
+    blocks = [(i, q) for i, q in enumerate(level.platforms) if q.kind in ("brick", "question", "hidden") and q.motion is None]
+    for n, (i, a) in enumerate(blocks):
+        for _, b in blocks[n + 1:]:
+            if a.x < b.x + b.w - 0.5 and a.x + a.w > b.x + 0.5 and a.y < b.y + b.h - 0.5 and a.y + a.h > b.y + 0.5:
+                err(f"platforms[{i}]", f"bloco '{a.id}' ({a.kind}) sobrepõe o bloco '{b.id}' ({b.kind})")
                 break
     # --- areas
     for i, a in enumerate(level.areas):

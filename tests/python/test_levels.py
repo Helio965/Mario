@@ -79,3 +79,26 @@ def test_level_files_are_canonical_json():
             text = entry.path.read_text(encoding="utf-8")
             assert json.loads(text)["id"] == entry.id
             assert text.endswith("\n")
+
+
+def test_overlapping_blocks_are_rejected():
+    """A brick resting inside a reward block made a planned secret unreachable."""
+    from tests.python.conftest import level
+
+    lvl = level(platforms=[
+        {"id": "floor", "kind": "ground", "x": 0, "y": 448, "w": 1600, "h": 92},
+        {"id": "q", "kind": "question", "x": 400, "y": 350, "w": 40, "h": 28, "reward": "grow"},
+        {"id": "b", "kind": "brick", "x": 420, "y": 330, "w": 40, "h": 22},
+    ])
+    problems = errors(validate_level(lvl, PROFILES, simulate=False))
+    assert any("sobrepõe" in p.message for p in problems)
+
+
+def test_terraces_count_as_ground_when_measuring_gaps():
+    """Narrow steps that touch each other form one run (no false 'pit')."""
+    from tests.python.conftest import level
+
+    steps = [{"id": f"s{k}", "kind": "ground", "x": 400 + k * 64, "y": 384 + k * 16, "w": 64, "h": 200} for k in range(5)]
+    lvl = level(platforms=[{"id": "a", "kind": "ground", "x": 0, "y": 368, "w": 400, "h": 232}, *steps,
+                           {"id": "b", "kind": "ground", "x": 720, "y": 448, "w": 900, "h": 152}])
+    assert main_path_gaps(lvl) == []

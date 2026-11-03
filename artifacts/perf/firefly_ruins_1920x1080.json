@@ -1,0 +1,36 @@
+{
+ "level": "firefly_ruins",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.715,
+  "p95": 1.127,
+  "max": 7.25
+ },
+ "submit_ms": {
+  "avg": 2.68,
+  "p95": 3.92
+ },
+ "frame_ms": {
+  "avg": 69.48,
+  "p95": 92.86,
+  "max": 156.31
+ },
+ "draw_calls": {
+  "avg": 76.0,
+  "max": 130
+ },
+ "entities": {
+  "avg": 43.8,
+  "max": 101
+ },
+ "texture_mb": 101.2,
+ "textures": 168,
+ "raster_ms_total": 1271.8,
+ "preload_ms": 1274.2,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 2.05,
+ "cpus": 4
+}

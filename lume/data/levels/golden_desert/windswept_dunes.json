@@ -297,6 +297,14 @@
    "y": 852.0,
    "count": 4,
    "spacing": 34
+  },
+  {
+   "id": "coins_devil",
+   "shape": "column",
+   "x": 3322,
+   "y": 220,
+   "count": 4,
+   "spacing": 40
   }
  ],
  "coins": [],
@@ -312,6 +320,12 @@
    "kind": "relic",
    "x": 3468,
    "y": 850
+  },
+  {
+   "id": "relic_devil",
+   "kind": "relic",
+   "x": 3330,
+   "y": 160
   }
  ],
  "items": [
@@ -352,6 +366,26 @@
     2480,
     2600
    ]
+  },
+  {
+   "id": "enemy_dune_pipe",
+   "species": "escaravelho_areia",
+   "x": 3240,
+   "y": 448,
+   "patrol": [
+    3200,
+    3290
+   ]
+  },
+  {
+   "id": "enemy_dune_end",
+   "species": "escaravelho_areia",
+   "x": 3480,
+   "y": 448,
+   "patrol": [
+    3420,
+    3560
+   ]
   }
  ],
  "hazards": [
@@ -381,6 +415,14 @@
    "rewards": [
     "relic_high"
    ]
+  },
+  {
+   "id": "dust_devil",
+   "kind": "hidden_area",
+   "clue": "Coluna de moedas num redemoinho de areia que puxa para cima",
+   "rewards": [
+    "relic_devil"
+   ]
   }
  ],
  "hints": [
@@ -397,5 +439,17 @@
    "text": "O sentinela dispara em intervalos."
   }
  ],
- "notes": "Convertida da edição TypeScript (fase 2-1). Sala secreta movida para câmara subterrânea (+720 u)."
+ "notes": "Convertida da edição TypeScript (fase 2-1). Sala secreta movida para câmara subterrânea (+720 u).",
+ "zones": [
+  {
+   "id": "dust_devil_updraft",
+   "kind": "wind",
+   "x": 3300,
+   "y": 100,
+   "w": 60,
+   "h": 348,
+   "force_x": 0,
+   "force_y": -1800
+  }
+ ]
 }

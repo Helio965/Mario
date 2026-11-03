@@ -47,6 +47,11 @@
    "id": "cp_mid",
    "x": 2190,
    "y": 414
+  },
+  {
+   "id": "cp_temple",
+   "x": 3030,
+   "y": 418
   }
  ],
  "exit": {
@@ -239,6 +244,38 @@
    "y": 760,
    "w": 291,
    "h": 136
+  },
+  {
+   "id": "sun_brick1",
+   "kind": "brick",
+   "x": 2180,
+   "y": 330,
+   "w": 40,
+   "h": 22
+  },
+  {
+   "id": "sun_brick2",
+   "kind": "brick",
+   "x": 2220,
+   "y": 330,
+   "w": 40,
+   "h": 22
+  },
+  {
+   "id": "sun_brick3",
+   "kind": "brick",
+   "x": 2260,
+   "y": 330,
+   "w": 40,
+   "h": 22
+  },
+  {
+   "id": "sun_brick4",
+   "kind": "brick",
+   "x": 2300,
+   "y": 330,
+   "w": 40,
+   "h": 22
   }
  ],
  "coin_groups": [
@@ -312,6 +349,12 @@
    "kind": "relic",
    "x": 2688,
    "y": 850
+  },
+  {
+   "id": "relic_sun",
+   "kind": "relic",
+   "x": 2230,
+   "y": 300
   }
  ],
  "items": [
@@ -359,6 +402,36 @@
     3980
    ],
    "hp": 4
+  },
+  {
+   "id": "enemy_temple_start",
+   "species": "escaravelho_areia",
+   "x": 300,
+   "y": 448,
+   "patrol": [
+    200,
+    400
+   ]
+  },
+  {
+   "id": "enemy_temple_tatu",
+   "species": "tatu_bola",
+   "x": 1030,
+   "y": 448,
+   "patrol": [
+    930,
+    1150
+   ]
+  },
+  {
+   "id": "enemy_temple_vulture",
+   "species": "abutre_filhote",
+   "x": 2620,
+   "y": 330,
+   "patrol": [
+    2520,
+    2760
+   ]
   }
  ],
  "hazards": [
@@ -388,6 +461,14 @@
    "rewards": [
     "relic_high"
    ]
+  },
+  {
+   "id": "sun_chamber",
+   "kind": "breakable_path",
+   "clue": "Tijolos rachados em forma de sol: crescido, quebre o de baixo da relíquia",
+   "rewards": [
+    "relic_sun"
+   ]
   }
  ],
  "hints": [
@@ -404,5 +485,6 @@
    "text": "A arena está adiante. Guarde sua luz."
   }
  ],
- "notes": "Convertida da edição TypeScript (fase 2-3). Sala secreta movida para câmara subterrânea (+720 u)."
+ "notes": "Convertida da edição TypeScript (fase 2-3). Sala secreta movida para câmara subterrânea (+720 u).",
+ "zones": []
 }

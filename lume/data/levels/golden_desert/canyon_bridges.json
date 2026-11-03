@@ -47,6 +47,11 @@
    "id": "cp_mid",
    "x": 1480,
    "y": 350
+  },
+  {
+   "id": "cp_canyon",
+   "x": 2960,
+   "y": 418
   }
  ],
  "exit": {
@@ -242,6 +247,15 @@
    "y": 760,
    "w": 291,
    "h": 136
+  },
+  {
+   "id": "vulture_nest_ledge",
+   "kind": "semisolid",
+   "x": 2760,
+   "y": 214,
+   "w": 90,
+   "h": 14,
+   "style": "ruin"
   }
  ],
  "coin_groups": [
@@ -300,6 +314,14 @@
    "y": 852.0,
    "count": 4,
    "spacing": 34
+  },
+  {
+   "id": "coins_nest",
+   "shape": "column",
+   "x": 2795,
+   "y": 300,
+   "count": 3,
+   "spacing": 40
   }
  ],
  "coins": [],
@@ -315,6 +337,12 @@
    "kind": "relic",
    "x": 3438,
    "y": 850
+  },
+  {
+   "id": "relic_nest",
+   "kind": "relic",
+   "x": 2785,
+   "y": 182
   }
  ],
  "items": [
@@ -355,6 +383,36 @@
     3570,
     3820
    ]
+  },
+  {
+   "id": "enemy_canyon_start",
+   "species": "escaravelho_areia",
+   "x": 300,
+   "y": 448,
+   "patrol": [
+    200,
+    520
+   ]
+  },
+  {
+   "id": "enemy_canyon_mid",
+   "species": "escaravelho_areia",
+   "x": 2380,
+   "y": 416,
+   "patrol": [
+    2330,
+    2440
+   ]
+  },
+  {
+   "id": "enemy_canyon_end",
+   "species": "tatu_bola",
+   "x": 3380,
+   "y": 448,
+   "patrol": [
+    3330,
+    3450
+   ]
   }
  ],
  "hazards": [
@@ -394,6 +452,14 @@
    "rewards": [
     "relic_high"
    ]
+  },
+  {
+   "id": "vulture_nest",
+   "kind": "hidden_area",
+   "clue": "Moedas sobem em coluna no vão: uma corrente de ar quente leva ao ninho do abutre",
+   "rewards": [
+    "relic_nest"
+   ]
   }
  ],
  "hints": [
@@ -410,5 +476,17 @@
    "text": "Espere a chama se afastar para passar."
   }
  ],
- "notes": "Convertida da edição TypeScript (fase 2-2). Sala secreta movida para câmara subterrânea (+720 u). Revisão: plataformas frágeis afastadas da patrulha do Tatu-Bola para que o salto sobre ele não bata no teto antes do vão (problema detectado pela rota automatizada)."
+ "notes": "Convertida da edição TypeScript (fase 2-2). Sala secreta movida para câmara subterrânea (+720 u). Revisão: plataformas frágeis afastadas da patrulha do Tatu-Bola para que o salto sobre ele não bata no teto antes do vão (problema detectado pela rota automatizada).",
+ "zones": [
+  {
+   "id": "nest_updraft",
+   "kind": "wind",
+   "x": 2745,
+   "y": 120,
+   "w": 110,
+   "h": 420,
+   "force_x": 0,
+   "force_y": -1800
+  }
+ ]
 }

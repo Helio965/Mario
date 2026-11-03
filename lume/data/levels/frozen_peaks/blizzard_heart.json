@@ -47,6 +47,11 @@
    "id": "cp_mid",
    "x": 2270,
    "y": 414
+  },
+  {
+   "id": "cp_blizzard",
+   "x": 3600,
+   "y": 418
   }
  ],
  "exit": {
@@ -248,6 +253,15 @@
    "y": 760,
    "w": 291,
    "h": 136
+  },
+  {
+   "id": "core_block",
+   "kind": "hidden",
+   "x": 2250,
+   "y": 320,
+   "w": 40,
+   "h": 24,
+   "secret": "blizzard_core"
   }
  ],
  "coin_groups": [
@@ -321,6 +335,12 @@
    "kind": "relic",
    "x": 2618,
    "y": 850
+  },
+  {
+   "id": "relic_core",
+   "kind": "relic",
+   "x": 2262,
+   "y": 200
   }
  ],
  "items": [
@@ -374,10 +394,50 @@
    "x": 4110,
    "y": 448,
    "patrol": [
-    3870,
+    3930,
     4370
    ],
    "hp": 5
+  },
+  {
+   "id": "enemy_blizzard_start",
+   "species": "pinguim_patrulha",
+   "x": 250,
+   "y": 448,
+   "patrol": [
+    150,
+    380
+   ]
+  },
+  {
+   "id": "enemy_blizzard_snail",
+   "species": "caracol_cristal",
+   "x": 1000,
+   "y": 416,
+   "patrol": [
+    930,
+    1150
+   ]
+  },
+  {
+   "id": "enemy_blizzard_snail2",
+   "species": "caracol_cristal",
+   "x": 3200,
+   "y": 416,
+   "patrol": [
+    3150,
+    3290
+   ]
+  },
+  {
+   "id": "enemy_blizzard_owl",
+   "species": "coruja_nevada",
+   "x": 1750,
+   "y": 300,
+   "patrol": [
+    1680,
+    1850
+   ]
   }
  ],
  "hazards": [
@@ -407,6 +467,15 @@
    "rewards": [
     "relic_high"
    ]
+  },
+  {
+   "id": "blizzard_core",
+   "kind": "hidden_block",
+   "clue": "Flocos giram em volta de um ponto parado no ar, mesmo durante a rajada",
+   "rewards": [
+    "relic_core"
+   ],
+   "entry": "core_block"
   }
  ],
  "hints": [
@@ -423,5 +492,6 @@
    "text": "A rocha protege uma última arena de gelo."
   }
  ],
- "notes": "Convertida da edição TypeScript (fase 3-3). Sala secreta movida para câmara subterrânea (+720 u)."
+ "notes": "Convertida da edição TypeScript (fase 3-3). Sala secreta movida para câmara subterrânea (+720 u).",
+ "zones": []
 }

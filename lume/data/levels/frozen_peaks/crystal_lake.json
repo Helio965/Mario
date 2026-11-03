@@ -284,6 +284,12 @@
    "kind": "relic",
    "x": 2648,
    "y": 850
+  },
+  {
+   "id": "relic_pier",
+   "kind": "relic",
+   "x": 1834,
+   "y": 330
   }
  ],
  "items": [
@@ -324,6 +330,26 @@
     3070,
     3300
    ]
+  },
+  {
+   "id": "enemy_lake_start",
+   "species": "pinguim_patrulha",
+   "x": 300,
+   "y": 448,
+   "patrol": [
+    200,
+    480
+   ]
+  },
+  {
+   "id": "enemy_lake_owl",
+   "species": "coruja_nevada",
+   "x": 2500,
+   "y": 320,
+   "patrol": [
+    2420,
+    2600
+   ]
   }
  ],
  "hazards": [
@@ -353,6 +379,14 @@
    "rewards": [
     "relic_high"
    ]
+  },
+  {
+   "id": "frozen_pier",
+   "kind": "optional_challenge",
+   "clue": "Marcas de patins terminam na ponta do píer congelado: pare ali e salte",
+   "rewards": [
+    "relic_pier"
+   ]
   }
  ],
  "hints": [
@@ -369,5 +403,6 @@
    "text": "Há espaço para frear depois de cada salto."
   }
  ],
- "notes": "Convertida da edição TypeScript (fase 3-1). Sala secreta movida para câmara subterrânea (+720 u)."
+ "notes": "Convertida da edição TypeScript (fase 3-1). Sala secreta movida para câmara subterrânea (+720 u).",
+ "zones": []
 }

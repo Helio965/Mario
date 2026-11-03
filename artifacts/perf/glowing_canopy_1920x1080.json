@@ -1,0 +1,36 @@
+{
+ "level": "glowing_canopy",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.957,
+  "p95": 1.518,
+  "max": 5.922
+ },
+ "submit_ms": {
+  "avg": 2.82,
+  "p95": 4.46
+ },
+ "frame_ms": {
+  "avg": 71.13,
+  "p95": 93.4,
+  "max": 131.61
+ },
+ "draw_calls": {
+  "avg": 76.8,
+  "max": 138
+ },
+ "entities": {
+  "avg": 43.5,
+  "max": 108
+ },
+ "texture_mb": 97.7,
+ "textures": 159,
+ "raster_ms_total": 1335.6,
+ "preload_ms": 1338.6,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 1.67,
+ "cpus": 4
+}

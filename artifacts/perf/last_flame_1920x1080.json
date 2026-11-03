@@ -1,0 +1,36 @@
+{
+ "level": "last_flame",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.889,
+  "p95": 1.59,
+  "max": 4.613
+ },
+ "submit_ms": {
+  "avg": 3.04,
+  "p95": 4.65
+ },
+ "frame_ms": {
+  "avg": 49.02,
+  "p95": 63.85,
+  "max": 95.67
+ },
+ "draw_calls": {
+  "avg": 75.6,
+  "max": 129
+ },
+ "entities": {
+  "avg": 42.8,
+  "max": 94
+ },
+ "texture_mb": 78.9,
+ "textures": 178,
+ "raster_ms_total": 1125.7,
+ "preload_ms": 1127.7,
+ "python_heap_peak_mb": 0.1,
+ "load_avg_1m": 1.87,
+ "cpus": 4
+}

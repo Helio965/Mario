@@ -262,6 +262,24 @@
    "y": 760,
    "w": 172,
    "h": 136
+  },
+  {
+   "id": "summit_ledge1",
+   "kind": "ledge",
+   "x": 2780,
+   "y": 220,
+   "w": 70,
+   "h": 20,
+   "style": "floating"
+  },
+  {
+   "id": "summit_ledge2",
+   "kind": "ledge",
+   "x": 2900,
+   "y": 170,
+   "w": 70,
+   "h": 20,
+   "style": "floating"
   }
  ],
  "coin_groups": [
@@ -351,6 +369,12 @@
    "kind": "relic",
    "x": 4068,
    "y": 850
+  },
+  {
+   "id": "relic_summit",
+   "kind": "relic",
+   "x": 2925,
+   "y": 128
   }
  ],
  "items": [
@@ -381,6 +405,46 @@
     1760,
     1980
    ]
+  },
+  {
+   "id": "enemy_ascent_start",
+   "species": "pinguim_patrulha",
+   "x": 300,
+   "y": 448,
+   "patrol": [
+    200,
+    520
+   ]
+  },
+  {
+   "id": "enemy_ascent_terrace",
+   "species": "pinguim_patrulha",
+   "x": 3100,
+   "y": 432,
+   "patrol": [
+    3000,
+    3200
+   ]
+  },
+  {
+   "id": "enemy_ascent_end",
+   "species": "caracol_cristal",
+   "x": 4000,
+   "y": 448,
+   "patrol": [
+    3900,
+    4150
+   ]
+  },
+  {
+   "id": "enemy_ascent_owl",
+   "species": "coruja_nevada",
+   "x": 2700,
+   "y": 300,
+   "patrol": [
+    2650,
+    2800
+   ]
   }
  ],
  "hazards": [
@@ -410,6 +474,14 @@
    "rewards": [
     "relic_high"
    ]
+  },
+  {
+   "id": "summit_route",
+   "kind": "high_route",
+   "clue": "Beirais acima do terraço de gelo levam ao pinheiro mais alto",
+   "rewards": [
+    "relic_summit"
+   ]
   }
  ],
  "hints": [
@@ -426,5 +498,6 @@
    "text": "Pouse antes dos espinhos e salte de novo."
   }
  ],
- "notes": "Convertida da edição TypeScript (fase 3-2). Sala secreta movida para câmara subterrânea (+720 u)."
+ "notes": "Convertida da edição TypeScript (fase 3-2). Sala secreta movida para câmara subterrânea (+720 u).",
+ "zones": []
 }

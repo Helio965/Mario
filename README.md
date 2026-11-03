@@ -4,7 +4,7 @@ Plataforma 2D **original** em Python com arte vetorial em alta definição: Lume
 
 Projeto independente, **não oficial e sem vínculo com a Nintendo**. Os jogos Super Mario foram estudados apenas como referência de engenharia de fases (ver `docs/research/`); personagens, criaturas, cenários, músicas e efeitos são originais e gerados por código.
 
-> **Estado atual (honesto):** a campanha está organizada em **10 mundos e 60 fases** com IDs estáveis. **18 fases são jogáveis** (as 15 originais preservadas e revisadas + 3 novas); o **Reino Verde está completo** (6 fases, arte dedicada, chefe Javali Espinheiro). As demais vagas estão planejadas. A matriz de qualidade, calculada por verificações automáticas, está em [docs/RELATORIO_EXPANSAO.md](docs/RELATORIO_EXPANSAO.md).
+> **Estado atual (honesto):** a campanha está organizada em **10 mundos e 60 fases** com IDs estáveis e uma ficha de planejamento individual para cada fase. **24 fases são jogáveis** (as 15 originais preservadas e revisadas + 9 novas) e **três mundos estão completos** — Reino Verde, Deserto Dourado e Montanhas Geladas (6 fases cada, arte HD dedicada e chefe exclusivo). Floresta Encantada e Fortaleza Vulcânica têm arte HD dedicada e 3 fases cada; os demais mundos estão planejados ou com arte em produção. A matriz de qualidade, calculada por verificações automáticas, está em [docs/RELATORIO_EXPANSAO.md](docs/RELATORIO_EXPANSAO.md).
 
 ![Reino Verde em 1920 × 1080](docs/images/hd/first_steps_1080p.png)
 
@@ -53,12 +53,12 @@ python tools/capture_level.py first_steps artifacts/shots --res 1920x1080 --at 3
 lume/
   core/        simulação de passo fixo, física, câmera, 23 famílias de comportamento de inimigos
   levels/      formato declarativo lume.level, registro da campanha, validação semântica
-  data/        campaign.json (10 mundos, 60 IDs), enemies.json (61 espécies), fases em JSON
+  data/        campaign.json (10 mundos, 60 IDs), enemies.json (63 espécies), fases em JSON
   render/      pipeline vetorial HD: SVG→textura, rigs, mundos, cena, HUD
   systems/     salvamento v2 e migração, áudio sintetizado, teclado e gamepad
   ui/, app.py  menus, mapa dos mundos, pausa, resultados, configurações
   qa/          robô de rotas e orçamentos de teste
-tests/python/  170 testes (lógica, fases, rotas completas, salvamento, gráficos)
+tests/python/  204 testes (lógica, fases, rotas completas, salvamento, gráficos)
 tools/         conversão das fases web, capturas, perfil de desempenho, matriz de qualidade
 docs/          pesquisa, planejamento das 60 fases, documentação técnica, relatório
 ```

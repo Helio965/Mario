@@ -141,6 +141,7 @@ l.d["checkpoints"].append({"id": "cp_hall", "x": 1650, "y": 418})
 l.ground(1600, 1360, style=F)
 l.plat("question", 1760, 340, 40, 28, reward="fire")
 l.enemy("tatu_bola", 1960, 448, 1840, 2200)
+l.enemy("escaravelho_areia", 2150, 448, 2060, 2240)
 l.hazard("moving", 2260, 352, 26, 26, range=46, speed=1.7)
 for i, (x, y) in enumerate(((2400, 372), (2520, 304), (2640, 236))):
     l.plat("brick", x, y, 80, 22)

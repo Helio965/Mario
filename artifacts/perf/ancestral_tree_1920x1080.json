@@ -1,0 +1,36 @@
+{
+ "level": "ancestral_tree",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.937,
+  "p95": 1.536,
+  "max": 2.763
+ },
+ "submit_ms": {
+  "avg": 2.79,
+  "p95": 4.17
+ },
+ "frame_ms": {
+  "avg": 69.6,
+  "p95": 88.67,
+  "max": 138.83
+ },
+ "draw_calls": {
+  "avg": 78.2,
+  "max": 134
+ },
+ "entities": {
+  "avg": 45.4,
+  "max": 101
+ },
+ "texture_mb": 100.5,
+ "textures": 169,
+ "raster_ms_total": 1491.8,
+ "preload_ms": 1495.0,
+ "python_heap_peak_mb": 0.2,
+ "load_avg_1m": 2.25,
+ "cpus": 4
+}

@@ -67,62 +67,64 @@ Gerada por `python tools/gen_docs.py`. "Arte provisória" significa que a espéc
 | `bolota` | Bolota | patrulheiro básico (papel análogo ao Goomba) | grassland, forest | walker | 1 | stomp, fire, shell, star | first_steps | dedicada | 6 fase(s) |
 | `caramujo` | Caramujo-de-Casca | criatura de casco (papel análogo ao Koopa Troopa) | grassland, forest, coast | shell | 2 | stomp, fire, shell, star | first_steps | dedicada | 6 fase(s) |
 | `besouro_alado` | Besouro-Asa | voador em onda (papel análogo ao Paratroopa) | grassland, forest | flyer | 2 | stomp, fire, shell, star | valley_canals | dedicada | 4 fase(s) |
-| `besouro` | Besouro | forma terrestre do Besouro-Asa | grassland, forest | walker | 1 | stomp, fire, shell, star | valley_canals | dedicada | 0 fase(s) |
+| `besouro` | Besouro | forma terrestre do Besouro-Asa | grassland, forest | walker | 1 | stomp, fire, shell, star | valley_canals | dedicada | 1 fase(s) |
 | `flor_mordedora` | Flor-Mordedora | planta hostil emergente (papel análogo à Piranha Plant) | grassland, forest, swamp | emerger | 2 | fire, shell, star | windmill_heights | dedicada | 3 fase(s) |
 | `ourico_espinho` | Ouriço-Espinho | inimigo com topo espinhoso (papel análogo ao Spiny) | grassland, forest, desert | walker | 3 | fire, shell, star | meadow_burrows | dedicada | 2 fase(s) |
 | `guardiao_pomar` | Guardião do Pomar (chefe) | guardião intermediário (legado 1-3) | grassland | guardian | 3 | stomp, fire, shell | orchard_guardian | dedicada | 1 fase(s) |
 | `javali_espinheiro` | Javali Espinheiro (chefe) | chefe de mundo com investida (papel de chefe de fortaleza) | grassland, fortress | thorn_boar | 4 | stomp, fire | bramble_fortress | dedicada | 1 fase(s) |
-| `escaravelho_areia` | Escaravelho-de-Areia | patrulheiro do deserto que se enterra | desert | walker | 2 | stomp, fire, shell, star | windswept_dunes | provisória | 1 fase(s) |
-| `tatu_bola` | Tatu-Bola | criatura de casco do deserto | desert | shell | 2 | stomp, fire, shell, star | windswept_dunes | provisória | 2 fase(s) |
-| `abutre_filhote` | Abutrinho | voador do deserto | desert, sky | flyer | 2 | stomp, fire, shell, star | canyon_bridges | provisória | 1 fase(s) |
-| `cacto_sentinela` | Cacto Sentinela | sentinela que dispara (papel análogo a lançadores) | desert | shooter | 2 | stomp, fire, shell, star | windswept_dunes | provisória | 3 fase(s) |
-| `escorpiao_couraca` | Escorpião-Couraça | inimigo blindado com cauda periódica | desert | armored | 3 | stomp, fire, shell, star | sand_temple | provisória | 1 fase(s) |
+| `escaravelho_areia` | Escaravelho-de-Areia | patrulheiro do deserto que se enterra | desert | walker | 2 | stomp, fire, shell, star | windswept_dunes | dedicada | 6 fase(s) |
+| `tatu_bola` | Tatu-Bola | criatura de casco do deserto | desert | shell | 2 | stomp, fire, shell, star | windswept_dunes | dedicada | 5 fase(s) |
+| `abutre_filhote` | Abutrinho | voador do deserto | desert, sky | flyer | 2 | stomp, fire, shell, star | canyon_bridges | dedicada | 4 fase(s) |
+| `cacto_sentinela` | Cacto Sentinela | sentinela que dispara (papel análogo a lançadores) | desert | shooter | 2 | stomp, fire, shell, star | windswept_dunes | dedicada | 5 fase(s) |
+| `escorpiao_couraca` | Escorpião-Couraça | inimigo blindado com cauda periódica | desert | armored | 3 | stomp, fire, shell, star | sand_temple | dedicada | 4 fase(s) |
 | `guardiao_templo` | Guardião do Templo (chefe) | guardião intermediário (legado 2-3) | desert | guardian | 3 | stomp, fire, shell | sand_temple | dedicada | 1 fase(s) |
-| `pinguim_patrulha` | Pinguim Patrulheiro | deslizante do gelo | snow | slider | 2 | stomp, fire, shell, star | crystal_lake | provisória | 1 fase(s) |
-| `caracol_cristal` | Caracol-de-Cristal | criatura de casco do gelo | snow | shell | 2 | stomp, fire, shell, star | crystal_lake | provisória | 2 fase(s) |
-| `coruja_nevada` | Coruja Nevada | voadora adaptada ao frio | snow | flyer | 2 | stomp, fire, shell, star | crystal_lake | provisória | 2 fase(s) |
-| `boneco_neve` | Boneco de Neve | sentinela que arremessa bolas de neve | snow | shooter | 2 | stomp, fire, shell, star | blue_ascent | provisória | 2 fase(s) |
-| `carneiro_glacial` | Carneiro Glacial | investidor resistente | snow | charger | 3 | stomp, fire, shell, star | blizzard_heart | provisória | 1 fase(s) |
+| `pinguim_patrulha` | Pinguim Patrulheiro | deslizante do gelo | snow | slider | 2 | stomp, fire, shell, star | crystal_lake | dedicada | 6 fase(s) |
+| `caracol_cristal` | Caracol-de-Cristal | criatura de casco do gelo | snow | shell | 2 | stomp, fire, shell, star | crystal_lake | dedicada | 6 fase(s) |
+| `coruja_nevada` | Coruja Nevada | voadora adaptada ao frio | snow | flyer | 2 | stomp, fire, shell, star | crystal_lake | dedicada | 6 fase(s) |
+| `boneco_neve` | Boneco de Neve | sentinela que arremessa bolas de neve | snow | shooter | 2 | stomp, fire, shell, star | blue_ascent | dedicada | 4 fase(s) |
+| `carneiro_glacial` | Carneiro Glacial | investidor resistente | snow | charger | 3 | stomp, fire, shell, star | blizzard_heart | dedicada | 3 fase(s) |
 | `guardiao_nevasca` | Guardião da Nevasca (chefe) | guardião intermediário (legado 3-3) | snow | guardian | 4 | stomp, fire, shell | blizzard_heart | dedicada | 1 fase(s) |
-| `cogumelo_saltitante` | Cogumelo Saltitante | saltador com antecipação | forest, swamp | hopper | 2 | stomp, fire, shell, star | glowing_canopy | provisória | 0 fase(s) |
-| `caracol_musgo` | Caracol-Musgo | criatura de casco camuflada | forest | shell | 2 | stomp, fire, shell, star | glowing_canopy | provisória | 1 fase(s) |
-| `mariposa_lume` | Mariposa-Lume | voadora luminosa | forest, swamp | flyer | 2 | stomp, fire, shell, star | glowing_canopy | provisória | 3 fase(s) |
-| `planta_esporos` | Planta-de-Esporos | sentinela vegetal | forest, swamp | shooter | 2 | stomp, fire, shell, star | glowing_canopy | provisória | 3 fase(s) |
-| `besouro_casca` | Besouro-Casca | blindado da floresta | forest | armored | 3 | stomp, fire, shell, star | firefly_ruins | provisória | 2 fase(s) |
+| `cogumelo_saltitante` | Cogumelo Saltitante | saltador com antecipação | forest, swamp | hopper | 2 | stomp, fire, shell, star | glowing_canopy | dedicada | 0 fase(s) |
+| `caracol_musgo` | Caracol-Musgo | criatura de casco camuflada | forest | shell | 2 | stomp, fire, shell, star | glowing_canopy | dedicada | 1 fase(s) |
+| `mariposa_lume` | Mariposa-Lume | voadora luminosa | forest, swamp | flyer | 2 | stomp, fire, shell, star | glowing_canopy | dedicada | 3 fase(s) |
+| `planta_esporos` | Planta-de-Esporos | sentinela vegetal | forest, swamp | shooter | 2 | stomp, fire, shell, star | glowing_canopy | dedicada | 3 fase(s) |
+| `besouro_casca` | Besouro-Casca | blindado da floresta | forest | armored | 3 | stomp, fire, shell, star | firefly_ruins | dedicada | 2 fase(s) |
 | `guardiao_arvore` | Guardião da Árvore (chefe) | guardião intermediário (legado 4-3) | forest | guardian | 4 | stomp, fire, shell | ancestral_tree | dedicada | 1 fase(s) |
-| `brasa_andante` | Brasa Andante | patrulheiro resistente ao fogo | volcano, fortress | walker | 3 | stomp, shell, star | basalt_bridges | provisória | 0 fase(s) |
-| `tartaruga_basalto` | Ermitão-de-Basalto | criatura de casco chutável (casco de rocha vulcânica) | volcano, fortress | shell | 3 | stomp, fire, shell, star | basalt_bridges | provisória | 2 fase(s) |
-| `morcego_brasa` | Morcego-Brasa | voador das cavernas de lava | volcano, fortress, underground | flyer | 3 | stomp, fire, shell, star | echo_furnace | provisória | 2 fase(s) |
-| `boca_fornalha` | Boca-de-Fornalha | sentinela de fortaleza | volcano, fortress | shooter | 3 | stomp, shell, star | basalt_bridges | provisória | 3 fase(s) |
-| `golem_basalto` | Golem de Basalto | blindado de fortaleza | volcano, fortress | armored | 4 | stomp, shell, star | basalt_bridges | provisória | 3 fase(s) |
+| `brasa_andante` | Brasa Andante | patrulheiro resistente ao fogo | volcano, fortress | walker | 3 | stomp, shell, star | basalt_bridges | dedicada | 0 fase(s) |
+| `tartaruga_basalto` | Ermitão-de-Basalto | criatura de casco chutável (casco de rocha vulcânica) | volcano, fortress | shell | 3 | stomp, fire, shell, star | basalt_bridges | dedicada | 2 fase(s) |
+| `morcego_brasa` | Morcego-Brasa | voador das cavernas de lava | volcano, fortress, underground | flyer | 3 | stomp, fire, shell, star | echo_furnace | dedicada | 2 fase(s) |
+| `boca_fornalha` | Boca-de-Fornalha | sentinela de fortaleza | volcano, fortress | shooter | 3 | stomp, shell, star | basalt_bridges | dedicada | 3 fase(s) |
+| `golem_basalto` | Golem de Basalto | blindado de fortaleza | volcano, fortress | armored | 4 | stomp, shell, star | basalt_bridges | dedicada | 3 fase(s) |
 | `guardiao_chama` | Guardião da Última Chama (chefe) | guardião intermediário (legado 5-3) | volcano | guardian | 5 | stomp, fire, shell | last_flame | dedicada | 1 fase(s) |
-| `serpente_duna` | Serpente-de-Duna | emboscador que viaja sob a areia (papel análogo ao Monty Mole) | desert | burrower | 3 | stomp, fire, shell, star | sandstorm_pass | provisória | 0 fase(s) |
-| `escaravelho_lancador` | Escaravelho Lançador | atirador em arco (papel análogo ao Hammer Bro) | desert | thrower | 4 | stomp, fire, shell, star | sunken_oasis | provisória | 0 fase(s) |
-| `caranguejo_pinca` | Caranguejo-Pinça | criatura blindada com pinças periódicas | coast, underwater | armored | 2 | stomp, fire, shell, star | shell_beach | provisória | 0 fase(s) |
-| `peixe_saltador` | Peixe-Saltador | peixe hostil que salta da água (papel análogo ao Cheep Cheep) | coast, underwater | swimmer | 2 | stomp, fire, shell, star | shell_beach | provisória | 0 fase(s) |
-| `baiacu_espinho` | Baiacu-Espinho | criatura que infla espinhos (papel análogo ao Porcupuffer/Urchin) | coast, underwater | puffer | 3 | stomp, fire, shell, star | tide_pools | provisória | 0 fase(s) |
-| `agua_viva` | Água-Viva Elétrica | obstáculo vivo flutuante | coast, underwater | floater | 3 | fire, star | current_depths | provisória | 0 fase(s) |
-| `moreia_toca` | Moreia-da-Toca | emboscador de tocas (papel análogo ao Unagi/Piranha) | coast, underwater | emerger | 3 | fire, shell, star | tide_pools | provisória | 0 fase(s) |
-| `polvo_tinteiro` | Polvo-Tinteiro | perseguidor aquático em impulsos (papel análogo ao Blooper) | underwater | swimmer | 4 | stomp, fire, shell, star | coral_maze | provisória | 0 fase(s) |
-| `yeti_mirim` | Yeti-Mirim | atirador em arco do gelo | snow | thrower | 4 | stomp, fire, shell, star | slippery_slopes | provisória | 0 fase(s) |
-| `pingente_queda` | Pingente de Gelo | perigo que desaba (papel análogo ao Thwomp) | snow, underground | crusher | 3 | indestrutível | avalanche_ridge | provisória | 0 fase(s) |
-| `arbusto_espreita` | Arbusto-Espreita | criatura camuflada que investe | forest | charger | 3 | stomp, fire, shell, star | vine_bridges | provisória | 0 fase(s) |
-| `aranha_cipo` | Aranha-do-Cipó | inimigo que desce das copas (papel análogo ao Swoop/Scuttlebug) | forest, swamp | swooper | 3 | stomp, fire, shell, star | whispering_hollow | provisória | 0 fase(s) |
-| `robo_patrulha` | Robô de Ronda | autômato patrulheiro | city | walker | 2 | stomp, fire, shell, star | gear_district | provisória | 0 fase(s) |
-| `sentinela_canhao` | Canhão Sentinela | lançador de projéteis retos (papel análogo ao Bill Blaster) | city, fortress, citadel | cannon | 3 | indestrutível | gear_district | provisória | 0 fase(s) |
-| `drone_vigia` | Drone Vigia | voador mergulhador mecânico | city, sky | swooper | 3 | stomp, fire, shell, star | steam_works | provisória | 0 fase(s) |
-| `prensa_vapor` | Prensa a Vapor | prensa que esmaga (papel análogo ao Thwomp) | city, fortress | crusher | 3 | indestrutível | conveyor_line | provisória | 0 fase(s) |
-| `torreta_arco` | Torreta de Arco | atirador mecânico em arco | city | thrower | 4 | stomp, fire, shell, star | clock_tower | provisória | 0 fase(s) |
+| `serpente_duna` | Serpente-de-Duna | emboscador que viaja sob a areia (papel análogo ao Monty Mole) | desert | burrower | 3 | stomp, fire, shell, star | sandstorm_pass | dedicada | 2 fase(s) |
+| `escaravelho_lancador` | Escaravelho Lançador | atirador em arco (papel análogo ao Hammer Bro) | desert | thrower | 4 | stomp, fire, shell, star | sunken_oasis | dedicada | 2 fase(s) |
+| `caranguejo_pinca` | Caranguejo-Pinça | criatura blindada com pinças periódicas | coast, underwater | armored | 2 | stomp, fire, shell, star | shell_beach | dedicada | 0 fase(s) |
+| `peixe_saltador` | Peixe-Saltador | peixe hostil que salta da água (papel análogo ao Cheep Cheep) | coast, underwater | swimmer | 2 | stomp, fire, shell, star | shell_beach | dedicada | 0 fase(s) |
+| `baiacu_espinho` | Baiacu-Espinho | criatura que infla espinhos (papel análogo ao Porcupuffer/Urchin) | coast, underwater | puffer | 3 | stomp, fire, shell, star | tide_pools | dedicada | 0 fase(s) |
+| `agua_viva` | Água-Viva Elétrica | obstáculo vivo flutuante | coast, underwater | floater | 3 | fire, star | current_depths | dedicada | 0 fase(s) |
+| `moreia_toca` | Moreia-da-Toca | emboscador de tocas (papel análogo ao Unagi/Piranha) | coast, underwater | emerger | 3 | fire, shell, star | tide_pools | dedicada | 0 fase(s) |
+| `polvo_tinteiro` | Polvo-Tinteiro | perseguidor aquático em impulsos (papel análogo ao Blooper) | underwater | swimmer | 4 | stomp, fire, shell, star | coral_maze | dedicada | 0 fase(s) |
+| `yeti_mirim` | Yeti-Mirim | atirador em arco do gelo | snow | thrower | 4 | stomp, fire, shell, star | slippery_slopes | dedicada | 3 fase(s) |
+| `pingente_queda` | Pingente de Gelo | perigo que desaba (papel análogo ao Thwomp) | snow, underground | crusher | 3 | indestrutível | avalanche_ridge | dedicada | 2 fase(s) |
+| `arbusto_espreita` | Arbusto-Espreita | criatura camuflada que investe | forest | charger | 3 | stomp, fire, shell, star | vine_bridges | dedicada | 0 fase(s) |
+| `aranha_cipo` | Aranha-do-Cipó | inimigo que desce das copas (papel análogo ao Swoop/Scuttlebug) | forest, swamp | swooper | 3 | stomp, fire, shell, star | whispering_hollow | dedicada | 0 fase(s) |
+| `robo_patrulha` | Robô de Ronda | autômato patrulheiro | city | walker | 2 | stomp, fire, shell, star | gear_district | dedicada | 0 fase(s) |
+| `sentinela_canhao` | Canhão Sentinela | lançador de projéteis retos (papel análogo ao Bill Blaster) | city, fortress, citadel | cannon | 3 | indestrutível | gear_district | dedicada | 0 fase(s) |
+| `drone_vigia` | Drone Vigia | voador mergulhador mecânico | city, sky | swooper | 3 | stomp, fire, shell, star | steam_works | dedicada | 0 fase(s) |
+| `prensa_vapor` | Prensa a Vapor | prensa que esmaga (papel análogo ao Thwomp) | city, fortress | crusher | 3 | indestrutível | conveyor_line | dedicada | 0 fase(s) |
+| `torreta_arco` | Torreta de Arco | atirador mecânico em arco | city | thrower | 4 | stomp, fire, shell, star | clock_tower | dedicada | 0 fase(s) |
 | `nuvem_marota` | Nuvem Marota | perseguidor aéreo que arremessa (papel análogo ao Lakitu) | sky | cloud_rider | 4 | stomp, fire, star | floating_gardens | provisória | 0 fase(s) |
 | `semente_espinho` | Semente-Espinho | andarilho espinhoso (papel análogo ao Spiny) | sky, grassland | walker | 3 | fire, shell, star | floating_gardens | provisória | 0 fase(s) |
 | `passaro_rajada` | Pássaro-Rajada | voador que mergulha com o vento | sky | swooper | 3 | stomp, fire, shell, star | cloud_harbor | provisória | 0 fase(s) |
 | `balao_espinho` | Balão-Espinho | obstáculo flutuante levado pelo vento | sky | floater | 3 | fire, star | gale_bridges | provisória | 0 fase(s) |
-| `assombracao_timida` | Sombra-Errante | criatura furtiva que reage à luz (mecânica própria do Lume) | swamp, citadel | shy_ghost | 3 | star, fire | misty_marsh | provisória | 0 fase(s) |
-| `sapo_lodo` | Sapo-do-Lodo | saltador do pântano | swamp | hopper | 2 | stomp, fire, shell, star | misty_marsh | provisória | 0 fase(s) |
-| `mao_lodo` | Mão-do-Lodo | emboscador que surge do chão | swamp | emerger | 3 | fire, star | lantern_bog | provisória | 0 fase(s) |
-| `ossada_pantano` | Ossada do Pântano | esqueleto que se remonta (papel análogo ao Dry Bones) | swamp, fortress, volcano | bones | 4 | shell, star, explosion | sunken_mansion | provisória | 0 fase(s) |
-| `bolha_magma` | Salta-Brasa | saltador de lava em ritmo fixo (papel de obstáculo rítmico) | volcano, fortress | lava_jumper | 3 | star | rising_magma | provisória | 0 fase(s) |
+| `assombracao_timida` | Sombra-Errante | criatura furtiva que reage à luz (mecânica própria do Lume) | swamp, citadel | shy_ghost | 3 | star, fire | misty_marsh | dedicada | 0 fase(s) |
+| `sapo_lodo` | Sapo-do-Lodo | saltador do pântano | swamp | hopper | 2 | stomp, fire, shell, star | misty_marsh | dedicada | 0 fase(s) |
+| `mao_lodo` | Mão-do-Lodo | emboscador que surge do chão | swamp | emerger | 3 | fire, star | lantern_bog | dedicada | 0 fase(s) |
+| `ossada_pantano` | Ossada do Pântano | esqueleto que se remonta (papel análogo ao Dry Bones) | swamp, fortress, volcano | bones | 4 | shell, star, explosion | sunken_mansion | dedicada | 0 fase(s) |
+| `bolha_magma` | Salta-Brasa | saltador de lava em ritmo fixo (papel de obstáculo rítmico) | volcano, fortress | lava_jumper | 3 | star | rising_magma | dedicada | 0 fase(s) |
 | `sentinela_estelar` | Sentinela Estelar | atirador de elite | citadel | shooter | 5 | stomp, fire, shell, star | starlit_gate | provisória | 0 fase(s) |
 | `cometa_errante` | Cometa Errante | mergulhador de elite | citadel | swooper | 5 | stomp, fire, shell, star | constellation_path | provisória | 0 fase(s) |
 | `guardiao_constelacao` | Guardião da Constelação | investidor de elite blindado | citadel | charger | 6 | stomp, fire, star | gravity_halls | provisória | 0 fase(s) |
+| `escaravelho_rei` | Escaravelho-Rei (chefe) | chefe de mundo com emboscada subterrânea | desert, fortress | scarab_king | 4 | stomp | scarab_pyramid | dedicada | 1 fase(s) |
+| `morsa_gelomar` | Morsa Gelomar (chefe) | chefe de mundo com armadura removível | snow, fortress | ice_walrus | 5 | stomp | frost_citadel | dedicada | 1 fase(s) |
 <!-- tabela:fim -->

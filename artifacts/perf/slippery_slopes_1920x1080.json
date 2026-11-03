@@ -1,0 +1,36 @@
+{
+ "level": "slippery_slopes",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 720,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.964,
+  "p95": 1.681,
+  "max": 5.792
+ },
+ "submit_ms": {
+  "avg": 3.33,
+  "p95": 4.98
+ },
+ "frame_ms": {
+  "avg": 53.14,
+  "p95": 65.26,
+  "max": 97.76
+ },
+ "draw_calls": {
+  "avg": 82.8,
+  "max": 153
+ },
+ "entities": {
+  "avg": 48.6,
+  "max": 121
+ },
+ "texture_mb": 86.0,
+ "textures": 244,
+ "raster_ms_total": 1577.6,
+ "preload_ms": 1580.5,
+ "python_heap_peak_mb": 0.2,
+ "load_avg_1m": 1.22,
+ "cpus": 4
+}

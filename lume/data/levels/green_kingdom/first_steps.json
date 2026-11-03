@@ -376,6 +376,16 @@
     2590,
     2800
    ]
+  },
+  {
+   "id": "enemy_cave_acorn",
+   "species": "bolota",
+   "x": 2420,
+   "y": 448,
+   "patrol": [
+    2330,
+    2510
+   ]
   }
  ],
  "hazards": [
