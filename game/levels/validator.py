@@ -167,7 +167,12 @@ def validate_level_dict(d: Any) -> list[Issue]:
 
 # --------------------------------------------------------------- geometria
 def _support_below(
-    x: float, y: float, w: float, platforms: list[PlatformSpec], reach: float = 100.0
+    x: float,
+    y: float,
+    w: float,
+    platforms: list[PlatformSpec],
+    reach: float = 100.0,
+    height: float = SMALL_HEIGHT,
 ) -> PlatformSpec | None:
     """Plataforma sólida cujo topo está entre o pé do retângulo e ``reach`` px abaixo."""
     best: PlatformSpec | None = None
@@ -177,7 +182,7 @@ def _support_below(
         if (
             x + w > p.x
             and x < p.x + p.w
-            and y + SMALL_HEIGHT - 1 <= p.y <= y + SMALL_HEIGHT + reach
+            and y + height - 1 <= p.y <= y + height + reach
             and (best is None or p.y < best.y)
         ):
             best = p
@@ -329,7 +334,10 @@ def validate_level(
     for e in level.enemies:
         if not (e.patrol[0] <= e.x and e.x + e.w <= e.patrol[1]):
             issues.append(Issue("error", "enemy.patrol", "posição inicial fora da patrulha", e.id))
-        if e.kind != "flyer" and _support_below(e.x, e.y, e.w, platforms, reach=4) is None:
+        if (
+            e.kind != "flyer"
+            and _support_below(e.x, e.y, e.w, platforms, reach=4, height=e.h) is None
+        ):
             issues.append(
                 Issue(
                     "warning",
