@@ -2185,15 +2185,14 @@ class HauntedSwamp(WorldArt):
         s.ellipse(28, 6, 27, 5, fill=MOSS["normal"][2], stroke=INK, width=1.0)
         s.ellipse(28, 6.2, 24, 3.9, fill=s.linear(0, 2, 0, 10, [(0, "#3a5a6a"), (1, "#16262e")]))
         s.path("M8 5 Q28 2.6 48 5", stroke="#b8d0e0", width=0.8, opacity=0.6)
-        for lx, rx in ((16, 6), (34, 7), (44, 4.5)):
+        for lx, rx in ((16 + r.uniform(-2, 2), 6.0), (34 + r.uniform(-2, 2), 7.0), (44 + r.uniform(-1, 1), 4.5)):
             s.path(f"M{lx:.1f} 6 L{lx + rx:.1f} 5.6 A{rx:.1f} {rx * 0.34:.1f} 0 1 1 {lx + rx * 0.9:.1f} 6.7 Z", fill="#5a8a50", stroke="#1e3a20",
                    width=0.5)
-        fx = 33.0
+        fx = r.uniform(30, 36)
         for k in range(6):
             a = math.radians(-170 + k * 32)
             s.path(f"M{fx:.1f} 5 L{fx + math.cos(a) * 3.4:.1f} {5 + math.sin(a) * 2.8:.1f}", stroke="#f6f2ff", width=1.8)
         s.circle(fx, 4.6, 1.0, fill=FIRE)
-        del r
         return s
 
     def _firefly_jar(self, seed: int) -> Svg:

@@ -827,7 +827,7 @@ class StarCitadel(WorldArt):
             if _hash(n, 66) > 0.5 and lx + wd * 1.6 < xmax:
                 _crystal(s, lx + wd * 0.9, edge_y(lx + wd * 0.9) - 1.0, 198, ln * 0.55, wd * 0.7, light, dark, CRYSTAL_LINE, 0.5)
 
-    def _crystal_cap(self, s: Svg, w: float, y0: float, left: bool, right: bool, x0: float) -> None:
+    def _crystal_cap(self, s: Svg, w: float, y0: float, left: bool, right: bool, x0: float, hang: bool = True) -> None:
         """White-crystal rim: a cut-crystal trim with a faint glow and crystal
         points hanging from its front (all world-aligned)."""
         xs = _samples(w, 2.0)
@@ -869,7 +869,7 @@ class StarCitadel(WorldArt):
         # crystal points hanging from the trim, in little clusters
         slot = 26.0
         for n in range(math.floor(x0 / slot), math.floor((x0 + w) / slot) + 1):
-            if _hash(n, 71) < 0.4:
+            if _hash(n, 71) < 0.4 or not hang:
                 continue
             cx = n * slot + slot * (0.25 + 0.5 * _hash(n, 72)) - x0
             for j in range(1 + int(_hash(n, 73) * 2.6)):
@@ -1132,19 +1132,369 @@ class StarCitadel(WorldArt):
                 _crystal(s, lx, bottom - ln - 0.8, 180, ln, 3.4 + 2 * _hash(n, 134), "#f0fffc", shade(color, -0.35), "#1a1630", 0.5)
         return s
 
+    # ------------------------------------------------------------------ blocks
     def block(self, kind: str, w: float, h: float) -> Svg:
         s = Svg(w, h)
-        s.rect(0, 0, w, h, fill=GOLD)
+        if kind in ("question", "used"):
+            self._reliquary(s, w, h, kind == "used")
+        elif kind == "brick":
+            s.path(rounded_rect_path(0.6, 0.6, w - 1.2, h - 1.2, 3), fill="#0c0e30", stroke=INK, width=1.2)
+            rows = 2
+            rh = (h - 2) / rows
+            for row in range(rows):
+                y = 1 + row * rh
+                x = -(0.0 if row % 2 == 0 else 10.0)
+                i = 0
+                while x < w:
+                    bx0, bx1 = max(1.4, x + 1.1), min(w - 1.4, x + 20 - 1.1)
+                    if bx1 > bx0 + 2:
+                        ident = row * 31 + i
+                        tone = mix("#3c48a0", "#5260c0", _hash(ident, 3))
+                        s.path(rounded_rect_path(bx0, y + 1.0, bx1 - bx0, rh - 2.0, 1.8),
+                               fill=s.linear(0, y, 0, y + rh, [(0, shade(tone, 0.12)), (0.35, tone), (1, "#1e2462")]), stroke=STONE_LINE, width=0.7)
+                        s.line(bx0 + 1.2, y + 2.1, bx1 - 1.2, y + 2.1, "#aab6ff", 0.9, 0.75)
+                        s.line(bx0 + 1.0, y + rh - 1.8, bx1 - 1.0, y + rh - 1.8, "#141a4c", 0.8, 0.6)
+                        for j in range(2):
+                            fx = bx0 + 2 + (bx1 - bx0 - 4) * _hash(ident, 10 + j)
+                            fy = y + 3.4 + (rh - 6.4) * _hash(ident, 20 + j)
+                            s.circle(fx, fy, 0.5 + 0.35 * _hash(ident, 30 + j), fill=GOLD_LIGHT if j == 0 else "#e6ecff", opacity=0.85)
+                        if _hash(ident, 40) > 0.8 and bx1 - bx0 > 10:
+                            _sparkle(s, (bx0 + bx1) / 2, y + rh * 0.5, 1.8, 0.8, GOLD_HI)
+                    x += 20
+                    i += 1
         return s
 
-    def platform(self, kind: str, w: float, h: float, style: str = "") -> Svg:
-        s = Svg(w, h + 10)
-        s.rect(0, 0, w, h, fill=STONE)
-        return s
+    def _reliquary(self, s: Svg, w: float, h: float, used: bool) -> None:
+        """Reward block: a gold reliquary framing a crystal pane with a glowing
+        eight-point star; once used, the gold tarnishes and the star goes dark."""
+        if used:
+            frame = [(0, "#b4aac6"), (0.45, "#7a7290"), (1, "#4a445e")]
+        else:
+            frame = [(0, GOLD_HI), (0.22, GOLD_LIGHT), (0.6, GOLD), (1, GOLD_DARK)]
+        s.path(rounded_rect_path(0.6, 0.6, w - 1.2, h - 1.2, 4.2), fill=s.linear(0, 0, 0, h, frame), stroke=INK, width=1.3)
+        s.path(rounded_rect_path(1.8, 1.8, w - 3.6, h - 3.6, 3.4), stroke="#ffffff" if not used else "#d8d2e6", width=0.8, opacity=0.55)
+        ix, iy = 4.4, 4.2
+        pane = rounded_rect_path(ix, iy, w - 2 * ix, h - 2 * iy, 2.6)
+        if used:
+            s.path(pane, fill=s.linear(ix, iy, w - ix, h - iy, [(0, "#3a3a66"), (1, "#1c1a3a")]), stroke="#2a2440", width=0.9)
+        else:
+            s.path(pane, fill=s.linear(ix, iy, w - ix, h - iy, [(0, "#6a7af0"), (0.5, "#3a3aa8"), (1, "#20186a")]), stroke=GOLD_DEEP, width=0.9)
+        # glass facets
+        s.polygon([(ix + 1.5, iy + 0.8), (ix + 6.5, iy + 0.8), (ix + 2.5, h - iy - 0.8), (ix + 0.8, h - iy - 0.8)], fill="#ffffff",
+                  opacity=0.22 if not used else 0.08)
+        s.polygon([(w - ix - 7, iy + 0.8), (w - ix - 5.2, iy + 0.8), (w - ix - 9, h - iy - 0.8), (w - ix - 10.8, h - iy - 0.8)], fill="#ffffff",
+                  opacity=0.15 if not used else 0.05)
+        cx, cy = w / 2, h / 2
+        rad = min(w - 2 * ix, h - 2 * iy) * 0.46
+        if not used:
+            _glow(s, cx, cy, rad * 1.7, "#fff0b0", 0.85)
+            s.polygon(star_points(cx, cy, rad * 0.78, rad * 0.22, 4, -45), fill=GOLD_LIGHT, opacity=0.9)
+            s.polygon(star_points(cx, cy, rad * 1.05, rad * 0.26, 4), fill=s.linear(cx - rad, cy - rad, cx + rad, cy + rad,
+                                                                                    [(0, "#ffffff"), (0.45, GOLD_HI), (1, GOLD_LIGHT)]),
+                      stroke=GOLD_DARK, width=0.6)
+            s.circle(cx, cy, rad * 0.16, fill="#ffffff")
+            _sparkle(s, ix + 4.2, iy + 3.2, 2.0, 0.9)
+        else:
+            s.polygon(star_points(cx, cy, rad * 0.95, rad * 0.26, 4), fill="#2a2846", stroke="#55507a", width=0.8)
+            s.polygon(star_points(cx, cy, rad * 0.62, rad * 0.2, 4, -45), fill=None, stroke="#55507a", width=0.6)
+        # corner studs and filigree notches on the frame
+        stud = "#fff6d8" if not used else "#9a92b0"
+        for px, py in ((2.6, 2.6), (w - 2.6, 2.6), (2.6, h - 2.6), (w - 2.6, h - 2.6)):
+            s.circle(px, py, 1.15, fill=stud, stroke=GOLD_DEEP if not used else "#3a344c", width=0.4)
+        for py in (2.3, h - 2.3):
+            s.polygon([(cx - 2.4, py), (cx, py - 1.6), (cx + 2.4, py), (cx, py + 1.6)], fill=stud, stroke=GOLD_DEEP if not used else "#3a344c",
+                      width=0.4)
 
+    # ------------------------------------------------------------------ pipes
     def pipe(self, w: float, h: float, warp: bool) -> Svg:
+        """Crystal portal tube with brass telescope rings; the warp variant
+        holds a swirling star glow and a luminous arrow."""
         s = Svg(w, h)
-        s.rect(0, 0, w, h, fill=CRYSTAL)
+        body = s.linear(4, 0, w - 4, 0, [(0, "#16134e"), (0.14, "#3e44a8"), (0.28, "#aeb8ff"), (0.4, "#6a74de"), (0.72, "#2a2a80"), (1, "#110f3e")])
+        s.path(rounded_rect_path(4, 10, w - 8, h - 10, 2), fill=body, stroke=INK, width=1.3)
+        r = Rand(int(w * 7 + h * 3))
+        for _ in range(int((w - 12) * (h - 16) / 90)):  # starlight inside the crystal
+            px, py = r.uniform(9, w - 9), r.uniform(17, h - 4)
+            s.circle(px, py, r.uniform(0.35, 0.8), fill="#ffffff", opacity=r.uniform(0.4, 0.85))
+        s.line(w * 0.3, 16, w * 0.3, h - 2, "#ffffff", 1.4, 0.45)
+        s.line(w * 0.36, 16, w * 0.36, h - 2, "#ffffff", 0.6, 0.3)
+        band = s.linear(4, 0, w - 4, 0, [(0, GOLD_DEEP), (0.25, GOLD), (0.38, GOLD_HI), (0.62, GOLD), (1, GOLD_DARK)])
+        if h > 30:
+            s.path(rounded_rect_path(3.2, h - 9, w - 6.4, 4.6, 1.5), fill=band, stroke=INK, width=0.9)
+        if h > 52:
+            s.path(rounded_rect_path(3.2, h * 0.58, w - 6.4, 3.8, 1.4), fill=band, stroke=INK, width=0.8)
+        # brass collar of the telescope, engraved with a small constellation
+        rim = s.linear(0.8, 0, w - 0.8, 0, [(0, GOLD_DEEP), (0.18, GOLD), (0.34, GOLD_HI), (0.58, GOLD_LIGHT), (0.8, GOLD), (1, GOLD_DARK)])
+        s.path(rounded_rect_path(0.8, 0.8, w - 1.6, 14, 3.5), fill=rim, stroke=INK, width=1.3)
+        s.line(3, 3.2, w - 3, 3.2, GOLD_HI, 1.0, 0.85)
+        s.line(3, 11.6, w - 3, 11.6, GOLD_DEEP, 0.9, 0.7)
+        pts = [(w * 0.3, 8.4), (w * 0.42, 6.2), (w * 0.56, 8.8), (w * 0.7, 6.6)]
+        for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+            s.line(ax, ay, bx, by, GOLD_DEEP, 0.7, 0.8)
+        for px, py in pts:
+            s.circle(px, py, 0.9, fill=GOLD_DEEP)
+        for bx in (5.0, w - 5.0):
+            s.circle(bx, 7.6, 1.3, fill=GOLD_HI, stroke=GOLD_DEEP, width=0.5)
+        if warp:
+            cy = 30 if h > 40 else h * 0.66
+            _glow(s, w / 2, cy, 14, "#d8f0ff", 0.85)
+            for k in range(2):
+                pts = [(w / 2 + math.cos(k * math.pi + i * 0.55) * (1.5 + i * 1.15), cy + math.sin(k * math.pi + i * 0.55) * (1.5 + i * 1.15) * 0.8)
+                       for i in range(9)]
+                s.path(smooth_open(pts), stroke="#ffffff", width=1.1, opacity=0.8)
+            for k in range(5):
+                a = k * 1.3 + 0.4
+                _sparkle(s, w / 2 + math.cos(a) * 9.5, cy + math.sin(a) * 7, 1.4, 0.9, GOLD_HI if k % 2 else "#ffffff")
+            s.polygon([(w / 2 - 4.6, cy - 3.0), (w / 2 + 4.6, cy - 3.0), (w / 2, cy + 3.8)], fill="#ffffff", stroke="#4a5ad8", width=0.7)
+        return s
+
+    # ------------------------------------------------------------------ platforms
+    def platform(self, kind: str, w: float, h: float, style: str = "") -> Svg:
+        if kind == "ledge":
+            return self._ledge(w, h, style)
+        s = Svg(w, h + 10)
+        if kind == "moving":
+            self._orbit_disc(s, w, h)
+        elif kind == "crumble":
+            self._fading_glass(s, w, h)
+        elif kind == "semisolid":
+            self._light_bridge(s, w, h)
+        elif kind == "spring":
+            self._tuning_fork(s, w, h)
+        else:  # conveyor (and switch fallback): a rotating orrery band
+            self._orrery_band(s, w, h)
+        return s
+
+    def _orbit_disc(self, s: Svg, w: float, h: float) -> None:
+        """Small orbiting stone disc: rune ring on its rim, a levitation crystal
+        and two pebbles circling underneath."""
+        cx = w / 2
+        rx = w / 2 - 1.0
+        _glow(s, cx, h + 2, w * 0.28, GLOW_VIOLET, 0.35)
+        # levitation crystal and its orbiting pebbles
+        _crystal(s, cx, h - 4, 180, 12, 6, "#f4f2ff", "#7a6ae0", INK, 0.7)
+        for px, py, pr in ((cx - w * 0.3, h + 3.5, 2.6), (cx + w * 0.34, h + 1.5, 2.0)):
+            s.path(blob(px, py, pr * 1.3, pr, 0.15, seed=px), fill=s.linear(0, py - pr, 0, py + pr, [(0, "#7a84d0"), (1, "#262a68")]), stroke=INK, width=0.6)
+            s.path(f"M{px - pr * 1.6:.2f} {py + 0.5:.2f} Q{px:.2f} {py + pr * 1.8:.2f} {px + pr * 1.6:.2f} {py + 0.5:.2f}", stroke="#bfc8ff", width=0.5,
+                   opacity=0.6)
+        side = (f"M1 3.2 L1 {h - 6:.2f} A{rx:.2f} 5.5 0 0 0 {w - 1:.2f} {h - 6:.2f} L{w - 1:.2f} 3.2 Z")
+        s.path(side, fill=s.linear(0, 2, 0, h, [(0, "#58649e"), (0.3, "#3a4596"), (1, "#151946")]), stroke=INK, width=1.2)
+        # rune band following the curve of the rim
+        ya, yb = h * 0.42, h * 0.42 + 4.2
+        s.path(f"M1.2 {ya:.2f} A{rx:.2f} 4 0 0 0 {w - 1.2:.2f} {ya:.2f} L{w - 1.2:.2f} {yb:.2f} A{rx:.2f} 4 0 0 1 1.2 {yb:.2f} Z",
+               fill=s.linear(0, 0, w, 0, [(0, GOLD_DARK), (0.3, GOLD_LIGHT), (0.55, GOLD), (1, GOLD_DEEP)]), stroke=GOLD_DEEP, width=0.5)
+        for k in range(1, 9):
+            t = k / 9
+            x = 1.2 + (w - 2.4) * t
+            dy = 4 * math.sqrt(max(0.0, 1 - ((x - cx) / rx) ** 2))
+            yy = (ya + yb) / 2 + dy
+            if k % 2:
+                s.line(x, yy - 1.2, x, yy + 1.2, "#2a1a08", 0.9)
+            else:
+                s.circle(x, yy, 0.9, fill="#d8fff8")
+                _glow(s, x, yy, 2.6, GLOW_TEAL, 0.5)
+        # top face: lighter stone with an inscribed ring and the bright crystal edge
+        s.ellipse(cx, 3.2, rx, 2.8, fill=s.linear(0, 0.4, 0, 6, [(0, "#a6b0ee"), (1, "#5c68b8")]), stroke=INK, width=0.9)
+        s.ellipse(cx, 3.3, rx * 0.66, 1.6, stroke=GOLD, width=0.6, opacity=0.9)
+        s.path(f"M2 3.4 A{rx - 1:.2f} 2.6 0 0 0 {w - 2:.2f} 3.4", stroke="#ffffff", width=1.0, opacity=0.8)
+        s.path(f"M3 2.2 A{rx - 2:.2f} 2.0 0 0 1 {w - 3:.2f} 2.2", stroke="#ffffff", width=0.8, opacity=0.5)
+
+    def _fading_glass(self, s: Svg, w: float, h: float) -> None:
+        """Crumbling platform: translucent constellation glass, cracked and
+        shedding shards (it fades away when stepped on)."""
+        r = Rand(int(w * 3 + h))
+        _glow(s, w / 2, h / 2, w * 0.5, GLOW_VIOLET, 0.12)
+        body = rounded_rect_path(0.6, 0.6, w - 1.2, h - 1.2, 3.2)
+        s.path(body, fill=s.linear(0, 0, 0, h, [(0, "#d8dcff", 0.85), (0.35, "#8c92e8", 0.62), (1, "#3c3aa0", 0.5)]))
+        s.path(body, fill=s.linear(0, 0, w, 0, [(0, "#ffffff", 0.0), (0.6, "#ffffff", 0.0), (1, "#c8b8ff", 0.25)]))
+        pts, edges = _constellation_shape(int(w), 7, 8, w - 8, 6, h - 5)
+        _inlay(s, pts, edges, 0.6, 0.3, groove=False)
+        for _ in range(3):
+            x = r.uniform(10, w - 10)
+            crack = [(x, 1.5), (x + r.uniform(-4, 4), h * 0.4), (x + r.uniform(-5, 5), h * 0.72), (x + r.uniform(-3, 3), h - 1.2)]
+            s.path(_line(crack), stroke="#2a2a7a", width=1.1, opacity=0.85)
+            s.path(_line([(px + 0.8, py) for px, py in crack]), stroke="#ffffff", width=0.6, opacity=0.85)
+            bx, by = crack[1]
+            s.path(_line([(bx, by), (bx + r.uniform(4, 8), by + r.uniform(-3, 3))]), stroke="#2a2a7a", width=0.8, opacity=0.8)
+        s.path(body, stroke=INK, width=1.1, opacity=0.85)
+        s.line(3, 1.6, w - 3, 1.6, "#ffffff", 1.3, 0.95)
+        for _ in range(5):  # shards drifting off the underside
+            fx, fy = r.uniform(6, w - 6), h + r.uniform(1.5, 8)
+            sz = r.uniform(1.4, 2.6)
+            s.polygon([(fx, fy - sz), (fx + sz * 0.8, fy), (fx, fy + sz * 0.6), (fx - sz * 0.6, fy)], fill="#dcd8ff", stroke="#4a46a8", width=0.4,
+                      opacity=r.uniform(0.5, 0.9))
+
+    def _light_bridge(self, s: Svg, w: float, h: float) -> None:
+        """Semisolid: a bridge of light joining a row of stars (pass-through from below)."""
+        deck = min(h, 7.0)
+        n = max(2, int(round((w - 12) / 24)))
+        xs = [6 + (w - 12) * i / n for i in range(n + 1)]
+        for x in xs:  # light falling from each star
+            s.rect(x - 1.2, deck, 2.4, h + 7 - deck, fill=s.linear(0, deck, 0, h + 8, [(0, GOLD_LIGHT, 0.45), (1, GOLD_LIGHT, 0)]))
+        s.line(4, deck * 0.5 + 0.5, w - 4, deck * 0.5 + 0.5, GOLD_LIGHT, 9, 0.14)
+        s.path(rounded_rect_path(2, 0.8, w - 4, deck - 1.2, (deck - 1.2) / 2), fill=s.linear(0, 0.8, 0, deck, [(0, "#ffffff", 0.95),
+                                                                                                                (0.45, "#fff2c4", 0.8),
+                                                                                                                (1, GOLD, 0.5)]))
+        s.line(4, 1.3, w - 4, 1.3, "#ffffff", 1.2)
+        s.line(4, deck - 0.6, w - 4, deck - 0.6, GOLD_DARK, 0.7, 0.6)
+        for i, x in enumerate(xs):
+            end = i in (0, n)
+            _glow(s, x, deck / 2, 7 if end else 5, "#fff0b8", 0.7)
+            _sparkle(s, x, deck / 2, 5.2 if end else 3.6, 1.0, "#ffffff")
+            s.circle(x, deck / 2, 1.4 if end else 1.0, fill="#ffffff")
+
+    def _tuning_fork(self, s: Svg, w: float, h: float) -> None:
+        """Spring: a crystal tuning fork on a brass foot, a crystal pad across
+        its prongs and faint resonance rings."""
+        cx = w / 2
+        for side in (-1, 1):  # resonance rings
+            for k in range(2):
+                ox = cx + side * (w * 0.36 + k * 3.2)
+                s.path(f"M{ox:.2f} {h * 0.22:.2f} Q{ox + side * 2.6:.2f} {h * 0.48:.2f} {ox:.2f} {h * 0.74:.2f}", stroke=GLOW_CYAN, width=0.9,
+                       opacity=0.6 - k * 0.25)
+        s.path(rounded_rect_path(w * 0.2, h - 3.6, w * 0.6, 3.6, 1.4), fill=s.linear(0, h - 3.6, 0, h, [(0, GOLD_LIGHT), (1, GOLD_DARK)]),
+               stroke=INK, width=0.9)
+        s.rect(cx - 1.8, h * 0.68, 3.6, h * 0.32 - 3, fill=s.linear(cx - 1.8, 0, cx + 1.8, 0, [(0, GOLD_LIGHT), (1, GOLD_DARK)]), stroke=INK,
+               width=0.7)
+        px0, px1 = w * 0.29, w * 0.71
+        fork = f"M{px0:.2f} 4 L{px0:.2f} {h * 0.5:.2f} Q{px0:.2f} {h * 0.72:.2f} {cx:.2f} {h * 0.72:.2f} Q{px1:.2f} {h * 0.72:.2f} {px1:.2f} {h * 0.5:.2f} L{px1:.2f} 4"
+        s.path(fork, stroke=INK, width=5.6)
+        s.path(fork, stroke=s.linear(0, 0, w, 0, [(0, "#f4f2ff"), (0.5, "#b6acf2"), (1, "#7a6ad8")]), width=3.8)
+        s.path(f"M{px0 - 0.8:.2f} 5 L{px0 - 0.8:.2f} {h * 0.5:.2f}", stroke="#ffffff", width=0.9, opacity=0.8)
+        s.path(rounded_rect_path(1.8, 0.4, w - 3.6, 5.2, 2.6), fill=s.linear(0, 0.4, 0, 5.6, [(0, "#ffffff"), (0.5, "#d6d0ff"), (1, "#8a7ee0")]),
+               stroke=INK, width=1.0)
+        for ex in (1.8, w - 5.0):
+            s.path(rounded_rect_path(ex, 0.4, 3.2, 5.2, 1.2), fill=s.linear(ex, 0, ex + 3.2, 0, [(0, GOLD_LIGHT), (1, GOLD_DARK)]))
+        _sparkle(s, w * 0.3, 2.6, 2.2, 0.95)
+
+    def _orrery_band(self, s: Svg, w: float, h: float) -> None:
+        """Conveyor: a brass orrery band whose little planets roll on a track."""
+        s.path(rounded_rect_path(0.6, 0.6, w - 1.2, h - 1.2, h / 2), fill=s.linear(0, 0, 0, h, [(0, GOLD_HI), (0.3, GOLD_LIGHT), (0.7, GOLD),
+                                                                                                (1, GOLD_DARK)]), stroke=INK, width=1.2)
+        s.path(rounded_rect_path(3.2, 3.6, w - 6.4, h - 7.2, (h - 7.2) / 2), fill=s.linear(0, 3.6, 0, h - 3.6, [(0, "#20206a"), (1, "#0c0a30")]),
+               stroke=GOLD_DEEP, width=0.7)
+        r = Rand(int(w))
+        for _ in range(int(w / 9)):
+            s.circle(r.uniform(h * 0.6, w - h * 0.6), r.uniform(5, h - 5), r.uniform(0.3, 0.6), fill="#ffffff", opacity=0.7)
+        s.line(h / 2, h / 2, w - h / 2, h / 2, GOLD, 0.7, 0.8)
+        colors = (("#fff2c0", GOLD), ("#c8fff6", "#2aa8a0"), ("#ffd6ea", "#c0508a"), ("#e8e2ff", "#7a6ad8"))
+        rad = h * 0.2
+        k = 0
+        x = h * 1.15
+        while x < w - h * 1.1:
+            hi, lo = colors[k % len(colors)]
+            s.circle(x, h / 2, rad, fill=s.radial(x - rad * 0.35, h / 2 - rad * 0.35, rad * 1.3, [(0, "#ffffff"), (0.35, hi), (1, lo)]), stroke=INK,
+                     width=0.5)
+            if k % 3 == 1:
+                s.ellipse(x, h / 2, rad * 1.7, rad * 0.45, stroke="#ffe8b0", width=0.6, opacity=0.85)
+            x += h * 1.15
+            k += 1
+        for hx in (h / 2, w - h / 2):  # orrery hubs
+            s.circle(hx, h / 2, h * 0.36, fill=s.radial(hx - 1, h / 2 - 1, h * 0.4, [(0, GOLD_HI), (0.6, GOLD), (1, GOLD_DARK)]), stroke=INK, width=0.8)
+            for j in range(6):
+                a = j * math.pi / 3
+                s.line(hx + math.cos(a) * h * 0.12, h / 2 + math.sin(a) * h * 0.12, hx + math.cos(a) * h * 0.3, h / 2 + math.sin(a) * h * 0.3,
+                       GOLD_DEEP, 0.8)
+            _glow(s, hx, h / 2, h * 0.22, "#fff6d0", 0.8)
+        s.line(h / 2, 1.6, w - h / 2, 1.6, "#ffffff", 1.0, 0.8)
+        for tx in range(int(h), int(w - h), 8):
+            s.line(tx, 0.8, tx, 2.8, GOLD_DEEP, 0.6, 0.7)
+
+    # ------------------------------------------------------------------ ledges
+    def _ledge(self, w: float, h: float, style: str) -> Svg:
+        """Ledges: star-stone slabs; "floating" = a small floating crystal;
+        "fortress" = temple masonry; "ice" = a mirror-crystal slab."""
+        hr = self.terrain_headroom
+        seed = int(w * 7 + h)
+        if "fortress" in style:
+            return self._fortress(w, h, seed, True, True, True, 0.0, "ice" if "ice" in style else "normal")
+        if style == "floating":
+            return self._floating_crystal(w, h)
+        under = 14.0
+        s = Svg(w, h + hr + under)
+        ice = "ice" in style
+        self._starstone(s, w, h, hr, True, True, 0.0, True, ice, under)
+        if ice:
+            self._mirror_cap(s, w, hr, True, True, 0.0)
+        else:
+            self._crystal_cap(s, w, hr, True, True, 0.0)
+        return s
+
+    def _floating_crystal(self, w: float, h: float) -> Svg:
+        """A small floating crystal: a flat polished top over a faceted lavender
+        mass ending in crystal points, lit from inside."""
+        hr = self.terrain_headroom
+        under = 20.0
+        s = Svg(w, h + hr + under)
+        y0 = hr
+        n = max(3, int(w / 34))
+        tips = []
+        for i in range(n):
+            t = (i + 0.5) / n
+            depth = h + under * (0.35 + 0.6 * math.sin(math.pi * t)) * (0.75 + 0.25 * _hash(i, 3))
+            tips.append((w * t + (_hash(i, 4) - 0.5) * w / n * 0.3, y0 + depth))
+        valleys = [(w * i / n, y0 + h * 0.55 + 3 * _hash(i, 5)) for i in range(1, n)]
+        bottom: list[Pt] = []
+        for i in range(n):
+            bottom.append(tips[i])
+            if i < n - 1:
+                bottom.append(valleys[i])
+        outline = [(1.0, y0 + 2.0)] + [(2.5, y0 + h * 0.45)] + bottom + [(w - 2.5, y0 + h * 0.45), (w - 1.0, y0 + 2.0)]
+        _glow(s, w / 2, y0 + h + under * 0.5, w * 0.36, GLOW_VIOLET, 0.3)
+        s.path(_poly(outline), fill=s.linear(0, y0, 0, y0 + h + under, [(0, "#e8e4ff"), (0.3, "#a69cf0"), (0.7, "#6a58c8"), (1, "#3a2c8a")]))
+        # facets toward each point: lit left face, shaded right face
+        for i, (tx, ty) in enumerate(tips):
+            la = valleys[i - 1][0] if i > 0 else 2.5
+            rb = valleys[i][0] if i < n - 1 else w - 2.5
+            s.polygon([(tx, ty), ((la + tx) / 2, y0 + 3), (tx, y0 + 3)], fill="#ffffff", opacity=0.22)
+            s.polygon([(tx, ty), (tx, y0 + 3), ((rb + tx) / 2, y0 + 3), (rb, y0 + h * 0.5)], fill="#2a1e70", opacity=0.28)
+            s.line(tx, ty - 1.5, tx, y0 + 4, "#ffffff", 0.7, 0.5)
+        _glow(s, w / 2, y0 + h * 0.6, min(w * 0.3, h * 1.2), "#c8f6ff", 0.45)
+        s.path(_line(outline[1:-1]), stroke=INK, width=1.2)
+        for k in range(3):
+            a = k * 2.1 + 0.6
+            _sparkle(s, w / 2 + math.cos(a) * w * 0.32, y0 + h * 0.75 + math.sin(a) * under * 0.4, 1.8, 0.8)
+        self._crystal_cap(s, w, y0, True, True, 0.0, hang=False)
+        return s
+
+    # ------------------------------------------------------------------ arena gate
+    def gate(self, w: float, h: float) -> Svg:
+        """Arena portcullis: translucent crystal bars between gilded posts,
+        gold rails with star studs and a star crest on the lintel."""
+        s = Svg(w, h)
+        frame = min(5.0, w * 0.13)
+        crest = min(15.0, w * 0.4)
+        top = crest * 1.25
+        s.rect(frame, top, w - 2 * frame, h - top - 8, fill="#0c0a2e", opacity=0.55)
+        n = max(3, int((w - 2 * frame) // 8))
+        bar = 4.4
+        for i in range(n):
+            x = frame + 1.2 + i * (w - 2 * frame - 2.4 - bar) / max(1, n - 1)
+            s.rect(x, top, bar, h - top - 10, fill=s.linear(x, 0, x + bar, 0, [(0, "#faf8ff"), (0.45, "#bdb4f6"), (1, "#5a4ec4")]), stroke=CRYSTAL_LINE,
+                   width=0.8)
+            s.line(x + 1.1, top + 2, x + 1.1, h - 12, "#ffffff", 0.9, 0.85)
+            s.polygon([(x - 0.4, h - 10.5), (x + bar / 2, h), (x + bar + 0.4, h - 10.5)],
+                      fill=s.linear(0, h - 11, 0, h, [(0, "#d8d2ff"), (1, "#6a5ad8")]), stroke=CRYSTAL_LINE, width=0.8)
+        for fx in (0.0, w - frame):
+            s.rect(fx, top - 2, frame, h - top - 4, fill=s.linear(fx, 0, fx + frame, 0, [(0, GOLD_LIGHT), (0.5, GOLD), (1, GOLD_DARK)]), stroke=INK,
+                   width=0.9)
+            for y in range(int(top) + 14, int(h) - 8, 20):
+                s.line(fx + 0.6, y, fx + frame - 0.6, y, GOLD_DEEP, 0.8, 0.8)
+        for y in (top + (h - top) * 0.3, top + (h - top) * 0.66):
+            s.rect(0, y, w, 6, fill=s.linear(0, y, 0, y + 6, [(0, GOLD_HI), (0.5, GOLD), (1, GOLD_DARK)]), stroke=INK, width=0.9, rx=1.5)
+            _sparkle(s, w / 2, y + 3, 3.0, 0.95, "#ffffff")
+            for bx in (frame / 2, w - frame / 2):
+                s.circle(bx, y + 3, 1.0, fill=GOLD_DEEP)
+        # lintel with the star crest
+        s.rect(0, top - 5, w, 6, fill=s.linear(0, top - 5, 0, top + 1, [(0, GOLD_HI), (1, GOLD_DARK)]), stroke=INK, width=0.9, rx=1.5)
+        cx, cy = w / 2, crest * 0.95
+        _glow(s, cx, cy, crest * 1.25, "#fff0b0", 0.55)
+        s.circle(cx, cy, crest * 0.82, fill=s.radial(cx - 2, cy - 2, crest, [(0, "#4a4ab8"), (1, "#18145a")]), stroke=GOLD, width=1.8)
+        s.circle(cx, cy, crest * 0.82, stroke=INK, width=0.6)
+        s.polygon(star_points(cx, cy, crest * 0.72, crest * 0.28, 8), fill=s.linear(cx - crest, cy - crest, cx + crest, cy + crest,
+                                                                                    [(0, "#ffffff"), (0.5, GOLD_LIGHT), (1, GOLD)]),
+                  stroke=GOLD_DEEP, width=0.6)
+        s.circle(cx, cy, crest * 0.16, fill="#ffffff")
         return s
 
 
