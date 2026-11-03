@@ -1,0 +1,34 @@
+{
+ "level": "meadow_burrows",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 840,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.769,
+  "p95": 1.369,
+  "max": 3.508
+ },
+ "submit_ms": {
+  "avg": 2.16,
+  "p95": 3.35
+ },
+ "frame_ms": {
+  "avg": 28.46,
+  "p95": 40.43,
+  "max": 53.78
+ },
+ "draw_calls": {
+  "avg": 56.3,
+  "max": 97
+ },
+ "entities": {
+  "avg": 26.2,
+  "max": 71
+ },
+ "texture_mb": 119.0,
+ "textures": 189,
+ "raster_ms_total": 1539.8,
+ "preload_ms": 1543.8,
+ "python_heap_peak_mb": 0.1
+}

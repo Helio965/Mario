@@ -1,0 +1,34 @@
+{
+ "level": "bramble_fortress",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 840,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.82,
+  "p95": 1.578,
+  "max": 2.103
+ },
+ "submit_ms": {
+  "avg": 2.11,
+  "p95": 3.39
+ },
+ "frame_ms": {
+  "avg": 12.43,
+  "p95": 19.78,
+  "max": 35.15
+ },
+ "draw_calls": {
+  "avg": 37.5,
+  "max": 75
+ },
+ "entities": {
+  "avg": 15.3,
+  "max": 52
+ },
+ "texture_mb": 91.2,
+ "textures": 159,
+ "raster_ms_total": 1052.4,
+ "preload_ms": 1044.8,
+ "python_heap_peak_mb": 0.1
+}

@@ -1,0 +1,34 @@
+{
+ "level": "orchard_guardian",
+ "resolution": "1920x1080",
+ "renderer": "software",
+ "frames": 840,
+ "status": "playing",
+ "update_ms": {
+  "avg": 0.716,
+  "p95": 1.297,
+  "max": 4.482
+ },
+ "submit_ms": {
+  "avg": 2.42,
+  "p95": 4.03
+ },
+ "frame_ms": {
+  "avg": 33.83,
+  "p95": 51.63,
+  "max": 74.63
+ },
+ "draw_calls": {
+  "avg": 70.2,
+  "max": 137
+ },
+ "entities": {
+  "avg": 33.7,
+  "max": 97
+ },
+ "texture_mb": 87.2,
+ "textures": 153,
+ "raster_ms_total": 895.1,
+ "preload_ms": 898.9,
+ "python_heap_peak_mb": 0.1
+}
