@@ -372,6 +372,9 @@ class Scene:
         self._particles(game, dt)
         self._hazards(game, liquids=True)
         self._decor("front")
+        darkness = game.darkness() if hasattr(game, "darkness") else 0.0
+        if darkness > 0:
+            self._darkness(game, darkness)
         if outdoor and self.effects:
             self._weather(dt)
         d.letterbox()
@@ -676,6 +679,25 @@ class Scene:
                 f.life = 0
             k = min(1.0, f.life / 2)
             self.draw_canvas(f.art, f.x, f.y, f.size, f.size, alpha=f.alpha * k, tint=f.tint, additive=f.additive, angle=f.rot)
+
+    def _darkness(self, game, level: float) -> None:
+        """Dark zones: everything is dimmed except the halo of Lume's lantern
+        (same radius the light-shy shadows react to). One smooth gradient
+        texture, large enough to cover the screen from any player position."""
+        if getattr(self, "_halo_tex", None) is None:
+            from .raster import rasterize
+
+            halo = Svg(2048, 2048)
+            halo.rect(0, 0, 2048, 2048, fill=halo.radial(1024, 1024, 1024, [
+                (0, "#05060c", 0.0), (0.05, "#05060c", 0.0), (0.075, "#05060c", 0.55), (0.1, "#05060c", 1.0), (1, "#05060c", 1.0)]))
+            self._halo_tex = self.display.texture(rasterize(halo, 0.5))  # smooth gradient: fixed 1024 px
+        p = game.player
+        cx, cy = self.w2c(p.x + p.w / 2, p.y + p.h / 2)
+        radius = game.lantern_radius() * self.zoom * 1.6  # canvas units where darkness is complete
+        size = 2048 * radius / 204.8
+        self.display.draw(self._halo_tex, cx - size / 2, cy - size / 2, size, size, alpha=min(1.0, level))
+        self.draw_art("particle.soft", p.x + p.w / 2 + p.facing * 9, p.y + p.h * 0.62, scale=2.4, alpha=0.6,
+                      tint=(255, 214, 140), additive=True)
 
     # ------------------------------------------------------------------ HUD
     def hud(self, game) -> None:

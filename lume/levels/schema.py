@@ -26,7 +26,7 @@ PLATFORM_KINDS = {
     "pipe", "semisolid", "conveyor", "spring", "switch",
 }
 SURFACES = {"normal", "ice", "sticky"}
-REWARDS = {"coin", "grow", "fire", "star", "heart"}
+REWARDS = {"coin", "grow", "fire", "star", "heart", "toggle"}
 ITEM_KINDS = {"grow", "fire", "star", "heart"}
 HAZARD_KINDS = {"lava", "water", "spikes", "moving", "thorns", "electric", "poison"}
 ZONE_KINDS = {"swim", "current", "wind", "dark", "quicksand", "lowgrav"}

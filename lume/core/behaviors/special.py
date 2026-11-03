@@ -76,11 +76,11 @@ class LightShyGhost(Behavior):
         e.set_state("freeze")
 
     def halo(self, game, e) -> float:
-        p = game.player
-        radius = float(self.param(e, "light_radius", 120.0))
-        if abs(p.vx) > 260:
-            radius = float(self.param(e, "run_radius", 64.0))
-        return radius
+        base = game.lantern_radius()
+        scale = float(self.param(e, "light_radius", 120.0)) / 120.0
+        if abs(game.player.vx) > 260:
+            return float(self.param(e, "run_radius", base))
+        return base * scale
 
     def update(self, game, e, dt, old_timer):
         dx, dy = player_distance(game, e)

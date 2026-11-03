@@ -125,3 +125,19 @@ def test_every_sub_area_renders(display_720, level):
         game.camera.snap(game)
         scene.render(game, 1 / 60)
         assert variance(display_720.screenshot()) > 100, area.id
+
+
+def test_dark_zone_draws_lantern_halo(display_720):
+    from .conftest import level as make_level
+
+    lvl = make_level(zones=[{"id": "dark", "kind": "dark", "x": 0, "y": 0, "w": 2400, "h": 540}])
+    scene = Scene(display_720)
+    game = Game([lvl])
+    scene.render(game, 1 / 60)
+    shot = display_720.screenshot()
+    far = sum(shot.get_at((1200, 420))[:3])  # far right: outside the halo and the HUD
+    lit_scene = Scene(display_720)
+    lit_game = Game([make_level()])
+    lit_scene.render(lit_game, 1 / 60)
+    lit = sum(display_720.screenshot().get_at((1200, 420))[:3])
+    assert game.darkness() > 0 and far < lit * 0.35  # 85% darkness away from the lantern

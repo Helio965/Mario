@@ -58,7 +58,8 @@ def rasterize(svg: Svg, scale: float, *, min_px: int = 1) -> pygame.Surface:
     if folder is not None:
         try:
             path.parent.mkdir(parents=True, exist_ok=True)
-            tmp = path.with_suffix(".tmp.png")
+            # unique temporary name: several processes may share the cache folder
+            tmp = path.with_name(f"{path.stem}.{os.getpid()}.{id(surface):x}.tmp.png")
             pygame.image.save(surface, str(tmp))
             os.replace(tmp, path)
         except (OSError, pygame.error):

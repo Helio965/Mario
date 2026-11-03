@@ -236,3 +236,28 @@ def test_wind_zone_pushes_player():
         ticks(g, 1, jump=True)
         run(g, 0.5, jump=True, right=True)
     assert windy.player.x < calm.player.x - 50
+
+
+def test_quicksand_slows_sinks_and_buries():
+    sand = [{"id": "sand", "kind": "quicksand", "x": 0, "y": 430, "w": 2400, "h": 110}]
+    g = game(zones=sand, platforms=[{"id": "floor", "kind": "ground", "x": 0, "y": 600, "w": 2400, "h": 40}],
+             spawn={"x": 64, "y": 400}, checkpoints=[])
+    run(g, 0.5, right=True)
+    assert abs(g.player.vx) <= 220 * 0.45 + 1
+    run(g, 6)
+    assert g.status in ("dead", "playing") and g.deaths >= 1
+
+
+def test_switch_block_toggles_group_and_rising_lava_rises():
+    plats = [
+        {"id": "toggle", "kind": "question", "reward": "toggle", "group": "red", "x": 60, "y": 336, "w": 40, "h": 28},
+        {"id": "wall", "kind": "switch", "group": "red", "x": 300, "y": 300, "w": 40, "h": 148, "active": True},
+    ]
+    g = game(extra_platforms=plats, hazards=[{"id": "lava", "kind": "lava", "x": 0, "y": 520, "w": 2400, "h": 40}],
+             events=[{"id": "rise", "kind": "rising_lava", "x": 0, "params": {"hazard": "lava", "to": 480, "speed": 40}}])
+    wall = g.platform_by_id["wall"]
+    ticks(g, 20)
+    ticks(g, 60, jump=True)
+    assert not wall.active and any(e.type == "toggle" for e in g.events)
+    lava = next(h for h in g.hazards if h.id == "lava")
+    assert lava.y < 520

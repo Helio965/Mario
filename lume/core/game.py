@@ -107,6 +107,8 @@ class Game:
         self.checkpoints = [Checkpoint(c.id, c.x, c.y) for c in level.checkpoints]
         self.triggered: set[str] = set()
         self.arena: Optional[dict] = None
+        self.rising: list[dict] = []  # active rising-lava events
+        self.switch_state: dict[str, bool] = {}
         self.enemies = []
         for spec in level.enemies:
             enemy = self._make_enemy(spec.species, spec.x, spec.y, spec.id, spec.patrol, spec.hp, spec.params)
@@ -262,7 +264,10 @@ class Game:
         was_swimming = p.swimming
         p.swimming = swim_zone is not None
         jump_pressed = inp.jump and not self.previous_jump
-        if p.swimming:
+        if gravity_scale < 0:
+            self._quicksand(p, inp, direction, jump_pressed, dt)
+            gravity_scale = 1.0
+        elif p.swimming:
             self._swim(p, inp, direction, jump_pressed, dt)
         else:
             floor = self.platform_by_id.get(p.standing_on) if p.standing_on else None
@@ -359,6 +364,22 @@ class Game:
             return "walk"
         return "idle"
 
+    def _quicksand(self, p: Player, inp: InputState, direction: int, jump_pressed: bool, dt: float) -> None:
+        """Sinking sand: slow walk, weak jump, steady sinking; fully buried = death."""
+        p.vx = approach(p.vx, direction * C.WALK_SPEED * 0.45, C.GROUND_ACCEL * dt)
+        if direction:
+            p.facing = direction
+        if jump_pressed:
+            p.vy = -C.JUMP_SPEED * 0.62
+            self.emit("jump", x=p.x + p.w / 2, y=p.y + p.h)
+        p.vy = min(36.0, p.vy + C.GRAVITY * dt) if p.vy < 36.0 else 36.0
+        p.coyote = 0.0
+        p.buffer = 0.0
+        for z in self.zones:
+            if z.kind == "quicksand" and z.x <= p.x + p.w / 2 < z.x + z.w and p.y > z.y + 4:
+                self.die()
+                return
+
     def _swim(self, p: Player, inp: InputState, direction: int, jump_pressed: bool, dt: float) -> None:
         target = direction * C.WATER_MAX_SPEED
         p.vx = approach(p.vx, target, (C.WATER_ACCEL if direction else C.WATER_DRAG) * dt)
@@ -390,7 +411,23 @@ class Game:
                 fy += z.force_y
             elif z.kind == "lowgrav":
                 gravity = min(gravity, 0.55)
+            elif z.kind == "quicksand":
+                gravity = -1.0  # sentinel handled by _quicksand
         return swim, fx, fy, gravity
+
+    def darkness(self) -> float:
+        """0..1 darkness at the player's position (dark zones), for the renderer."""
+        p = self.player
+        cx, cy = p.x + p.w / 2, p.y + p.h / 2
+        level = 0.0
+        for z in self.zones:
+            if z.kind == "dark" and z.x <= cx < z.x + z.w and z.y <= cy < z.y + z.h:
+                level = max(level, z.radius / 1000 if z.radius > 1 else 0.85)
+        return level
+
+    def lantern_radius(self) -> float:
+        """Radius of Lume's lantern halo; shrinks while running (shared with the shadows)."""
+        return 64.0 if abs(self.player.vx) > 260 else 120.0
 
     def zone_active(self, z: Zone) -> bool:
         return z.period <= 0 or (self.elapsed % z.period) < z.period * z.duty
@@ -455,6 +492,15 @@ class Game:
                 self.arena = dict(ev.params, id=ev.id)
                 self.emit("arena", text=ev.params.get("text"), ref=ev.id)
                 self.shake = max(self.shake, 0.2)
+            elif ev.kind == "rising_lava":
+                self.triggered.add(ev.id)
+                hz = next((h for h in self.hazards if h.id == ev.params.get("hazard")), None)
+                if hz is not None:
+                    self.rising.append({"hazard": hz, "to": float(ev.params.get("to", hz.y - 200)),
+                                        "speed": float(ev.params.get("speed", 20.0)), "id": ev.id})
+                    if ev.params.get("text"):
+                        self.emit("message", text=str(ev.params["text"]), ref=ev.id)
+                    self.shake = max(self.shake, 0.25)
             elif ev.kind in ("message", "camera_lock"):
                 self.triggered.add(ev.id)
                 if ev.kind == "camera_lock" and ev.params.get("lock"):
@@ -475,8 +521,27 @@ class Game:
             self.emit("arena_clear", ref=self.arena.get("id"))
             self.arena = None
 
+    def _update_rising(self, dt: float) -> None:
+        for r in self.rising:
+            hz = r["hazard"]
+            if hz.y > r["to"]:
+                step = min(hz.y - r["to"], r["speed"] * dt)
+                hz.y -= step
+                hz.h += step
+
+    def toggle_group(self, group: str) -> None:
+        state = not self.switch_state.get(group, False)
+        self.switch_state[group] = state
+        for s in self.platforms:
+            if s.kind == "switch" and s.group == group:
+                s.active = not s.active
+                s.bump = 0.2
+        self.emit("toggle", ref=group, value=1.0 if state else 0.0)
+
     def _interactions(self, dt: float, inp: InputState, heads: list[Platform]) -> None:
         self._interact_world(inp, heads)
+        if self.rising:
+            self._update_rising(dt)
         if self.level.events:
             self._events()
         self._update_enemies(dt)
@@ -521,6 +586,10 @@ class Game:
             if block.bump > 0:
                 continue
             block.bump = 0.18
+            if block.kind == "question" and block.reward == "toggle":
+                # switch block: never used up; flips every switch platform of its group
+                self.toggle_group(block.group or "a")
+                continue
             if block.kind in ("question", "hidden") and not block.used:
                 block.used = True
                 self.emit("block", x=block.x, y=block.y, ref=block.id)
