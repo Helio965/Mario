@@ -1,0 +1,481 @@
+"""Laço de simulação em passo fixo (port fiel de ``src/core/game.ts``)."""
+
+from __future__ import annotations
+
+import math
+
+from game.characters.abilities import update_powers
+from game.characters.roster import (
+    CHARGED_JUMP_HOLD,
+    CHARGED_JUMP_SPEED_MUL,
+    FLOAT_AIR_SPEED_CAP,
+    FLOAT_FALL_SPEED,
+    FLOAT_MAX_DURATION,
+    INVINCIBLE_KNOCKBACK,
+    INVINCIBLE_STUN,
+    SCUTTLE_FALL_GRAVITY_MUL,
+    Character,
+    get_character,
+)
+from game.core.interactions import burst, interact_world, update_platforms
+from game.core.types import (
+    Coin,
+    Enemy,
+    GameEvent,
+    GameStatus,
+    InputState,
+    Item,
+    Level,
+    Npc,
+    Particle,
+    Platform,
+    Player,
+    Projectile,
+    Rect,
+    Vec,
+)
+from game.enemies.behaviors import create_behavior, update_modern
+from game.enemies.legacy import update_enemies
+from game.enemies.registry import known_enemy_kinds  # noqa: F401 - registra arquétipos
+from game.npc.npc import try_interact, update_npcs
+from game.physics.collision import approach, move_body, overlaps
+from game.physics.movement import FIXED_DT, LEGACY_PROFILE, MovementProfile
+
+VIEW_WIDTH = 960
+
+
+def is_boss(enemy: Enemy) -> bool:
+    return enemy.kind == "boss" or bool(getattr(enemy.behavior, "is_boss", False))
+
+
+VIEW_HEIGHT = 540
+
+
+class Game:
+    """Estado completo de uma partida: fase carregada, jogador, entidades, eventos."""
+
+    def __init__(
+        self,
+        levels: list[Level] | None = None,
+        profile: MovementProfile = LEGACY_PROFILE,
+        character: str | Character = "lume",
+    ) -> None:
+        if levels is None:
+            from game.levels.loader import load_levels
+
+            levels = load_levels()
+        self.levels: list[Level] = levels
+        self.character: Character = (
+            character if isinstance(character, Character) else get_character(character)
+        )
+        self.base_profile = profile
+        self.profile = self.character.profile(profile)
+        self.abilities = frozenset(self.character.delta.abilities)
+        self.invincible_model = self.character.delta.damage_model == "invincible"
+        self.level: Level = levels[0]
+        self.level_index = 0
+        self.player: Player = Player(x=0, y=0)
+        self.platforms: list[Platform] = []
+        self.coins: list[Coin] = []
+        self.enemies: list[Enemy] = []
+        self.items: list[Item] = []
+        self.projectiles: list[Projectile] = []
+        self.particles: list[Particle] = []
+        self.events: list[GameEvent] = []
+        self.camera = Vec(0, 0)
+        self.status: GameStatus = "playing"
+        self.time = 300.0
+        self.lives = 5
+        self.score = 0
+        self.level_start_score = 0
+        self.coins_total = 0
+        self.checkpoint_reached = False
+        self.found_relic = False
+        self.elapsed = 0.0
+        self.shake = 0.0
+        self._accumulator = 0.0
+        self._previous_jump = False
+        self._previous_down = False
+        self._transition = 0.0
+        self.pipe_cooldown = 0.0
+        self.npcs: list[Npc] = []
+        self.last_input: InputState = InputState()
+        self.talking = False
+        self.talking_npc: Npc | None = None
+        self.load(0)
+
+    # ----------------------------------------------------------------- ciclo
+    def start(self, index: int = 0) -> None:
+        self.lives = 5
+        self.score = 0
+        self.coins_total = 0
+        self.load(index)
+
+    def load(self, index: int) -> None:
+        self.level_start_score = self.score
+        self.level_index = max(0, min(index, len(self.levels) - 1))
+        self.level = self.levels[self.level_index]
+        self.platforms = [Platform.from_spec(p) for p in self.level.platforms]
+        self.coins = [Coin(c.id, c.x, c.y, c.w, c.h, c.special, False) for c in self.level.coins]
+        self.items = [Item(i.id, i.kind, i.x, i.y, i.w, i.h, 0, 0, True) for i in self.level.items]
+        self.enemies = [
+            Enemy(
+                id=e.id,
+                kind=e.kind,
+                x=e.x,
+                y=e.y,
+                w=e.w,
+                h=e.h,
+                patrol=list(e.patrol),
+                hp=e.hp,
+                vx=-60,
+                vy=0,
+                alive=True,
+                health=e.hp
+                if e.hp is not None
+                else (2 if e.kind == "armored" else 4 if e.kind == "boss" else 1),
+                facing=-1,
+                timer=0,
+                hit_timer=0,
+                state="walk",
+                origin_y=e.y,
+                grounded=False,
+            )
+            for e in self.level.enemies
+        ]
+        for enemy in self.enemies:
+            enemy.behavior = create_behavior(enemy)
+        self.npcs = [Npc.from_spec(n) for n in self.level.npcs]
+        self.talking = False
+        self.talking_npc = None
+        self._previous_down = False
+        self.projectiles = []
+        self.particles = []
+        self.events = []
+        self.checkpoint_reached = False
+        self.found_relic = False
+        self.elapsed = 0.0
+        self.time = self.level.time + self.character.delta.time_bonus
+        self.status = "playing"
+        self._accumulator = 0.0
+        self._previous_jump = False
+        self._transition = 0.0
+        self.spawn(self.level.spawn.x, self.level.spawn.y)
+
+    def spawn(self, x: float, y: float) -> None:
+        self.player = Player(x=x, y=y)
+        self.camera = Vec(max(0, x - 240), 0)
+
+    def pause(self) -> None:
+        if self.status == "playing":
+            self.status = "paused"
+
+    def resume(self) -> None:
+        if self.status == "paused":
+            self.status = "playing"
+
+    def next(self) -> bool:
+        if self.status != "complete" or self.level_index >= len(self.levels) - 1:
+            return False
+        self.load(self.level_index + 1)
+        return True
+
+    def update(self, dt: float, input_state: InputState) -> None:
+        if self.status == "paused" or self.status == "gameover" or self.talking:
+            return
+        if self.status == "complete":
+            self.elapsed += min(dt, 0.25)
+            for v in self.particles:
+                v.life -= dt
+                v.x += v.vx * dt
+                v.y += v.vy * dt
+            self.particles = [v for v in self.particles if v.life > 0]
+            return
+        self._accumulator += min(dt, 0.25)
+        while self._accumulator >= FIXED_DT:
+            self.step(FIXED_DT, input_state)
+            self._accumulator -= FIXED_DT
+
+    # ------------------------------------------------------------------ passo
+    def step(self, dt: float, input_state: InputState) -> None:
+        self.elapsed += dt
+        self.last_input = input_state
+        if self.status == "dead":
+            self._transition -= dt
+            if self._transition <= 0:
+                self.respawn()
+            return
+        if self.status != "playing":
+            return
+        self.time = max(0, self.time - dt)
+        self.pipe_cooldown = max(0, self.pipe_cooldown - dt)
+        update_platforms(self, dt)
+        p = self.player
+        prof = self.profile
+        p.invulnerable = max(0, p.invulnerable - dt)
+        p.star = max(0, p.star - dt)
+        p.shoot_cooldown = max(0, p.shoot_cooldown - dt)
+        self.shake = max(0, self.shake - dt)
+        direction = int(input_state.right) - int(input_state.left)
+        if p.stun > 0:  # Pirilampo empurrado: sem controle por um instante
+            p.stun = max(0, p.stun - dt)
+            direction = 0
+            input_state = InputState(jump=False, run=input_state.run)
+        p.crouching = p.grounded and input_state.down and direction == 0
+        self._update_charge(p, input_state, dt)
+        floor = next((s for s in self.platforms if s.id == p.standing_on), None)
+        on_ice = floor is not None and floor.kind == "ice"
+        if prof.model == "legacy":
+            self._horizontal_legacy(p, input_state, direction, on_ice, dt)
+        else:
+            self._horizontal_calibrated(p, input_state, direction, on_ice, dt)
+        if direction:
+            p.facing = direction
+        if input_state.jump and not self._previous_jump:
+            p.buffer = prof.jump_buffer
+        self._previous_jump = input_state.jump
+        p.buffer = max(0, p.buffer - dt)
+        p.coyote = prof.coyote_time if p.grounded else max(0, p.coyote - dt)
+        if p.buffer > 0 and p.coyote > 0:
+            speed = prof.jump_speed
+            if prof.run_jump_speed is not None and abs(p.vx) >= prof.run_jump_threshold:
+                speed = prof.run_jump_speed
+            if p.charged:
+                speed *= CHARGED_JUMP_SPEED_MUL
+                p.charged = False
+                p.charge = 0.0
+            p.vy = -speed
+            p.float_used = False
+            p.float_time = FLOAT_MAX_DURATION if "float" in self.abilities else 0.0
+            p.grounded = False
+            p.standing_on = None
+            p.coyote = 0
+            p.buffer = 0
+            self.events.append(GameEvent("jump"))
+        if not input_state.jump and p.vy < -prof.jump_cut_speed:
+            p.vy = -prof.jump_cut_speed
+        gravity = prof.gravity if (p.vy < 0 and input_state.jump) else prof.fall_gravity
+        if "scuttle" in self.abilities and p.vy > 0 and input_state.jump and not p.grounded:
+            gravity *= SCUTTLE_FALL_GRAVITY_MUL
+        p.vy = min(prof.terminal_velocity, p.vy + gravity * dt)
+        self._update_float(p, input_state, dt)
+        collision = move_body(p, self.platforms, dt)
+        p.grounded = collision.grounded
+        p.standing_on = collision.standing_on
+        p.hit_ceiling = bool(collision.heads)
+        if p.hit_ceiling and prof.ceiling_bump_speed:
+            p.vy = prof.ceiling_bump_speed
+        p.x = max(0, min(p.x, self.level.width - p.w))
+        self.interactions(dt, input_state, collision.heads)
+        if p.y > self.level.height + 100 or self.time <= 0:
+            self.die()
+        if self.status == "playing":
+            if p.invulnerable > 0 and p.invulnerable < 1.2:
+                p.animation = "hurt"
+            elif not p.grounded:
+                p.animation = "jump" if p.vy < 0 else "fall"
+            elif abs(p.vx) > 260:
+                p.animation = "run"
+            elif abs(p.vx) > 15:
+                p.animation = "walk"
+            else:
+                p.animation = "idle"
+        target_x = max(
+            0, min(self.level.width - VIEW_WIDTH, p.x - 310 + p.vx * prof.camera_lookahead)
+        )
+        target_y = max(0, min(self.level.height - VIEW_HEIGHT, p.y - 250))
+        self.camera.x += (target_x - self.camera.x) * (1 - math.exp(-6 * dt))
+        self.camera.y += (target_y - self.camera.y) * (1 - math.exp(-6 * dt))
+
+    def _update_charge(self, p: Player, input_state: InputState, dt: float) -> None:
+        """Salto carregado (Fagulha): agachada parada por 0,5 s; mover cancela (SMB2 Power Squat).
+
+        Pressionar o salto no mesmo passo em que solta o agachamento ainda usa a carga.
+        """
+        if "charged_jump" not in self.abilities:
+            return
+        if p.crouching and abs(p.vx) < 1:
+            p.charge = min(CHARGED_JUMP_HOLD, p.charge + dt)
+            p.charged = p.charge >= CHARGED_JUMP_HOLD
+        elif p.grounded and not input_state.jump:
+            p.charge = 0.0
+            p.charged = False
+        # No ar a carga é mantida até ser consumida no impulso.
+
+    def _update_float(self, p: Player, input_state: InputState, dt: float) -> None:
+        """Flutuação (Aurora): após o ápice, segurando o salto, por até 0,8 s, uma vez por salto."""
+        p.floating = False
+        if "float" not in self.abilities or p.grounded or p.float_used:
+            return
+        if p.vy >= 0 and input_state.jump and p.float_time > 0:
+            p.floating = True
+            p.float_time = max(0.0, p.float_time - dt)
+            p.vy = min(p.vy, FLOAT_FALL_SPEED)
+            if abs(p.vx) > FLOAT_AIR_SPEED_CAP:
+                p.vx = FLOAT_AIR_SPEED_CAP if p.vx > 0 else -FLOAT_AIR_SPEED_CAP
+            if p.float_time <= 0:
+                p.float_used = True
+        elif p.vy >= 0 and not input_state.jump and p.float_time < FLOAT_MAX_DURATION:
+            p.float_used = True  # soltar encerra a flutuação desta queda
+
+    def _horizontal_legacy(
+        self, p: Player, input_state: InputState, direction: int, on_ice: bool, dt: float
+    ) -> None:
+        """Modelo de referência: aceleração única e atrito ao soltar (também no ar)."""
+        prof = self.profile
+        friction = prof.ice_friction if on_ice else prof.ground_friction
+        if direction:
+            rate = prof.ground_acceleration if p.grounded else prof.air_acceleration
+        else:
+            rate = friction if p.grounded else prof.air_friction
+        p.vx = approach(
+            p.vx, direction * (prof.run_speed if input_state.run else prof.walk_speed), rate * dt
+        )
+        p.skidding = False
+        p.run_grace = 0.0
+
+    def _horizontal_calibrated(
+        self, p: Player, input_state: InputState, direction: int, on_ice: bool, dt: float
+    ) -> None:
+        """Modelo calibrado (docs/research/MOVIMENTACAO.md §13.3).
+
+        Acelerar, derrapar (atrito dobrado, SMB1) ou soltar (sem atrito no ar);
+        teto de corrida com graça ao soltar (SMB1 ``RunningTimer``); gelo reduz
+        a tração (SMW); no ar o teto preserva a velocidade atual.
+        """
+        prof = self.profile
+        accel_mult = prof.ice_acceleration_multiplier if on_ice else 1.0
+        if input_state.run and p.grounded:
+            p.run_grace = prof.run_release_grace
+        else:
+            p.run_grace = max(0.0, p.run_grace - dt)
+        cap = prof.run_speed if (input_state.run or p.run_grace > 0) else prof.walk_speed
+        if not p.grounded:
+            cap = max(cap, min(abs(p.vx), prof.run_speed))
+        moving_against = direction != 0 and p.vx != 0 and (direction > 0) != (p.vx > 0)
+        p.skidding = False
+        if direction and not moving_against:
+            if p.grounded:
+                rate = prof.run_acceleration if cap > prof.walk_speed else prof.walk_acceleration
+            else:
+                rate = prof.air_acceleration
+            p.vx = approach(p.vx, direction * cap, rate * accel_mult * dt)
+        elif moving_against:
+            if p.grounded:
+                rate = prof.ice_skid_deceleration if on_ice else prof.skid_deceleration
+            else:
+                rate = prof.air_acceleration
+            p.vx = approach(p.vx, 0.0, rate * dt)
+            p.skidding = p.grounded and abs(p.vx) > prof.skid_turn_speed
+        else:
+            rate = (
+                (prof.ice_friction if on_ice else prof.ground_friction)
+                if p.grounded
+                else prof.air_friction
+            )
+            p.vx = approach(p.vx, 0.0, rate * dt)
+
+    def interactions(self, dt: float, input_state: InputState, heads: list[Platform]) -> None:
+        on_pipe = self._on_pipe()
+        interact_world(self, input_state, heads)
+        update_enemies(self, dt)
+        update_modern(self, dt)
+        if self.npcs:
+            update_npcs(self, dt)
+            if input_state.down and not self._previous_down and not on_pipe:
+                try_interact(self)
+        self._previous_down = input_state.down
+        update_powers(self, dt, input_state)
+        exit_box = Rect(x=self.level.exit.x - 12, y=self.level.exit.y - 110, w=44, h=110)
+        if overlaps(self.player, exit_box) and self.boss() is None:
+            self.finish()
+        for particle in self.particles:
+            particle.life -= dt
+            particle.x += particle.vx * dt
+            particle.y += particle.vy * dt
+            particle.vy += 300 * dt
+        self.particles = [v for v in self.particles if v.life > 0]
+
+    def _on_pipe(self) -> bool:
+        """Jogador sobre um cano com passagem (mesma condição de ``interact_world``)."""
+        p = self.player
+        return any(
+            s.kind == "pipe"
+            and s.destination is not None
+            and p.x + p.w > s.x
+            and p.x < s.x + s.w
+            and abs(p.y + p.h - s.y) < 10
+            for s in self.platforms
+        )
+
+    def end_talk(self) -> None:
+        """Encerra o diálogo iniciado por ``try_interact`` e devolve o NPC à rotina."""
+        if self.talking_npc is not None and self.talking_npc.state == "talk":
+            self.talking_npc.state = "routine"
+        self.talking_npc = None
+        self.talking = False
+
+    # ---------------------------------------------------------------- estado
+    def hurt(self) -> None:
+        p = self.player
+        if self.status != "playing" or p.invulnerable > 0 or p.star > 0:
+            return
+        if self.invincible_model:
+            # Pirilampo: inimigos não ferem; apenas empurram e atordoam (Nabbit/Yoshi).
+            if p.stun > 0:
+                return
+            p.stun = INVINCIBLE_STUN
+            p.vx = -p.facing * INVINCIBLE_KNOCKBACK
+            p.vy = min(p.vy, -120)
+            burst(self, p.x, p.y, "#c7f464", 6)
+            self.events.append(GameEvent("hurt"))
+            return
+        self.events.append(GameEvent("hurt"))
+        self.shake = 0.12
+        burst(self, p.x, p.y, "#ef9473")
+        if p.power == "small":
+            self.die()
+            return
+        if p.power == "fire":
+            p.power = "grown"
+        else:
+            p.power = "small"
+            p.y += p.h - 30
+            p.h = 30
+        p.invulnerable = self.profile.hurt_invulnerability
+        p.vx = -p.facing * self.profile.hurt_knockback
+
+    def finish(self) -> None:
+        if self.status != "playing":
+            return
+        self.status = "complete"
+        self.player.animation = "win"
+        self.score += math.floor(self.time) * 10
+        self.events.append(
+            GameEvent("complete", text="Fase concluída!", value=self.score - self.level_start_score)
+        )
+
+    def die(self) -> None:
+        if self.status != "playing":
+            return
+        self.lives -= 1
+        self.status = "dead"
+        self.player.animation = "dead"
+        self._transition = 1.1
+        self.events.append(GameEvent("death"))
+
+    def respawn(self) -> None:
+        if self.lives <= 0:
+            self.status = "gameover"
+            return
+        point = self.level.checkpoint if self.checkpoint_reached else self.level.spawn
+        self.spawn(point.x, point.y)
+        self.status = "playing"
+        self.time = max(self.time, 90)
+        self.projectiles = []
+        self.pipe_cooldown = 0
+
+    # -------------------------------------------------------------- consultas
+    def boss(self) -> Enemy | None:
+        """Guardião vivo (legado ``kind == "boss"`` ou arquétipo moderno marcado ``is_boss``)."""
+        return next((e for e in self.enemies if e.alive and is_boss(e)), None)

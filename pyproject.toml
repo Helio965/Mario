@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lume"
+version = "2.0.0a1"
+description = "Lume — As Cinco Fronteiras: jogo de plataforma 2D original em Python (pygame-ce)"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "Hélio" }]
+dependencies = [
+  "pygame-ce>=2.5.8,<3",
+  "numpy>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "pytest-cov>=5",
+  "ruff>=0.12",
+  "mypy>=1.14",
+  "pillow>=11",
+]
+build = ["pyinstaller>=6.11"]
+
+[project.scripts]
+lume = "game.application:main"
+
+[tool.setuptools]
+packages = { find = { include = ["game*"] } }
+include-package-data = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q -ra --strict-markers"
+markers = [
+  "gameplay: testes de campanha dirigidos por entradas normais (lentos)",
+  "performance: medições de desempenho (não exigem valores absolutos em CI)",
+  "graphics: exigem SDL (usam driver dummy em CI)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["node_modules", "dist", ".venv", "build"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4", "RUF", "N", "PL"]
+ignore = ["PLR0913", "PLR0917", "PLR0912", "PLR0915", "PLR2004", "PLR0911", "PLR0914", "PLR6301", "E501", "RUF001", "RUF002", "RUF003", "PLW2901", "PLR1714", "SIM108", "PLC0415", "PLW0603", "PLR1702"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["PLR", "N", "B011"]
+"tools/**" = ["PLR"]
+
+[tool.mypy]
+python_version = "3.12"
+packages = ["game"]
+strict = true
+warn_unreachable = true
+ignore_missing_imports = true

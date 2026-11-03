@@ -1,0 +1,429 @@
+{
+  "game": {
+    "title": "LUME",
+    "subtitle": "AS CINCO FRONTEIRAS",
+    "tagline": "Há uma luz além de cada horizonte.\nSalte, explore e encontre a sua.",
+    "eyebrow": "AVENTURA DE PLATAFORMA 2D"
+  },
+  "menu": {
+    "play": "JOGAR",
+    "continue": "Continuar · {world}-{stage}",
+    "start_here": "Sua jornada começa aqui",
+    "map": "Selecionar mundo",
+    "controls": "Controles",
+    "settings": "Configurações",
+    "credits": "Créditos",
+    "quit": "Sair",
+    "saved_locally": "Seu progresso é salvo neste computador.",
+    "next_frontier": "SUA PRÓXIMA FRONTEIRA",
+    "first_destination": "SEU PRIMEIRO DESTINO",
+    "scene_subtitle": "{subtitle}.",
+    "world_counter": "{current} / {total}"
+  },
+  "hud": {
+    "lives": "VIDAS",
+    "score": "PONTOS",
+    "coins": "MOEDAS",
+    "stage": "MUNDO / FASE",
+    "time": "TEMPO",
+    "guardian": "GUARDIÃO",
+    "power_small": "Explorador",
+    "power_grown": "Crescimento",
+    "power_fire": "Flor de fogo",
+    "power_star": "Invencível · {seconds}s",
+    "fps": "{fps} FPS",
+    "stage_value": "{world} — {stage}",
+    "boss_health": "{health} / {max}"
+  },
+  "events": {
+    "checkpoint": "Checkpoint ativado",
+    "secret": "Uma passagem secreta!",
+    "relic": "Relíquia encontrada!",
+    "complete": "Fase concluída!",
+    "boss": "Guardião derrotado!",
+    "life_coins": "100 moedas: vida extra!",
+    "life_heart": "Uma vida extra!",
+    "power_grow": "Mais forte!",
+    "power_fire": "Chama ativa — pressione {button}",
+    "power_star": "12 segundos de invencibilidade",
+    "save_blocked": "Não foi possível gravar o progresso. Ele vale nesta sessão.",
+    "progress_reset": "Uma nova jornada começa. Progresso reiniciado.",
+    "audio_on": "Áudio ativado.",
+    "audio_off": "Áudio desligado."
+  },
+  "dialogues": {
+    "intro_1-1": {
+      "0": "Então é aqui que a luz começa... O vale inteiro está brilhando!",
+      "1": "Moedas, blocos com luz e canos antigos. Alguém deixou pistas para mim.",
+      "2": "Cinco fronteiras, cinco guardiões. Vamos descobrir o que há além do horizonte."
+    }
+  },
+  "reactions": {
+    "lume": {
+      "jump": [
+        "Hup!",
+        "Lá vou eu!",
+        "Mais alto!"
+      ],
+      "hurt": [
+        "Ai!",
+        "Isso doeu...",
+        "Preciso ter mais cuidado."
+      ],
+      "stomp": [
+        "Desculpe!",
+        "Peguei!",
+        "Fora do caminho!"
+      ],
+      "coin_streak": [
+        "Que brilho!",
+        "Isso vai render.",
+        "Mais uma para a coleção."
+      ],
+      "relic": [
+        "Uma relíquia! Ela está quente de luz.",
+        "Olha só o que estava escondido aqui!",
+        "Os antigos deixaram isso para alguém encontrar."
+      ],
+      "checkpoint": [
+        "Daqui eu não volto atrás.",
+        "Um fôlego, e seguimos.",
+        "A luz marcou este lugar."
+      ],
+      "secret": [
+        "Uma passagem! Eu sabia que esse cano escondia algo.",
+        "Quem construiu isso gostava de segredos.",
+        "Por aqui ninguém passou há muito tempo."
+      ],
+      "power_grow": [
+        "Sinto a luz crescer em mim!",
+        "Mais forte!",
+        "Agora aguento um tombo."
+      ],
+      "power_fire": [
+        "Chama na mão! Cuidado, guardiões.",
+        "Quente, quente, quente!",
+        "Vou iluminar o caminho... literalmente."
+      ],
+      "power_star": [
+        "Nada me para agora!",
+        "Estou brilhando!",
+        "Rápido, antes que passe!"
+      ],
+      "boss_intro": [
+        "Então você é quem guarda esta fronteira.",
+        "Não vim brigar. Mas também não vou embora.",
+        "Mostre o que sabe fazer, guardião."
+      ],
+      "boss_hit": [
+        "Achei a brecha!",
+        "Mais uma vez!",
+        "Está sentindo a luz?"
+      ],
+      "boss_defeated": [
+        "A fronteira está aberta.",
+        "Descanse, guardião. Eu cuido do resto.",
+        "Uma luz a menos apagada."
+      ],
+      "victory": [
+        "Mais um horizonte!",
+        "Conseguimos!",
+        "O que vem agora?"
+      ],
+      "defeat": [
+        "Tudo bem. Eu volto.",
+        "A luz continua aqui.",
+        "Da próxima vez, eu chego lá."
+      ],
+      "world_unlock": [
+        "Uma nova fronteira... o ar mudou.",
+        "Nunca estive tão longe de casa.",
+        "Cada mundo tem sua própria luz."
+      ],
+      "idle_long": [
+        "Hmm... por onde?",
+        "Esse vento traz um cheiro novo.",
+        "Será que ouvi alguma coisa?"
+      ]
+    }
+  },
+  "characters": {
+    "lume": {
+      "name": "Lume",
+      "description": "Portador da luz. Equilibrado em tudo: salto, corrida e coragem."
+    },
+    "vento": {
+      "name": "Vento",
+      "description": "Irmão mais alto e tímido. Salta mais alto, escorrega mais e desce devagar ao segurar o salto."
+    },
+    "fagulha": {
+      "name": "Fagulha",
+      "description": "Rápida e baixinha. Salta menos, mas, agachada por meio segundo, dispara um salto carregado."
+    },
+    "aurora": {
+      "name": "Aurora",
+      "description": "Planadora. Corre um pouco menos e pode flutuar por um instante no ar, uma vez por salto."
+    },
+    "pirilampo": {
+      "name": "Pirilampo",
+      "description": "Para quem está começando: inimigos não ferem, mas poços, lava e o tempo continuam valendo."
+    }
+  },
+  "format": {
+    "thousands": "."
+  },
+  "common": {
+    "back": "Voltar",
+    "back_to_pause": "Voltar à pausa",
+    "yes": "Sim",
+    "no": "Não",
+    "cancel": "Cancelar",
+    "on": "Ligado",
+    "off": "Desligado"
+  },
+  "screens": {
+    "map": {
+      "label": "MAPA DA AVENTURA",
+      "title": "Escolha seu horizonte."
+    },
+    "controls": {
+      "label": "CONTROLES",
+      "title": "Um salto de cada vez."
+    },
+    "settings": {
+      "label": "CONFIGURAÇÕES",
+      "title": "Do seu jeito."
+    },
+    "credits": {
+      "label": "CRÉDITOS & LICENÇAS",
+      "title": "Uma nova luz."
+    },
+    "pause": {
+      "label": "JOGO PAUSADO",
+      "title": "Respire. A aventura espera."
+    },
+    "complete": {
+      "label": "FASE CONCLUÍDA",
+      "title": "Mais um horizonte alcançado!",
+      "title_final": "Você iluminou as cinco fronteiras!"
+    },
+    "gameover": {
+      "label": "FIM DE JOGO",
+      "title": "Toda aventura tem recomeços."
+    }
+  },
+  "map": {
+    "progress": "{percent}% da jornada",
+    "relics": "{count} / {total} relíquias",
+    "achievements": "CONQUISTAS",
+    "achievements_count": "{count} / {total}",
+    "no_achievements": "Sua primeira conquista espera no fim da primeira fase.",
+    "world_number": "0{world}",
+    "node": {
+      "record": "{score} pts",
+      "next": "Próximo destino",
+      "again": "Explore de novo",
+      "locked_hint": "Complete a anterior"
+    }
+  },
+  "achievements": {
+    "first-clear": "Primeira luz",
+    "all-clear": "As cinco fronteiras",
+    "relic-hunter": "Caçador de relíquias",
+    "secret-path": "Caminho secreto",
+    "world-1": "Guardião do vale",
+    "world-2": "Além das dunas",
+    "world-3": "Coração de cristal",
+    "world-4": "Luz na floresta",
+    "world-5": "A última chama"
+  },
+  "levels": {
+    "1-1": "Primeiros Passos",
+    "1-2": "Canais do Vale",
+    "1-3": "Guardião do Pomar",
+    "2-1": "Dunas ao Vento",
+    "2-2": "Pontes do Cânion",
+    "2-3": "Templo das Areias",
+    "3-1": "Lago de Cristal",
+    "3-2": "Escalada Azul",
+    "3-3": "Coração da Nevasca",
+    "4-1": "Copas Luminosas",
+    "4-2": "Ruínas dos Vagalumes",
+    "4-3": "A Árvore Ancestral",
+    "5-1": "Pontes de Basalto",
+    "5-2": "Fornalha dos Ecos",
+    "5-3": "A Última Chama"
+  },
+  "themes": {
+    "1": {
+      "name": "Reino Verde",
+      "subtitle": "Colinas, canais e pomares"
+    },
+    "2": {
+      "name": "Deserto Dourado",
+      "subtitle": "Dunas e templos sob o sol"
+    },
+    "3": {
+      "name": "Montanhas Geladas",
+      "subtitle": "Encostas, pontes e neve"
+    },
+    "4": {
+      "name": "Floresta Encantada",
+      "subtitle": "Copas luminosas e ruínas"
+    },
+    "5": {
+      "name": "Fortaleza Vulcânica",
+      "subtitle": "Basalto, brasa e a última luz"
+    }
+  },
+  "controls": {
+    "keyboard": "Teclado",
+    "gamepad": "Gamepad",
+    "actions": {
+      "left": "Mover para a esquerda",
+      "right": "Mover para a direita",
+      "jump": "Pular",
+      "run": "Correr",
+      "ability": "Habilidade (flor de fogo)",
+      "down": "Entrar em canos",
+      "pause": "Pausar",
+      "move": "Mover",
+      "menus": "Menus"
+    },
+    "gamepad_move": "Direcional / analógico esquerdo",
+    "gamepad_jump": "Botão A / ✕",
+    "gamepad_run": "Botão X / □ ou gatilho direito",
+    "gamepad_ability": "Botão B / ○",
+    "gamepad_pause": "Start / Options",
+    "gamepad_menus": "A confirma · B volta · LB/RB percorrem",
+    "remap": "Remapear teclas em Configurações",
+    "ui_hint": "Nos menus: setas ou WASD navegam, Tab percorre, Enter ou Espaço confirmam, Esc volta e M silencia o áudio.",
+    "tip_title": "O segredo está no salto.",
+    "tip": "Segure para saltar mais alto e solte para um salto curto. Corra antes de um vão. Sobre um cano com passagem, pressione para baixo."
+  },
+  "settings": {
+    "sound": "O som da aventura",
+    "music": "Volume da música",
+    "sfx": "Efeitos sonoros",
+    "voice": "Vozes",
+    "ambient": "Sons do ambiente",
+    "sound_note": "Cada canal tem volume próprio: silenciar a música nunca silencia os efeitos.",
+    "percent": "{value}%",
+    "experience": "Sua experiência",
+    "effects": "Efeitos visuais",
+    "effects_desc": "Partículas, clima e tremor de câmera.",
+    "fullscreen": "Tela cheia",
+    "fullscreen_desc": "Ocupa o monitor inteiro (F11 também alterna).",
+    "show_fps": "Exibir FPS",
+    "show_fps_desc": "Mostra os quadros por segundo no canto da tela.",
+    "subtitles": "Legendas",
+    "subtitles_desc": "Exibe em texto as falas e vozes dos personagens.",
+    "reduced_motion": "Redução de movimento",
+    "reduced_motion_desc": "Desliga as animações da interface e as transições.",
+    "high_contrast": "Alto contraste",
+    "high_contrast_desc": "Paleta com contraste máximo para facilitar a leitura.",
+    "display": "Tela",
+    "scale": "Escala da janela",
+    "scale_desc": "Tamanho da janela em múltiplos de 960 × 540.",
+    "scale_fit": "Ajustar à janela",
+    "scale_value": "{scale}×",
+    "fps_limit": "Limite de quadros",
+    "fps_limit_desc": "Quadros por segundo no máximo.",
+    "fps_unlimited": "Ilimitado",
+    "fps_value": "{fps} FPS",
+    "quality": "Qualidade",
+    "quality_desc": "Clima, partículas e tremor de câmera.",
+    "quality_high": "Alta",
+    "quality_medium": "Média",
+    "quality_low": "Baixa",
+    "language": "Idioma",
+    "language_desc": "Idioma dos textos do jogo.",
+    "languages": {
+      "pt-BR": "Português (Brasil)",
+      "en-US": "English (US)"
+    },
+    "bindings": "Teclas",
+    "bindings_desc": "Selecione uma ação e pressione a nova tecla principal. Uma tecla usada em outra ação é movida.",
+    "press_key": "Pressione uma tecla…",
+    "press_key_hint": "Esc cancela",
+    "bindings_reset": "Restaurar teclas padrão",
+    "reset_title": "Uma nova jornada",
+    "reset_desc": "Apague fases concluídas, recordes, relíquias e conquistas deste computador.",
+    "reset": "Reiniciar progresso",
+    "reset_confirm_title": "Reiniciar todo o progresso?",
+    "reset_confirm_desc": "As fases, recordes, relíquias e conquistas salvos serão apagados. As configurações são mantidas.",
+    "reset_yes": "Sim, reiniciar",
+    "reset_no": "Cancelar"
+  },
+  "credits": {
+    "title": "Lume · As Cinco Fronteiras",
+    "intro": "Uma aventura original de plataforma, feita para celebrar a exploração e o prazer de um salto preciso.",
+    "art_label": "ARTE & PERSONAGENS",
+    "art": "Pixel art original desenhada por código. Cinco mundos, quinze caminhos e uma identidade própria.",
+    "music_label": "MÚSICA & EFEITOS",
+    "music": "Trilhas e efeitos originais sintetizados em tempo real, sem arquivos de áudio proprietários.",
+    "license": "Código e recursos originais sob licença MIT.\nProjeto independente, não oficial e sem afiliação com a Nintendo. Super Mario Bros. pertence aos seus respectivos titulares."
+  },
+  "pause": {
+    "description": "{level} · Mundo {world}, fase {stage}",
+    "journey": "Sua jornada",
+    "resume": "Continuar",
+    "restart": "Reiniciar fase",
+    "settings": "Configurações",
+    "menu": "Voltar ao menu",
+    "footnote": "Pressione {button} para continuar."
+  },
+  "complete": {
+    "unlocked": "Seu próximo caminho já está desbloqueado.",
+    "final": "A última chama está acesa. A jornada é sua.",
+    "relic_found": "✦ Encontrada",
+    "relic_missing": "A explorar",
+    "next": "Próxima fase",
+    "map": "Explorar o mapa",
+    "world_map": "Mapa dos mundos",
+    "menu": "Voltar ao menu"
+  },
+  "gameover": {
+    "description": "A luz continua aqui. Tente uma nova rota.",
+    "retry": "Tentar novamente",
+    "menu": "Voltar ao menu"
+  },
+  "stats": {
+    "score": "PONTUAÇÃO",
+    "coins": "MOEDAS",
+    "relic": "RELÍQUIA"
+  },
+  "voice": {
+    "jump": "Hup!",
+    "hurt": "Ai!",
+    "victory": "Conseguimos!",
+    "defeat": "Tudo bem. Eu volto.",
+    "hello": "Olá!",
+    "surprise": "Uau!"
+  },
+  "keys": {
+    "space": "ESPAÇO",
+    "left shift": "SHIFT",
+    "right shift": "SHIFT DIR.",
+    "up": "↑",
+    "down": "↓",
+    "left": "←",
+    "right": "→",
+    "escape": "ESC",
+    "return": "ENTER",
+    "enter": "ENTER",
+    "tab": "TAB",
+    "backspace": "BACKSPACE",
+    "left ctrl": "CTRL",
+    "right ctrl": "CTRL DIR.",
+    "left alt": "ALT",
+    "right alt": "ALT DIR.",
+    "delete": "DELETE",
+    "page up": "PAGE UP",
+    "page down": "PAGE DOWN",
+    "home": "HOME",
+    "end": "END",
+    "insert": "INSERT",
+    "caps lock": "CAPS LOCK"
+  }
+}

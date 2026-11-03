@@ -1,0 +1,28 @@
+{
+  "id": "fagulha",
+  "name": {
+    "pt-BR": "Fagulha",
+    "en-US": "Fagulha"
+  },
+  "palette": {
+    "primary": "#ff8c42",
+    "secondary": "#6a2c70",
+    "accent": "#fff1a3"
+  },
+  "delta": {
+    "jump_speed_mul": 0.92,
+    "run_speed_mul": 1.12,
+    "walk_speed_mul": 1.11,
+    "ground_accel_mul": 1.2
+  },
+  "abilities": [
+    "charged_jump",
+    "fire"
+  ],
+  "damage_model": "standard",
+  "unlock": {
+    "world": 3
+  },
+  "voice_pitch": 1.25,
+  "description_key": "characters.fagulha.description"
+}
