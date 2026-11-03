@@ -314,13 +314,14 @@ def user_data_dir(app: str = "Lume") -> Path:
     override = os.environ.get("LUME_SAVE_DIR")
     if override:
         return Path(override)
-    if sys.platform == "emscripten":
+    platform: str = sys.platform  # alias evita que o mypy marque ramos como inalcançáveis por SO
+    if platform == "emscripten":
         # Pygbag: /data/data é o ponto de montagem persistente (IDBFS) do navegador.
         return Path("/data/data") / app.lower()
-    if sys.platform.startswith("win"):
+    if platform.startswith("win"):
         base = os.environ.get("APPDATA") or str(Path.home() / "AppData" / "Roaming")
         return Path(base) / app
-    if sys.platform == "darwin":
+    if platform == "darwin":
         return Path.home() / "Library" / "Application Support" / app
     base = os.environ.get("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")
     return Path(base) / app.lower()
