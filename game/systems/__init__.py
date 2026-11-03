@@ -1,1 +1,1 @@
-"""Lume — pacote systems."""
+"""Sistemas transversais: entrada, áudio, salvamento, progressão, localização."""

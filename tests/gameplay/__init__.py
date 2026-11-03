@@ -1,1 +1,1 @@
-"""Lume — pacote gameplay."""
+"""Testes de campanha dirigidos por entradas normais."""

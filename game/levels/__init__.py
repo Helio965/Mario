@@ -1,1 +1,1 @@
-"""Lume — pacote levels."""
+"""Carregamento e validação das fases declarativas (``data/levels``)."""

@@ -1,1 +1,1 @@
-"""Lume — pacote characters."""
+"""Personagens jogáveis: poderes, controlador, animação e registro."""
