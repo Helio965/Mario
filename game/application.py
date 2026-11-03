@@ -350,7 +350,8 @@ class Application:
             self.running = False
             return
         if event.type == pygame.WINDOWFOCUSLOST:
-            self.suspend()
+            if not self.options.headless_frames:  # sem janela real não há foco a perder
+                self.suspend()
             return
         if event.type == pygame.KEYDOWN and event.key == pygame.K_F11:
             self.toggle_fullscreen()
