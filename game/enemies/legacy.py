@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
 
 def hit_enemy(game: Game, e: Enemy, damage: int = 1) -> bool:
+    if e.behavior is not None:
+        return bool(e.alive and e.behavior.on_hit(game, damage))
     if not e.alive or e.hit_timer > 0 or (e.kind == "boss" and e.state != "shell"):
         return False
     e.health -= damage
@@ -41,7 +43,7 @@ def hit_enemy(game: Game, e: Enemy, damage: int = 1) -> bool:
 def update_enemies(game: Game, dt: float) -> None:
     player = game.player
     for e in game.enemies:
-        if not e.alive:
+        if not e.alive or e.behavior is not None:
             continue
         old_timer = e.timer
         e.timer += dt

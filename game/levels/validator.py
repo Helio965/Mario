@@ -15,7 +15,6 @@ from typing import Any
 
 from game.core.game import Game
 from game.core.types import (
-    ENEMY_KINDS,
     HAZARD_KINDS,
     ITEM_KINDS,
     PLATFORM_KINDS,
@@ -24,6 +23,7 @@ from game.core.types import (
     PlatformSpec,
     Rect,
 )
+from game.enemies.registry import known_enemy_kinds
 from game.physics.collision import overlaps
 from game.physics.movement import FIXED_DT, LEGACY_PROFILE, MovementProfile
 
@@ -119,7 +119,7 @@ def validate_level_dict(d: Any) -> list[Issue]:
         seen.add(ref)
     for e in d.get("enemies", []):
         ref = str(e.get("id"))
-        if e.get("kind") not in ENEMY_KINDS:
+        if e.get("kind") not in known_enemy_kinds():
             issues.append(Issue("error", "enemy.kind", f"tipo desconhecido {e.get('kind')!r}", ref))
         if not _rect_ok(e):
             issues.append(Issue("error", "enemy.rect", "inimigo sem retângulo válido", ref))

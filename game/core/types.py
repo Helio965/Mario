@@ -7,12 +7,14 @@ determinística, testável sem janela, áudio ou sistema de arquivos.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Any, Literal
 
 PlatformKind = Literal["ground", "brick", "question", "hidden", "moving", "crumble", "pipe", "ice"]
 Power = Literal["small", "grown", "fire"]
 ItemKind = Literal["grow", "fire", "star", "heart"]
-EnemyKind = Literal["walker", "shell", "flyer", "shooter", "armored", "boss"]
+# Tipos legados (comportamento em game/enemies/legacy.py); arquétipos modernos são
+# registrados em game/enemies/registry.py e validados por ``known_enemy_kinds()``.
+EnemyKind = str
 EnemyState = Literal["walk", "shell", "slide"]
 HazardKind = Literal["lava", "water", "spikes", "moving"]
 Weather = Literal["none", "sand", "snow", "spores", "embers"]
@@ -199,6 +201,10 @@ class Enemy:
     state: EnemyState
     origin_y: float
     grounded: bool
+    behavior: Any = None  # arquétipo moderno (game/enemies/behaviors.py) ou None
+    anim: str = "walk"  # estado de animação exposto à renderização
+    telegraph: bool = False  # sinalização visível de ataque iminente
+    stompable: bool = True
 
 
 @dataclass(slots=True)

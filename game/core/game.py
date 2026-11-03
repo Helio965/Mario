@@ -21,6 +21,7 @@ from game.core.types import (
     Rect,
     Vec,
 )
+from game.enemies.behaviors import create_behavior, update_modern
 from game.enemies.legacy import update_enemies
 from game.physics.collision import approach, move_body, overlaps
 from game.physics.movement import FIXED_DT, LEGACY_PROFILE, MovementProfile
@@ -107,6 +108,8 @@ class Game:
             )
             for e in self.level.enemies
         ]
+        for enemy in self.enemies:
+            enemy.behavior = create_behavior(enemy)
         self.projectiles = []
         self.particles = []
         self.events = []
@@ -289,6 +292,7 @@ class Game:
     def interactions(self, dt: float, input_state: InputState, heads: list[Platform]) -> None:
         interact_world(self, input_state, heads)
         update_enemies(self, dt)
+        update_modern(self, dt)
         update_powers(self, dt, input_state)
         exit_box = Rect(x=self.level.exit.x - 12, y=self.level.exit.y - 110, w=44, h=110)
         if overlaps(self.player, exit_box) and not any(
