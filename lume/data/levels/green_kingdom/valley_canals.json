@@ -1,0 +1,420 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "valley_canals",
+ "legacy_ids": [
+  "1-2"
+ ],
+ "name": "Canais do Vale",
+ "world": "green_kingdom",
+ "role": "exploration",
+ "difficulty": 1,
+ "art": {
+  "set": "green_kingdom",
+  "variant": "canals",
+  "weather": "auto"
+ },
+ "music": "green_kingdom_main",
+ "bounds": {
+  "width": 3500,
+  "height": 1240
+ },
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 3500,
+   "h": 540,
+   "variant": "canals"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2529,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "time_limit": 377,
+ "spawn": {
+  "x": 72,
+  "y": 414
+ },
+ "checkpoints": [
+  {
+   "id": "cp_mid",
+   "x": 1640,
+   "y": 414
+  }
+ ],
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 3350,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 640,
+   "h": 152
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 740,
+   "y": 416,
+   "w": 640,
+   "h": 184
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1500,
+   "y": 448,
+   "w": 700,
+   "h": 152
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2340,
+   "y": 448,
+   "w": 1160,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 470,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "pipe01",
+   "kind": "pipe",
+   "style": "pipe",
+   "x": 1020,
+   "y": 368,
+   "w": 58,
+   "h": 48
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 1150,
+   "y": 320,
+   "w": 40,
+   "h": 28,
+   "reward": "coin"
+  },
+  {
+   "id": "brick01",
+   "kind": "brick",
+   "x": 1190,
+   "y": 320,
+   "w": 40,
+   "h": 28
+  },
+  {
+   "id": "moving01",
+   "kind": "moving",
+   "x": 1360,
+   "y": 356,
+   "w": 90,
+   "h": 18,
+   "motion": {
+    "axis": "y",
+    "range": 30,
+    "speed": 1.6,
+    "phase": 0
+   }
+  },
+  {
+   "id": "brick02",
+   "kind": "brick",
+   "x": 1810,
+   "y": 376,
+   "w": 98,
+   "h": 22
+  },
+  {
+   "id": "moving02",
+   "kind": "moving",
+   "x": 1950,
+   "y": 312,
+   "w": 100,
+   "h": 18,
+   "motion": {
+    "axis": "x",
+    "range": 34,
+    "speed": 1.1,
+    "phase": 0
+   }
+  },
+  {
+   "id": "brick03",
+   "kind": "brick",
+   "x": 2110,
+   "y": 290,
+   "w": 110,
+   "h": 22
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 2490,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 2884,
+    "y": 846
+   },
+   "return": {
+    "x": 2742,
+    "y": 402
+   },
+   "x": 2670,
+   "y": 400,
+   "w": 56,
+   "h": 48
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "style": "pipe",
+   "warp": {
+    "x": 2742,
+    "y": 402
+   },
+   "return": {
+    "x": 2884,
+    "y": 846
+   },
+   "x": 3086,
+   "y": 864,
+   "w": 56,
+   "h": 32
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2529,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2529,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2529,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3198,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 230,
+   "y": 410,
+   "count": 5,
+   "spacing": 34
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 604,
+   "y": 363,
+   "count": 5,
+   "spacing": 34
+  },
+  {
+   "id": "coins03",
+   "shape": "arc",
+   "x": 1350,
+   "y": 336,
+   "count": 5,
+   "spacing": 32
+  },
+  {
+   "id": "coins04",
+   "shape": "arc",
+   "x": 2150,
+   "y": 362,
+   "count": 7,
+   "spacing": 30
+  },
+  {
+   "id": "coins05",
+   "shape": "row",
+   "x": 3180,
+   "y": 410,
+   "count": 5,
+   "spacing": 34
+  },
+  {
+   "id": "room_coins01",
+   "shape": "row",
+   "x": 2924,
+   "y": 852.0,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 2147,
+   "y": 252
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 3038,
+   "y": 850
+  }
+ ],
+ "items": [
+  {
+   "id": "item01_grow",
+   "kind": "grow",
+   "x": 2988,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "bolota",
+   "x": 870,
+   "y": 416,
+   "patrol": [
+    800,
+    975
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "caramujo",
+   "x": 1200,
+   "y": 416,
+   "patrol": [
+    1130,
+    1300
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "besouro_alado",
+   "x": 2950,
+   "y": 352,
+   "patrol": [
+    2830,
+    3160
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_water01",
+   "kind": "water",
+   "x": 640,
+   "y": 500,
+   "w": 100,
+   "h": 40
+  },
+  {
+   "id": "hz_water02",
+   "kind": "water",
+   "x": 1380,
+   "y": 500,
+   "w": 120,
+   "h": 40
+  },
+  {
+   "id": "hz_water03",
+   "kind": "water",
+   "x": 2200,
+   "y": 500,
+   "w": 140,
+   "h": 40
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "entry": "pipe_room_entry",
+   "clue": "Cano com seta luminosa e dica próxima",
+   "rewards": [
+    "relic_room"
+   ]
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos blocos",
+   "rewards": [
+    "relic_high"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 120,
+   "text": "As pontes também escondem caminhos altos."
+  },
+  {
+   "x": 1380,
+   "text": "A plataforma sobe e desce. Espere o momento."
+  },
+  {
+   "x": 2620,
+   "text": "Há luz dentro deste cano."
+  }
+ ],
+ "notes": "Convertida da edição TypeScript (fase 1-2). Sala secreta movida para câmara subterrânea (+720 u)."
+}

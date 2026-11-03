@@ -1,0 +1,533 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "last_flame",
+ "legacy_ids": [
+  "5-3"
+ ],
+ "name": "A Última Chama",
+ "world": "volcanic_fortress",
+ "role": "movement",
+ "difficulty": 8,
+ "art": {
+  "set": "volcanic_fortress",
+  "variant": "citadel",
+  "weather": "auto"
+ },
+ "music": "volcanic_fortress_main",
+ "bounds": {
+  "width": 5200,
+  "height": 1240
+ },
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 5200,
+   "h": 540,
+   "variant": "citadel"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2419,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "time_limit": 433,
+ "spawn": {
+  "x": 72,
+  "y": 414
+ },
+ "checkpoints": [
+  {
+   "id": "cp_mid",
+   "x": 2610,
+   "y": 414
+  }
+ ],
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 5050,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 810,
+   "h": 152
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 930,
+   "y": 448,
+   "w": 730,
+   "h": 152
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1780,
+   "y": 448,
+   "w": 1100,
+   "h": 152
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3000,
+   "y": 416,
+   "w": 640,
+   "h": 184
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3760,
+   "y": 448,
+   "w": 590,
+   "h": 152
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4470,
+   "y": 448,
+   "w": 730,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 380,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "brick01",
+   "kind": "brick",
+   "x": 1040,
+   "y": 376,
+   "w": 104,
+   "h": 24
+  },
+  {
+   "id": "crumble01",
+   "kind": "crumble",
+   "x": 1210,
+   "y": 310,
+   "w": 104,
+   "h": 20
+  },
+  {
+   "id": "moving01",
+   "kind": "moving",
+   "x": 1380,
+   "y": 258,
+   "w": 110,
+   "h": 18,
+   "motion": {
+    "axis": "x",
+    "range": 25,
+    "speed": 1.5,
+    "phase": 0
+   }
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 1910,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 1990,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "coin"
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 2774,
+    "y": 846
+   },
+   "return": {
+    "x": 2752,
+    "y": 402
+   },
+   "x": 2680,
+   "y": 400,
+   "w": 56,
+   "h": 48
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "style": "pipe",
+   "warp": {
+    "x": 2752,
+    "y": 402
+   },
+   "return": {
+    "x": 2774,
+    "y": 846
+   },
+   "x": 2976,
+   "y": 864,
+   "w": 56,
+   "h": 32
+  },
+  {
+   "id": "brick02",
+   "kind": "brick",
+   "x": 3140,
+   "y": 344,
+   "w": 102,
+   "h": 24
+  },
+  {
+   "id": "crumble02",
+   "kind": "crumble",
+   "x": 3300,
+   "y": 280,
+   "w": 104,
+   "h": 20
+  },
+  {
+   "id": "question04",
+   "kind": "question",
+   "x": 3890,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "heart"
+  },
+  {
+   "id": "brick03",
+   "kind": "brick",
+   "x": 4210,
+   "y": 375,
+   "w": 92,
+   "h": 24
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2419,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2419,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2419,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3088,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 170,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins02",
+   "shape": "arc",
+   "x": 780,
+   "y": 365,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins03",
+   "shape": "arc",
+   "x": 1630,
+   "y": 365,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins04",
+   "shape": "arc",
+   "x": 2850,
+   "y": 347,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins05",
+   "shape": "row",
+   "x": 3308,
+   "y": 242,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins06",
+   "shape": "arc",
+   "x": 3610,
+   "y": 332,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins07",
+   "shape": "arc",
+   "x": 4320,
+   "y": 365,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins08",
+   "shape": "row",
+   "x": 5070,
+   "y": 410,
+   "count": 2,
+   "spacing": 34
+  },
+  {
+   "id": "room_coins01",
+   "shape": "row",
+   "x": 2814,
+   "y": 852.0,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 1420,
+   "y": 220
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 2928,
+   "y": 850
+  }
+ ],
+ "items": [
+  {
+   "id": "item01_star",
+   "kind": "star",
+   "x": 2878,
+   "y": 866
+  },
+  {
+   "id": "item02_fire",
+   "kind": "fire",
+   "x": 4520,
+   "y": 420
+  },
+  {
+   "id": "item03_heart",
+   "kind": "heart",
+   "x": 4570,
+   "y": 420
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "tartaruga_basalto",
+   "x": 650,
+   "y": 448,
+   "patrol": [
+    560,
+    760
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "golem_basalto",
+   "x": 1480,
+   "y": 448,
+   "patrol": [
+    1440,
+    1570
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "boca_fornalha",
+   "x": 2370,
+   "y": 448,
+   "patrol": [
+    2320,
+    2400
+   ]
+  },
+  {
+   "id": "enemy04",
+   "species": "morcego_brasa",
+   "x": 3470,
+   "y": 310,
+   "patrol": [
+    3370,
+    3570
+   ]
+  },
+  {
+   "id": "enemy05",
+   "species": "guardiao_chama",
+   "x": 4830,
+   "y": 448,
+   "patrol": [
+    4630,
+    4970
+   ],
+   "hp": 7
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_lava01",
+   "kind": "lava",
+   "x": 810,
+   "y": 474,
+   "w": 120,
+   "h": 66
+  },
+  {
+   "id": "hz_lava02",
+   "kind": "lava",
+   "x": 1660,
+   "y": 474,
+   "w": 120,
+   "h": 66
+  },
+  {
+   "id": "hz_lava03",
+   "kind": "lava",
+   "x": 2880,
+   "y": 474,
+   "w": 120,
+   "h": 66
+  },
+  {
+   "id": "hz_lava04",
+   "kind": "lava",
+   "x": 3640,
+   "y": 474,
+   "w": 120,
+   "h": 66
+  },
+  {
+   "id": "hz_lava05",
+   "kind": "lava",
+   "x": 4350,
+   "y": 474,
+   "w": 120,
+   "h": 66
+  },
+  {
+   "id": "hz_moving06",
+   "kind": "moving",
+   "x": 2180,
+   "y": 365,
+   "w": 26,
+   "h": 26,
+   "range": 36,
+   "speed": 1.4
+  },
+  {
+   "id": "hz_moving07",
+   "kind": "moving",
+   "x": 4080,
+   "y": 360,
+   "w": 26,
+   "h": 26,
+   "range": 34,
+   "speed": 1.6
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "entry": "pipe_room_entry",
+   "clue": "Cano com seta luminosa e dica próxima",
+   "rewards": [
+    "relic_room"
+   ]
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos blocos",
+   "rewards": [
+    "relic_high"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 150,
+   "text": "Tudo que aprendeu leva até a última chama."
+  },
+  {
+   "x": 2600,
+   "text": "Recupere o fôlego neste chão seguro."
+  },
+  {
+   "x": 4510,
+   "text": "O último guardião protege a saída. Observe e salte."
+  }
+ ],
+ "notes": "Convertida da edição TypeScript (fase 5-3). Sala secreta movida para câmara subterrânea (+720 u)."
+}

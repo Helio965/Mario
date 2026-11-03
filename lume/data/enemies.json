@@ -1,0 +1,1366 @@
+{
+ "format": "lume.enemies",
+ "format_version": 1,
+ "species": [
+  {
+   "id": "bolota",
+   "name": "Bolota",
+   "role_reference": "patrulheiro básico (papel análogo ao Goomba)",
+   "description": "Bolota de carvalho com pernas curtas e chapéu de cúpula. Patrulha, vira em paredes e beiradas e para um instante ao notar Lume.",
+   "habitats": [
+    "grassland",
+    "forest"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 1,
+   "behavior": "walker",
+   "abilities": [],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 62,
+   "score": 200,
+   "animation_set": "acorn",
+   "animation_states": [
+    "walk",
+    "alert",
+    "hurt",
+    "defeat"
+   ],
+   "visual_theme": "grassland",
+   "defeat": "achata ao ser pisada; gira e cai com fogo ou casco",
+   "introduced_in": "first_steps",
+   "boss": false,
+   "params": {
+    "notice_range": 230
+   }
+  },
+  {
+   "id": "caramujo",
+   "name": "Caramujo-de-Casca",
+   "role_reference": "criatura de casco (papel análogo ao Koopa Troopa)",
+   "description": "Caramujo de casca espiralada. Ao ser pisado recolhe-se; o casco pode ser chutado e derruba outros inimigos. Sai da casca após alguns segundos.",
+   "habitats": [
+    "grassland",
+    "forest",
+    "coast"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 2,
+   "behavior": "shell",
+   "abilities": [
+    "shell",
+    "kickable"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 62,
+   "score": 200,
+   "animation_set": "snail",
+   "animation_states": [
+    "walk",
+    "shell",
+    "slide",
+    "wake",
+    "defeat"
+   ],
+   "visual_theme": "grassland",
+   "defeat": "casco é chutado; fogo, estrela ou outro casco o derrotam",
+   "introduced_in": "first_steps",
+   "boss": false,
+   "params": {
+    "recover_time": 7.0
+   }
+  },
+  {
+   "id": "besouro_alado",
+   "name": "Besouro-Asa",
+   "role_reference": "voador em onda (papel análogo ao Paratroopa)",
+   "description": "Besouro com élitros translúcidos que voa em onda. O primeiro pisão arranca as asas e ele continua andando.",
+   "habitats": [
+    "grassland",
+    "forest"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 2,
+   "behavior": "flyer",
+   "abilities": [
+    "fly"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    24
+   ],
+   "hp": 1,
+   "speed": 78,
+   "score": 200,
+   "animation_set": "beetle_winged",
+   "animation_states": [
+    "fly",
+    "defeat"
+   ],
+   "visual_theme": "grassland",
+   "defeat": "perde as asas no primeiro pisão; fogo derrota direto",
+   "introduced_in": "valley_canals",
+   "boss": false,
+   "params": {
+    "grounded_form": "besouro"
+   }
+  },
+  {
+   "id": "besouro",
+   "name": "Besouro",
+   "role_reference": "forma terrestre do Besouro-Asa",
+   "description": "Besouro sem asas que corre pelo chão depois de cair.",
+   "habitats": [
+    "grassland",
+    "forest"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 1,
+   "behavior": "walker",
+   "abilities": [],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    22
+   ],
+   "hp": 1,
+   "speed": 70,
+   "score": 150,
+   "animation_set": "beetle",
+   "animation_states": [
+    "walk",
+    "defeat"
+   ],
+   "visual_theme": "grassland",
+   "defeat": "achata ao ser pisado",
+   "introduced_in": "valley_canals",
+   "boss": false,
+   "params": {}
+  },
+  {
+   "id": "flor_mordedora",
+   "name": "Flor-Mordedora",
+   "role_reference": "planta hostil emergente (papel análogo à Piranha Plant)",
+   "description": "Tulipa carnívora que sobe de um cano ou toca de terra, morde e recua. Não sai se Lume estiver encostado no esconderijo. Não pode ser pisada.",
+   "habitats": [
+    "grassland",
+    "forest",
+    "swamp"
+   ],
+   "movement_type": "stationary",
+   "difficulty_tier": 2,
+   "behavior": "emerger",
+   "abilities": [
+    "emerge"
+   ],
+   "weaknesses": [
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    40
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 200,
+   "animation_set": "biter_flower",
+   "animation_states": [
+    "hidden",
+    "rise",
+    "out",
+    "bite",
+    "retreat",
+    "defeat"
+   ],
+   "visual_theme": "grassland",
+   "defeat": "fogo, casco ou estrela; murcha e afunda",
+   "introduced_in": "windmill_heights",
+   "boss": false,
+   "params": {
+    "hidden_time": 1.8,
+    "out_time": 2.0,
+    "shy_radius": 40
+   }
+  },
+  {
+   "id": "ourico_espinho",
+   "name": "Ouriço-Espinho",
+   "role_reference": "inimigo com topo espinhoso (papel análogo ao Spiny)",
+   "description": "Ouriço de espinhos dourados que patrulha devagar. Pisar machuca: ensina o uso do fogo e dos cascos.",
+   "habitats": [
+    "grassland",
+    "forest",
+    "desert"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 3,
+   "behavior": "walker",
+   "abilities": [
+    "spiked_top"
+   ],
+   "weaknesses": [
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    26
+   ],
+   "hp": 1,
+   "speed": 50,
+   "score": 300,
+   "animation_set": "hedgehog",
+   "animation_states": [
+    "walk",
+    "alert",
+    "defeat"
+   ],
+   "visual_theme": "grassland",
+   "defeat": "fogo, casco ou estrela",
+   "introduced_in": "meadow_burrows",
+   "boss": false,
+   "params": {
+    "notice_range": 200
+   }
+  },
+  {
+   "id": "guardiao_pomar",
+   "name": "Guardião do Pomar",
+   "role_reference": "guardião intermediário (legado 1-3)",
+   "description": "Armadura de folhas e pedra que avança, salta e dispara esferas; abre a guarda periodicamente.",
+   "habitats": [
+    "grassland"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 3,
+   "behavior": "guardian",
+   "abilities": [
+    "projectile",
+    "shield"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell"
+   ],
+   "size": [
+    62,
+    64
+   ],
+   "hp": 3,
+   "speed": 85,
+   "score": 5000,
+   "animation_set": "guardian",
+   "animation_states": [
+    "walk",
+    "shell",
+    "jump",
+    "defeat"
+   ],
+   "visual_theme": "grassland",
+   "defeat": "pisões quando a guarda está aberta",
+   "introduced_in": "orchard_guardian",
+   "boss": true,
+   "params": {
+    "tier": 1
+   }
+  },
+  {
+   "id": "javali_espinheiro",
+   "name": "Javali Espinheiro",
+   "role_reference": "chefe de mundo com investida (papel de chefe de fortaleza)",
+   "description": "Javali enorme com crina de espinheiro. Anuncia a investida raspando o chão, corre até bater na parede e fica atordoado — única abertura para o pisão. Na segunda fase derruba bolotas espinhosas do teto.",
+   "habitats": [
+    "grassland",
+    "fortress"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 4,
+   "behavior": "thorn_boar",
+   "abilities": [
+    "charge",
+    "spiked_top"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire"
+   ],
+   "size": [
+    76,
+    58
+   ],
+   "hp": 3,
+   "speed": 70,
+   "score": 5000,
+   "animation_set": "boar",
+   "animation_states": [
+    "intro",
+    "stalk",
+    "telegraph",
+    "charge",
+    "stunned",
+    "recover",
+    "hurt",
+    "defeat"
+   ],
+   "visual_theme": "grassland",
+   "defeat": "três pisões na cabeça enquanto atordoado",
+   "introduced_in": "bramble_fortress",
+   "boss": true,
+   "params": {}
+  },
+  {
+   "id": "escaravelho_areia",
+   "name": "Escaravelho-de-Areia",
+   "role_reference": "patrulheiro do deserto que se enterra",
+   "description": "Escaravelho que patrulha e periodicamente se enterra (intocável) para reaparecer adiante — leitura do ritmo.",
+   "habitats": [
+    "desert"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 2,
+   "behavior": "walker",
+   "abilities": [
+    "burrow"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 69,
+   "score": 200,
+   "animation_set": "scarab",
+   "animation_states": [
+    "walk",
+    "burrow",
+    "emerge",
+    "defeat"
+   ],
+   "visual_theme": "desert",
+   "defeat": "achata ao ser pisado fora da areia",
+   "introduced_in": "windswept_dunes",
+   "boss": false,
+   "params": {
+    "burrow_interval": 4.5,
+    "burrow_time": 1.1
+   }
+  },
+  {
+   "id": "tatu_bola",
+   "name": "Tatu-Bola",
+   "role_reference": "criatura de casco do deserto",
+   "description": "Tatu que se fecha em bola ao ser pisado; a bola rola mais rápido que um casco comum.",
+   "habitats": [
+    "desert"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 2,
+   "behavior": "shell",
+   "abilities": [
+    "shell",
+    "kickable"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 69,
+   "score": 200,
+   "animation_set": "armadillo",
+   "animation_states": [
+    "walk",
+    "shell",
+    "slide",
+    "wake",
+    "defeat"
+   ],
+   "visual_theme": "desert",
+   "defeat": "bola chutada; fogo ou estrela",
+   "introduced_in": "windswept_dunes",
+   "boss": false,
+   "params": {
+    "recover_time": 6.0,
+    "slide_speed": 380
+   }
+  },
+  {
+   "id": "abutre_filhote",
+   "name": "Abutrinho",
+   "role_reference": "voador do deserto",
+   "description": "Filhote de abutre que plana em ondas largas sobre os cânions.",
+   "habitats": [
+    "desert",
+    "sky"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 2,
+   "behavior": "flyer",
+   "abilities": [
+    "fly"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    24
+   ],
+   "hp": 1,
+   "speed": 84,
+   "score": 200,
+   "animation_set": "vulture",
+   "animation_states": [
+    "fly",
+    "defeat"
+   ],
+   "visual_theme": "desert",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "canyon_bridges",
+   "boss": false,
+   "params": {
+    "amplitude": 42,
+    "frequency": 1.9
+   }
+  },
+  {
+   "id": "cacto_sentinela",
+   "name": "Cacto Sentinela",
+   "role_reference": "sentinela que dispara (papel análogo a lançadores)",
+   "description": "Cacto que vira para Lume, incha e dispara um espinho em linha reta a cada 2,2 s.",
+   "habitats": [
+    "desert"
+   ],
+   "movement_type": "stationary",
+   "difficulty_tier": 2,
+   "behavior": "shooter",
+   "abilities": [
+    "projectile"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 200,
+   "animation_set": "cactus",
+   "animation_states": [
+    "idle",
+    "charge",
+    "fire",
+    "defeat"
+   ],
+   "visual_theme": "desert",
+   "defeat": "pisão, fogo ou casco",
+   "introduced_in": "windswept_dunes",
+   "boss": false,
+   "params": {
+    "shot_kind": "spine"
+   }
+  },
+  {
+   "id": "escorpiao_couraca",
+   "name": "Escorpião-Couraça",
+   "role_reference": "inimigo blindado com cauda periódica",
+   "description": "Escorpião resistente (2 golpes). Ergue a cauda ferroante em ciclos: só pode ser pisado com a cauda baixa.",
+   "habitats": [
+    "desert"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 3,
+   "behavior": "armored",
+   "abilities": [
+    "shield"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    34,
+    32
+   ],
+   "hp": 2,
+   "speed": 44,
+   "score": 300,
+   "animation_set": "scorpion",
+   "animation_states": [
+    "walk",
+    "guard",
+    "hurt",
+    "defeat"
+   ],
+   "visual_theme": "desert",
+   "defeat": "dois golpes com a cauda baixa, ou fogo",
+   "introduced_in": "sand_temple",
+   "boss": false,
+   "params": {
+    "crest_period": 3.0,
+    "crest_duty": 0.35
+   }
+  },
+  {
+   "id": "guardiao_templo",
+   "name": "Guardião do Templo",
+   "role_reference": "guardião intermediário (legado 2-3)",
+   "description": "Colosso de arenito que avança, salta e dispara; abre a guarda periodicamente.",
+   "habitats": [
+    "desert"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 3,
+   "behavior": "guardian",
+   "abilities": [
+    "projectile",
+    "shield"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell"
+   ],
+   "size": [
+    62,
+    64
+   ],
+   "hp": 4,
+   "speed": 85,
+   "score": 5000,
+   "animation_set": "guardian",
+   "animation_states": [
+    "walk",
+    "shell",
+    "jump",
+    "defeat"
+   ],
+   "visual_theme": "desert",
+   "defeat": "pisões quando a guarda está aberta",
+   "introduced_in": "sand_temple",
+   "boss": true,
+   "params": {
+    "tier": 2
+   }
+  },
+  {
+   "id": "pinguim_patrulha",
+   "name": "Pinguim Patrulheiro",
+   "role_reference": "deslizante do gelo",
+   "description": "Pinguim que anda devagar mas, sobre gelo, mergulha de barriga em direção a Lume.",
+   "habitats": [
+    "snow"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 2,
+   "behavior": "slider",
+   "abilities": [
+    "slide"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 76,
+   "score": 200,
+   "animation_set": "penguin",
+   "animation_states": [
+    "walk",
+    "slide",
+    "defeat"
+   ],
+   "visual_theme": "snow",
+   "defeat": "pisão (inclusive deslizando), fogo ou casco",
+   "introduced_in": "crystal_lake",
+   "boss": false,
+   "params": {
+    "slide_speed": 230,
+    "sight": 280
+   }
+  },
+  {
+   "id": "caracol_cristal",
+   "name": "Caracol-de-Cristal",
+   "role_reference": "criatura de casco do gelo",
+   "description": "Caracol com concha de gelo; o casco deslizante ricocheteia pelas encostas.",
+   "habitats": [
+    "snow"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 2,
+   "behavior": "shell",
+   "abilities": [
+    "shell",
+    "kickable"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 76,
+   "score": 200,
+   "animation_set": "crystal_snail",
+   "animation_states": [
+    "walk",
+    "shell",
+    "slide",
+    "wake",
+    "defeat"
+   ],
+   "visual_theme": "snow",
+   "defeat": "casco chutado; fogo ou estrela",
+   "introduced_in": "crystal_lake",
+   "boss": false,
+   "params": {}
+  },
+  {
+   "id": "coruja_nevada",
+   "name": "Coruja Nevada",
+   "role_reference": "voadora adaptada ao frio",
+   "description": "Coruja branca que voa em ondas curtas contra a nevasca.",
+   "habitats": [
+    "snow"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 2,
+   "behavior": "flyer",
+   "abilities": [
+    "fly"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    24
+   ],
+   "hp": 1,
+   "speed": 90,
+   "score": 200,
+   "animation_set": "owl",
+   "animation_states": [
+    "fly",
+    "defeat"
+   ],
+   "visual_theme": "snow",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "crystal_lake",
+   "boss": false,
+   "params": {
+    "frequency": 2.5,
+    "amplitude": 34
+   }
+  },
+  {
+   "id": "boneco_neve",
+   "name": "Boneco de Neve",
+   "role_reference": "sentinela que arremessa bolas de neve",
+   "description": "Boneco animado que gira o corpo e lança bolas de neve em linha reta.",
+   "habitats": [
+    "snow"
+   ],
+   "movement_type": "stationary",
+   "difficulty_tier": 2,
+   "behavior": "shooter",
+   "abilities": [
+    "projectile"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 200,
+   "animation_set": "snowman",
+   "animation_states": [
+    "idle",
+    "charge",
+    "fire",
+    "defeat"
+   ],
+   "visual_theme": "snow",
+   "defeat": "pisão, fogo ou casco",
+   "introduced_in": "blue_ascent",
+   "boss": false,
+   "params": {
+    "shot_kind": "snowball"
+   }
+  },
+  {
+   "id": "carneiro_glacial",
+   "name": "Carneiro Glacial",
+   "role_reference": "investidor resistente",
+   "description": "Carneiro de chifres de gelo (2 golpes) que raspa o casco antes de investir e fica tonto ao bater na parede.",
+   "habitats": [
+    "snow"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 3,
+   "behavior": "charger",
+   "abilities": [
+    "charge",
+    "shield"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    34,
+    32
+   ],
+   "hp": 2,
+   "speed": 44,
+   "score": 300,
+   "animation_set": "ram",
+   "animation_states": [
+    "walk",
+    "alert",
+    "charge",
+    "stunned",
+    "recover",
+    "defeat"
+   ],
+   "visual_theme": "snow",
+   "defeat": "dois pisões fora da investida, ou fogo",
+   "introduced_in": "blizzard_heart",
+   "boss": false,
+   "params": {
+    "charge_speed": 240,
+    "sight": 260
+   }
+  },
+  {
+   "id": "guardiao_nevasca",
+   "name": "Guardião da Nevasca",
+   "role_reference": "guardião intermediário (legado 3-3)",
+   "description": "Armadura de gelo e granito que avança, salta e dispara; abre a guarda periodicamente.",
+   "habitats": [
+    "snow"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 4,
+   "behavior": "guardian",
+   "abilities": [
+    "projectile",
+    "shield"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell"
+   ],
+   "size": [
+    62,
+    64
+   ],
+   "hp": 5,
+   "speed": 85,
+   "score": 5000,
+   "animation_set": "guardian",
+   "animation_states": [
+    "walk",
+    "shell",
+    "jump",
+    "defeat"
+   ],
+   "visual_theme": "snow",
+   "defeat": "pisões quando a guarda está aberta",
+   "introduced_in": "blizzard_heart",
+   "boss": true,
+   "params": {
+    "tier": 3
+   }
+  },
+  {
+   "id": "cogumelo_saltitante",
+   "name": "Cogumelo Saltitante",
+   "role_reference": "saltador com antecipação",
+   "description": "Cogumelo que se agacha visivelmente antes de cada salto em direção a Lume.",
+   "habitats": [
+    "forest",
+    "swamp"
+   ],
+   "movement_type": "hopper",
+   "difficulty_tier": 2,
+   "behavior": "hopper",
+   "abilities": [],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 83,
+   "score": 200,
+   "animation_set": "mushroom",
+   "animation_states": [
+    "idle",
+    "crouch",
+    "jump",
+    "fall",
+    "land",
+    "defeat"
+   ],
+   "visual_theme": "forest",
+   "defeat": "pisão, fogo ou casco",
+   "introduced_in": "glowing_canopy",
+   "boss": false,
+   "params": {
+    "interval": 1.4,
+    "jump_speed": 430,
+    "hop_speed": 83
+   }
+  },
+  {
+   "id": "caracol_musgo",
+   "name": "Caracol-Musgo",
+   "role_reference": "criatura de casco camuflada",
+   "description": "Caracol coberto de musgo: recolhido, parece uma pedra musgosa no chão da floresta.",
+   "habitats": [
+    "forest"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 2,
+   "behavior": "shell",
+   "abilities": [
+    "shell",
+    "kickable",
+    "camouflage"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 83,
+   "score": 200,
+   "animation_set": "moss_snail",
+   "animation_states": [
+    "walk",
+    "shell",
+    "slide",
+    "wake",
+    "defeat"
+   ],
+   "visual_theme": "forest",
+   "defeat": "casco chutado; fogo ou estrela",
+   "introduced_in": "glowing_canopy",
+   "boss": false,
+   "params": {}
+  },
+  {
+   "id": "mariposa_lume",
+   "name": "Mariposa-Lume",
+   "role_reference": "voadora luminosa",
+   "description": "Mariposa de asas que brilham, voando em ondas rápidas entre as copas.",
+   "habitats": [
+    "forest",
+    "swamp"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 2,
+   "behavior": "flyer",
+   "abilities": [
+    "fly"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    24
+   ],
+   "hp": 1,
+   "speed": 96,
+   "score": 200,
+   "animation_set": "moth",
+   "animation_states": [
+    "fly",
+    "defeat"
+   ],
+   "visual_theme": "forest",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "glowing_canopy",
+   "boss": false,
+   "params": {
+    "frequency": 2.6
+   }
+  },
+  {
+   "id": "planta_esporos",
+   "name": "Planta-de-Esporos",
+   "role_reference": "sentinela vegetal",
+   "description": "Botão gigante que se enche e cospe uma nuvem de esporos em linha reta.",
+   "habitats": [
+    "forest",
+    "swamp"
+   ],
+   "movement_type": "stationary",
+   "difficulty_tier": 2,
+   "behavior": "shooter",
+   "abilities": [
+    "projectile"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 200,
+   "animation_set": "spore_plant",
+   "animation_states": [
+    "idle",
+    "charge",
+    "fire",
+    "defeat"
+   ],
+   "visual_theme": "forest",
+   "defeat": "pisão, fogo ou casco",
+   "introduced_in": "glowing_canopy",
+   "boss": false,
+   "params": {
+    "shot_kind": "spore",
+    "shot_speed": 165
+   }
+  },
+  {
+   "id": "besouro_casca",
+   "name": "Besouro-Casca",
+   "role_reference": "blindado da floresta",
+   "description": "Besouro de casca de árvore, resistente (2 golpes) e lento.",
+   "habitats": [
+    "forest"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 3,
+   "behavior": "armored",
+   "abilities": [
+    "shield"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    34,
+    32
+   ],
+   "hp": 2,
+   "speed": 44,
+   "score": 300,
+   "animation_set": "bark_beetle",
+   "animation_states": [
+    "walk",
+    "guard",
+    "hurt",
+    "defeat"
+   ],
+   "visual_theme": "forest",
+   "defeat": "dois pisões ou fogo",
+   "introduced_in": "firefly_ruins",
+   "boss": false,
+   "params": {}
+  },
+  {
+   "id": "guardiao_arvore",
+   "name": "Guardião da Árvore",
+   "role_reference": "guardião intermediário (legado 4-3)",
+   "description": "Armadura de raízes e cristais que avança, salta e dispara; abre a guarda periodicamente.",
+   "habitats": [
+    "forest"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 4,
+   "behavior": "guardian",
+   "abilities": [
+    "projectile",
+    "shield"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell"
+   ],
+   "size": [
+    62,
+    64
+   ],
+   "hp": 6,
+   "speed": 85,
+   "score": 5000,
+   "animation_set": "guardian",
+   "animation_states": [
+    "walk",
+    "shell",
+    "jump",
+    "defeat"
+   ],
+   "visual_theme": "forest",
+   "defeat": "pisões quando a guarda está aberta",
+   "introduced_in": "ancestral_tree",
+   "boss": true,
+   "params": {
+    "tier": 4
+   }
+  },
+  {
+   "id": "brasa_andante",
+   "name": "Brasa Andante",
+   "role_reference": "patrulheiro resistente ao fogo",
+   "description": "Pedaço de carvão em brasa com pernas. O fogo de Lume não o afeta.",
+   "habitats": [
+    "volcano",
+    "fortress"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 3,
+   "behavior": "walker",
+   "abilities": [
+    "fire_immune"
+   ],
+   "weaknesses": [
+    "stomp",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 90,
+   "score": 200,
+   "animation_set": "ember",
+   "animation_states": [
+    "walk",
+    "alert",
+    "defeat"
+   ],
+   "visual_theme": "volcano",
+   "defeat": "pisão, casco ou estrela",
+   "introduced_in": "basalt_bridges",
+   "boss": false,
+   "params": {
+    "notice_range": 200
+   }
+  },
+  {
+   "id": "tartaruga_basalto",
+   "name": "Tartaruga-Basalto",
+   "role_reference": "criatura de casco vulcânica",
+   "description": "Tartaruga de casco de basalto; o casco chutado atravessa corredores de lava.",
+   "habitats": [
+    "volcano",
+    "fortress"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 3,
+   "behavior": "shell",
+   "abilities": [
+    "shell",
+    "kickable"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 90,
+   "score": 200,
+   "animation_set": "basalt_turtle",
+   "animation_states": [
+    "walk",
+    "shell",
+    "slide",
+    "wake",
+    "defeat"
+   ],
+   "visual_theme": "volcano",
+   "defeat": "casco chutado; fogo ou estrela",
+   "introduced_in": "basalt_bridges",
+   "boss": false,
+   "params": {}
+  },
+  {
+   "id": "morcego_brasa",
+   "name": "Morcego-Brasa",
+   "role_reference": "voador das cavernas de lava",
+   "description": "Morcego de asas incandescentes em voo ondulado.",
+   "habitats": [
+    "volcano",
+    "fortress",
+    "underground"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 3,
+   "behavior": "flyer",
+   "abilities": [
+    "fly"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    24
+   ],
+   "hp": 1,
+   "speed": 102,
+   "score": 200,
+   "animation_set": "bat",
+   "animation_states": [
+    "fly",
+    "defeat"
+   ],
+   "visual_theme": "volcano",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "echo_furnace",
+   "boss": false,
+   "params": {
+    "frequency": 2.8,
+    "amplitude": 34
+   }
+  },
+  {
+   "id": "boca_fornalha",
+   "name": "Boca-de-Fornalha",
+   "role_reference": "sentinela de fortaleza",
+   "description": "Gárgula de fornalha que cospe bolas de fogo em linha reta.",
+   "habitats": [
+    "volcano",
+    "fortress"
+   ],
+   "movement_type": "stationary",
+   "difficulty_tier": 3,
+   "behavior": "shooter",
+   "abilities": [
+    "projectile",
+    "fire_immune"
+   ],
+   "weaknesses": [
+    "stomp",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    28
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 200,
+   "animation_set": "furnace_mouth",
+   "animation_states": [
+    "idle",
+    "charge",
+    "fire",
+    "defeat"
+   ],
+   "visual_theme": "volcano",
+   "defeat": "pisão ou casco",
+   "introduced_in": "basalt_bridges",
+   "boss": false,
+   "params": {
+    "shot_kind": "fireball"
+   }
+  },
+  {
+   "id": "golem_basalto",
+   "name": "Golem de Basalto",
+   "role_reference": "blindado de fortaleza",
+   "description": "Golem de basalto (2 golpes) imune ao fogo.",
+   "habitats": [
+    "volcano",
+    "fortress"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 4,
+   "behavior": "armored",
+   "abilities": [
+    "shield",
+    "fire_immune"
+   ],
+   "weaknesses": [
+    "stomp",
+    "shell",
+    "star"
+   ],
+   "size": [
+    34,
+    32
+   ],
+   "hp": 2,
+   "speed": 44,
+   "score": 300,
+   "animation_set": "golem",
+   "animation_states": [
+    "walk",
+    "guard",
+    "hurt",
+    "defeat"
+   ],
+   "visual_theme": "volcano",
+   "defeat": "dois pisões ou casco",
+   "introduced_in": "basalt_bridges",
+   "boss": false,
+   "params": {}
+  },
+  {
+   "id": "guardiao_chama",
+   "name": "Guardião da Última Chama",
+   "role_reference": "guardião intermediário (legado 5-3)",
+   "description": "Armadura de basalto incandescente que avança, salta e dispara três vezes; abre a guarda periodicamente.",
+   "habitats": [
+    "volcano"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 5,
+   "behavior": "guardian",
+   "abilities": [
+    "projectile",
+    "shield"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell"
+   ],
+   "size": [
+    62,
+    64
+   ],
+   "hp": 7,
+   "speed": 85,
+   "score": 5000,
+   "animation_set": "guardian",
+   "animation_states": [
+    "walk",
+    "shell",
+    "jump",
+    "defeat"
+   ],
+   "visual_theme": "volcano",
+   "defeat": "pisões quando a guarda está aberta",
+   "introduced_in": "last_flame",
+   "boss": true,
+   "params": {
+    "tier": 5
+   }
+  }
+ ]
+}

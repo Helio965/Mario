@@ -1,0 +1,401 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "windswept_dunes",
+ "legacy_ids": [
+  "2-1"
+ ],
+ "name": "Dunas ao Vento",
+ "world": "golden_desert",
+ "role": "presentation",
+ "difficulty": 2,
+ "art": {
+  "set": "golden_desert",
+  "variant": "dunes",
+  "weather": "auto"
+ },
+ "music": "golden_desert_main",
+ "bounds": {
+  "width": 3800,
+  "height": 1240
+ },
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 3800,
+   "h": 540,
+   "variant": "dunes"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2840,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "time_limit": 387,
+ "spawn": {
+  "x": 72,
+  "y": 414
+ },
+ "checkpoints": [
+  {
+   "id": "cp_mid",
+   "x": 2040,
+   "y": 414
+  }
+ ],
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 3650,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 1000,
+   "h": 152
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1120,
+   "y": 448,
+   "w": 650,
+   "h": 152
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1900,
+   "y": 448,
+   "w": 900,
+   "h": 152
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2930,
+   "y": 448,
+   "w": 870,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 330,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "pipe01",
+   "kind": "pipe",
+   "style": "pipe",
+   "x": 550,
+   "y": 400,
+   "w": 62,
+   "h": 48
+  },
+  {
+   "id": "pipe02",
+   "kind": "pipe",
+   "style": "pipe",
+   "x": 690,
+   "y": 376,
+   "w": 62,
+   "h": 72
+  },
+  {
+   "id": "brick01",
+   "kind": "brick",
+   "x": 1200,
+   "y": 380,
+   "w": 80,
+   "h": 24
+  },
+  {
+   "id": "brick02",
+   "kind": "brick",
+   "x": 1330,
+   "y": 316,
+   "w": 80,
+   "h": 24
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 1460,
+   "y": 290,
+   "w": 40,
+   "h": 28,
+   "reward": "star"
+  },
+  {
+   "id": "brick03",
+   "kind": "brick",
+   "x": 1500,
+   "y": 290,
+   "w": 80,
+   "h": 28
+  },
+  {
+   "id": "question03",
+   "kind": "question",
+   "x": 2200,
+   "y": 350,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "brick04",
+   "kind": "brick",
+   "x": 2620,
+   "y": 376,
+   "w": 96,
+   "h": 20
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 3314,
+    "y": 846
+   },
+   "return": {
+    "x": 3202,
+    "y": 402
+   },
+   "x": 3130,
+   "y": 400,
+   "w": 56,
+   "h": 48
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "style": "pipe",
+   "warp": {
+    "x": 3202,
+    "y": 402
+   },
+   "return": {
+    "x": 3314,
+    "y": 846
+   },
+   "x": 3516,
+   "y": 864,
+   "w": 56,
+   "h": 32
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2840,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2840,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2840,
+   "y": 760,
+   "w": 410,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 3628,
+   "y": 760,
+   "w": 172,
+   "h": 136
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 150,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins02",
+   "shape": "row",
+   "x": 562,
+   "y": 365,
+   "count": 2,
+   "spacing": 34
+  },
+  {
+   "id": "coins03",
+   "shape": "arc",
+   "x": 980,
+   "y": 368,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins04",
+   "shape": "arc",
+   "x": 1750,
+   "y": 365,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins05",
+   "shape": "arc",
+   "x": 2780,
+   "y": 365,
+   "count": 6,
+   "spacing": 30
+  },
+  {
+   "id": "coins06",
+   "shape": "row",
+   "x": 3560,
+   "y": 410,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "room_coins01",
+   "shape": "row",
+   "x": 3354,
+   "y": 852.0,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 1530,
+   "y": 252
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 3468,
+   "y": 850
+  }
+ ],
+ "items": [
+  {
+   "id": "item01_heart",
+   "kind": "heart",
+   "x": 3418,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "tatu_bola",
+   "x": 840,
+   "y": 448,
+   "patrol": [
+    805,
+    970
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "escaravelho_areia",
+   "x": 1530,
+   "y": 448,
+   "patrol": [
+    1450,
+    1670
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "cacto_sentinela",
+   "x": 2510,
+   "y": 448,
+   "patrol": [
+    2480,
+    2600
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_spikes01",
+   "kind": "spikes",
+   "x": 2280,
+   "y": 434,
+   "w": 48,
+   "h": 14
+  }
+ ],
+ "secrets": [
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "entry": "pipe_room_entry",
+   "clue": "Cano com seta luminosa e dica próxima",
+   "rewards": [
+    "relic_room"
+   ]
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos blocos",
+   "rewards": [
+    "relic_high"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "x": 160,
+   "text": "Corra entre as dunas; observe onde pousar."
+  },
+  {
+   "x": 2230,
+   "text": "Espinhos são vencidos com um salto preciso."
+  },
+  {
+   "x": 2470,
+   "text": "O sentinela dispara em intervalos."
+  }
+ ],
+ "notes": "Convertida da edição TypeScript (fase 2-1). Sala secreta movida para câmara subterrânea (+720 u)."
+}
