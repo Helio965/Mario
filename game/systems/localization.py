@@ -43,6 +43,13 @@ class Localization:
         except (OSError, ValueError):
             return {}
 
+    def has(self, key: str) -> bool:
+        """Verdadeiro se a chave existe no idioma atual ou no padrão (sem registrar em ``missing``)."""
+        return (
+            self._lookup(self._strings, key) is not None
+            or self._lookup(self._fallback, key) is not None
+        )
+
     def t(self, key: str, **params: Any) -> str:
         value = self._lookup(self._strings, key)
         if value is None:
