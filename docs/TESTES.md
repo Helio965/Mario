@@ -57,9 +57,9 @@ Os 15 testes Playwright (menus, teclado, pausa, persistência, áudio, gamepad, 
 ## Resultado atual
 
 ```text
-tests/unit + tests/gameplay: ? testes aprovados, 0 xfail (perfil calibrado em 2-3, travessia)
-  — a única falha do momento é um teste da família "explosivos/aquáticos" ainda em
-    escrita pelo fluxo de arquétipos (0 falha, fora deste commit)
+tests/unit + tests/gameplay: 334 testes aprovados, 1 xfail (perfil calibrado em 2-3, travessia)
+  — as únicas falhas do momento são testes da família "explosivos/aquáticos" ainda em
+    escrita pelo fluxo de arquétipos (3 falhas, fora deste commit)
 tests/integration: aprovados (renderização, áudio e interface sem janela)
 ruff check / ruff format --check: limpos
 mypy --strict (pacote game): limpo

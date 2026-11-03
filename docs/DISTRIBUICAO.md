@@ -35,18 +35,28 @@ O ponto de entrada já é assíncrono quando `sys.platform == "emscripten"`
 quadro, o salvamento usa `/data/data/lume` e o áudio é iniciado após o
 primeiro gesto do usuário.
 
+```bash
+python -m tools.build_web          # empacota build/web-src/lume/build/web (index.html + lume.apk)
+python -m tools.build_web --serve  # idem e serve em http://localhost:8000 com o servidor do Pygbag
+```
+
+`tools/build_web.py` copia só `main.py`, `game/`, `data/` e `assets/` para uma
+pasta limpa antes de chamar o Pygbag: empacotar a raiz do repositório arrastava
+`.venv` e `node_modules` (110 MB); a pasta limpa gera um `lume.apk` de 217 KB.
+
 | Verificação | Resultado |
 | --- | --- |
-| `pygbag` instalado no ambiente de desenvolvimento | sim (`python -m pygbag --version`) |
-| `python -m pygbag --build main.py` | ver nota abaixo — depende de baixar o runtime `pygame-web` da internet durante o build |
-| Execução no navegador | **não verificada** |
+| `pygbag` 0.9.x instalado no ambiente de desenvolvimento | sim |
+| `python -m tools.build_web` (build) | concluído: `index.html`, `lume.apk` (217 KB), `lume.tar.gz`; o modelo e o ícone vêm da CDN `pygame-web.github.io/cdn/0.9.3/` (precisa de rede) |
+| Abertura em Chromium sem janela (Playwright, via o proxy de rede desta sessão) | o runtime (`pythons.js`, `cpython312/main.wasm`) carrega e busca `lume.tar.gz`; `browserfs.min.js` responde 404 na CDN (sem sistema de arquivos persistente) e, em 8 minutos, o interpretador não chegou a imprimir a importação do pygame — **execução no navegador não confirmada** nesta sessão (rede lenta/intermediada) |
+| Execução em navegador com rede normal | **não verificada** — passo a passo: `python -m tools.build_web --serve`, abrir `http://localhost:8000`, clicar para liberar o áudio |
 
-Nota: o resultado da tentativa de build nesta sessão está registrado na seção
-"Registro" ao fim deste documento; o build web precisa de acesso à rede para o
-runtime do Pygbag, o que pode não existir no ambiente de CI/desenvolvimento.
-Alternativa documentada: executar o build numa máquina com rede e publicar
-`build/web/` em qualquer servidor estático (GitHub Pages inclusive).
+Limitações conhecidas do alvo web, a confirmar quando a execução for possível:
+`numpy` precisa existir como roda wasm na CDN do Pygbag (o áudio procedural usa
+`numpy`); se faltar, o áudio deve ser desligado no navegador. O salvamento
+depende do BrowserFS/IndexedDB do runtime.
 
 ## Registro
 
 - 2026-11-03: PyInstaller no Linux — build e fumaça sem janela concluídos (82 MB).
+- 2026-11-03: Pygbag — build limpo (217 KB) com `tools/build_web.py`; runtime carrega em Chromium sem janela, mas o interpretador não iniciou em 8 min através do proxy; `browserfs.min.js` 404 na CDN 0.9.3.
