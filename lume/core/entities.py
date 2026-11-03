@@ -221,6 +221,7 @@ class Player:
     transform: float = 0.0  # >0 while the growth/power-up animation plays
     shot_flash: float = 0.0
     hurt_flash: float = 0.0
+    damage_blink: float = 0.0
 
 
 @dataclass(slots=True)

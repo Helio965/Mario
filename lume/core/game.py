@@ -251,6 +251,7 @@ class Game:
         p.transform = max(0.0, p.transform - dt)
         p.shot_flash = max(0.0, p.shot_flash - dt)
         p.hurt_flash = max(0.0, p.hurt_flash - dt)
+        p.damage_blink = max(0.0, p.damage_blink - dt)
         p.anim_time += dt
         self.shake = max(0.0, self.shake - dt)
 
@@ -765,6 +766,7 @@ class Game:
             p.y += p.h - C.PLAYER_SMALL_HEIGHT
             p.h = C.PLAYER_SMALL_HEIGHT
         p.invulnerable = 2.0
+        p.damage_blink = 2.0
         p.hurt_flash = 0.45
         p.vx = -p.facing * 100.0
 

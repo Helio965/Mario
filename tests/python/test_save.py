@@ -37,7 +37,8 @@ def test_v1_migration_keeps_progress_records_relics_and_settings():
     # completed ones in the new order.
     for level_id in ["first_steps", "valley_canals", "orchard_guardian", "windswept_dunes", "canyon_bridges"]:
         assert level_id in new.unlocked
-    assert "windmill_heights" in new.unlocked  # new level after orchard_guardian
+    # the level after orchard_guardian in the new order is unlocked (planned slots are skipped)
+    assert VIEW.next_after("orchard_guardian") in new.unlocked
     assert new.settings.music == 0.2 and new.settings.effects is False and new.settings.touch is True
     assert new.migrated_from == "lume-save-v1"
 

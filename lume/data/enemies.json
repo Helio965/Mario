@@ -1361,6 +1361,1249 @@
    "params": {
     "tier": 5
    }
+  },
+  {
+   "id": "serpente_duna",
+   "name": "Serpente-de-Duna",
+   "role_reference": "emboscador que viaja sob a areia (papel análogo ao Monty Mole)",
+   "description": "Só um rastro de areia é visível; surge ao lado de Lume após um tremor de aviso e passa a rastejar antes de mergulhar de novo.",
+   "habitats": [
+    "desert"
+   ],
+   "movement_type": "burrow",
+   "difficulty_tier": 3,
+   "behavior": "burrower",
+   "abilities": [
+    "burrow",
+    "emerge"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    24
+   ],
+   "hp": 1,
+   "speed": 80,
+   "score": 300,
+   "animation_set": "dune_serpent",
+   "animation_states": [
+    "underground",
+    "surface",
+    "walk",
+    "dig",
+    "defeat"
+   ],
+   "visual_theme": "desert",
+   "defeat": "pisão ou fogo fora da areia",
+   "introduced_in": "sandstorm_pass",
+   "boss": false,
+   "params": {
+    "dig_speed": 120,
+    "surface_range": 70
+   }
+  },
+  {
+   "id": "escaravelho_lancador",
+   "name": "Escaravelho Lançador",
+   "role_reference": "atirador em arco (papel análogo ao Hammer Bro)",
+   "description": "Escaravelho de pé que dá passos, salta e arremessa bolas de areia em arco depois de levantar os braços.",
+   "habitats": [
+    "desert"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 4,
+   "behavior": "thrower",
+   "abilities": [
+    "arc_projectile"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    34
+   ],
+   "hp": 2,
+   "speed": 40,
+   "score": 400,
+   "animation_set": "scarab_thrower",
+   "animation_states": [
+    "step",
+    "windup",
+    "throw",
+    "jump",
+    "defeat"
+   ],
+   "visual_theme": "desert",
+   "defeat": "dois pisões ou fogo",
+   "introduced_in": "sunken_oasis",
+   "boss": false,
+   "params": {
+    "shot_kind": "sand",
+    "interval": 1.9
+   }
+  },
+  {
+   "id": "caranguejo_pinca",
+   "name": "Caranguejo-Pinça",
+   "role_reference": "criatura blindada com pinças periódicas",
+   "description": "Caranguejo que anda de lado; quando ergue as pinças fica perigoso por cima, ao baixá-las pode ser pisado.",
+   "habitats": [
+    "coast",
+    "underwater"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 2,
+   "behavior": "armored",
+   "abilities": [
+    "shield"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    34,
+    26
+   ],
+   "hp": 1,
+   "speed": 52,
+   "score": 200,
+   "animation_set": "crab",
+   "animation_states": [
+    "walk",
+    "guard",
+    "defeat"
+   ],
+   "visual_theme": "coast",
+   "defeat": "pisão com pinças baixas, fogo ou casco",
+   "introduced_in": "shell_beach",
+   "boss": false,
+   "params": {
+    "crest_period": 2.6,
+    "crest_duty": 0.45
+   }
+  },
+  {
+   "id": "peixe_saltador",
+   "name": "Peixe-Saltador",
+   "role_reference": "peixe hostil que salta da água (papel análogo ao Cheep Cheep)",
+   "description": "Peixe listrado que nada em onda e periodicamente salta em arco para fora d'água.",
+   "habitats": [
+    "coast",
+    "underwater"
+   ],
+   "movement_type": "water",
+   "difficulty_tier": 2,
+   "behavior": "swimmer",
+   "abilities": [
+    "swim"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    22
+   ],
+   "hp": 1,
+   "speed": 70,
+   "score": 200,
+   "animation_set": "leaping_fish",
+   "animation_states": [
+    "swim",
+    "leap",
+    "defeat"
+   ],
+   "visual_theme": "coast",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "shell_beach",
+   "boss": false,
+   "params": {
+    "leap_interval": 3.2,
+    "leap_speed": 560
+   }
+  },
+  {
+   "id": "baiacu_espinho",
+   "name": "Baiacu-Espinho",
+   "role_reference": "criatura que infla espinhos (papel análogo ao Porcupuffer/Urchin)",
+   "description": "Peixe-balão que flutua e infla espinhos quando Lume se aproxima; murcho pode ser pisado.",
+   "habitats": [
+    "coast",
+    "underwater"
+   ],
+   "movement_type": "water",
+   "difficulty_tier": 3,
+   "behavior": "puffer",
+   "abilities": [
+    "inflate"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    30
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 300,
+   "animation_set": "puffer",
+   "animation_states": [
+    "idle",
+    "inflate",
+    "spiky",
+    "deflate",
+    "defeat"
+   ],
+   "visual_theme": "coast",
+   "defeat": "pisão quando murcho, fogo ou casco",
+   "introduced_in": "tide_pools",
+   "boss": false,
+   "params": {
+    "trigger": 120
+   }
+  },
+  {
+   "id": "agua_viva",
+   "name": "Água-Viva Elétrica",
+   "role_reference": "obstáculo vivo flutuante",
+   "description": "Água-viva translúcida que sobe e desce nas correntes; o topo eletrificado não pode ser pisado.",
+   "habitats": [
+    "coast",
+    "underwater"
+   ],
+   "movement_type": "water",
+   "difficulty_tier": 3,
+   "behavior": "floater",
+   "abilities": [
+    "spiked_top"
+   ],
+   "weaknesses": [
+    "fire",
+    "star"
+   ],
+   "size": [
+    28,
+    34
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 250,
+   "animation_set": "jellyfish",
+   "animation_states": [
+    "drift",
+    "defeat"
+   ],
+   "visual_theme": "coast",
+   "defeat": "fogo ou estrela",
+   "introduced_in": "current_depths",
+   "boss": false,
+   "params": {
+    "amplitude": 60,
+    "frequency": 0.9
+   }
+  },
+  {
+   "id": "moreia_toca",
+   "name": "Moreia-da-Toca",
+   "role_reference": "emboscador de tocas (papel análogo ao Unagi/Piranha)",
+   "description": "Moreia que sai de uma fenda no coral, morde e recua; não sai se Lume estiver encostado na toca.",
+   "habitats": [
+    "coast",
+    "underwater"
+   ],
+   "movement_type": "stationary",
+   "difficulty_tier": 3,
+   "behavior": "emerger",
+   "abilities": [
+    "emerge"
+   ],
+   "weaknesses": [
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    44
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 300,
+   "animation_set": "moray",
+   "animation_states": [
+    "hidden",
+    "rise",
+    "out",
+    "bite",
+    "retreat",
+    "defeat"
+   ],
+   "visual_theme": "coast",
+   "defeat": "fogo, casco ou estrela",
+   "introduced_in": "tide_pools",
+   "boss": false,
+   "params": {
+    "hidden_time": 2.2,
+    "out_time": 1.6
+   }
+  },
+  {
+   "id": "polvo_tinteiro",
+   "name": "Polvo-Tinteiro",
+   "role_reference": "perseguidor aquático em impulsos (papel análogo ao Blooper)",
+   "description": "Polvo que persegue Lume nadando em impulsos quando ele está na água.",
+   "habitats": [
+    "underwater"
+   ],
+   "movement_type": "water",
+   "difficulty_tier": 4,
+   "behavior": "swimmer",
+   "abilities": [
+    "swim",
+    "follow"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    32
+   ],
+   "hp": 1,
+   "speed": 75,
+   "score": 350,
+   "animation_set": "octopus",
+   "animation_states": [
+    "swim",
+    "chase",
+    "defeat"
+   ],
+   "visual_theme": "coast",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "coral_maze",
+   "boss": false,
+   "params": {
+    "chase": true,
+    "amplitude": 10
+   }
+  },
+  {
+   "id": "yeti_mirim",
+   "name": "Yeti-Mirim",
+   "role_reference": "atirador em arco do gelo",
+   "description": "Filhote de yeti que arremessa bolas de neve em arco depois de erguê-las acima da cabeça.",
+   "habitats": [
+    "snow"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 4,
+   "behavior": "thrower",
+   "abilities": [
+    "arc_projectile"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    32,
+    36
+   ],
+   "hp": 2,
+   "speed": 40,
+   "score": 400,
+   "animation_set": "yeti",
+   "animation_states": [
+    "step",
+    "windup",
+    "throw",
+    "jump",
+    "defeat"
+   ],
+   "visual_theme": "snow",
+   "defeat": "dois pisões ou fogo",
+   "introduced_in": "slippery_slopes",
+   "boss": false,
+   "params": {
+    "shot_kind": "snowball",
+    "interval": 2.1
+   }
+  },
+  {
+   "id": "pingente_queda",
+   "name": "Pingente de Gelo",
+   "role_reference": "perigo que desaba (papel análogo ao Thwomp)",
+   "description": "Pingente gigante preso ao teto que treme e despenca quando Lume passa embaixo, e depois volta a se formar.",
+   "habitats": [
+    "snow",
+    "underground"
+   ],
+   "movement_type": "ceiling",
+   "difficulty_tier": 3,
+   "behavior": "crusher",
+   "abilities": [
+    "crush"
+   ],
+   "weaknesses": [],
+   "size": [
+    34,
+    40
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 0,
+   "animation_set": "icicle",
+   "animation_states": [
+    "wait",
+    "shake",
+    "fall",
+    "rest",
+    "rise",
+    "defeat"
+   ],
+   "visual_theme": "snow",
+   "defeat": "indestrutível; o topo é seguro",
+   "introduced_in": "avalanche_ridge",
+   "boss": false,
+   "params": {
+    "telegraph": 0.45,
+    "rest": 1.4
+   }
+  },
+  {
+   "id": "arbusto_espreita",
+   "name": "Arbusto-Espreita",
+   "role_reference": "criatura camuflada que investe",
+   "description": "Parece um arbusto comum; ao ver Lume abre olhos amarelos, sacode as folhas e investe.",
+   "habitats": [
+    "forest"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 3,
+   "behavior": "charger",
+   "abilities": [
+    "camouflage",
+    "charge"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    34,
+    30
+   ],
+   "hp": 1,
+   "speed": 40,
+   "score": 300,
+   "animation_set": "lurk_bush",
+   "animation_states": [
+    "walk",
+    "alert",
+    "charge",
+    "stunned",
+    "recover",
+    "defeat"
+   ],
+   "visual_theme": "forest",
+   "defeat": "pisão fora da investida, fogo ou casco",
+   "introduced_in": "vine_bridges",
+   "boss": false,
+   "params": {
+    "sight": 240,
+    "charge_speed": 260,
+    "telegraph": 0.6
+   }
+  },
+  {
+   "id": "aranha_cipo",
+   "name": "Aranha-do-Cipó",
+   "role_reference": "inimigo que desce das copas (papel análogo ao Swoop/Scuttlebug)",
+   "description": "Aranha pendurada nas copas que nota Lume abaixo e desce em arco antes de subir de volta.",
+   "habitats": [
+    "forest",
+    "swamp"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 3,
+   "behavior": "swooper",
+   "abilities": [
+    "fly"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    28,
+    26
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 300,
+   "animation_set": "vine_spider",
+   "animation_states": [
+    "perch",
+    "alert",
+    "dive",
+    "climb",
+    "defeat"
+   ],
+   "visual_theme": "forest",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "whispering_hollow",
+   "boss": false,
+   "params": {
+    "sight": 170,
+    "dive_speed": 170
+   }
+  },
+  {
+   "id": "robo_patrulha",
+   "name": "Robô de Ronda",
+   "role_reference": "autômato patrulheiro",
+   "description": "Autômato de corda com farol no peito; patrulha corredores e para para varrer o ambiente com a luz.",
+   "habitats": [
+    "city"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 2,
+   "behavior": "walker",
+   "abilities": [],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    32
+   ],
+   "hp": 1,
+   "speed": 70,
+   "score": 200,
+   "animation_set": "patrol_bot",
+   "animation_states": [
+    "walk",
+    "alert",
+    "defeat"
+   ],
+   "visual_theme": "city",
+   "defeat": "pisão, fogo ou casco",
+   "introduced_in": "gear_district",
+   "boss": false,
+   "params": {
+    "notice_range": 240
+   }
+  },
+  {
+   "id": "sentinela_canhao",
+   "name": "Canhão Sentinela",
+   "role_reference": "lançador de projéteis retos (papel análogo ao Bill Blaster)",
+   "description": "Canhão fixo em blocos que dispara projéteis lentos; os projéteis podem ser pisados.",
+   "habitats": [
+    "city",
+    "fortress",
+    "citadel"
+   ],
+   "movement_type": "stationary",
+   "difficulty_tier": 3,
+   "behavior": "cannon",
+   "abilities": [
+    "projectile"
+   ],
+   "weaknesses": [],
+   "size": [
+    32,
+    32
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 0,
+   "animation_set": "cannon",
+   "animation_states": [
+    "idle",
+    "charge",
+    "fire",
+    "defeat"
+   ],
+   "visual_theme": "city",
+   "defeat": "indestrutível; pise nos projéteis",
+   "introduced_in": "gear_district",
+   "boss": false,
+   "params": {
+    "interval": 3.2,
+    "shot_speed": 160
+   }
+  },
+  {
+   "id": "drone_vigia",
+   "name": "Drone Vigia",
+   "role_reference": "voador mergulhador mecânico",
+   "description": "Drone com hélice que paira, mira e mergulha em diagonal quando Lume passa embaixo.",
+   "habitats": [
+    "city",
+    "sky"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 3,
+   "behavior": "swooper",
+   "abilities": [
+    "fly"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    22
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 300,
+   "animation_set": "drone",
+   "animation_states": [
+    "perch",
+    "alert",
+    "dive",
+    "climb",
+    "defeat"
+   ],
+   "visual_theme": "city",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "steam_works",
+   "boss": false,
+   "params": {
+    "sight": 190
+   }
+  },
+  {
+   "id": "prensa_vapor",
+   "name": "Prensa a Vapor",
+   "role_reference": "prensa que esmaga (papel análogo ao Thwomp)",
+   "description": "Prensa industrial que solta vapor (aviso) e desce com força; o topo é seguro.",
+   "habitats": [
+    "city",
+    "fortress"
+   ],
+   "movement_type": "ceiling",
+   "difficulty_tier": 3,
+   "behavior": "crusher",
+   "abilities": [
+    "crush"
+   ],
+   "weaknesses": [],
+   "size": [
+    44,
+    40
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 0,
+   "animation_set": "steam_press",
+   "animation_states": [
+    "wait",
+    "shake",
+    "fall",
+    "rest",
+    "rise",
+    "defeat"
+   ],
+   "visual_theme": "city",
+   "defeat": "indestrutível",
+   "introduced_in": "conveyor_line",
+   "boss": false,
+   "params": {
+    "telegraph": 0.4,
+    "rest": 0.9
+   }
+  },
+  {
+   "id": "torreta_arco",
+   "name": "Torreta de Arco",
+   "role_reference": "atirador mecânico em arco",
+   "description": "Pequena torreta sobre pernas que lança porcas incandescentes em arco.",
+   "habitats": [
+    "city"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 4,
+   "behavior": "thrower",
+   "abilities": [
+    "arc_projectile"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    30
+   ],
+   "hp": 2,
+   "speed": 30,
+   "score": 400,
+   "animation_set": "arc_turret",
+   "animation_states": [
+    "step",
+    "windup",
+    "throw",
+    "jump",
+    "defeat"
+   ],
+   "visual_theme": "city",
+   "defeat": "dois pisões ou fogo",
+   "introduced_in": "clock_tower",
+   "boss": false,
+   "params": {
+    "shot_kind": "bolt",
+    "hop": false
+   }
+  },
+  {
+   "id": "nuvem_marota",
+   "name": "Nuvem Marota",
+   "role_reference": "perseguidor aéreo que arremessa (papel análogo ao Lakitu)",
+   "description": "Nuvenzinha com rosto que segue Lume pelo alto e solta sementes espinhosas que viram andarilhos.",
+   "habitats": [
+    "sky"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 4,
+   "behavior": "cloud_rider",
+   "abilities": [
+    "follow",
+    "summon"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "star"
+   ],
+   "size": [
+    34,
+    30
+   ],
+   "hp": 1,
+   "speed": 130,
+   "score": 400,
+   "animation_set": "cloud_imp",
+   "animation_states": [
+    "float",
+    "throw",
+    "defeat"
+   ],
+   "visual_theme": "sky",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "floating_gardens",
+   "boss": false,
+   "params": {
+    "seed_species": "semente_espinho",
+    "interval": 3.4
+   }
+  },
+  {
+   "id": "semente_espinho",
+   "name": "Semente-Espinho",
+   "role_reference": "andarilho espinhoso (papel análogo ao Spiny)",
+   "description": "Semente com casca espinhosa que cai das nuvens e passa a patrulhar.",
+   "habitats": [
+    "sky",
+    "grassland"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 3,
+   "behavior": "walker",
+   "abilities": [
+    "spiked_top"
+   ],
+   "weaknesses": [
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    24,
+    22
+   ],
+   "hp": 1,
+   "speed": 60,
+   "score": 100,
+   "animation_set": "spike_seed",
+   "animation_states": [
+    "walk",
+    "defeat"
+   ],
+   "visual_theme": "sky",
+   "defeat": "fogo, casco ou estrela",
+   "introduced_in": "floating_gardens",
+   "boss": false,
+   "params": {}
+  },
+  {
+   "id": "passaro_rajada",
+   "name": "Pássaro-Rajada",
+   "role_reference": "voador que mergulha com o vento",
+   "description": "Ave de penas azuladas que espera em poleiros e mergulha em arco.",
+   "habitats": [
+    "sky"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 3,
+   "behavior": "swooper",
+   "abilities": [
+    "fly",
+    "wind"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    24
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 300,
+   "animation_set": "gust_bird",
+   "animation_states": [
+    "perch",
+    "alert",
+    "dive",
+    "climb",
+    "defeat"
+   ],
+   "visual_theme": "sky",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "cloud_harbor",
+   "boss": false,
+   "params": {
+    "sight": 200,
+    "dive_speed": 210
+   }
+  },
+  {
+   "id": "balao_espinho",
+   "name": "Balão-Espinho",
+   "role_reference": "obstáculo flutuante levado pelo vento",
+   "description": "Balão de cardo com espinhos que deriva com o vento entre as ilhas.",
+   "habitats": [
+    "sky"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 3,
+   "behavior": "floater",
+   "abilities": [
+    "spiked_top",
+    "wind"
+   ],
+   "weaknesses": [
+    "fire",
+    "star"
+   ],
+   "size": [
+    30,
+    30
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 250,
+   "animation_set": "thistle_balloon",
+   "animation_states": [
+    "drift",
+    "defeat"
+   ],
+   "visual_theme": "sky",
+   "defeat": "fogo ou estrela",
+   "introduced_in": "gale_bridges",
+   "boss": false,
+   "params": {
+    "amplitude": 40,
+    "drift": 25
+   }
+  },
+  {
+   "id": "assombracao_timida",
+   "name": "Assombração Tímida",
+   "role_reference": "fantasma que reage ao olhar (papel análogo ao Boo)",
+   "description": "Lanterninha fantasma que se aproxima quando Lume está de costas e cobre o rosto quando encarada; atravessa paredes.",
+   "habitats": [
+    "swamp",
+    "citadel"
+   ],
+   "movement_type": "ghost",
+   "difficulty_tier": 3,
+   "behavior": "shy_ghost",
+   "abilities": [
+    "phase",
+    "light_reactive"
+   ],
+   "weaknesses": [
+    "star",
+    "fire"
+   ],
+   "size": [
+    30,
+    30
+   ],
+   "hp": 1,
+   "speed": 70,
+   "score": 300,
+   "animation_set": "shy_ghost",
+   "animation_states": [
+    "chase",
+    "hide",
+    "defeat"
+   ],
+   "visual_theme": "swamp",
+   "defeat": "fogo ou estrela",
+   "introduced_in": "misty_marsh",
+   "boss": false,
+   "params": {
+    "sight": 520
+   }
+  },
+  {
+   "id": "sapo_lodo",
+   "name": "Sapo-do-Lodo",
+   "role_reference": "saltador do pântano",
+   "description": "Sapo de lodo que se agacha, infla a garganta e salta na direção de Lume.",
+   "habitats": [
+    "swamp"
+   ],
+   "movement_type": "hopper",
+   "difficulty_tier": 2,
+   "behavior": "hopper",
+   "abilities": [],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    26
+   ],
+   "hp": 1,
+   "speed": 90,
+   "score": 200,
+   "animation_set": "swamp_frog",
+   "animation_states": [
+    "idle",
+    "crouch",
+    "jump",
+    "fall",
+    "land",
+    "defeat"
+   ],
+   "visual_theme": "swamp",
+   "defeat": "pisão, fogo ou casco",
+   "introduced_in": "misty_marsh",
+   "boss": false,
+   "params": {
+    "interval": 1.3,
+    "jump_speed": 460
+   }
+  },
+  {
+   "id": "mao_lodo",
+   "name": "Mão-do-Lodo",
+   "role_reference": "emboscador que surge do chão",
+   "description": "Mão de lodo que sobe de poças escuras, agarra o ar e afunda.",
+   "habitats": [
+    "swamp"
+   ],
+   "movement_type": "stationary",
+   "difficulty_tier": 3,
+   "behavior": "emerger",
+   "abilities": [
+    "emerge"
+   ],
+   "weaknesses": [
+    "fire",
+    "star"
+   ],
+   "size": [
+    30,
+    40
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 300,
+   "animation_set": "mud_hand",
+   "animation_states": [
+    "hidden",
+    "rise",
+    "out",
+    "bite",
+    "retreat",
+    "defeat"
+   ],
+   "visual_theme": "swamp",
+   "defeat": "fogo ou estrela",
+   "introduced_in": "lantern_bog",
+   "boss": false,
+   "params": {
+    "hidden_time": 2.0,
+    "out_time": 1.4
+   }
+  },
+  {
+   "id": "ossada_pantano",
+   "name": "Ossada do Pântano",
+   "role_reference": "esqueleto que se remonta (papel análogo ao Dry Bones)",
+   "description": "Esqueleto de criatura do pântano que desmorona ao ser pisado e se remonta depois de alguns segundos.",
+   "habitats": [
+    "swamp",
+    "fortress",
+    "volcano"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 4,
+   "behavior": "bones",
+   "abilities": [
+    "reassemble"
+   ],
+   "weaknesses": [
+    "shell",
+    "star",
+    "explosion"
+   ],
+   "size": [
+    28,
+    32
+   ],
+   "hp": 1,
+   "speed": 50,
+   "score": 400,
+   "animation_set": "bone_walker",
+   "animation_states": [
+    "walk",
+    "collapse",
+    "pile",
+    "reassemble",
+    "defeat"
+   ],
+   "visual_theme": "swamp",
+   "defeat": "casco ou estrela; pisão só desmonta",
+   "introduced_in": "sunken_mansion",
+   "boss": false,
+   "params": {
+    "rest": 4.0
+   }
+  },
+  {
+   "id": "bolha_magma",
+   "name": "Bolha de Magma",
+   "role_reference": "bola de lava saltadora (papel análogo ao Podoboo)",
+   "description": "Bolha incandescente que salta verticalmente da lava num ritmo fixo, anunciado por borbulhas.",
+   "habitats": [
+    "volcano",
+    "fortress"
+   ],
+   "movement_type": "stationary",
+   "difficulty_tier": 3,
+   "behavior": "lava_jumper",
+   "abilities": [
+    "fire_immune"
+   ],
+   "weaknesses": [
+    "star"
+   ],
+   "size": [
+    24,
+    26
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 0,
+   "animation_set": "magma_bubble",
+   "animation_states": [
+    "submerged",
+    "bubble",
+    "jump",
+    "fall",
+    "defeat"
+   ],
+   "visual_theme": "volcano",
+   "defeat": "só estrela; evite",
+   "introduced_in": "rising_magma",
+   "boss": false,
+   "params": {
+    "interval": 2.6,
+    "jump_speed": 640
+   }
+  },
+  {
+   "id": "sentinela_estelar",
+   "name": "Sentinela Estelar",
+   "role_reference": "atirador de elite",
+   "description": "Sentinela de cristal que dispara três projéteis em leque depois de carregar.",
+   "habitats": [
+    "citadel"
+   ],
+   "movement_type": "stationary",
+   "difficulty_tier": 5,
+   "behavior": "shooter",
+   "abilities": [
+    "projectile"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    34
+   ],
+   "hp": 2,
+   "speed": 0,
+   "score": 500,
+   "animation_set": "star_sentinel",
+   "animation_states": [
+    "idle",
+    "charge",
+    "fire",
+    "defeat"
+   ],
+   "visual_theme": "citadel",
+   "defeat": "dois pisões ou fogo",
+   "introduced_in": "starlit_gate",
+   "boss": false,
+   "params": {
+    "interval": 1.8,
+    "shot_speed": 210,
+    "shot_kind": "orb"
+   }
+  },
+  {
+   "id": "cometa_errante",
+   "name": "Cometa Errante",
+   "role_reference": "mergulhador de elite",
+   "description": "Cometa vivo que espera no céu estrelado e mergulha deixando rastro.",
+   "habitats": [
+    "citadel"
+   ],
+   "movement_type": "air",
+   "difficulty_tier": 5,
+   "behavior": "swooper",
+   "abilities": [
+    "fly"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "shell",
+    "star"
+   ],
+   "size": [
+    30,
+    26
+   ],
+   "hp": 1,
+   "speed": 0,
+   "score": 400,
+   "animation_set": "comet",
+   "animation_states": [
+    "perch",
+    "alert",
+    "dive",
+    "climb",
+    "defeat"
+   ],
+   "visual_theme": "citadel",
+   "defeat": "pisão ou fogo",
+   "introduced_in": "constellation_path",
+   "boss": false,
+   "params": {
+    "sight": 230,
+    "dive_speed": 240
+   }
+  },
+  {
+   "id": "guardiao_constelacao",
+   "name": "Guardião da Constelação",
+   "role_reference": "investidor de elite blindado",
+   "description": "Guardião de pedra estelar (3 golpes) que investe depois de acender as constelações do corpo.",
+   "habitats": [
+    "citadel"
+   ],
+   "movement_type": "ground",
+   "difficulty_tier": 6,
+   "behavior": "charger",
+   "abilities": [
+    "charge",
+    "shield"
+   ],
+   "weaknesses": [
+    "stomp",
+    "fire",
+    "star"
+   ],
+   "size": [
+    38,
+    40
+   ],
+   "hp": 3,
+   "speed": 50,
+   "score": 800,
+   "animation_set": "constellation_knight",
+   "animation_states": [
+    "walk",
+    "alert",
+    "charge",
+    "stunned",
+    "recover",
+    "defeat"
+   ],
+   "visual_theme": "citadel",
+   "defeat": "três pisões fora da investida",
+   "introduced_in": "gravity_halls",
+   "boss": false,
+   "params": {
+    "charge_speed": 320,
+    "sight": 320
+   }
   }
  ]
 }

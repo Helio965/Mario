@@ -145,10 +145,14 @@ class CampaignView:
         return self.order[0]
 
     def next_after(self, level_id: str) -> Optional[str]:
+        """Next *playable* level in campaign order (planned levels are skipped,
+        so unfinished slots never block progression)."""
         if level_id not in self.order:
             return None
-        i = self.order.index(level_id)
-        return self.order[i + 1] if i + 1 < len(self.order) else None
+        for candidate in self.order[self.order.index(level_id) + 1 :]:
+            if candidate in self.playable:
+                return candidate
+        return None
 
 
 def fresh_save(view: CampaignView) -> SaveData:
