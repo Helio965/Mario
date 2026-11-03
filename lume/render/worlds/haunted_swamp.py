@@ -30,6 +30,7 @@ portraits, damask of moths and leaves); no crosses on the stones.
 from __future__ import annotations
 
 import math
+from functools import partial
 from typing import Optional, Sequence
 
 from ..svg import Rand, Svg, blob, mix, rounded_rect_path, shade, smooth_closed, smooth_open, star_points
@@ -512,10 +513,8 @@ class HauntedSwamp(WorldArt):
         return s
 
     def sky_extras(self) -> dict[str, PropSpec]:
-        extras = {
-            f"hs.cloud.{i}": PropSpec((lambda i=i, w=w, h=h: self._night_cloud(83 + i * 19, w, h)), (0, 0))
-            for i, (w, h) in enumerate([(320, 58), (240, 44), (400, 70)])
-        }
+        extras = {f"hs.cloud.{i}": PropSpec(partial(self._night_cloud, 83 + i * 19, w, h), (0, 0))
+                  for i, (w, h) in enumerate([(320.0, 58.0), (240.0, 44.0), (400.0, 70.0)])}
         # weather sprites resolve as ``particle.<name>`` (see ``weather``)
         extras["particle.hs_firefly"] = PropSpec(lambda: self._particle("firefly"), (8, 8))
         extras["particle.hs_firefly_far"] = PropSpec(lambda: self._particle("far"), (8, 8))
@@ -788,9 +787,9 @@ class HauntedSwamp(WorldArt):
             arm_x = lx + lean + 20
             s.path(f"M{lx + lean:.1f} {top + 6:.1f} Q{lx + lean + 10:.1f} {top - 2:.1f} {arm_x:.1f} {top + 2:.1f}", stroke="#1a1820", width=2.6)
             _hang_lantern(s, arm_x, top + 2, 13, True, 0.6)
-        # reeds and cattails
-        x = r.uniform(10, 40)
-        while x < w - 20:
+        # reeds and cattails (kept off the strip edges so no blade is cut where strips meet)
+        x = r.uniform(30, 50)
+        while x < w - 40:
             by = bank_y(x)
             roll = r.next()
             if roll < 0.55:
@@ -817,11 +816,11 @@ class HauntedSwamp(WorldArt):
         return s
 
     def layer_art(self) -> dict[str, PropSpec]:
-        art = {}
+        art: dict[str, PropSpec] = {}
         for i in range(2):
-            art[f"hs.far.{i}"] = PropSpec((lambda i=i: self._far(i)), (0, 0))
-            art[f"hs.mid.{i}"] = PropSpec((lambda i=i: self._mid(i)), (0, 0))
-            art[f"hs.near.{i}"] = PropSpec((lambda i=i: self._near(i)), (0, 0))
+            art[f"hs.far.{i}"] = PropSpec(partial(self._far, i), (0, 0))
+            art[f"hs.mid.{i}"] = PropSpec(partial(self._mid, i), (0, 0))
+            art[f"hs.near.{i}"] = PropSpec(partial(self._near, i), (0, 0))
         return art
 
     def layers(self) -> list[Layer]:
@@ -1291,24 +1290,24 @@ class HauntedSwamp(WorldArt):
             _haze(s, cx, cy, rx, ry, "#8ab04a", a)
         # great roots through the vault
         for k, (x, reach, thick) in enumerate(((90, 330, 34), (330, 220, 24), (560, 380, 40), (800, 260, 28), (940, 320, 30))):
-            pts = []
+            root: list[tuple[float, float, float]] = []
             for j in range(9):
                 t = j / 8
-                pts.append((x + 46 * math.sin(t * 3.0 + k) + 22 * t * (1 if k % 2 else -1), -10 + reach * t, thick * (1 - t) ** 0.7 + 1.5))
-            s.path(_vtaper(pts), fill=s.linear(x - thick, 0, x + thick, 0, [(0, "#1e1416"), (0.6, "#4a382c"), (1, "#24181a")]))
-            wound = [(px + math.sin(j * 1.4 + k) * pt * 0.5, py, max(1.0, pt * 0.35)) for j, (px, py, pt) in enumerate(pts[:7])]
+                root.append((x + 46 * math.sin(t * 3.0 + k) + 22 * t * (1 if k % 2 else -1), -10 + reach * t, thick * (1 - t) ** 0.7 + 1.5))
+            s.path(_vtaper(root), fill=s.linear(x - thick, 0, x + thick, 0, [(0, "#1e1416"), (0.6, "#4a382c"), (1, "#24181a")]))
+            wound = [(px + math.sin(j * 1.4 + k) * pt * 0.5, py, max(1.0, pt * 0.35)) for j, (px, py, pt) in enumerate(root[:7])]
             s.path(_vtaper(wound), fill="#33251f")
-            s.path(smooth_open([(px + pt * 0.3, py) for px, py, pt in pts[:7]]), stroke="#9a7c60", width=1.4, opacity=0.45)
+            s.path(smooth_open([(px + pt * 0.3, py) for px, py, pt in root[:7]]), stroke="#9a7c60", width=1.4, opacity=0.45)
             for j in (3, 5, 6):
-                px, py, pt = pts[j]
+                px, py, pt = root[j]
                 side = 1 if (j + k) % 2 else -1
                 tip = (px + side * 30, py + 70 + 20 * math.sin(j + k))
                 s.path(smooth_open([(px, py), (px + side * 20, py + 34), tip]), stroke="#2a1e1c", width=max(1.4, pt * 0.25))
                 _glow(s, tip[0], tip[1], 10, FIRE, 0.55)
                 s.circle(tip[0], tip[1], 1.5, fill=FIRE_HOT)
-            _moss_hang(s, pts[2][0], pts[2][1], 26, 50, x + k, ("#5a6a50", "#8a9a78"), 0.6)
+            _moss_hang(s, root[2][0], root[2][1], 26, 50, x + k, ("#5a6a50", "#8a9a78"), 0.6)
             # shelf fungi stacked on the side of the root, glowing
-            fx, fy, ft = pts[4]
+            fx, fy, ft = root[4]
             side = 1 if k % 2 else -1
             for j in range(3):
                 size = 13 - j * 3.2
@@ -1337,18 +1336,20 @@ class HauntedSwamp(WorldArt):
             s.line(gx, gy, gx + r.uniform(10, 50), gy, "#6a9a80", r.uniform(0.6, 1.2), r.uniform(0.2, 0.4))
         # drips and fireflies
         for _ in range(14):
-            x, y = r.uniform(20, 940), r.uniform(60, 260)
-            s.path(f"M{x:.1f} {y - 3:.1f} Q{x + 1.6:.1f} {y + 1:.1f} {x:.1f} {y + 2:.1f} Q{x - 1.6:.1f} {y + 1:.1f} {x:.1f} {y - 3:.1f} Z", fill="#9ac8c8",
-                   opacity=0.5)
+            dx, dy = r.uniform(20, 940), r.uniform(60, 260)
+            s.path(f"M{dx:.1f} {dy - 3:.1f} Q{dx + 1.6:.1f} {dy + 1:.1f} {dx:.1f} {dy + 2:.1f} Q{dx - 1.6:.1f} {dy + 1:.1f} {dx:.1f} {dy - 3:.1f} Z",
+                   fill="#9ac8c8", opacity=0.5)
         for _ in range(26):
             _firefly(s, r.uniform(10, 950), r.uniform(80, 460), r.uniform(0.8, 1.4))
         return s
 
     # ------------------------------------------------------------------ interiors
     def interior(self, variant: str):
-        if variant == "mansion":
+        """Indoor areas: the sunken manor ("mansion", also "manor") and the lantern
+        keep hall ("fortress", also "keep"/"tower"); "cave" uses ``cave_sky``."""
+        if variant in ("mansion", "manor"):
             return self._mansion_backdrop, self._mansion_shelves
-        if variant == "fortress":
+        if variant in ("fortress", "keep", "tower"):
             return self._keep_hall, self._keep_pillars
         return None
 
@@ -1407,8 +1408,8 @@ class HauntedSwamp(WorldArt):
                    f"L{wx + ww} {wy + wh} L{wx} {wy + wh} Z", fill="#141a34")
             _dead_tree(s, wx + 40, wy + wh - 36, 70, 3.0, "#141a34")
             for k in range(3):
-                bx = wx + ww * (k + 1) / 4
-                s.line(bx, wy + (40 if k == 1 else 52), bx, wy + wh, "#100c14", 4.0)
+                mullion = wx + ww * (k + 1) / 4
+                s.line(mullion, wy + (40 if k == 1 else 52), mullion, wy + wh, "#100c14", 4.0)
             for yy in (wy + 140, wy + 220):
                 s.line(wx, yy, wx + ww, yy, "#100c14", 4.0)
             s.path(f"M{wx} {wy + wh} L{wx} {wy + 80} Q{wx + ww / 2} {wy - 30} {wx + ww} {wy + 80} L{wx + ww} {wy + wh} Z", stroke="#2a1c22", width=12)
@@ -1779,8 +1780,8 @@ class HauntedSwamp(WorldArt):
                    stroke=INK, width=1.2)
             for x in range(int(h / 2), int(w - h / 2), 9):
                 s.line(x, 1.5, x, h - 1.5, "#2e261e", 1.0, 0.7)
-            for x in (h / 2, w - h / 2):
-                s.circle(x, h / 2, h * 0.34, fill=s.radial(x - 1, h / 2 - 1, h * 0.36, [(0, RUST_HI), (1, RUST_DARK)]), stroke=INK, width=0.8)
+            for rx in (h / 2, w - h / 2):
+                s.circle(rx, h / 2, h * 0.34, fill=s.radial(rx - 1, h / 2 - 1, h * 0.36, [(0, RUST_HI), (1, RUST_DARK)]), stroke=INK, width=0.8)
             s.line(h / 2, 1.4, w - h / 2, 1.4, "#e0d0b0", 0.9, 0.7)
         return s
 

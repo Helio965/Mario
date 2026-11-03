@@ -122,10 +122,11 @@ class ShyGhost(CreatureRig):
 
         def tail(seg: int, aura: bool = False):
             s = Svg(36, 44)
+            centre: list[tuple[float, float, float]]
             if seg == 0:
-                centre = [(18, 2, 30), (19, 12, 25), (16, 23, 19), (18, 33, 15), (17, 42, 12)]
+                centre = [(18.0, 2.0, 30.0), (19.0, 12.0, 25.0), (16.0, 23.0, 19.0), (18.0, 33.0, 15.0), (17.0, 42.0, 12.0)]
             else:
-                centre = [(18, 2, 13), (19, 12, 10), (16, 22, 7.5), (19, 31, 4.5), (17, 41, 1.0)]
+                centre = [(18.0, 2.0, 13.0), (19.0, 12.0, 10.0), (16.0, 22.0, 7.5), (19.0, 31.0, 4.5), (17.0, 41.0, 1.0)]
             if aura:
                 centre = [(x, y, t * 1.3 + 3) for x, y, t in centre]
             d = _taper(centre, 0.85)
