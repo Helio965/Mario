@@ -138,7 +138,7 @@ def test_track_tables_match_original_and_render_full_loops() -> None:
 
 def test_cues_cover_all_event_types() -> None:
     assert set(synth.CUES) == set(EVENT_TYPES)
-    assert len(synth.CUES) == 14
+    assert len(synth.CUES) == len(EVENT_TYPES)  # 14 cues originais + 4 dos eventos novos
     assert synth.CUES["jump"].slide == 14
     assert synth.CUES["hurt"].wave == "sawtooth"
     assert synth.CUES["complete"].notes == (72, 76, 79, 84, 79, 84, 88, 91)
