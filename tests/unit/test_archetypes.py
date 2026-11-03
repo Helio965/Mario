@@ -92,9 +92,11 @@ def test_stomp_defeats_and_side_contact_hurts() -> None:
     g.player.vy = 400
     g.player.grounded = False
     ticks(g, 2)
-    assert not e.alive
-    assert e.behavior.state == S.DEFEATED
+    assert e.behavior.state == S.DEFEATED, "achatado por 0,5 s antes de sumir"
+    assert e.alive and not e.stompable
     assert any(ev.type == "stomp" for ev in g.events)
+    ticks(g, 70)
+    assert not e.alive
     h = Game([stalker_level(player_x=64, enemy_x=300)])
     h.player.invulnerable = 0
     h.player.x = 290

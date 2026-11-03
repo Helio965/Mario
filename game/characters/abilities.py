@@ -105,6 +105,8 @@ def update_powers(game: Game, dt: float, input_state: object) -> None:
             continue
         if not s.hostile:
             s.vy += 600 * dt
+        if s.gravity:
+            s.vy += s.gravity * dt
         before = s.vx
         collision = move_body(s, game.platforms, dt)
         if before != 0 and s.vx == 0:
@@ -121,7 +123,7 @@ def update_powers(game: Game, dt: float, input_state: object) -> None:
         else:
             for e in game.enemies:
                 if e.alive and overlaps(s, e):
-                    hit_enemy(game, e)
+                    hit_enemy(game, e, 1, "fire")
                     s.alive = False
                     burst(game, s.x, s.y, "#ffb35c", 5)
                     break

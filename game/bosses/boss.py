@@ -293,7 +293,7 @@ class GuardianBehavior(Behavior):
                 e.facing = 1 if self.bb.player_dx > 0 else -1
 
     # ---------------------------------------------------------------- dano
-    def on_hit(self, game: Game, damage: int) -> bool:
+    def on_hit(self, game: Game, damage: int, source: str = "stomp") -> bool:
         e = self.enemy
         if not e.alive or e.hit_timer > 0 or not self.vulnerable or self.state == S.DEFEATED:
             return False

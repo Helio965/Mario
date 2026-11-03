@@ -60,8 +60,21 @@ class Blackboard:
     health: int = 1
     max_health: int = 1
     in_water: bool = False
+    player_looking_at_me: bool = False
+    player_speed: float = 0.0
+    player_below: bool = False
+    player_grounded: bool = True
+    player_star: bool = False
+    on_screen: bool = True
+    just_landed: bool = False
+    hit_enemy: bool = False
+    hit_wall: bool = False
     flags: dict[str, Any] = field(default_factory=dict)
     timers: dict[str, float] = field(default_factory=dict)
+
+    def in_zone(self, low: float, high: float) -> bool:
+        """Janela assimétrica em ``player_dx`` (Thwomp/Piranha usam deslocamentos distintos)."""
+        return low <= self.player_dx < high
 
     def timer(self, name: str) -> float:
         return self.timers.get(name, 0.0)

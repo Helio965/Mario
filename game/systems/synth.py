@@ -180,6 +180,13 @@ CUES: Final[dict[str, Cue]] = {
     "boss_phase": Cue(notes=(50, 57, 62, 69), duration=0.1, slide=6),
     "talk": Cue(notes=(84, 91), duration=0.05, wave="triangle", gain=0.7),
     "npc_say": Cue(notes=(88,), duration=0.08, slide=9, wave="triangle", gain=0.7),
+    # Eventos dos arquétipos de inimigos e dos chefes (sinalização sonora).
+    "kick": Cue(notes=(58,), duration=0.07, slide=-9, wave="square"),
+    "ricochet": Cue(notes=(70, 77), duration=0.04, wave="square"),
+    "impact": Cue(notes=(33, 31), duration=0.12, slide=-6, wave="sawtooth"),
+    "explode": Cue(notes=(40, 36, 31, 28), duration=0.12, slide=-10, wave="sawtooth"),
+    "telegraph": Cue(notes=(74, 81), duration=0.06, slide=4, wave="triangle", gain=0.8),
+    "boss_telegraph": Cue(notes=(45, 52), duration=0.1, slide=-4, wave="sawtooth", gain=0.9),
 }
 PORTED_CUE_NAMES: Final[tuple[str, ...]] = tuple(CUES)[:14]  # os 14 de ``audio.ts``
 

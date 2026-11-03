@@ -15,9 +15,9 @@ if TYPE_CHECKING:
     from game.core.game import Game
 
 
-def hit_enemy(game: Game, e: Enemy, damage: int = 1) -> bool:
+def hit_enemy(game: Game, e: Enemy, damage: int = 1, source: str = "stomp") -> bool:
     if e.behavior is not None:
-        return bool(e.alive and e.behavior.on_hit(game, damage))
+        return bool(e.alive and e.behavior.on_hit(game, damage, source))
     if not e.alive or e.hit_timer > 0 or (e.kind == "boss" and e.state != "shell"):
         return False
     e.health -= damage
@@ -116,11 +116,11 @@ def update_enemies(game: Game, dt: float) -> None:
         if e.state == "slide":
             for other in game.enemies:
                 if other is not e and other.alive and overlaps(e, other):
-                    hit_enemy(game, other, 2)
+                    hit_enemy(game, other, 2, "shell")
         if not overlaps(player, e):
             continue
         if player.star > 0:
-            hit_enemy(game, e, 2)
+            hit_enemy(game, e, 2, "star")
             continue
         stomp = player.vy > 0 and player.y + player.h <= e.y + min(24, player.vy * dt + 15)
         if stomp:

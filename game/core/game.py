@@ -99,6 +99,7 @@ class Game:
         self._transition = 0.0
         self.pipe_cooldown = 0.0
         self.npcs: list[Npc] = []
+        self.last_input: InputState = InputState()
         self.talking = False
         self.talking_npc: Npc | None = None
         self.load(0)
@@ -198,6 +199,7 @@ class Game:
     # ------------------------------------------------------------------ passo
     def step(self, dt: float, input_state: InputState) -> None:
         self.elapsed += dt
+        self.last_input = input_state
         if self.status == "dead":
             self._transition -= dt
             if self._transition <= 0:

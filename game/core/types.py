@@ -39,6 +39,12 @@ EventType = Literal[
     "boss_phase",
     "talk",
     "npc_say",
+    "kick",
+    "ricochet",
+    "impact",
+    "explode",
+    "telegraph",
+    "boss_telegraph",
 ]
 
 PLATFORM_KINDS: tuple[str, ...] = (
@@ -73,6 +79,12 @@ EVENT_TYPES: tuple[str, ...] = (
     "boss_phase",
     "talk",
     "npc_say",
+    "kick",
+    "ricochet",
+    "impact",
+    "explode",
+    "telegraph",
+    "boss_telegraph",
 )
 
 
@@ -249,6 +261,7 @@ class Projectile:
     hostile: bool
     life: float
     alive: bool = True
+    gravity: float = 0.0  # projéteis em arco (martelo, gota de magma); 0 = comportamento legado
 
 
 @dataclass(slots=True)
