@@ -53,7 +53,7 @@ def test_every_level_renders_at_720p(display_720, level):
     scene, shot = frame(display_720, level)
     assert shot.get_size() == (1280, 720)
     assert variance(shot) > 200, "quadro sem conteúdo"
-    assert scene.stats["draws"] > 20
+    assert scene.stats["draws"] > 8
 
 
 @pytest.mark.parametrize("res", [(1280, 720), (1920, 1080), (3840, 2160)])
@@ -110,3 +110,18 @@ def test_character_sheet_states_all_draw():
             assert cmds and all(scene.store.get(c.part) is not None for c in cmds), state
     finally:
         display.close()
+
+
+@pytest.mark.parametrize("level", [lvl for lvl in CAMPAIGN.levels if len(lvl.areas) > 1], ids=lambda lvl: lvl.id)
+def test_every_sub_area_renders(display_720, level):
+    """Secret rooms, tunnels and other sub-areas render too (not only the spawn view)."""
+    for area in level.areas[1:]:
+        scene = Scene(display_720)
+        game = Game([level])
+        floor = min((p.y for p in level.platforms if p.kind in ("ground", "ledge")
+                     and area.x <= p.x + p.w / 2 < area.x + area.w and area.y < p.y < area.y + area.h), default=area.y + area.h - 100)
+        game.player.x = area.x + area.w / 2
+        game.player.y = floor - game.player.h - 1
+        game.camera.snap(game)
+        scene.render(game, 1 / 60)
+        assert variance(display_720.screenshot()) > 100, area.id

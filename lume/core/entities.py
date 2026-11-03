@@ -222,6 +222,7 @@ class Player:
     shot_flash: float = 0.0
     hurt_flash: float = 0.0
     damage_blink: float = 0.0
+    launched: bool = False  # spring launch: the jump-cut rule does not apply until the apex
 
 
 @dataclass(slots=True)

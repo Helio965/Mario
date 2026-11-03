@@ -87,9 +87,9 @@
    "id": "ground04",
    "kind": "ground",
    "style": "terrain",
-   "x": 2340,
+   "x": 2325,
    "y": 448,
-   "w": 1160,
+   "w": 1175,
    "h": 152
   },
   {
@@ -250,6 +250,15 @@
    "y": 760,
    "w": 291,
    "h": 136
+  },
+  {
+   "id": "bridge01",
+   "kind": "semisolid",
+   "style": "bridge",
+   "x": 2236,
+   "y": 336,
+   "w": 150,
+   "h": 14
   }
  ],
  "coin_groups": [
@@ -315,6 +324,12 @@
    "kind": "relic",
    "x": 3038,
    "y": 850
+  },
+  {
+   "id": "relic_bridge",
+   "kind": "relic",
+   "x": 2300,
+   "y": 288
   }
  ],
  "items": [
@@ -362,25 +377,25 @@
    "id": "hz_water01",
    "kind": "water",
    "x": 640,
-   "y": 500,
+   "y": 468,
    "w": 100,
-   "h": 40
+   "h": 132
   },
   {
    "id": "hz_water02",
    "kind": "water",
    "x": 1380,
-   "y": 500,
+   "y": 468,
    "w": 120,
-   "h": 40
+   "h": 132
   },
   {
    "id": "hz_water03",
    "kind": "water",
    "x": 2200,
-   "y": 500,
-   "w": 140,
-   "h": 40
+   "y": 468,
+   "w": 125,
+   "h": 132
   }
  ],
  "secrets": [
@@ -400,6 +415,14 @@
    "rewards": [
     "relic_high"
    ]
+  },
+  {
+   "id": "bridge_route",
+   "kind": "high_route",
+   "clue": "Ponte de tábuas sobre o último canal",
+   "rewards": [
+    "relic_bridge"
+   ]
   }
  ],
  "hints": [
@@ -416,5 +439,5 @@
    "text": "Há luz dentro deste cano."
   }
  ],
- "notes": "Convertida da edição TypeScript (fase 1-2). Sala secreta movida para câmara subterrânea (+720 u)."
+ "notes": "Convertida da edição TypeScript (fase 1-2) e revisada: vão final reduzido de 140 u para 125 u (regra do Mundo 1), canais visíveis e terceira relíquia sobre a ponte. Sala secreta em câmara subterrânea."
 }

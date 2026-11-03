@@ -79,6 +79,25 @@ class WorldArt:
     def weather(self) -> Weather:
         return Weather()
 
+    def hazard(self, kind: str, w: float, h: float):
+        """World-specific hazard art (e.g. bramble thorns); None = common art."""
+        return None
+
+    def gate(self, w: float, h: float):
+        """Arena gate (switch platform with style 'gate')."""
+        from ..svg import rounded_rect_path
+
+        s = Svg(w, h)
+        s.path(rounded_rect_path(0, 0, w, h, 3), fill=s.linear(0, 0, w, 0, [(0, "#5a5f68"), (0.5, "#8a909a"), (1, "#4a4e56")]),
+               stroke="#2b1d2c", width=1.4)
+        for i in range(1, int(w // 10)):
+            s.line(i * 10, 2, i * 10, h - 2, "#3a3e46", 2.0)
+        return s
+
+    def interior(self, variant: str):
+        """(backdrop Svg builder, layer Svg builder or None) for indoor areas."""
+        return None
+
     def cave_sky(self) -> Svg:
         s = Svg(960, 540)
         s.rect(0, 0, 960, 540, fill=s.linear(0, 0, 0, 540, [(0, "#20283a"), (1, "#0e121c")]))

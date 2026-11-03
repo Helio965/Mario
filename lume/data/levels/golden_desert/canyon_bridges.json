@@ -113,7 +113,7 @@
   {
    "id": "crumble01",
    "kind": "crumble",
-   "x": 890,
+   "x": 770,
    "y": 338,
    "w": 90,
    "h": 18
@@ -121,7 +121,7 @@
   {
    "id": "crumble02",
    "kind": "crumble",
-   "x": 1040,
+   "x": 920,
    "y": 288,
    "w": 96,
    "h": 18
@@ -307,7 +307,7 @@
   {
    "id": "relic_high",
    "kind": "relic",
-   "x": 1074,
+   "x": 954,
    "y": 250
   },
   {
@@ -410,5 +410,5 @@
    "text": "Espere a chama se afastar para passar."
   }
  ],
- "notes": "Convertida da edição TypeScript (fase 2-2). Sala secreta movida para câmara subterrânea (+720 u)."
+ "notes": "Convertida da edição TypeScript (fase 2-2). Sala secreta movida para câmara subterrânea (+720 u). Revisão: plataformas frágeis afastadas da patrulha do Tatu-Bola para que o salto sobre ele não bata no teto antes do vão (problema detectado pela rota automatizada)."
 }

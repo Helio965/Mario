@@ -87,7 +87,7 @@ class Game:
                 motion=Motion(s.motion.axis, s.motion.range, s.motion.speed, s.motion.phase) if s.motion else None,
                 destination=(s.warp.x, s.warp.y) if s.warp else None,
                 return_point=(s.return_point.x, s.return_point.y) if s.return_point else None,
-                secret=s.secret, surface_speed=s.surface_speed, bounce=s.bounce, group=s.group,
+                secret=s.secret, surface_speed=s.surface_speed, bounce=s.bounce, group=s.group, active=s.active,
             )
             for s in level.platforms
         ]
@@ -105,6 +105,8 @@ class Game:
             for z in level.zones
         ]
         self.checkpoints = [Checkpoint(c.id, c.x, c.y) for c in level.checkpoints]
+        self.triggered: set[str] = set()
+        self.arena: Optional[dict] = None
         self.enemies = []
         for spec in level.enemies:
             enemy = self._make_enemy(spec.species, spec.x, spec.y, spec.id, spec.patrol, spec.hp, spec.params)
@@ -288,7 +290,9 @@ class Game:
                 p.coyote = 0.0
                 p.buffer = 0.0
                 self.emit("jump", x=p.x + p.w / 2, y=p.y + p.h)
-            if not inp.jump and p.vy < C.JUMP_CUT_SPEED:
+            if p.launched and p.vy >= 0:
+                p.launched = False
+            if not inp.jump and p.vy < C.JUMP_CUT_SPEED and not p.launched:
                 p.vy = C.JUMP_CUT_SPEED
             p.vy = min(C.MAX_FALL_SPEED, p.vy + C.GRAVITY * gravity_scale * dt)
         self.previous_jump = inp.jump
@@ -302,6 +306,7 @@ class Game:
         floor = collision.standing_on
         if floor is not None and floor.kind == "spring" and fall_speed > 60:
             p.vy = -(floor.bounce or 900.0) * (1.0 if inp.jump else 0.82)
+            p.launched = True
             p.grounded = False
             p.standing_on = None
             floor.bump = 0.25
@@ -426,8 +431,54 @@ class Game:
                         s.crumble = 0.0
 
     # ------------------------------------------------------------------ interactions
+    def _events(self) -> None:
+        """Level events triggered by the player's x (boss arenas, messages)."""
+        p = self.player
+        for ev in self.level.events:
+            if ev.id in self.triggered or p.x < ev.x:
+                continue
+            if ev.kind == "boss_arena":
+                lock = ev.params.get("lock")
+                # only trigger while inside the arena's vertical span
+                if lock and not (lock[1] <= p.y + p.h / 2 <= lock[1] + lock[3]):
+                    continue
+                self.triggered.add(ev.id)
+                if lock:
+                    self.camera.lock = (float(lock[0]), float(lock[1]), float(lock[2]), float(lock[3]))
+                for gid in ev.params.get("close", []):
+                    gate = self.platform_by_id.get(gid)
+                    if gate is not None and not gate.active:
+                        if overlaps(p, gate):
+                            continue
+                        gate.active = True
+                        gate.bump = 0.3
+                self.arena = dict(ev.params, id=ev.id)
+                self.emit("arena", text=ev.params.get("text"), ref=ev.id)
+                self.shake = max(self.shake, 0.2)
+            elif ev.kind in ("message", "camera_lock"):
+                self.triggered.add(ev.id)
+                if ev.kind == "camera_lock" and ev.params.get("lock"):
+                    lock = ev.params["lock"]
+                    self.camera.lock = (float(lock[0]), float(lock[1]), float(lock[2]), float(lock[3]))
+                if ev.params.get("text"):
+                    self.emit("message", text=str(ev.params["text"]), ref=ev.id)
+        if self.arena is not None and not self.bosses_alive():
+            for gid in self.arena.get("open", []):
+                gate = self.platform_by_id.get(gid)
+                if gate is not None:
+                    gate.active = False
+            for gid in self.arena.get("close", []):
+                gate = self.platform_by_id.get(gid)
+                if gate is not None and self.arena.get("reopen", True):
+                    gate.active = False
+            self.camera.lock = None
+            self.emit("arena_clear", ref=self.arena.get("id"))
+            self.arena = None
+
     def _interactions(self, dt: float, inp: InputState, heads: list[Platform]) -> None:
         self._interact_world(inp, heads)
+        if self.level.events:
+            self._events()
         self._update_enemies(dt)
         self._update_powers(dt, inp)
         ex = self.level.exit
@@ -792,6 +843,23 @@ class Game:
         if self.lives <= 0:
             self.status = "gameover"
             return
+        if self.arena is not None:
+            # leaving an unfinished arena resets it: gates reopen and the event re-arms
+            for gid in self.arena.get("close", []):
+                gate = self.platform_by_id.get(gid)
+                if gate is not None:
+                    gate.active = False
+            self.triggered.discard(self.arena.get("id", ""))
+            self.arena = None
+            self.camera.lock = None
+            for e in self.enemies:
+                if self.profiles[e.species].boss:
+                    e.alive, e.health, e.defeated = True, e.hp, 0.0
+                    e.x, e.y, e.vx, e.vy = e.origin_x, e.origin_y, 0.0, 0.0
+                    e.hit_timer, e.timer = 0.0, 0.0
+                    e.memory = {"family": self.profiles[e.species].behavior}
+                    e.state, e.state_time = "walk", 0.0
+                    self.behaviors[e.species].spawn(self, e)
         point = self.last_checkpoint or self.level.spawn
         self._spawn(point.x, point.y)
         self.status = "playing"

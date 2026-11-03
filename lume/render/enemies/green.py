@@ -267,8 +267,9 @@ class BiterFlower(CreatureRig):
         }
 
     def commands(self, e, t):
-        base = Xf()
         base_y = e.memory.get("base_y", e.y)
+        # the burrow stays at ground level while the hitbox sinks into it
+        base = Xf(0.0, -(e.y - base_y) / self.du)
         rise = 1.0 - max(0.0, min(1.0, (e.y - base_y) / max(1.0, e.h)))
         out = []
         if e.alive or e.defeated > 0:

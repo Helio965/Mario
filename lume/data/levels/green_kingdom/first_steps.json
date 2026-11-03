@@ -222,6 +222,24 @@
    "y": 760,
    "w": 291,
    "h": 136
+  },
+  {
+   "id": "branch01",
+   "kind": "semisolid",
+   "style": "branch",
+   "x": 2560,
+   "y": 364,
+   "w": 120,
+   "h": 14
+  },
+  {
+   "id": "branch02",
+   "kind": "semisolid",
+   "style": "branch",
+   "x": 2730,
+   "y": 296,
+   "w": 120,
+   "h": 14
   }
  ],
  "coin_groups": [
@@ -288,6 +306,15 @@
    "y": 852.0,
    "count": 4,
    "spacing": 34
+  },
+  {
+   "id": "coins_branch",
+   "shape": "diagonal",
+   "x": 2590,
+   "y": 330,
+   "count": 4,
+   "spacing": 40,
+   "rise": 18
   }
  ],
  "coins": [],
@@ -297,6 +324,18 @@
    "kind": "relic",
    "x": 2678,
    "y": 850
+  },
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 1886,
+   "y": 232
+  },
+  {
+   "id": "relic_branch",
+   "kind": "relic",
+   "x": 2780,
+   "y": 246
   }
  ],
  "items": [
@@ -344,17 +383,17 @@
    "id": "hz_water01",
    "kind": "water",
    "x": 1040,
-   "y": 500,
+   "y": 468,
    "w": 100,
-   "h": 40
+   "h": 132
   },
   {
    "id": "hz_water02",
    "kind": "water",
    "x": 1920,
-   "y": 500,
+   "y": 468,
    "w": 120,
-   "h": 40
+   "h": 132
   }
  ],
  "secrets": [
@@ -373,6 +412,22 @@
    "entry": "hidden01",
    "clue": "Moedas e luzes convergem para um ponto vazio no ar",
    "rewards": []
+  },
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Trilha de moedas sobe pelos tijolos",
+   "rewards": [
+    "relic_high"
+   ]
+  },
+  {
+   "id": "branch_route",
+   "kind": "optional_challenge",
+   "clue": "Galhos da macieira formam degraus acima do caramujo",
+   "rewards": [
+    "relic_branch"
+   ]
   }
  ],
  "hints": [
@@ -393,5 +448,5 @@
    "text": "Sobre o cano, pressione ↓ para explorar."
   }
  ],
- "notes": "Convertida da edição TypeScript (fase 1-1). Sala secreta movida para câmara subterrânea (+720 u)."
+ "notes": "Convertida da edição TypeScript (fase 1-1) e revisada: canais visíveis, terceira relíquia na trilha dos tijolos e rota opcional de galhos. Sala secreta movida para câmara subterrânea (+720 u)."
 }

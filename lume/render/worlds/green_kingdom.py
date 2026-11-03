@@ -147,7 +147,6 @@ class GreenKingdom(WorldArt):
             s.path(blob(x, cy, rad * 1.25, rad, 0.1, seed=x), fill=s.radial(x - rad * 0.4, cy - rad * 0.6, rad * 1.8,
                    [(0, n0), (0.7, n1), (1, n2)]))
             x += r.uniform(50, 95)
-        s.rect(0, h - 18, w, 18, fill=self.c["near"][2])
         for i in range(26):
             fx, fy = r.uniform(0, w), h - r.uniform(14, 44)
             color = r.choice(list(self.c["flowers"]))
@@ -176,7 +175,9 @@ class GreenKingdom(WorldArt):
         strata) are functions of the world x (``x0`` + local x) so adjacent
         chunks join seamlessly."""
         if style == "cave":
-            return self._cave(w, h, seed, left, right)
+            return self._cave(w, h, seed, left, right, top)
+        if style == "fortress":
+            return self._fortress(w, h, seed, left, right, top, x0)
         hr = self.terrain_headroom
         s = Svg(w, h + hr)
         r = Rand(seed)
@@ -255,7 +256,109 @@ class GreenKingdom(WorldArt):
                 s.circle(fx, y0 - 4, 1.1, fill="#f5b52a")
         return s
 
-    def _cave(self, w: float, h: float, seed: int, left: bool, right: bool) -> Svg:
+    def _fortress(self, w: float, h: float, seed: int, left: bool, right: bool, top: bool, x0: float) -> Svg:
+        """Mossy castle masonry with creeping brambles (Fortaleza do Espinheiro)."""
+        hr = self.terrain_headroom
+        s = Svg(w, h + hr)
+        r = Rand(seed)
+        y0 = hr
+        s.rect(0, y0, w, h, fill=s.linear(0, y0, 0, y0 + h, [(0, "#9aa094"), (0.4, "#767c72"), (1, "#3e423e")]))
+        row_h = 22.0
+        rows = int(h / row_h) + 1
+        for row in range(rows):
+            yy = y0 + row * row_h
+            offset = (row % 2) * 24.0
+            gx = math.floor((x0 - offset) / 48) * 48 + offset - x0
+            while gx < w:
+                bw = 48.0
+                bx0, bx1 = max(0.0, gx + 1.2), min(w, gx + bw - 1.2)
+                if bx1 > bx0 + 3:
+                    shade_k = (math.sin((x0 + gx) * 0.37 + row * 1.7) + 1) * 0.06
+                    s.rect(bx0, yy + 1.2, bx1 - bx0, row_h - 2.4, fill=shade("#8a9086", shade_k - 0.05), rx=2.2, stroke="#4a4e48", width=0.8)
+                    s.line(bx0 + 2, yy + 3, bx1 - 2, yy + 3, "#b8beb2", 1.0, 0.6)
+                gx += bw
+        if top:
+            s.rect(0, y0 - 1, w, 7, fill=s.linear(0, y0 - 1, 0, y0 + 6, [(0, "#c8cec0"), (1, "#8a9086")]))
+            s.line(0, y0 - 0.5, w, y0 - 0.5, "#e2e8da", 1.4, 0.9)
+            for _ in range(max(2, int(w / 40))):
+                mx = r.uniform(4, w - 4)
+                s.path(blob(mx, y0 + 2, r.uniform(5, 11), r.uniform(2.2, 3.8), 0.25, seed=mx),
+                       fill=s.linear(0, y0 - 2, 0, y0 + 5, [(0, "#9fe064"), (1, "#3a8a36")]), opacity=0.95)
+            # brambles creeping along the edge (world-aligned so chunks connect)
+            pts = [(lx, y0 + 4 + 3 * math.sin((x0 + lx) * 0.09)) for lx in [i * w / 10 for i in range(11)]]
+            s.path(smooth_open(pts), stroke="#2f5a2a", width=2.6, opacity=0.95)
+            for lx, ly in pts[1:-1]:
+                s.polygon([(lx - 1.6, ly), (lx, ly - 4.5), (lx + 1.6, ly)], fill="#e8d8a8", stroke="#2b1d2c", width=0.5)
+        if left:
+            s.rect(0, y0, 4, h, fill="#3a3e3a", opacity=0.5)
+        if right:
+            s.rect(w - 4, y0, 4, h, fill="#3a3e3a", opacity=0.5)
+        return s
+
+    def hazard(self, kind: str, w: float, h: float):
+        if kind != "thorns":
+            return None
+        s = Svg(w, max(h, 16) + 4)
+        hh = max(h, 16)
+        for k in range(3):
+            pts = [(lx, hh * (0.45 + 0.18 * k) + 3 * math.sin(lx * 0.12 + k * 2)) for lx in [i * w / 12 for i in range(13)]]
+            s.path(smooth_open(pts), stroke=["#24461f", "#2f5a2a", "#3d7034"][k], width=3.4 - k * 0.6)
+            for i, (lx, ly) in enumerate(pts[:-1]):
+                if (i + k) % 2 == 0:
+                    s.polygon([(lx - 1.8, ly), (lx + 0.4, ly - 6), (lx + 1.8, ly)], fill="#efe2b8", stroke="#2b1d2c", width=0.5)
+        return s
+
+    def gate(self, w: float, h: float):
+        s = Svg(w, h)
+        s.rect(0, 0, w, h, fill=s.linear(0, 0, 0, h, [(0, "#2a2620"), (1, "#14120e")]), rx=2)
+        for i in range(int(w // 9) + 1):
+            x = 3 + i * 9
+            s.rect(x, 0, 3.2, h - 4, fill=s.linear(x, 0, x + 3.2, 0, [(0, "#8a8f98"), (1, "#4a4e56")]), rx=1)
+            s.polygon([(x - 1, h - 6), (x + 1.6, h), (x + 4.2, h - 6)], fill="#6a6e76")
+        for y in (h * 0.25, h * 0.6):
+            s.rect(0, y, w, 4, fill="#5a5e66", stroke="#2b1d2c", width=0.8, rx=1.5)
+        return s
+
+    def interior(self, variant: str):
+        if variant != "fortress":
+            return None
+
+        def backdrop():
+            s = Svg(960, 540)
+            s.rect(0, 0, 960, 540, fill=s.linear(0, 0, 0, 540, [(0, "#2a3330"), (0.6, "#3a4440"), (1, "#1e2422")]))
+            for row in range(13):
+                y = row * 44
+                off = (row % 2) * 60
+                for col in range(-1, 9):
+                    x = col * 120 + off
+                    s.rect(x + 2, y + 2, 116, 40, fill="#46514c" if (row + col) % 3 else "#4c5852", rx=3, opacity=0.9)
+            for k, ax in enumerate((140, 480, 820)):
+                s.path(f"M{ax - 70} 360 L{ax - 70} 170 Q{ax} 70 {ax + 70} 170 L{ax + 70} 360 Z",
+                       fill=s.linear(0, 90, 0, 360, [(0, "#9fd8f0"), (1, "#5fa0b8")]), stroke="#1e2422", width=6)
+                s.polygon([(ax - 50, 160), (ax + 20, 160), (ax + 160, 540), (ax - 10, 540)], fill="#e8f6ff", opacity=0.06 + 0.02 * k)
+                s.rect(ax - 90, 360, 180, 14, fill="#5a6660", rx=3)
+            for bx in (300, 650):
+                s.path(f"M{bx} 60 L{bx + 46} 60 L{bx + 46} 200 L{bx + 23} 180 L{bx} 200 Z",
+                       fill=s.linear(bx, 0, bx + 46, 0, [(0, "#2aa598"), (1, "#1a6a66")]), stroke="#0e2a2a", width=2)
+                s.circle(bx + 23, 110, 11, fill="#ffd27a", stroke="#5a3a12", width=1.5)
+            for vx in (40, 560, 900):
+                pts = [(vx + 12 * math.sin(i * 0.8), i * 30) for i in range(19)]
+                s.path(smooth_open(pts), stroke="#2f5a2a", width=6, opacity=0.8)
+            return s
+
+        def pillars():
+            s = Svg(900, 420)
+            for x in (90, 540):
+                s.rect(x, 20, 70, 400, fill=s.linear(x, 0, x + 70, 0, [(0, "#6e7a72"), (0.5, "#8a968e"), (1, "#4a544e")]), rx=6)
+                for y in range(40, 420, 46):
+                    s.line(x, y, x + 70, y, "#3e4842", 2.0, 0.7)
+                s.circle(x + 35, 150, 30, fill=s.radial(x + 35, 150, 30, [(0, "#ffe08a", 0.7), (1, "#ffb04a", 0)]))
+                s.rect(x + 27, 140, 16, 22, fill="#ffcf6a", stroke="#5a3a12", width=2, rx=3)
+            return s
+
+        return backdrop, pillars
+
+    def _cave(self, w: float, h: float, seed: int, left: bool, right: bool, top: bool = True) -> Svg:
         r = Rand(seed)
         hr = self.terrain_headroom
         s = Svg(w, h + hr)
@@ -269,6 +372,17 @@ class GreenKingdom(WorldArt):
             s.polygon([(cx, cy - 7), (cx + 3.4, cy), (cx, cy + 4), (cx - 3.4, cy)], fill=s.linear(cx, cy - 7, cx, cy + 4, [(0, "#d8fff7"), (1, "#3bc0b0")]),
                       stroke="#1f6a6a", width=0.6)
         s.path(smooth_open([(0, hr + 1.5), (w, hr + 1.5)]), stroke="#8a7a86", width=2.5, opacity=0.7)
+        if top:
+            for _ in range(max(1, int(w / 60))):
+                mx = r.uniform(6, w - 6)
+                s.path(blob(mx, hr + 2, r.uniform(6, 12), 2.6, 0.3, seed=mx), fill="#5f9a5a", opacity=0.85)
+        else:
+            # ceiling: stalactites and hanging roots along the bottom edge
+            for _ in range(max(2, int(w / 34))):
+                sx = r.uniform(4, w - 4)
+                ln = r.uniform(8, 24)
+                s.polygon([(sx - 4, h + hr - 1), (sx, h + hr + ln * 0.0 - 1 + ln), (sx + 4, h + hr - 1)],
+                          fill=s.linear(sx, h + hr, sx, h + hr + ln, [(0, "#5a4c58"), (1, "#8a7a86")]))
         return s
 
     # ------------------------------------------------------------------ blocks and platforms
@@ -432,6 +546,27 @@ class GreenKingdom(WorldArt):
                    (70 + ca * 66 - sa * 14, 70 + sa * 66 + ca * 14), (70 + ca * 14 - sa * 12, 70 + sa * 14 + ca * 12)]
             s.polygon(pts, fill="#f7efd8", stroke=INK, width=1.1, opacity=0.95)
         s.circle(70, 70, 7, fill="#7a4a28", stroke=INK, width=1.0)
+        return s
+
+    def cave_sky(self) -> Svg:
+        s = Svg(960, 540)
+        s.rect(0, 0, 960, 540, fill=s.linear(0, 0, 0, 540, [(0, "#1c1a26"), (0.5, "#2a2634"), (1, "#14121a")]))
+        r = Rand(77)
+        for layer, (color, base) in enumerate((("#2e2a3a", 420), ("#3a3446", 470))):
+            pts = [(0, 540)] + [(x, base - r.uniform(20, 120) * (1 - layer * 0.3)) for x in range(0, 1000, 70)] + [(960, 540)]
+            s.path(smooth_closed(pts, 0.5), fill=color)
+        for _ in range(9):
+            x = r.uniform(20, 940)
+            ln = r.uniform(40, 140)
+            s.path(smooth_open([(x, 0), (x + r.uniform(-12, 12), ln * 0.5), (x + r.uniform(-8, 8), ln)]), stroke="#4a3a2a", width=r.uniform(2, 4), opacity=0.8)
+        for _ in range(14):
+            x, y = r.uniform(20, 940), r.uniform(300, 520)
+            color = r.choice(["#7af0e0", "#c8a0ff", "#ffe08a"])
+            s.circle(x, y, r.uniform(10, 22), fill=s.radial(x, y, 22, [(0, color, 0.45), (1, color, 0)]))
+            s.polygon([(x, y - 7), (x + 3, y), (x, y + 4), (x - 3, y)], fill=color, opacity=0.9)
+        for k in range(3):
+            x = 160 + k * 320
+            s.polygon([(x - 30, 0), (x + 30, 0), (x + 90, 540), (x - 10, 540)], fill="#c8e8ff", opacity=0.04)
         return s
 
     def props(self) -> dict[str, PropSpec]:

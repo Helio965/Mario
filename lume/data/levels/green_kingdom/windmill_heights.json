@@ -1,0 +1,721 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "windmill_heights",
+ "name": "Colina dos Moinhos",
+ "world": "green_kingdom",
+ "role": "special",
+ "difficulty": 2,
+ "art": {
+  "set": "green_kingdom",
+  "variant": "windmills",
+  "weather": "auto"
+ },
+ "music": "green_kingdom_main",
+ "bounds": {
+  "width": 5600,
+  "height": 1240
+ },
+ "time_limit": 330,
+ "spawn": {
+  "x": 72,
+  "y": 418
+ },
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 5450,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 0,
+   "y": 448,
+   "w": 1180,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 380,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "moving01",
+   "kind": "moving",
+   "x": 270,
+   "y": 330,
+   "w": 90,
+   "h": 18,
+   "style": "sail",
+   "motion": {
+    "axis": "circle",
+    "range": 40,
+    "speed": 1.0,
+    "phase": 0
+   }
+  },
+  {
+   "id": "spring01",
+   "kind": "spring",
+   "x": 600,
+   "y": 432,
+   "w": 40,
+   "h": 16,
+   "bounce": 900
+  },
+  {
+   "id": "ledge01",
+   "kind": "ledge",
+   "x": 660,
+   "y": 250,
+   "w": 150,
+   "h": 24,
+   "style": "floating"
+  },
+  {
+   "id": "spring02",
+   "kind": "spring",
+   "x": 1140,
+   "y": 432,
+   "w": 40,
+   "h": 16,
+   "bounce": 950
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1180,
+   "y": 300,
+   "w": 520,
+   "h": 300
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 1700,
+   "y": 448,
+   "w": 300,
+   "h": 152
+  },
+  {
+   "id": "moving02",
+   "kind": "moving",
+   "x": 2095,
+   "y": 360,
+   "w": 90,
+   "h": 18,
+   "style": "sail",
+   "motion": {
+    "axis": "circle",
+    "range": 64,
+    "speed": 1.1,
+    "phase": 3.14
+   }
+  },
+  {
+   "id": "ledge02",
+   "kind": "ledge",
+   "x": 2252,
+   "y": 250,
+   "w": 44,
+   "h": 24,
+   "style": "floating"
+  },
+  {
+   "id": "moving03",
+   "kind": "moving",
+   "x": 2345,
+   "y": 360,
+   "w": 90,
+   "h": 18,
+   "style": "sail",
+   "motion": {
+    "axis": "circle",
+    "range": 64,
+    "speed": 1.1,
+    "phase": 0
+   }
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 2560,
+   "y": 448,
+   "w": 740,
+   "h": 152
+  },
+  {
+   "id": "brick01",
+   "kind": "brick",
+   "x": 3100,
+   "y": 340,
+   "w": 140,
+   "h": 22
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 3420,
+   "y": 448,
+   "w": 880,
+   "h": 152
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 3480,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "spring03",
+   "kind": "spring",
+   "x": 3880,
+   "y": 432,
+   "w": 40,
+   "h": 16,
+   "bounce": 950
+  },
+  {
+   "id": "ledge03",
+   "kind": "ledge",
+   "x": 3950,
+   "y": 250,
+   "w": 150,
+   "h": 24,
+   "style": "floating"
+  },
+  {
+   "id": "ledge04",
+   "kind": "ledge",
+   "x": 4150,
+   "y": 222,
+   "w": 150,
+   "h": 24,
+   "style": "floating"
+  },
+  {
+   "id": "brick02",
+   "kind": "brick",
+   "x": 4010,
+   "y": 360,
+   "w": 40,
+   "h": 22
+  },
+  {
+   "id": "brick03",
+   "kind": "brick",
+   "x": 4110,
+   "y": 360,
+   "w": 40,
+   "h": 22
+  },
+  {
+   "id": "moving04",
+   "kind": "moving",
+   "x": 4365,
+   "y": 380,
+   "w": 90,
+   "h": 18,
+   "style": "sail",
+   "motion": {
+    "axis": "circle",
+    "range": 50,
+    "speed": 1.2,
+    "phase": 1.6
+   }
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "terrain",
+   "x": 4520,
+   "y": 448,
+   "w": 1080,
+   "h": 152
+  },
+  {
+   "id": "hidden01",
+   "kind": "hidden",
+   "x": 4700,
+   "y": 344,
+   "w": 40,
+   "h": 24,
+   "reward": "star",
+   "secret": "hidden_star"
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "x": 4900,
+   "y": 400,
+   "w": 56,
+   "h": 48,
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 5034,
+    "y": 846
+   },
+   "return": {
+    "x": 4972,
+    "y": 402
+   }
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4640,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4640,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 4640,
+   "y": 760,
+   "w": 330,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 5348,
+   "y": 760,
+   "w": 252,
+   "h": 136
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "x": 5236,
+   "y": 864,
+   "w": 56,
+   "h": 32,
+   "style": "pipe",
+   "warp": {
+    "x": 4972,
+    "y": 402
+   },
+   "return": {
+    "x": 5034,
+    "y": 846
+   }
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "arc",
+   "x": 230,
+   "y": 300,
+   "count": 5,
+   "spacing": 32,
+   "rise": 26
+  },
+  {
+   "id": "coins02",
+   "shape": "column",
+   "x": 612,
+   "y": 380,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins03",
+   "shape": "row",
+   "x": 680,
+   "y": 214,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins04",
+   "shape": "column",
+   "x": 1152,
+   "y": 360,
+   "count": 3,
+   "spacing": 34
+  },
+  {
+   "id": "coins05",
+   "shape": "row",
+   "x": 1260,
+   "y": 262,
+   "count": 6,
+   "spacing": 34
+  },
+  {
+   "id": "coins06",
+   "shape": "arc",
+   "x": 2080,
+   "y": 300,
+   "count": 6,
+   "spacing": 40,
+   "rise": 40
+  },
+  {
+   "id": "coins07",
+   "shape": "arc",
+   "x": 2860,
+   "y": 360,
+   "count": 4,
+   "spacing": 30,
+   "rise": 40
+  },
+  {
+   "id": "coins08",
+   "shape": "row",
+   "x": 3970,
+   "y": 214,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins09",
+   "shape": "arc",
+   "x": 4640,
+   "y": 360,
+   "count": 5,
+   "spacing": 30,
+   "rise": 28
+  },
+  {
+   "id": "coins10",
+   "shape": "row",
+   "x": 5074,
+   "y": 852,
+   "count": 4,
+   "spacing": 34
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_mill",
+   "kind": "relic",
+   "x": 2263,
+   "y": 206
+  },
+  {
+   "id": "relic_high",
+   "kind": "relic",
+   "x": 4210,
+   "y": 176
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 5188,
+   "y": 850
+  }
+ ],
+ "items": [
+  {
+   "id": "item_heart01",
+   "kind": "heart",
+   "x": 5138,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "bolota",
+   "x": 900,
+   "y": 448,
+   "patrol": [
+    830,
+    1170
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "besouro_alado",
+   "x": 1460,
+   "y": 250,
+   "patrol": [
+    1300,
+    1660
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "flor_mordedora",
+   "x": 2900,
+   "y": 448,
+   "patrol": [
+    2890,
+    2930
+   ]
+  },
+  {
+   "id": "enemy04",
+   "species": "flor_mordedora",
+   "x": 3150,
+   "y": 448,
+   "patrol": [
+    3140,
+    3180
+   ]
+  },
+  {
+   "id": "enemy05",
+   "species": "caramujo",
+   "x": 3640,
+   "y": 448,
+   "patrol": [
+    3520,
+    3820
+   ]
+  },
+  {
+   "id": "enemy06",
+   "species": "flor_mordedora",
+   "x": 4060,
+   "y": 448,
+   "patrol": [
+    4050,
+    4090
+   ]
+  },
+  {
+   "id": "enemy07",
+   "species": "bolota",
+   "x": 4220,
+   "y": 448,
+   "patrol": [
+    4160,
+    4290
+   ]
+  },
+  {
+   "id": "enemy08",
+   "species": "besouro_alado",
+   "x": 5120,
+   "y": 340,
+   "patrol": [
+    5000,
+    5300
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_water01",
+   "kind": "water",
+   "x": 2000,
+   "y": 468,
+   "w": 560,
+   "h": 132
+  },
+  {
+   "id": "hz_water02",
+   "kind": "water",
+   "x": 3300,
+   "y": 468,
+   "w": 120,
+   "h": 132
+  },
+  {
+   "id": "hz_water03",
+   "kind": "water",
+   "x": 4300,
+   "y": 468,
+   "w": 220,
+   "h": 132
+  }
+ ],
+ "zones": [],
+ "secrets": [
+  {
+   "id": "high_route",
+   "kind": "high_route",
+   "clue": "Mola diante de plataformas flutuantes",
+   "rewards": [
+    "relic_high"
+   ]
+  },
+  {
+   "id": "hidden_star",
+   "kind": "hidden_block",
+   "clue": "Arco de moedas aponta para o vazio",
+   "rewards": []
+  },
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "clue": "Cano com seta luminosa",
+   "rewards": [
+    "relic_room"
+   ],
+   "entry": "pipe_room_entry"
+  }
+ ],
+ "hints": [
+  {
+   "x": 980,
+   "text": "Molas lançam alto: segure o salto para subir mais."
+  },
+  {
+   "x": 1760,
+   "text": "As pás do moinho giram: suba no topo da volta."
+  },
+  {
+   "x": 2780,
+   "text": "A flor sobe da toca: espere ela recolher ou salte por cima."
+  },
+  {
+   "x": 4620,
+   "text": "Há uma estrela escondida onde as moedas se curvam."
+  }
+ ],
+ "events": [],
+ "checkpoints": [
+  {
+   "id": "cp_mill",
+   "x": 2700,
+   "y": 418
+  }
+ ],
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 5600,
+   "h": 540,
+   "variant": "windmills"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 4640,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "decor": [
+  {
+   "prop": "windmill",
+   "x": 2150,
+   "y": 470,
+   "layer": "back",
+   "scale": 1.0
+  },
+  {
+   "prop": "windmill",
+   "x": 4420,
+   "y": 470,
+   "layer": "back",
+   "scale": 0.9
+  },
+  {
+   "prop": "fence",
+   "x": 200,
+   "y": 450,
+   "layer": "mid"
+  },
+  {
+   "prop": "tree_oak",
+   "x": 520,
+   "y": 450,
+   "layer": "back"
+  },
+  {
+   "prop": "bush",
+   "x": 760,
+   "y": 450,
+   "layer": "back"
+  },
+  {
+   "prop": "flowers",
+   "x": 1380,
+   "y": 302,
+   "layer": "mid"
+  },
+  {
+   "prop": "bush_b",
+   "x": 1600,
+   "y": 302,
+   "layer": "back"
+  },
+  {
+   "prop": "rock",
+   "x": 1850,
+   "y": 450,
+   "layer": "mid",
+   "scale": 0.8
+  },
+  {
+   "prop": "tree_oak_b",
+   "x": 2700,
+   "y": 450,
+   "layer": "back"
+  },
+  {
+   "prop": "flowers_b",
+   "x": 3020,
+   "y": 450,
+   "layer": "mid"
+  },
+  {
+   "prop": "bush",
+   "x": 3560,
+   "y": 450,
+   "layer": "back"
+  },
+  {
+   "prop": "fence",
+   "x": 3780,
+   "y": 450,
+   "layer": "mid"
+  },
+  {
+   "prop": "tree_oak",
+   "x": 4600,
+   "y": 450,
+   "layer": "back"
+  },
+  {
+   "prop": "flowers",
+   "x": 5200,
+   "y": 450,
+   "layer": "mid"
+  },
+  {
+   "prop": "bush_b",
+   "x": 5330,
+   "y": 450,
+   "layer": "back"
+  }
+ ],
+ "notes": "Fase nova (Mundo 1-4): mecânica especial do Reino Verde — molas e pás de moinho giratórias; apresenta a Flor-Mordedora."
+}

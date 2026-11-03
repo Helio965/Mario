@@ -104,6 +104,12 @@ class Scene:
         w = self.world
         self._canvas_spec(f"{w.id}.sky", w.sky, group="world", floor=0.5)
         self._canvas_spec(f"{w.id}.cave_sky", w.cave_sky, group="world", floor=0.5)
+        interior = w.interior("fortress")
+        if interior is not None:
+            back, layer = interior
+            self._canvas_spec(f"{w.id}.interior.fortress", back, group="world", floor=0.5)
+            if layer is not None:
+                self._canvas_spec(f"{w.id}.interior.fortress.layer", layer, group="world", floor=0.5)
         for art_id, prop in {**w.sky_extras(), **w.layer_art()}.items():
             self._canvas_spec(art_id, prop.build, prop.pivot, "world", floor=0.5)
         for name, prop in w.props().items():
@@ -140,6 +146,7 @@ class Scene:
         for h in game.hazards:
             if h.kind == "spikes":
                 ids.append(self._spikes_art(h.w))
+        ids += [a for a in (f"{w.id}.interior.fortress", f"{w.id}.interior.fortress.layer") if self.store.has(a)]
         for species in {e.species for e in game.enemies}:
             rig = self._rig(species, game)
             ids += [rig.part_id(n) for n in rig.parts()]
@@ -166,14 +173,15 @@ class Scene:
         self.terrain = []
         grounds = [p for p in level.platforms if p.kind in ("ground",)]
         for p in grounds:
-            covered = any(
-                o is not p and o.kind == "ground" and o.x < p.x + p.w and o.x + o.w > p.x and abs((o.y + o.h) - p.y) < 2
-                for o in grounds
-            )
             style = "cave" if p.style == "cave" else (p.style or "terrain")
             n = max(1, math.ceil(p.w / CHUNK))
             cw = p.w / n
             for i in range(n):
+                cx0, cx1 = p.x + i * cw, p.x + (i + 1) * cw
+                # a chunk loses its grass top only where another body sits flush on most of it
+                cover = sum(max(0.0, min(cx1, o.x + o.w) - max(cx0, o.x)) for o in grounds
+                            if o is not p and abs((o.y + o.h) - p.y) < 2)
+                covered = cover > cw * 0.6
                 art = f"terrain.{level.id}.{p.id}.{i}"
                 seed = abs(hash((level.id, p.id, i))) % 100000
                 left, right = i == 0, i == n - 1
@@ -204,6 +212,8 @@ class Scene:
         blocked += [(level.spawn.x - 60, level.spawn.x + 90)]
         for p in level.platforms:
             if p.kind != "ground" or p.style == "cave" or not (main.y <= p.y < main.y + main.h):
+                continue
+            if p.style in ("fortress",):
                 continue
             for prop, dx, scale, layer in w.auto_decor(rng, p.w):
                 x = p.x + dx
@@ -328,7 +338,8 @@ class Scene:
         self.view = self.compute_view(game)
         p = game.player
         area = level.area_at(p.x + p.w / 2, min(p.y + p.h / 2, level.height - 1))
-        outdoor = area is level.areas[0] and area.variant != "cave"
+        indoor = area.variant in ("cave", "fortress")
+        outdoor = not indoor
         shake_x = shake_y = 0.0
         if self.effects and game.shake > 0:
             amp = min(6.0, game.shake * 26)
@@ -340,6 +351,12 @@ class Scene:
             self.draw_canvas(f"{w.id}.sky", 0, 0, 960, 540)
             self._clouds()
             self._layers(level)
+        elif area.variant == "fortress" and self.store.has(f"{w.id}.interior.fortress"):
+            self.draw_canvas(f"{w.id}.interior.fortress", 0, 0, 960, 540)
+            if self.store.has(f"{w.id}.interior.fortress.layer"):
+                off = (self.view[0] * self.zoom * 0.45) % 900
+                for k in range(-1, 2):
+                    self.draw_canvas(f"{w.id}.interior.fortress.layer", k * 900 - off, 120, 900, 420)
         else:
             self.draw_canvas(f"{w.id}.cave_sky", 0, 0, 960, 540)
         self._decor("back")
@@ -439,6 +456,14 @@ class Scene:
                 self.draw_art(self._block_art("brick", s.w, s.h), s.x, s.y + bump, pivot=False)
             elif s.kind == "pipe":
                 self.draw_art(self._pipe_art(s.w, s.h, s.destination is not None and s.secret is not None), s.x, s.y, pivot=False)
+            elif s.kind == "switch":
+                if not s.active:
+                    continue
+                art = f"{self.world.id}.gate.{s.w:g}x{s.h:g}"
+                if not self.store.has(art):
+                    self.store.register(ArtSpec(art, (lambda gw=s.w, gh=s.h: self.world.gate(gw, gh)), 1.0, (0, 0), "world"))
+                drop = -math.sin(min(1.0, s.bump / 0.3) * math.pi / 2) * 20 if s.bump > 0 else 0.0
+                self.draw_art(art, s.x, s.y + drop, pivot=False)
             elif s.kind == "ledge":
                 art = self._platform_art("ledge", s.w, s.h, s.style)
                 self.draw_art(art, s.x, s.y - self.world.terrain_headroom, pivot=False)
@@ -450,11 +475,11 @@ class Scene:
     def _landmarks(self, game) -> None:
         level = game.level
         for hint in level.hints:
-            floor = self._floor_y(game, hint.x)
+            floor = self._floor_y(game, hint.x, hint.y)
             if floor is not None and self.visible(hint.x - 20, floor - 50, 40, 50):
                 self.draw_art("sign", hint.x + 10, floor + 1)
         for cp in game.checkpoints:
-            floor = self._floor_y(game, cp.x + 10)
+            floor = self._floor_y(game, cp.x + 10, cp.y)
             if floor is not None and self.visible(cp.x - 20, floor - 120, 60, 120):
                 self.draw_art("checkpoint.on" if cp.reached else "checkpoint.off", cp.x + 10, floor + 1)
                 if cp.reached and self.effects:
@@ -464,14 +489,16 @@ class Scene:
         if self.visible(ex.x - 40, ex.y - 230, 160, 240):
             self.draw_art("goal", ex.x + 10, ex.y + 1)
 
-    def _floor_y(self, game, x: float) -> Optional[float]:
+    def _floor_y(self, game, x: float, y: Optional[float] = None) -> Optional[float]:
+        """Top of the nearest ground at x below height y (or the highest one)."""
         best = None
         for s in game.index.query(x - 1, x + 1):
             if s.kind in ("ground", "ledge") and s.x <= x < s.x + s.w and s.y < game.level.height:
+                if y is not None and s.y < y - 2:
+                    continue
                 if best is None or s.y < best:
                     best = s.y
-        main = game.level.areas[0]
-        return best if best is None or best < main.y + main.h + 400 else best
+        return best
 
     def _hazards(self, game, liquids: bool) -> None:
         for h in game.hazards:
@@ -495,6 +522,15 @@ class Scene:
                 continue
             elif h.kind == "spikes":
                 self.draw_art(self._spikes_art(h.w), hx, hy - 2, pivot=False)
+            elif h.kind == "thorns":
+                art = f"{self.world.id}.thorns.{h.w:g}x{h.h:g}"
+                if not self.store.has(art):
+                    built = self.world.hazard("thorns", h.w, h.h)
+                    if built is None:
+                        art = self._spikes_art(h.w)
+                    else:
+                        self.store.register(ArtSpec(art, (lambda hw=h.w, hh=h.h: self.world.hazard("thorns", hw, hh)), 1.0, (0, 0), "world"))
+                self.draw_art(art, hx, hy - 4, pivot=False)
             elif h.kind == "moving":
                 cx, cy = hx + h.w / 2, hy + h.h / 2
                 if self.effects:

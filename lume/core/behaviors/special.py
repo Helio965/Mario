@@ -61,34 +61,47 @@ class Emerger(Behavior):
 
 
 @register("shy_ghost")
-class ShyGhost(Behavior):
-    """Approaches only while the player looks away; when faced it stops and
-    hides its face. Passes through walls. Light (dark zones) can repel it."""
+class LightShyGhost(Behavior):
+    """Drifts toward Lume in the dark and freezes inside the halo of Lume's
+    lantern. The halo shrinks while Lume runs (the flame flickers), so rushing
+    lets shadows close in. Passes through walls; fire dispels it.
 
-    states = ("chase", "hide", "hurt", "defeat")
+    Original mechanic of Lume (light-reactive), deliberately not based on the
+    direction the player faces."""
+
+    states = ("chase", "freeze", "defeat")
 
     def spawn(self, game, e):
         e.vx = 0.0
-        e.set_state("hide")
+        e.set_state("freeze")
+
+    def halo(self, game, e) -> float:
+        p = game.player
+        radius = float(self.param(e, "light_radius", 120.0))
+        if abs(p.vx) > 260:
+            radius = float(self.param(e, "run_radius", 64.0))
+        return radius
 
     def update(self, game, e, dt, old_timer):
-        p = game.player
         dx, dy = player_distance(game, e)
-        facing_ghost = (p.facing > 0) == (dx < 0) if abs(dx) > 4 else True
+        dist = max(1.0, math.hypot(dx, dy))
         speed = float(self.param(e, "speed", self.profile.speed))
-        if facing_ghost and abs(dx) < 700:
-            e.set_state("hide")
-            e.vx *= max(0.0, 1 - dt * 6)
-            e.vy *= max(0.0, 1 - dt * 6)
-        elif abs(dx) < float(self.param(e, "sight", 520.0)):
+        if dist < self.halo(game, e) + e.w * 0.5:
+            e.set_state("freeze")
+            e.vx *= max(0.0, 1 - dt * 7)
+            e.vy *= max(0.0, 1 - dt * 7)
+        elif dist < float(self.param(e, "sight", 520.0)):
             e.set_state("chase")
-            dist = max(1.0, math.hypot(dx, dy))
-            e.vx += (dx / dist * speed - e.vx) * min(1.0, dt * 2.5)
-            e.vy += (dy / dist * speed - e.vy) * min(1.0, dt * 2.5)
+            e.vx += (dx / dist * speed - e.vx) * min(1.0, dt * 2.2)
+            e.vy += (dy / dist * speed - e.vy) * min(1.0, dt * 2.2)
             e.facing = 1 if dx > 0 else -1
         e.x += e.vx * dt
         e.y += e.vy * dt + math.sin(e.timer * 3) * 6 * dt
         e.anim = e.state
+
+    def tangible(self, game, e):
+        # frozen shadows are harmless wisps; moving ones hurt
+        return e.state == "chase"
 
     def stompable(self, game, e):
         return False

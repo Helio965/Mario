@@ -136,3 +136,27 @@ def test_activation_keeps_far_enemies_frozen_until_near():
     x = e.x
     ticks(g, 120)
     assert not e.active and e.x == x
+
+
+def test_light_shy_shadow_freezes_in_lantern_halo_and_closes_in_when_running():
+    from lume.core.species import parse_profiles
+    import json
+    from pathlib import Path
+
+    data = json.loads((Path(__file__).resolve().parents[2] / "lume" / "data" / "enemies.json").read_text())
+    shadow = next(s for s in data["species"] if s["id"] == "assombracao_timida")
+    shadow = dict(shadow, habitats=["grassland"])
+    data["species"] = [s for s in data["species"] if s["id"] != "assombracao_timida"] + [shadow]
+    profiles = parse_profiles(data)
+    from lume.core.game import Game
+    from .conftest import level
+
+    g = Game([level(enemies=[{"id": "s", "species": "assombracao_timida", "x": 300, "y": 400, "patrol": [0, 2400]}])], profiles=profiles)
+    e = g.enemies[0]
+    ticks(g, 600)  # standing still: halo is large, the shadow stops at its edge
+    assert e.state == "freeze"
+    frozen_distance = abs((e.x + e.w / 2) - (g.player.x + g.player.w / 2))
+    beh = g.behaviors[e.species]
+    g.player.vx = 340  # running shrinks the halo
+    assert beh.halo(g, e) < 100
+    assert not beh.tangible(g, e) and frozen_distance > 60

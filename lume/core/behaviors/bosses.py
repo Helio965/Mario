@@ -94,7 +94,14 @@ class ThornBoar(Behavior):
             e.vx = 0.0
             if e.state_time > (1.35 if angry else 1.8):
                 e.set_state("recover")
-        elif e.state in ("recover", "hurt"):
+        elif e.state == "hurt":
+            # knocked back toward the arena centre; harmless while recoiling
+            centre = (e.patrol[0] + e.patrol[1]) / 2
+            e.facing = 1 if centre > e.x + e.w / 2 else -1
+            e.vx = e.facing * (160.0 if e.state_time < 0.5 else 0.0)
+            if e.state_time > 1.1:
+                e.set_state("recover")
+        elif e.state == "recover":
             e.vx = 0.0
             if e.state_time > 0.55:
                 e.set_state("stalk")
@@ -119,6 +126,9 @@ class ThornBoar(Behavior):
 
     def spiked(self, game, e):
         return e.state != "stunned"
+
+    def tangible(self, game, e):
+        return e.state not in ("hurt", "dormant")
 
     def stompable(self, game, e):
         return e.state == "stunned"

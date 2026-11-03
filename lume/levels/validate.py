@@ -179,6 +179,15 @@ def validate_level(level: LevelSpec, profiles: dict[str, EnemyProfile], *, world
             warn(f"platforms[{i}].secret", f"segredo '{p.secret}' não descrito em secrets")
         if p.x < -200 or p.x + p.w > level.width + 200 or p.y + p.h > level.height + 200:
             err(f"platforms[{i}]", "plataforma fora dos limites da fase")
+    # --- interactive platforms must not be buried inside terrain
+    terrain = [q for q in level.platforms if q.kind == "ground"]
+    for i, q in enumerate(level.platforms):
+        if q.kind in ("ground", "pipe") or q.motion is not None:
+            continue
+        for t in terrain:
+            if q.x < t.x + t.w - 0.5 and q.x + q.w > t.x + 0.5 and q.y < t.y + t.h - 0.5 and q.y + q.h > t.y + 0.5:
+                err(f"platforms[{i}]", f"'{q.id}' ({q.kind}) está dentro do terreno '{t.id}'")
+                break
     # --- areas
     for i, a in enumerate(level.areas):
         if a.x < 0 or a.y < 0 or a.x + a.w > level.width + 0.01 or a.y + a.h > level.height + 0.01:
@@ -207,8 +216,19 @@ def validate_level(level: LevelSpec, profiles: dict[str, EnemyProfile], *, world
         problems.extend(_simulate_points(level, profiles, points))
         for gap in main_path_gaps(level):
             result = simulate_gap(level, gap)
-            if not all(result.values()):
-                failed = [k for k, ok in result.items() if not ok]
+            if all(result.values()):
+                continue
+            failed = [k for k, ok in result.items() if not ok]
+            gx0, gx1 = gap.left.x + gap.left.w, gap.right.x
+            helpers = [p for p in level.platforms
+                       if p.kind in ("moving", "ledge", "semisolid", "spring", "crumble", "brick", "question", "pipe")
+                       and p.x < gx1 and p.x + p.w + (p.motion.range if p.motion else 0) > gx0 - 80]
+            if helpers:
+                # Crossed with moving/intermediate platforms: the static jump test cannot
+                # judge timing, so the route test (real physics, real timing) must pass.
+                warn("platforms", f"{gap.describe()} depende de {len(helpers)} plataforma(s) intermediária(s); "
+                                  "validado pela rota automatizada")
+            else:
                 err("platforms", f"{gap.describe()} não pode ser atravessado (jogador {', '.join(failed)})")
     return problems
 

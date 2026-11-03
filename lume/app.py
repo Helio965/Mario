@@ -317,7 +317,8 @@ class App:
         self.audio.play_music("boss" if boss_near else g.level.music)
         for hint in g.level.hints:
             key = (g.level.id, hint.x)
-            if abs(g.player.x - hint.x) < 70 and key not in getattr(self, "_hints_seen", set()):
+            near_y = hint.y is None or abs((g.player.y + g.player.h) - hint.y) < 160
+            if abs(g.player.x - hint.x) < 70 and near_y and key not in getattr(self, "_hints_seen", set()):
                 self._hints_seen = getattr(self, "_hints_seen", set()) | {key}
                 self.toast(hint.text)
         if g.status == "gameover":

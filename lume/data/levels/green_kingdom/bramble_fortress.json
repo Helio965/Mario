@@ -1,0 +1,536 @@
+{
+ "format": "lume.level",
+ "format_version": 1,
+ "id": "bramble_fortress",
+ "name": "Fortaleza do Espinheiro",
+ "world": "green_kingdom",
+ "role": "fortress",
+ "difficulty": 3,
+ "art": {
+  "set": "green_kingdom",
+  "variant": "fortress",
+  "weather": "none"
+ },
+ "music": "green_kingdom_fortress",
+ "bounds": {
+  "width": 4400,
+  "height": 1240
+ },
+ "time_limit": 320,
+ "spawn": {
+  "x": 72,
+  "y": 418
+ },
+ "exit": {
+  "id": "goal",
+  "kind": "flag",
+  "x": 4250,
+  "y": 448
+ },
+ "platforms": [
+  {
+   "id": "ground01",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 0,
+   "y": 448,
+   "w": 900,
+   "h": 152
+  },
+  {
+   "id": "question01",
+   "kind": "question",
+   "x": 300,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "grow"
+  },
+  {
+   "id": "crumble01",
+   "kind": "crumble",
+   "x": 920,
+   "y": 448,
+   "w": 100,
+   "h": 20
+  },
+  {
+   "id": "ground02",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 1040,
+   "y": 448,
+   "w": 760,
+   "h": 152
+  },
+  {
+   "id": "spring01",
+   "kind": "spring",
+   "x": 1760,
+   "y": 432,
+   "w": 40,
+   "h": 16,
+   "bounce": 950
+  },
+  {
+   "id": "ground03",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 1800,
+   "y": 300,
+   "w": 300,
+   "h": 300
+  },
+  {
+   "id": "ledge01",
+   "kind": "ledge",
+   "x": 1380,
+   "y": 230,
+   "w": 260,
+   "h": 24,
+   "style": "gallery"
+  },
+  {
+   "id": "ground04",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 2100,
+   "y": 448,
+   "w": 1100,
+   "h": 152
+  },
+  {
+   "id": "question02",
+   "kind": "question",
+   "x": 2320,
+   "y": 340,
+   "w": 40,
+   "h": 28,
+   "reward": "fire"
+  },
+  {
+   "id": "ledge02",
+   "kind": "ledge",
+   "x": 2840,
+   "y": 300,
+   "w": 100,
+   "h": 24,
+   "style": "gallery"
+  },
+  {
+   "id": "pipe_room_entry",
+   "kind": "pipe",
+   "x": 2400,
+   "y": 400,
+   "w": 56,
+   "h": 48,
+   "style": "pipe",
+   "secret": "pipe_room",
+   "warp": {
+    "x": 2544,
+    "y": 846
+   },
+   "return": {
+    "x": 2472,
+    "y": 402
+   }
+  },
+  {
+   "id": "cave_floor",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2189,
+   "y": 896,
+   "w": 960,
+   "h": 344
+  },
+  {
+   "id": "cave_ceiling",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2189,
+   "y": 700,
+   "w": 960,
+   "h": 60
+  },
+  {
+   "id": "cave_wall_left",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2189,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "cave_wall_right",
+   "kind": "ground",
+   "style": "cave",
+   "x": 2858,
+   "y": 760,
+   "w": 291,
+   "h": 136
+  },
+  {
+   "id": "pipe_room_exit",
+   "kind": "pipe",
+   "x": 2746,
+   "y": 864,
+   "w": 56,
+   "h": 32,
+   "style": "pipe",
+   "warp": {
+    "x": 2472,
+    "y": 402
+   },
+   "return": {
+    "x": 2544,
+    "y": 846
+   }
+  },
+  {
+   "id": "ground05",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 3200,
+   "y": 448,
+   "w": 840,
+   "h": 152
+  },
+  {
+   "id": "gate_left",
+   "kind": "switch",
+   "x": 3200,
+   "y": 300,
+   "w": 40,
+   "h": 148,
+   "style": "gate",
+   "active": false
+  },
+  {
+   "id": "arena_pillar_left",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 3200,
+   "y": 0,
+   "w": 40,
+   "h": 300
+  },
+  {
+   "id": "gate_right",
+   "kind": "switch",
+   "x": 4040,
+   "y": 300,
+   "w": 40,
+   "h": 148,
+   "style": "gate",
+   "active": true
+  },
+  {
+   "id": "arena_pillar_right",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 4040,
+   "y": 0,
+   "w": 40,
+   "h": 300
+  },
+  {
+   "id": "ground06",
+   "kind": "ground",
+   "style": "fortress",
+   "x": 4040,
+   "y": 448,
+   "w": 360,
+   "h": 152
+  }
+ ],
+ "coin_groups": [
+  {
+   "id": "coins01",
+   "shape": "row",
+   "x": 600,
+   "y": 300,
+   "count": 4
+  },
+  {
+   "id": "coins02",
+   "shape": "row",
+   "x": 1400,
+   "y": 196,
+   "count": 3
+  },
+  {
+   "id": "coins03",
+   "shape": "row",
+   "x": 2584,
+   "y": 852,
+   "count": 4,
+   "spacing": 34
+  },
+  {
+   "id": "coins_hall",
+   "shape": "row",
+   "x": 160,
+   "y": 410,
+   "count": 5
+  },
+  {
+   "id": "coins_thorns",
+   "shape": "arc",
+   "x": 500,
+   "y": 380,
+   "count": 4,
+   "spacing": 30,
+   "rise": 40
+  },
+  {
+   "id": "coins_shell",
+   "shape": "row",
+   "x": 1300,
+   "y": 410,
+   "count": 4
+  },
+  {
+   "id": "coins_flowers",
+   "shape": "arc",
+   "x": 2460,
+   "y": 370,
+   "count": 5,
+   "spacing": 34,
+   "rise": 46
+  },
+  {
+   "id": "coins_gate",
+   "shape": "row",
+   "x": 3020,
+   "y": 410,
+   "count": 5
+  }
+ ],
+ "coins": [],
+ "collectibles": [
+  {
+   "id": "relic_gallery",
+   "kind": "relic",
+   "x": 1500,
+   "y": 186
+  },
+  {
+   "id": "relic_flame",
+   "kind": "relic",
+   "x": 2880,
+   "y": 250
+  },
+  {
+   "id": "relic_room",
+   "kind": "relic",
+   "x": 2698,
+   "y": 850
+  }
+ ],
+ "items": [
+  {
+   "id": "item_heart01",
+   "kind": "heart",
+   "x": 2648,
+   "y": 866
+  }
+ ],
+ "enemies": [
+  {
+   "id": "enemy01",
+   "species": "caramujo",
+   "x": 1180,
+   "y": 448,
+   "patrol": [
+    1080,
+    1300
+   ]
+  },
+  {
+   "id": "enemy02",
+   "species": "ourico_espinho",
+   "x": 1460,
+   "y": 448,
+   "patrol": [
+    1380,
+    1560
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "ourico_espinho",
+   "x": 1600,
+   "y": 448,
+   "patrol": [
+    1580,
+    1780
+   ]
+  },
+  {
+   "id": "enemy04",
+   "species": "flor_mordedora",
+   "x": 2500,
+   "y": 448,
+   "patrol": [
+    2490,
+    2530
+   ]
+  },
+  {
+   "id": "enemy05",
+   "species": "flor_mordedora",
+   "x": 2700,
+   "y": 448,
+   "patrol": [
+    2690,
+    2730
+   ]
+  },
+  {
+   "id": "enemy06",
+   "species": "bolota",
+   "x": 3000,
+   "y": 448,
+   "patrol": [
+    2960,
+    3160
+   ]
+  },
+  {
+   "id": "enemy07",
+   "species": "javali_espinheiro",
+   "x": 3760,
+   "y": 448,
+   "patrol": [
+    3240,
+    4040
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "id": "hz_thorns01",
+   "kind": "thorns",
+   "x": 520,
+   "y": 432,
+   "w": 48,
+   "h": 16
+  },
+  {
+   "id": "hz_moving01",
+   "kind": "moving",
+   "x": 760,
+   "y": 352,
+   "w": 26,
+   "h": 26,
+   "range": 40,
+   "speed": 1.6
+  },
+  {
+   "id": "hz_thorns02",
+   "kind": "thorns",
+   "x": 900,
+   "y": 520,
+   "w": 140,
+   "h": 20
+  },
+  {
+   "id": "hz_moving02",
+   "kind": "moving",
+   "x": 2880,
+   "y": 356,
+   "w": 26,
+   "h": 26,
+   "range": 46,
+   "speed": 1.4
+  }
+ ],
+ "zones": [],
+ "secrets": [
+  {
+   "id": "gallery",
+   "kind": "high_route",
+   "clue": "Mola no fim do salão leva à galeria",
+   "rewards": [
+    "relic_gallery"
+   ]
+  },
+  {
+   "id": "flame_ledge",
+   "kind": "optional_challenge",
+   "clue": "Plataforma acima da chama oscilante",
+   "rewards": [
+    "relic_flame"
+   ]
+  },
+  {
+   "id": "pipe_room",
+   "kind": "warp_room",
+   "clue": "Cano com seta luminosa",
+   "rewards": [
+    "relic_room"
+   ],
+   "entry": "pipe_room_entry"
+  }
+ ],
+ "hints": [
+  {
+   "x": 1100,
+   "text": "Chute o casco do caramujo contra os ouriços."
+  },
+  {
+   "x": 3060,
+   "text": "O javali investe até bater na parede: pule por cima e pise quando ele estiver tonto."
+  }
+ ],
+ "events": [
+  {
+   "id": "arena",
+   "kind": "boss_arena",
+   "x": 3290,
+   "params": {
+    "lock": [
+     3140,
+     0,
+     960,
+     540
+    ],
+    "close": [
+     "gate_left"
+    ],
+    "open": [
+     "gate_right"
+    ],
+    "text": "O Javali Espinheiro guarda a saída!"
+   }
+  }
+ ],
+ "checkpoints": [
+  {
+   "id": "cp_hall",
+   "x": 2200,
+   "y": 418
+  }
+ ],
+ "areas": [
+  {
+   "id": "main",
+   "x": 0,
+   "y": 0,
+   "w": 4400,
+   "h": 540,
+   "variant": "fortress"
+  },
+  {
+   "id": "pipe_room_area",
+   "x": 2189,
+   "y": 700,
+   "w": 960,
+   "h": 540,
+   "variant": "cave"
+  }
+ ],
+ "notes": "Fase nova (Mundo 1-6): fortaleza de pedra tomada por espinheiros; cascos contra ouriços, chamas oscilantes, galeria opcional e a arena do Javali Espinheiro (portões fecham na entrada e abrem com a vitória)."
+}

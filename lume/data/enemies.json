@@ -1152,9 +1152,9 @@
   },
   {
    "id": "tartaruga_basalto",
-   "name": "Tartaruga-Basalto",
-   "role_reference": "criatura de casco vulcânica",
-   "description": "Tartaruga de casco de basalto; o casco chutado atravessa corredores de lava.",
+   "name": "Ermitão-de-Basalto",
+   "role_reference": "criatura de casco chutável (casco de rocha vulcânica)",
+   "description": "Caranguejo-ermitão que vive dentro de um bloco de basalto poroso com fendas incandescentes; pisado, recolhe-se na rocha, que pode ser chutada pelos corredores de lava.",
    "habitats": [
     "volcano",
     "fortress"
@@ -2261,9 +2261,9 @@
   },
   {
    "id": "assombracao_timida",
-   "name": "Assombração Tímida",
-   "role_reference": "fantasma que reage ao olhar (papel análogo ao Boo)",
-   "description": "Lanterninha fantasma que se aproxima quando Lume está de costas e cobre o rosto quando encarada; atravessa paredes.",
+   "name": "Sombra-Errante",
+   "role_reference": "criatura furtiva que reage à luz (mecânica própria do Lume)",
+   "description": "Sombra com olhos de vaga-lume que deriva na direção de Lume no escuro e paralisa quando alcançada pelo halo da lanterna; o halo encolhe enquanto Lume corre, então avançar com pressa deixa as sombras se aproximarem. Atravessa paredes; o fogo a dissipa.",
    "habitats": [
     "swamp",
     "citadel"
@@ -2297,7 +2297,9 @@
    "introduced_in": "misty_marsh",
    "boss": false,
    "params": {
-    "sight": 520
+    "light_radius": 120,
+    "run_radius": 64,
+    "speed": 70
    }
   },
   {
@@ -2432,9 +2434,9 @@
   },
   {
    "id": "bolha_magma",
-   "name": "Bolha de Magma",
-   "role_reference": "bola de lava saltadora (papel análogo ao Podoboo)",
-   "description": "Bolha incandescente que salta verticalmente da lava num ritmo fixo, anunciado por borbulhas.",
+   "name": "Salta-Brasa",
+   "role_reference": "saltador de lava em ritmo fixo (papel de obstáculo rítmico)",
+   "description": "Pequeno espírito de brasa que salta verticalmente da lava num ritmo fixo, anunciado por borbulhas; só a estrela o vence.",
    "habitats": [
     "volcano",
     "fortress"

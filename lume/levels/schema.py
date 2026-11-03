@@ -70,6 +70,7 @@ class PlatformSpec:
     surface_speed: float = 0.0
     bounce: float = 0.0
     group: str = ""
+    active: bool = True  # switch blocks / arena gates start solid or open
 
 
 @dataclass(frozen=True, slots=True)
@@ -174,6 +175,7 @@ class SecretSpec:
 class HintSpec:
     x: float
     text: str
+    y: Optional[float] = None  # optional: disambiguates stacked areas (surface vs tunnel)
 
 
 @dataclass(frozen=True, slots=True)
@@ -338,7 +340,7 @@ def parse_level(data: Any, source: str = "<memória>") -> LevelSpec:
         r.unknown_keys(
             p,
             {"id", "kind", "x", "y", "w", "h", "style", "surface", "reward", "motion", "warp", "return",
-             "secret", "surface_speed", "bounce", "group"},
+             "secret", "surface_speed", "bounce", "group", "active"},
             path,
         )
         motion = None
@@ -372,6 +374,7 @@ def parse_level(data: Any, source: str = "<memória>") -> LevelSpec:
                 surface_speed=r.number(p, "surface_speed", path, 0.0, required=False, minimum=-400, maximum=400),
                 bounce=r.number(p, "bounce", path, 0.0, required=False, minimum=0, maximum=1400),
                 group=p.get("group", "") if isinstance(p.get("group", ""), str) else "",
+                active=r.boolean(p, "active", path, True),
             )
         )
 
@@ -493,8 +496,9 @@ def parse_level(data: Any, source: str = "<memória>") -> LevelSpec:
     for i, raw in enumerate(r.arr(root.get("hints"), "$.hints")):
         path = f"hints[{i}]"
         h = r.obj(raw, path)
-        r.unknown_keys(h, {"x", "text"}, path)
-        hints.append(HintSpec(r.number(h, "x", path), r.string(h, "text", path)))
+        r.unknown_keys(h, {"x", "y", "text"}, path)
+        hints.append(HintSpec(r.number(h, "x", path), r.string(h, "text", path),
+                              r.number(h, "y", path, None, required=False) if "y" in h else None))
 
     decor = []
     for i, raw in enumerate(r.arr(root.get("decor"), "$.decor")):
