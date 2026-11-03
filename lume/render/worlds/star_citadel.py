@@ -1982,21 +1982,19 @@ class StarCitadel(WorldArt):
         for k, (gx, gy, gr, color) in enumerate(((150.0, 250.0, 46.0, GLOW_TEAL), (812.0, 210.0, 54.0, GLOW_VIOLET), (560.0, 330.0, 34.0, "#ff8ae0"),
                                                  (330.0, 360.0, 28.0, GLOW_TEAL))):
             _geode(s, gx, gy, gr, color, 300 + k * 17)
-        # floating rocks in the low gravity of the hollow
-        for _ in range(7):
-            x, y = r.uniform(60, 900), r.uniform(120, 330)
-            rr = r.uniform(6, 16)
+        # floating rocks in the low gravity of the hollow (placed clear of the geodes)
+        for x, y, rr in ((268.0, 150.0, 14.0), (420.0, 222.0, 8.0), (650.0, 168.0, 12.0), (705.0, 286.0, 7.0), (930.0, 330.0, 9.0),
+                         (40.0, 130.0, 10.0)):
             s.path(blob(x, y, rr * 1.4, rr, 0.22, seed=x), fill=s.linear(0, y - rr, 0, y + rr, [(0, "#4a4470"), (1, "#16122a")]), stroke="#0c0a18", width=1.2)
             s.path(f"M{x - rr * 1.2:.1f} {y - rr * 0.3:.1f} Q{x - rr * 0.6:.1f} {y - rr * 1.0:.1f} {x + rr * 0.4:.1f} {y - rr * 0.95:.1f}",
                    stroke="#a8a0d8", width=1.2, opacity=0.6)
-        # crystal clusters on the far floor
-        for k in range(6):
-            cx = 80 + k * 160 + r.uniform(-30, 30)
-            color = r.choice([GLOW_TEAL, GLOW_VIOLET])
-            _glow(s, cx, 470, 46, color, 0.3)
-            for j in range(3):
-                _crystal(s, cx + (j - 1) * 10, 482, (j - 1) * 18 + r.uniform(-6, 6), r.uniform(26, 44) * (1.2 if j == 1 else 0.8), 12,
-                         "#f2fffd", shade(color, -0.4), "#0c0a18", 1.0, 0.85)
+        # crystal clusters on the far floor (uneven sizes and spacing)
+        for cx, scale, color in ((96.0, 1.0, GLOW_TEAL), (300.0, 0.7, GLOW_VIOLET), (470.0, 1.25, GLOW_TEAL), (705.0, 0.8, "#ff8ae0"),
+                                 (880.0, 1.1, GLOW_VIOLET)):
+            _glow(s, cx, 470, 50 * scale, color, 0.3)
+            for j in range(4):
+                _crystal(s, cx + (j - 1.5) * 10 * scale, 484, (j - 1.5) * 16 + r.uniform(-6, 6), r.uniform(22, 44) * scale * (1.25 if j == 1 else 0.85),
+                         12 * scale, "#f2fffd", shade(color, -0.4), "#0c0a18", 1.0, 0.85)
         for _ in range(40):
             x, y = r.uniform(0, 960), r.uniform(90, 500)
             s.circle(x, y, r.uniform(0.6, 1.4), fill=r.choice(["#c8fff6", "#e6dcff"]), opacity=r.uniform(0.3, 0.7))

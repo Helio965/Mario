@@ -31,8 +31,8 @@ Puff = tuple[float, float, float]  # centre x, centre y, radius
 INK = "#2b1d2c"
 SUN = (190.0, 112.0)
 # sky and clouds (lavender shadows, warm lit tops)
-CLOUD_HI, CLOUD, CLOUD_SHADE, CLOUD_DEEP, CLOUD_LINE = "#ffffff", "#f4f2fb", "#d4d0ec", "#aaa5d2", "#8f8ac0"
-CLOUD_WARM = "#fff6e6"
+CLOUD_HI, CLOUD, CLOUD_SHADE, CLOUD_DEEP, CLOUD_LINE = "#ffffff", "#f3f5fc", "#d6dcf1", "#b6bde2", "#8c90c4"
+CLOUD_WARM = "#fffaf0"
 SEA_TOP, SEA, SEA_LOW = "#f7f3fb", "#e2def1", "#cdc8e6"  # body of the cloud sea (sky bottom and pit layers)
 # island rock: pale sandstone that cools to lavender in its own shade
 ROCK_HI, ROCK_TOP, ROCK, ROCK_MID, ROCK_LOW, ROCK_UNDER, ROCK_LINE = (
@@ -164,20 +164,35 @@ def _dangle(s: Svg, x: float, y: float, length: float, seed: int, width: float =
            width=max(0.6, width * 0.55))
 
 
-def _puff_fill(s: Svg, cx: float, cy: float, rad: float, lit: str = CLOUD_WARM, mid: str = CLOUD, low: str = CLOUD_SHADE,
-               deep: str = CLOUD_DEEP) -> str:
-    """Radial fill of one cumulus puff lit from the upper left."""
-    return s.radial(cx - rad * 0.38, cy - rad * 0.48, rad * 1.55, [(0, lit), (0.42, mid), (0.78, low), (1, deep)])
-
-
 def _puffs(s: Svg, puffs: Sequence[Puff], *, lit: str = CLOUD_WARM, mid: str = CLOUD, low: str = CLOUD_SHADE, deep: str = CLOUD_DEEP,
-           shadow: str = "#9c9ccc", shadow_alpha: float = 0.32, opacity: float = 1.0) -> None:
-    """Cauliflower cloud: a soft offset shadow, then every puff shaded on its own."""
+           shadow: str = "#a3b0d6", shadow_alpha: float = 0.3, glow: float = 0.75, creases: float = 0.3) -> None:
+    """Soft cumulus from overlapping puffs: one shared light-to-shade fill so
+    the puffs merge into a single body, a soft shadow to the lower right, a
+    glow on the lit side of each upper puff and faint creases where puffs
+    overlap. Puffs are opaque (overlaps of translucent circles would show)."""
+    if not puffs:
+        return
+    top = min(cy - rad for _cx, cy, rad in puffs)
+    bottom = max(cy + rad for _cx, cy, rad in puffs)
     if shadow_alpha > 0:
         for cx, cy, rad in puffs:
-            s.circle(cx + rad * 0.12, cy + rad * 0.1, rad, fill=shadow, opacity=shadow_alpha * opacity)
+            s.circle(cx + rad * 0.07, cy + rad * 0.09, rad, fill=shadow, opacity=shadow_alpha)
+    body = s.linear(0, top, 0, bottom, [(0, lit), (0.4, mid), (0.78, low), (1, deep)])
     for cx, cy, rad in puffs:
-        s.circle(cx, cy, rad, fill=_puff_fill(s, cx, cy, rad, lit, mid, low, deep), opacity=opacity)
+        s.circle(cx, cy, rad, fill=body)
+    if creases > 0:
+        for cx, cy, rad in puffs:
+            if cy + rad * 0.6 < bottom - 1:
+                rr = rad * 0.93
+                a0, a1 = math.radians(30), math.radians(150)
+                s.path(f"M{cx + math.cos(a0) * rr:.1f} {cy + math.sin(a0) * rr:.1f} A{rr:.1f} {rr:.1f} 0 0 1 "
+                       f"{cx + math.cos(a1) * rr:.1f} {cy + math.sin(a1) * rr:.1f}", stroke=low, width=max(0.6, rad * 0.09), opacity=creases)
+    if glow > 0:
+        limit = top + (bottom - top) * 0.62
+        for cx, cy, rad in puffs:
+            if cy - rad < limit:
+                gx, gy = cx - rad * 0.3, cy - rad * 0.34
+                s.circle(gx, gy, rad * 0.72, fill=s.radial(gx, gy, rad * 0.72, [(0, CLOUD_HI, glow), (0.6, CLOUD_HI, glow * 0.35), (1, CLOUD_HI, 0)]))
 
 
 def _cloud_outline(puffs: Sequence[Puff], x0: float, x1: float, base: float, step: float = 3.0) -> list[Pt]:
@@ -395,11 +410,11 @@ class SkyArchipelago(WorldArt):
                 top = [(x + length * k / 6 + strand * 14, y + oy - k * 1.4 + 2.0 * math.sin(k * 1.3 + i)) for k in range(7)]
                 bottom = [(px, py + thick * (0.3 + 0.7 * math.sin(math.pi * k / 6)) * (1 - strand * 0.3)) for k, (px, py) in enumerate(top)]
                 s.path(smooth_open(top) + "L" + smooth_open(list(reversed(bottom)))[1:] + "Z", fill=veil, opacity=0.9 - strand * 0.35)
-        # towering cumulus far away on the horizon
-        self._tower(s, 628, 404, 250, 292, 3)
-        self._tower(s, 884, 404, 170, 190, 7)
-        self._tower(s, 92, 404, 190, 96, 11)
-        s.rect(0, 300, 960, 110, fill=s.linear(0, 300, 0, 410, [(0, "#fbe9d6", 0), (1, "#fbe9d6", 0.7)]))
+        # towering cumulus far away on the horizon (hazy: they sit behind the sea of clouds)
+        self._tower(s, 700, 402, 210, 214, 3)
+        self._tower(s, 905, 402, 130, 128, 7)
+        self._tower(s, 76, 402, 170, 64, 11)
+        s.rect(0, 300, 960, 110, fill=s.linear(0, 300, 0, 410, [(0, "#fbe9d6", 0), (1, "#fbe9d6", 0.75)]))
         # the sun
         s.circle(sx, sy, 78, fill=s.radial(sx, sy, 78, [(0, "#ffffff", 0.95), (0.35, "#fffbea", 0.45), (1, "#fff6dc", 0)]))
         s.circle(sx, sy, 27, fill=s.radial(sx - 6, sy - 6, 31, [(0, "#ffffff"), (0.7, "#fffcf3"), (1, "#ffeec6")]))
@@ -407,64 +422,70 @@ class SkyArchipelago(WorldArt):
         return s
 
     def _tower(self, s: Svg, cx: float, base: float, width: float, height: float, seed: int) -> None:
-        """Towering cumulus: a broad base, a rising column sheared by the wind
-        at altitude and a cauliflower crown, lit from the upper left."""
+        """Towering cumulus: a broad base, a column sheared to the right by the
+        wind at altitude and a cauliflower crown; hazy blue shade (far away)."""
         r = Rand(seed)
         puffs: list[Puff] = []
-        for i in range(7):
-            t = i / 6
-            rad = width * (0.1 + 0.06 * math.sin(math.pi * t)) * r.uniform(0.85, 1.15)
-            puffs.append((cx - width / 2 + width * t, base - rad * 0.5, rad))
-        levels = max(3, int(height / 42))
+        nb = 9
+        for i in range(nb):
+            t = i / (nb - 1)
+            rad = width * (0.07 + 0.05 * math.sin(math.pi * t)) * r.uniform(0.85, 1.15)
+            puffs.append((cx - width / 2 + width * t, base - rad * 0.4, rad))
+        levels = max(3, int(height / 24))
         for j in range(1, levels + 1):
             k = j / levels
-            lean = height * 0.1 * k * k
-            col = width * (0.36 - 0.14 * k)
-            for i in range(3 if k < 0.75 else 2):
-                rad = col * r.uniform(0.34, 0.46)
-                x = cx + lean + (i - 1) * col * 0.42 + r.uniform(-5, 5)
-                puffs.append((x, base - height * k + rad * 0.55, rad))
-        crown_x = cx + height * 0.1
-        for _ in range(4):
-            rad = width * r.uniform(0.09, 0.14)
-            puffs.append((crown_x + r.uniform(-width * 0.16, width * 0.16), base - height + r.uniform(-4, 14), rad))
-        _puffs(s, puffs, lit="#fffaf0", mid="#f6f2f6", low="#d9d6ec", deep="#bcbde0", shadow="#a9add8", shadow_alpha=0.3, opacity=0.92)
+            col = width * (0.42 - 0.2 * k)
+            lean = height * 0.12 * k * k
+            m = 4 if k < 0.6 else 3
+            for i in range(m):
+                rad = col * r.uniform(0.19, 0.28)
+                puffs.append((cx + lean + (i - (m - 1) / 2) * col * 0.34 + r.uniform(-4, 4), base - height * k + rad * 0.7, rad))
+        for _ in range(3):
+            rad = width * r.uniform(0.07, 0.1)
+            puffs.append((cx + height * 0.12 + r.uniform(-width * 0.12, width * 0.12), base - height + r.uniform(-2, 8), rad))
+        _puffs(s, puffs, lit="#fffaf2", mid="#f1f3f9", low="#d3dbee", deep="#bccae6", shadow="#b4c4e4", shadow_alpha=0.25, glow=0.5,
+               creases=0.22)
 
     def _sky_sea(self, s: Svg) -> None:
-        """The sea of clouds far below: rolling bands that grow toward the viewer."""
-        bands = ((394.0, 7.0, 12.0, 0.75), (410.0, 11.0, 19.0, 0.55), (434.0, 18.0, 30.0, 0.35), (470.0, 28.0, 44.0, 0.18),
-                 (516.0, 40.0, 62.0, 0.0))
+        """The sea of clouds far below: soft rolling bands growing toward the
+        viewer, warm on top (afternoon light), cool lavender-blue between."""
+        bands = ((394.0, 9.0, 15.0, 0.7), (412.0, 14.0, 24.0, 0.5), (440.0, 22.0, 36.0, 0.3), (482.0, 32.0, 50.0, 0.12),
+                 (530.0, 44.0, 66.0, 0.0))
         for i, (y, rmin, rmax, haze) in enumerate(bands):
             r = Rand(31 + i * 7)
-            lit, mid, low = mix("#fffaf2", "#f7e7da", haze), mix("#f2eff9", "#f1e3dc", haze), mix("#d3cfe9", "#e6d9de", haze)
-            deep = mix("#b9b5dc", "#dccfd8", haze)
-            s.rect(0, y + rmax * 0.1, 960, 540 - y, fill=s.linear(0, y, 0, 540, [(0, mid), (1, mix(SEA, SEA_LOW, 0.5))]))
+            lit = mix("#fffaf2", "#f8e8dc", haze)
+            mid = mix("#f2f3fa", "#f2e6e0", haze)
+            low = mix("#d6dbef", "#e8dce0", haze)
+            deep = mix("#bfc6e4", "#dccfd8", haze)
+            s.rect(0, y + rmax * 0.15, 960, 540 - y, fill=s.linear(0, y, 0, 540, [(0, low), (1, mix(SEA, SEA_LOW, 0.5))]))
             puffs = []
             x = -rmax * r.uniform(0.2, 1.0)
             while x < 960 + rmax:
                 rad = r.uniform(rmin, rmax)
-                puffs.append((x, y + rad * 0.2, rad))
-                x += rad * r.uniform(1.15, 1.6)
-            _puffs(s, puffs, lit=lit, mid=mid, low=low, deep=deep, shadow="#b4b0d8", shadow_alpha=0.22 * (1 - haze))
+                puffs.append((x, y + rad * 0.25, rad))
+                x += rad * r.uniform(1.2, 1.7)
+            _puffs(s, puffs, lit=lit, mid=mid, low=low, deep=deep, shadow="#b8bedf", shadow_alpha=0.18 * (1 - haze), glow=0.45 * (1 - haze * 0.6),
+                   creases=0.0)
 
     def _cumulus(self, seed: int, w: float, h: float) -> Svg:
-        """Fair-weather cumulus drifting across the upper sky."""
+        """Fair-weather cumulus drifting across the upper sky: a flat base and
+        a lumpy crown of smaller puffs."""
         r = Rand(seed)
         s = Svg(w, h)
-        base = h * 0.8
-        puffs = []
-        n = 7
+        base = h * 0.84
+        puffs: list[Puff] = []
+        n = 9
         for i in range(n):
             t = i / (n - 1)
-            rad = h * (0.2 + 0.24 * math.sin(math.pi * t) ** 1.3) * r.uniform(0.85, 1.12)
-            puffs.append((w * (0.12 + 0.76 * t) + r.uniform(-5, 5), base - rad * 0.55, rad))
-        for _ in range(2):
-            rad = h * r.uniform(0.2, 0.26)
-            puffs.append((w * r.uniform(0.35, 0.65), base - h * 0.5, rad))
-        s.path(f"M{w * 0.1:.1f} {base:.1f} Q{w * 0.5:.1f} {base + 6:.1f} {w * 0.9:.1f} {base:.1f} L{w * 0.9:.1f} {base - 10:.1f} "
-               f"L{w * 0.1:.1f} {base - 10:.1f} Z", fill=CLOUD_SHADE)
-        _puffs(s, puffs, shadow_alpha=0.3)
-        s.path(f"M{w * 0.12:.1f} {base - 2:.1f} Q{w * 0.5:.1f} {base + 4:.1f} {w * 0.88:.1f} {base - 2:.1f}", stroke="#c4c0e2", width=3, opacity=0.6)
+            rad = h * (0.16 + 0.22 * math.sin(math.pi * t) ** 1.2) * r.uniform(0.85, 1.12)
+            puffs.append((w * (0.1 + 0.8 * t) + r.uniform(-4, 4), base - rad * 0.62, rad))
+        for _ in range(3):
+            rad = h * r.uniform(0.18, 0.26)
+            puffs.append((w * r.uniform(0.3, 0.68), base - h * r.uniform(0.42, 0.56), rad))
+        puffs = [(cx, min(cy, base - rad * 0.3), rad) for cx, cy, rad in puffs]
+        s.path(f"M{w * 0.1:.1f} {base:.1f} Q{w * 0.5:.1f} {base + 5:.1f} {w * 0.9:.1f} {base:.1f} L{w * 0.88:.1f} {base - 8:.1f} "
+               f"L{w * 0.12:.1f} {base - 8:.1f} Z", fill=CLOUD_DEEP, opacity=0.7)
+        _puffs(s, puffs, shadow_alpha=0.28, glow=0.6, creases=0.26)
         return s
 
     def _feather_particle(self) -> Svg:
@@ -489,7 +510,7 @@ class SkyArchipelago(WorldArt):
     def sky_extras(self) -> dict[str, PropSpec]:
         extras = {
             f"sa.cloud.{i}": PropSpec((lambda i=i, w=w, h=h: self._cumulus(41 + i * 9, w, h)), (0, 0))
-            for i, (w, h) in enumerate([(260, 104), (190, 80), (320, 120)])
+            for i, (w, h) in enumerate([(230, 78), (160, 58), (290, 90)])
         }
         # drifting feathers and petals for the weather system (looked up as particle.<name>)
         extras["particle.sa_feather"] = PropSpec(self._feather_particle, (8, 8))
