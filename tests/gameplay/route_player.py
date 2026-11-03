@@ -7,12 +7,14 @@ escreve estado de entidades, concede itens, altera vidas ou remove perigos.
 
 from __future__ import annotations
 
+import copy
 import json
 import math
 from dataclasses import dataclass, field
 
 from game.core.game import Game
 from game.core.types import Enemy, InputState, Level
+from game.physics.movement import LEGACY_PROFILE, MovementProfile
 
 STEP = 1 / 120
 
@@ -56,9 +58,15 @@ def _js_round(value: float) -> int:
 
 
 def play_campaign_route(
-    level: Level, seconds: float = 100, run: bool = True, record_inputs: bool = False
+    level: Level,
+    seconds: float = 100,
+    run: bool = True,
+    record_inputs: bool = False,
+    profile: MovementProfile = LEGACY_PROFILE,
+    smart_air: bool = False,
 ) -> RouteResult:
-    game = Game([level])
+    """``smart_air`` liga a previsão de pouso: no ar, o condutor freia ou acelera para cair em chão."""
+    game = Game([level], profile)
     state = {"jump_hold": 0.0, "jump_cooldown": 0.0, "landing_frame": False}
     goal = None
     collecting = False
@@ -72,6 +80,7 @@ def play_campaign_route(
     inputs: list[int] = []
     deaths = powers = boss_hits = 0
     running = run
+    plan: dict[str, object] = {}
 
     def steer(inp: InputState, center: float, run_now: bool = False) -> None:
         p = game.player
@@ -92,6 +101,7 @@ def play_campaign_route(
         grounded_before = p.grounded
         if state["landing_frame"]:
             state["jump_hold"] = 0.0
+            plan.clear()
         state["jump_hold"] = max(0.0, state["jump_hold"] - STEP)
         state["jump_cooldown"] = max(0.0, state["jump_cooldown"] - STEP)
         inp = InputState(right=True, run=running, ability=True)
@@ -233,6 +243,14 @@ def play_campaign_route(
                 inp.run = jump_run
 
         inp.jump = state["jump_hold"] > 0 or (boss_mode and boss is not None and not p.grounded)
+        if (
+            smart_air
+            and not boss_mode
+            and goal is None
+            and not p.grounded
+            and game.status == "playing"
+        ):
+            _plan_landing(game, inp, state["jump_hold"], jump_run, plan, ticks)
         nearby = [
             [_js_round(s.x), _js_round(s.y)]
             for s in game.projectiles
@@ -283,3 +301,72 @@ def _fight_boss(game: Game, boss: Enemy, inp: InputState, steer: object, jump: o
     if abs(p.x + p.w / 2 - launch) < 20 and boss.state == "shell" and boss.hit_timer < 0.1:
         steer(inp, center)  # type: ignore[operator]
         jump(0.74)  # type: ignore[operator]
+
+
+def _shadow(game: Game) -> Game:
+    """Cópia rasa do jogo com entidades mutáveis duplicadas: a "imaginação" do condutor."""
+    g = copy.copy(game)
+    g.player = copy.copy(game.player)
+    g.platforms = [copy.copy(s) for s in game.platforms]
+    g.enemies = [copy.copy(e) for e in game.enemies]
+    g.items = [copy.copy(i) for i in game.items]
+    g.projectiles = [copy.copy(s) for s in game.projectiles]
+    g.particles = []
+    g.events = []
+    g.camera = copy.copy(game.camera)
+    return g
+
+
+def _policy_input(policy: str, t: float, remaining_hold: float, jump_run: bool) -> InputState:
+    jump = t < remaining_hold
+    if policy == "A":
+        return InputState(right=True, run=jump_run, jump=jump)
+    if policy == "B":
+        return InputState(right=True, run=True, jump=jump)
+    if policy == "C":
+        return InputState(right=True, run=False, jump=jump)
+    if policy == "D":
+        return InputState(left=t < 0.25, right=t >= 0.25, run=False, jump=jump)
+    return InputState(left=True, run=False, jump=jump)
+
+
+def _simulate(
+    game: Game, policy: str, remaining_hold: float, jump_run: bool, horizon: float = 1.3
+) -> bool:
+    shadow = _shadow(game)
+    steps = int(horizon * 120)
+    for i in range(steps):
+        shadow.update(STEP, _policy_input(policy, i * STEP, remaining_hold, jump_run))
+        if shadow.status != "playing":
+            return False
+        if shadow.player.grounded:
+            return True
+    return False
+
+
+def _plan_landing(
+    game: Game,
+    inp: InputState,
+    remaining_hold: float,
+    jump_run: bool,
+    plan: dict[str, object],
+    tick: int,
+) -> None:
+    """Replaneja a cada 6 ticks: se seguir em frente leva à morte, tenta acelerar, soltar a corrida ou frear."""
+    chosen = plan.get("policy")
+    since = tick - int(plan.get("tick", -99))
+    if chosen is None or since >= 6:
+        chosen = "A"
+        if not _simulate(game, "A", remaining_hold, jump_run):
+            for policy in ("B", "C", "D", "E"):
+                if _simulate(game, policy, remaining_hold, jump_run):
+                    chosen = policy
+                    break
+        plan["policy"] = chosen
+        plan["tick"] = tick
+        plan["start"] = tick if chosen != "A" else plan.get("start", tick)
+    if chosen == "A":
+        return
+    t = (tick - int(plan.get("start", tick))) * STEP
+    override = _policy_input(str(chosen), t, remaining_hold, jump_run)
+    inp.left, inp.right, inp.run = override.left, override.right, override.run

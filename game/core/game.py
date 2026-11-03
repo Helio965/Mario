@@ -175,16 +175,11 @@ class Game:
         self.shake = max(0, self.shake - dt)
         direction = int(input_state.right) - int(input_state.left)
         floor = next((s for s in self.platforms if s.id == p.standing_on), None)
-        friction = (
-            prof.ice_friction if floor is not None and floor.kind == "ice" else prof.ground_friction
-        )
-        if direction:
-            rate = prof.ground_acceleration if p.grounded else prof.air_acceleration
+        on_ice = floor is not None and floor.kind == "ice"
+        if prof.model == "legacy":
+            self._horizontal_legacy(p, input_state, direction, on_ice, dt)
         else:
-            rate = friction if p.grounded else prof.air_friction
-        p.vx = approach(
-            p.vx, direction * (prof.run_speed if input_state.run else prof.walk_speed), rate * dt
-        )
+            self._horizontal_calibrated(p, input_state, direction, on_ice, dt)
         if direction:
             p.facing = direction
         if input_state.jump and not self._previous_jump:
@@ -193,7 +188,10 @@ class Game:
         p.buffer = max(0, p.buffer - dt)
         p.coyote = prof.coyote_time if p.grounded else max(0, p.coyote - dt)
         if p.buffer > 0 and p.coyote > 0:
-            p.vy = -prof.jump_speed
+            speed = prof.jump_speed
+            if prof.run_jump_speed is not None and abs(p.vx) >= prof.run_jump_threshold:
+                speed = prof.run_jump_speed
+            p.vy = -speed
             p.grounded = False
             p.standing_on = None
             p.coyote = 0
@@ -201,10 +199,14 @@ class Game:
             self.events.append(GameEvent("jump"))
         if not input_state.jump and p.vy < -prof.jump_cut_speed:
             p.vy = -prof.jump_cut_speed
-        p.vy = min(prof.terminal_velocity, p.vy + prof.gravity * dt)
+        gravity = prof.gravity if (p.vy < 0 and input_state.jump) else prof.fall_gravity
+        p.vy = min(prof.terminal_velocity, p.vy + gravity * dt)
         collision = move_body(p, self.platforms, dt)
         p.grounded = collision.grounded
         p.standing_on = collision.standing_on
+        p.hit_ceiling = bool(collision.heads)
+        if p.hit_ceiling and prof.ceiling_bump_speed:
+            p.vy = prof.ceiling_bump_speed
         p.x = max(0, min(p.x, self.level.width - p.w))
         self.interactions(dt, input_state, collision.heads)
         if p.y > self.level.height + 100 or self.time <= 0:
@@ -226,6 +228,63 @@ class Game:
         target_y = max(0, min(self.level.height - VIEW_HEIGHT, p.y - 250))
         self.camera.x += (target_x - self.camera.x) * (1 - math.exp(-6 * dt))
         self.camera.y += (target_y - self.camera.y) * (1 - math.exp(-6 * dt))
+
+    def _horizontal_legacy(
+        self, p: Player, input_state: InputState, direction: int, on_ice: bool, dt: float
+    ) -> None:
+        """Modelo de referência: aceleração única e atrito ao soltar (também no ar)."""
+        prof = self.profile
+        friction = prof.ice_friction if on_ice else prof.ground_friction
+        if direction:
+            rate = prof.ground_acceleration if p.grounded else prof.air_acceleration
+        else:
+            rate = friction if p.grounded else prof.air_friction
+        p.vx = approach(
+            p.vx, direction * (prof.run_speed if input_state.run else prof.walk_speed), rate * dt
+        )
+        p.skidding = False
+        p.run_grace = 0.0
+
+    def _horizontal_calibrated(
+        self, p: Player, input_state: InputState, direction: int, on_ice: bool, dt: float
+    ) -> None:
+        """Modelo calibrado (docs/research/MOVIMENTACAO.md §13.3).
+
+        Acelerar, derrapar (atrito dobrado, SMB1) ou soltar (sem atrito no ar);
+        teto de corrida com graça ao soltar (SMB1 ``RunningTimer``); gelo reduz
+        a tração (SMW); no ar o teto preserva a velocidade atual.
+        """
+        prof = self.profile
+        accel_mult = prof.ice_acceleration_multiplier if on_ice else 1.0
+        if input_state.run and p.grounded:
+            p.run_grace = prof.run_release_grace
+        else:
+            p.run_grace = max(0.0, p.run_grace - dt)
+        cap = prof.run_speed if (input_state.run or p.run_grace > 0) else prof.walk_speed
+        if not p.grounded:
+            cap = max(cap, min(abs(p.vx), prof.run_speed))
+        moving_against = direction != 0 and p.vx != 0 and (direction > 0) != (p.vx > 0)
+        p.skidding = False
+        if direction and not moving_against:
+            if p.grounded:
+                rate = prof.run_acceleration if cap > prof.walk_speed else prof.walk_acceleration
+            else:
+                rate = prof.air_acceleration
+            p.vx = approach(p.vx, direction * cap, rate * accel_mult * dt)
+        elif moving_against:
+            if p.grounded:
+                rate = prof.ice_skid_deceleration if on_ice else prof.skid_deceleration
+            else:
+                rate = prof.air_acceleration
+            p.vx = approach(p.vx, 0.0, rate * dt)
+            p.skidding = p.grounded and abs(p.vx) > prof.skid_turn_speed
+        else:
+            rate = (
+                (prof.ice_friction if on_ice else prof.ground_friction)
+                if p.grounded
+                else prof.air_friction
+            )
+            p.vx = approach(p.vx, 0.0, rate * dt)
 
     def interactions(self, dt: float, input_state: InputState, heads: list[Platform]) -> None:
         interact_world(self, input_state, heads)
@@ -260,8 +319,8 @@ class Game:
             p.power = "small"
             p.y += p.h - 30
             p.h = 30
-        p.invulnerable = 2
-        p.vx = -p.facing * 100
+        p.invulnerable = self.profile.hurt_invulnerability
+        p.vx = -p.facing * self.profile.hurt_knockback
 
     def finish(self) -> None:
         if self.status != "playing":

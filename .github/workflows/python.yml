@@ -1,0 +1,40 @@
+name: Validar Lume (Python)
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.12"]
+    env:
+      SDL_VIDEODRIVER: dummy
+      SDL_AUDIODRIVER: dummy
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - name: Instalar
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Lint e formatação
+        run: |
+          ruff check game tests tools
+          ruff format --check game tests tools
+      - name: Tipos
+        run: mypy
+      - name: Testes de lógica, integração e campanha
+        run: python -m pytest -q
+      - name: Fumaça da aplicação (headless)
+        run: python main.py --headless-frames 120 --no-audio --screenshot build-smoke.png

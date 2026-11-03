@@ -316,6 +316,9 @@ class Player:
     shoot_cooldown: float = 0.0
     standing_on: str | None = None
     animation: PlayerAnimation = "idle"
+    run_grace: float = 0.0
+    skidding: bool = False
+    hit_ceiling: bool = False
 
 
 @dataclass(slots=True)
