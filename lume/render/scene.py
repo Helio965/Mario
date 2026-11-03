@@ -171,8 +171,6 @@ class Scene:
                 for o in grounds
             )
             style = "cave" if p.style == "cave" else (p.style or "terrain")
-            if p.surface == "ice" and style == "terrain":
-                style = "terrain"
             n = max(1, math.ceil(p.w / CHUNK))
             cw = p.w / n
             for i in range(n):
@@ -183,8 +181,8 @@ class Scene:
                 # chunks overlap by 1.5 u so texture filtering never shows a seam
                 aw = cw + (1.5 if not right else 0.0)
                 self.store.register(
-                    ArtSpec(art, (lambda st=style, aw=aw, h=p.h, sd=seed, l=left, r=right, top=not covered, gx=gx:
-                                  w.terrain(st, aw, h, sd, l, r, top, gx)), 1.0, (0, 0), "level")
+                    ArtSpec(art, (lambda st=style, aw=aw, h=p.h, sd=seed, l=left, r=right, top=not covered, gx=gx, sf=p.surface:
+                                  w.terrain(st, aw, h, sd, l, r, top, gx, sf)), 1.0, (0, 0), "level")
                 )
                 self.terrain.append(TerrainPiece(art, gx, p.y - w.terrain_headroom, aw, p.h + w.terrain_headroom))
 

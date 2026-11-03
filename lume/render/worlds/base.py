@@ -56,7 +56,8 @@ class WorldArt:
     def layer_art(self) -> dict[str, PropSpec]:
         return {}
 
-    def terrain(self, style: str, w: float, h: float, seed: int, left: bool, right: bool, top: bool = True, x0: float = 0.0) -> Svg:
+    def terrain(self, style: str, w: float, h: float, seed: int, left: bool, right: bool, top: bool = True, x0: float = 0.0,
+                surface: str = "normal") -> Svg:
         raise NotImplementedError
 
     def block(self, kind: str, w: float, h: float) -> Svg:

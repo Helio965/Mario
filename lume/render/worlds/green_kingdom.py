@@ -170,7 +170,8 @@ class GreenKingdom(WorldArt):
         ]
 
     # ------------------------------------------------------------------ terrain
-    def terrain(self, style: str, w: float, h: float, seed: int, left: bool, right: bool, top: bool = True, x0: float = 0.0) -> Svg:
+    def terrain(self, style: str, w: float, h: float, seed: int, left: bool, right: bool, top: bool = True, x0: float = 0.0,
+                surface: str = "normal") -> Svg:
         """Terrain chunk art. Patterns that cross chunk borders (grass lip,
         strata) are functions of the world x (``x0`` + local x) so adjacent
         chunks join seamlessly."""
@@ -465,3 +466,6 @@ class GreenKingdom(WorldArt):
 
     def weather(self) -> Weather:
         return Weather("leaves", 0.35, ("leaf", "petal"), wind=40.0)
+
+
+ART_CLASS = GreenKingdom
