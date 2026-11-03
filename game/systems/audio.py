@@ -25,9 +25,11 @@ IMPLEMENTAÇÃO:
   ``loops=-1`` em um de dois canais de música alternados; a troca faz um
   crossfade linear de 0,4 s. Ambientes usam o mesmo esquema com fade de 1 s.
 * Canais reservados: 0-1 música, 2-9 efeitos, 10-11 vozes, 12-13 ambiente.
-* Os 14 cues são sintetizados no ``__init__``; trilhas, ambientes e vozes são
-  renderizados em uma thread de fundo (só numpy) e embrulhados em ``Sound``
-  no thread principal quando pedidos. ``prewarm()`` força tudo de uma vez.
+* Os cues (os 14 do original mais ``boss_intro``, ``boss_phase``, ``talk`` e
+  ``npc_say`` dos eventos novos do núcleo Python) são sintetizados no
+  ``__init__``; trilhas, ambientes e vozes são renderizados em uma thread de
+  fundo (só numpy) e embrulhados em ``Sound`` no thread principal quando
+  pedidos. ``prewarm()`` força tudo de uma vez.
 * Diferença deliberada do original: efeitos e vozes continuam disponíveis
   com a música pausada (menus de pausa podem soar).
 * ``voice(name)`` devolve a chave de localização da legenda
@@ -76,6 +78,8 @@ EFFECT_PRIORITY: Final[dict[str, int]] = {
     "death": 5,
     "complete": 5,
     "boss": 4,
+    "boss_intro": 4,
+    "boss_phase": 4,
     "life": 4,
     "power": 3,
     "hurt": 3,
@@ -87,6 +91,8 @@ EFFECT_PRIORITY: Final[dict[str, int]] = {
     "block": 1,
     "jump": 1,
     "coin": 0,
+    "talk": 0,
+    "npc_say": 0,
 }
 VOICE_CAPTION_KEYS: Final[dict[str, str]] = {name: f"voice.{name}" for name in synth.VOICE_NAMES}
 
@@ -237,7 +243,7 @@ class AudioSystem:
                 else:
                     slot.channel.unpause()
             except pygame.error:
-                slot.key = None
+                self._release_loop_slot(slot)
 
     def effect(self, kind: EventType | str) -> None:
         if not self.available:
@@ -309,7 +315,7 @@ class AudioSystem:
             return
         for slot in (*self._music, *self._ambient):
             self._stop_channel(slot.channel)
-            slot.key = None
+            self._release_loop_slot(slot)
         for one_shot in (*self._sfx, *self._voice):
             self._stop_channel(one_shot.channel)
             one_shot.kind = None
@@ -463,7 +469,7 @@ class AudioSystem:
             if self._paused:
                 slot.channel.pause()
         except pygame.error:
-            slot.key = None
+            self._release_loop_slot(slot)
             return
         slot.key = key
         slot.weight = 0.0
@@ -484,9 +490,16 @@ class AudioSystem:
                 slot.channel.set_volume(bus_volume * slot.weight)
                 if slot.weight <= 0.0 and slot.target <= 0.0:
                     slot.channel.stop()
-                    slot.key = None
+                    self._release_loop_slot(slot)
             except pygame.error:
-                slot.key = None
+                self._release_loop_slot(slot)
+
+    @staticmethod
+    def _release_loop_slot(slot: _LoopSlot) -> None:
+        """Canal de loop livre: sem chave e com pesos zerados (``fading`` não fica preso)."""
+        slot.key = None
+        slot.weight = 0.0
+        slot.target = 0.0
 
     # -------------------------------------------------------------- one-shots
     def _release_finished(self, slots: list[_OneShotSlot]) -> None:

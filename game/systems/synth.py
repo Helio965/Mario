@@ -16,8 +16,6 @@ from typing import Any, Final, Literal
 import numpy as np
 from numpy.typing import NDArray
 
-from game.core.types import EVENT_TYPES
-
 SAMPLE_RATE: Final = 44100
 Waveform = Literal["square", "triangle", "sawtooth", "sine"]
 FloatArray = NDArray[np.float64]
@@ -145,12 +143,16 @@ TRACKS_BY_NAME: Final[dict[str, Track]] = {track.name: track for track in ALL_TR
 
 @dataclass(frozen=True, slots=True)
 class Cue:
-    """Efeito sonoro: sequência de notas MIDI, uma a cada ``duration`` segundos."""
+    """Efeito sonoro: sequência de notas MIDI, uma a cada ``duration`` segundos.
+
+    ``gain`` multiplica ``CUE_LEVEL`` (1,0 nos 14 cues portados do original).
+    """
 
     notes: tuple[int, ...]
     duration: float
     wave: Waveform = "square"
     slide: float = 0.0
+    gain: float = 1.0
 
     @property
     def total_duration(self) -> float:
@@ -173,11 +175,13 @@ CUES: Final[dict[str, Cue]] = {
     "boss": Cue(notes=(40, 39, 38, 36), duration=0.14, wave="sawtooth"),
     "life": Cue(notes=(79, 84, 88, 91), duration=0.09),
     # Eventos novos do motor Python (chefes com fases, NPCs e diálogos) — timbres originais.
+    # Os blips de fala são mais discretos (gain) para não cobrir a voz nem a música.
     "boss_intro": Cue(notes=(36, 43, 48), duration=0.18, slide=-5, wave="sawtooth"),
     "boss_phase": Cue(notes=(50, 57, 62, 69), duration=0.1, slide=6),
-    "talk": Cue(notes=(84, 91), duration=0.05, wave="triangle"),
-    "npc_say": Cue(notes=(88,), duration=0.08, slide=9, wave="triangle"),
+    "talk": Cue(notes=(84, 91), duration=0.05, wave="triangle", gain=0.7),
+    "npc_say": Cue(notes=(88,), duration=0.08, slide=9, wave="triangle", gain=0.7),
 }
+PORTED_CUE_NAMES: Final[tuple[str, ...]] = tuple(CUES)[:14]  # os 14 de ``audio.ts``
 
 
 # ------------------------------------------------------------- utilidades
@@ -414,7 +418,7 @@ class VoiceSpec:
     vibrato: float = 0.0
     breath: float = 0.02
     brightness: float = 0.6
-    loudness: float = 0.55
+    loudness: float = 0.42  # pico; ver a folga de mix em MASTER_GAIN
     seed: int = 1
 
 
@@ -483,7 +487,7 @@ AMBIENT_ALIASES: Final[dict[str, str]] = {
     "embers": "lava",
 }
 AMBIENT_SECONDS: Final = 8.0
-AMBIENT_PEAK: Final = 0.45
+AMBIENT_PEAK: Final = 0.4  # pico do loop; o barramento ainda aplica AMBIENT_LEVEL
 
 
 def resolve_ambient(name: str | None) -> str | None:

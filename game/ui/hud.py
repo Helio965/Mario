@@ -32,6 +32,8 @@ class Hud:
         self._mark: pygame.Surface | None = None
         self._boss_id: str | None = None
         self._boss_fill = 0.0
+        self._toast_key: tuple[str, int] | None = None
+        self._toast_surface: pygame.Surface | None = None
 
     # ------------------------------------------------------------ consultas
     @staticmethod
@@ -184,26 +186,39 @@ class Hud:
             style.round_rect(surface, box, p.hud, 4, 200)
             surface.blit(text, (box.x + 7, box.y + 2))
 
-    def toast(self, surface: pygame.Surface, text: str, age: float, remaining: float) -> None:
+    def _compose_toast(self, text: str) -> pygame.Surface:
+        """Caixa + texto do aviso numa única superfície (cacheada por texto e paleta)."""
         style = self.ui.style
         p = style.palette
+        key = (text, id(p))
+        if self._toast_key == key and self._toast_surface is not None:
+            return self._toast_surface
         lines = style.wrap(text, 12, 700)
         width = max(style.measure(line, 12)[0] for line in lines) + 46
         height = 26 + len(lines) * 18
+        composed = pygame.Surface((width, height + 8), pygame.SRCALPHA)
+        box = pygame.Rect(0, 0, width, height)
+        style.round_rect(composed, box.move(0, 6), p.shadow, 7, 40)
+        style.round_rect(composed, box, p.toast, 7, border=p.toast_border)
+        y = 13
+        for line in lines:
+            line_surface = style.text(line, 12, p.toast_text)
+            composed.blit(line_surface, (width // 2 - line_surface.get_width() // 2, y))
+            y += 18
+        self._toast_key = key
+        self._toast_surface = composed
+        return composed
+
+    def toast(self, surface: pygame.Surface, text: str, age: float, remaining: float) -> None:
+        style = self.ui.style
+        composed = self._compose_toast(text)
         slide = 0
         alpha = 255
         if style.motion:
             slide = round((1 - min(1.0, age / TOAST_SLIDE)) * 10)
             alpha = round(255 * min(1.0, remaining / TOAST_FADE))
-        box = pygame.Rect(
-            (VIEW_WIDTH - width) // 2, VIEW_HEIGHT - 25 - height + slide, width, height
+        composed.set_alpha(alpha)
+        height = composed.get_height() - 8
+        surface.blit(
+            composed, ((VIEW_WIDTH - composed.get_width()) // 2, VIEW_HEIGHT - 25 - height + slide)
         )
-        style.round_rect(surface, box.move(0, 6), p.shadow, 7, min(40, alpha))
-        style.round_rect(surface, box, p.toast, 7, alpha, border=p.toast_border)
-        if alpha < 255:
-            return
-        y = box.y + 13
-        for line in lines:
-            line_surface = style.text(line, 12, p.toast_text)
-            surface.blit(line_surface, (box.centerx - line_surface.get_width() // 2, y))
-            y += 18

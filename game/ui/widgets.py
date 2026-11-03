@@ -711,21 +711,24 @@ class WidgetGroup:
             if i == self.focus:
                 continue
             r = self.widgets[i].rect
+            # Distância entre bordas na direção pedida; o candidato precisa começar
+            # depois da borda do widget atual (tolerância de 2 px). ``gap`` penaliza
+            # desalinhamento no eixo perpendicular (0 quando há sobreposição).
             if direction == "down":
-                primary = r.centery - cur.centery
+                primary = r.top - cur.bottom
                 gap = max(0, r.left - cur.right, cur.left - r.right)
             elif direction == "up":
-                primary = cur.centery - r.centery
+                primary = cur.top - r.bottom
                 gap = max(0, r.left - cur.right, cur.left - r.right)
             elif direction == "right":
-                primary = r.centerx - cur.centerx
+                primary = r.left - cur.right
                 gap = max(0, r.top - cur.bottom, cur.top - r.bottom)
             else:
-                primary = cur.centerx - r.centerx
+                primary = cur.left - r.right
                 gap = max(0, r.top - cur.bottom, cur.top - r.bottom)
-            if primary <= 0:
+            if primary < -2:
                 continue
-            score = primary + 2.5 * gap
+            score = max(0, primary) + 2.5 * gap
             if score < best_score:
                 best_score = score
                 best = i

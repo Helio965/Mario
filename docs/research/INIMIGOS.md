@@ -581,3 +581,143 @@ Perseguidor: IDLE (dorme) ──(|dx| < 90 & |dy| < 90)──▶ ALERT (0,2 s) �
 | Pisável debaixo d'água | não (SMB1/3/SMW), sim (Wonder) | **não** (coerente com água letal) | OFICIAL [M-SMB1] → decisão |
 
 ---
+## 7. Implicações para o Lume — decisões concretas
+
+1. **Tabela de flags em vez de `if kind == ...`**: substituir os ramos de `update_enemies` (`walker/shell/flyer/shooter/armored/boss`) por um `ArchetypeProfile` com as flags da §6.0 (`stompable`, `stomp_hurts`, `fireproof`, `star_kills`, `shell_kills`, `explosion_kills`, `turn_at_edges`, `turn_on_enemy_contact`, `face_player_on_land`, `blocks_player`) — o equivalente das tabelas `OAT_/OA2_/OA3_` de SMB3 [D-SMB3]. O ramo de dano (`hit_enemy`) consulta as flags; o pisão consulta `stompable`/`stomp_hurts` antes de `game.hurt()`.
+2. **Percepção clássica = janelas, não visão**: os perfis dos arquétipos 6.1–6.8 usam `needs_line_of_sight=False`, `field_of_view_behind` ilimitado e `reaction_time` 0 ou 0,33 s. A linha de visão amostrada de `perception.py` fica reservada a chefes/NPCs. Adicionar ao `Blackboard`: `player_looking_at_me`, `player_speed`, `player_below`, `on_screen`, `in_zone(lo, hi)` (janela assimétrica — Thwomp/Piranha usam deslocamentos de −36/+44 e −27/+28 por causa do centro do sprite [D-SMB3][D-SMW]).
+3. **Timers em segundos, iguais aos originais**: casco 5,5 s (4,0 nos mundos finais), pernas 1,5 s antes; achatado 0,5 s; atordoado 4,25 s com telegraph de 0,8 s; pavio 4,25 s com piscar de 1,07 s; Thwomp espera 1,07 s; Boo reage em 0,33 s; Lakitu lança a cada 2,1 s com 0,27 s de aviso [D-SMB1][D-SMB3][D-SMW]. Implementar como `State.max_time/timeout_to` + flag `telegraph` do `State` (já existe) ligada nos últimos N segundos.
+4. **Velocidades**: walker 72 + 6·mundo px/s (0,33× a caminhada, como 30/90); rápido 110; casco 420 (1,24× a corrida, como 180/150); projétil de torre 220 (= caminhada, como 90/90); Boo 130 (0,6× a caminhada, como 60/90); Lakitu 190/440/590 por estado do jogador [D-SMB1][D-SMB3]. Conversões na §6.0.
+5. **Distâncias** escaladas por 1,875: Piranha 62 px, torre 75 px, Thwomp 75 px (alerta 120), Chain Chomp 120 px, Rip Van Fish 90 px, Boo zona morta 19 px, Lakitu teto 112 px.
+6. **Regras de "intenção barata" de SMB1** (adotar as duas): inimigos invertem ao colidir entre si (exceto emboscada/aéreo/arremessador) e **viram-se para o jogador ao pousar de uma queda** (exceto Trotador-Goomba) [D-SMB1]. Custo: dois `if` por pouso.
+7. **Pisão**: manter a janela atual (`player.y + h ≤ e.y + min(24, vy·dt + 15)`), rebote −390 px/s; adicionar o **pisão-salto** (−590 px/s se o salto está pressionado no quadro do pisão), espelhando o SMB1 em que o rebote (−4 px/q) é o próprio v0 do salto e a gravidade depende do botão [D-SMB1][FISICA]. Para `stomp_hurts=True` (espinhos, esmagador), o pisão chama `game.hurt()`.
+8. **Casco**: `SLIDE` a 420 px/s, dano 2 em outros inimigos (manter), quica em paredes com som de ricochete (telegraph oficial [M-SMB1]), fere o jogador sempre que em movimento, para ao ser pisado; **nunca** demotar Planador vermelho para um Casqueiro sem regra de borda (correção do bug do SMB1).
+9. **Telegraph obrigatório por estado de ataque**: todo `ATTACK` é precedido de `PREPARE_ATTACK` com `telegraph=True` e duração mínima de 0,25 s (martelo, afundar na nuvem, flash do canhão, recuo do acorrentado) ou de uma animação de estado (cara do esmagador, subida da emboscada, pernas do casco, piscar do pavio, tremor dos ossos) — catálogo na §5.2. Som por evento: pisão, chute, ricochete, disparo, impacto, explosão (o Lume já tem `GameEvent` para `stomp/shot/hurt`; acrescentar `kick`, `ricochet`, `impact`, `explode`, `telegraph`).
+10. **Água letal** → arquétipo aquático na forma saltadora (de baixo da tela, máx. 3, spawn 0,27–1,6 s), não pisável debaixo d'água (coerente com SMB1 [M-SMB1]); a forma nadadora/perseguidora fica em código mas desligada até existir água navegável.
+11. **Escala por mundo** sem mudar regras: SMB1 só muda velocidades (0,5 → 0,75 px/q), timers (16 → 11 ticks) e cadências (48 → 28 q) na "segunda volta" [D-SMB1]. No Lume: mundos 4–5 usam `fast_walk`, casco revive em 4,0 s, martelo a cada 0,5 s, canhão 2,0 s, Thwomp alerta 150 px.
+12. **Colisão no pygame-ce**: as sondas de borda/parede e as janelas de percepção continuam como `Rect` puros (`pygame.Rect.colliderect`/`collidelist` em `game/physics/collision.py`), sem `pygame.mask` — os originais usam 1–2 pontos de sonda por inimigo ("bottom middle (8,18)" em SMB1 [D-SMB1]); referência da API: [PG-Rect].
+
+### 7.1 Constantes propostas (Python, px/s, px/s², s)
+
+```python
+# game/enemies/archetypes.py — valores para passo fixo de 1/120 s. Comentários: origem (DOCUMENTADO) → conversão (ESTIMADO)
+from dataclasses import dataclass, field
+
+@dataclass(frozen=True, slots=True)
+class ArchetypeFlags:
+    stompable: bool = True        # pisar derrota/atordoa
+    stomp_hurts: bool = False     # espinhos: pisar fere (Spiny, Thwomp)      SMB3 OA3_NOTSTOMPABLE
+    fireproof: bool = False       # Buzzy (SMB1), Boo/Thwomp/Dry Bones/Bob-omb/Bullet/Chomp (SMB3)
+    star_kills: bool = True
+    shell_kills: bool = True
+    explosion_kills: bool = True
+    turn_at_edges: bool = False   # Koopa vermelho, Dry Bones (SMW), Shy Guy rosa
+    turn_on_enemy_contact: bool = True   # SMB1 EnemyTurnAround (exceções: emboscada, aéreo, arremessador)
+    face_player_on_land: bool = False    # SMB1 ProcEnemyDirection (Koopas sim, Goomba não)
+    blocks_player: bool = False   # pode-se ficar em cima (Konk, Shy Guy)
+
+@dataclass(frozen=True, slots=True)
+class WalkerProfile:              # Trotador / Casqueiro / Esqueleto
+    walk_speed: float = 72.0      # 0,5 px/q = 30 px/s × 2,44
+    fast_speed: float = 110.0     # 0,75 px/q = 45 px/s × 2,44
+    squash_time: float = 0.5      # Goomba achatado ≈0,35–0,7 s
+    stun_time: float = 4.25       # SMW $FF q
+    stun_telegraph: float = 0.8   # SMW < $30 q
+    shell_speed: float = 420.0    # 3 px/q = 180 px/s × 2,44 → arredondado (1,24 × corrida)
+    shell_revive_time: float = 5.5        # SMB1 16 ticks × 21 q
+    shell_revive_time_hard: float = 4.0   # SMB1 11 ticks
+    shell_legs_telegraph: float = 1.5     # SMB1 timer < 5 ticks
+    knockback_vy: float = -440.0  # SMB1 −3 px/q × 2,46
+    knockback_vx: float = 146.0   # SMB1 ±1 px/q × 2,44
+    stomp_bounce: float = -390.0  # atual; −590 se salto pressionado (pisão-salto)
+
+@dataclass(frozen=True, slots=True)
+class ZoneProfile:                # janelas de percepção (px); assimetria preservada
+    piranha_hide: float = 62.0             # SMB1 33 px × 1,875
+    blaster_dead_zone: float = 75.0        # SMB1 40 px × 1,875
+    crusher_alert: float = 120.0           # SMW ±64 px × 1,875
+    crusher_drop: tuple[float, float] = (-68.0, 83.0)   # SMB3/SMW −36…+44 px × 1,875
+    chomp_target: float = 120.0            # SMB3 64 px × 1,875
+    fish_wake: float = 90.0                # SMW ±48 px × 1,875 (X e Y)
+    boo_dead_zone_x: float = 19.0          # SMW 10 px × 1,875
+    boo_dead_zone_y: float = 8.0           # SMB3 4 px × 1,875
+    lakitu_distance_cap: float = 112.0     # SMB1 60 px × 1,875
+
+@dataclass(frozen=True, slots=True)
+class TimingProfile:              # segundos (× 1)
+    thrower_interval: float = 0.8          # SMB1 48 q (0,47 difícil)
+    thrower_telegraph: float = 0.25        # adição do Lume (SMB1 = 0)
+    thrower_jump_interval: tuple[float, float] = (3.2, 4.25)   # SMB1/SMB3 $C0–$FF q
+    aerial_interval: float = 2.1           # SMB1 128 q
+    aerial_telegraph: float = 0.27         # SMB1 16 q
+    turret_interval: tuple[float, float] = (2.0, 2.6)
+    turret_flash: float = 0.17             # SMB1 10 q
+    ambush_wait: float = 1.07              # SMB1 64 q (SMB3 0,8; SMW 0,53)
+    ambush_travel: float = 0.8             # SMB1 48 q
+    crusher_wait: float = 1.07             # SMB3/SMW 64 q
+    crusher_shake: float = 0.4             # SMB3/SMW 24 q
+    boo_reaction: float = 0.33             # SMB3 20 q
+    boo_turn: float = 0.5                  # SMW 31 q
+    fuse_time: float = 4.25                # SMB3 255 q
+    fuse_flash: float = 1.07               # SMB3 < 64 q
+    explosion_time: float = 0.67           # SMB3 40 q
+    bones_down: float = 4.4                # SMB3 ≈315 q total − 0,8 s
+    bones_rebuild: float = 0.8
+    chomp_lunge: float = 0.67              # SMB3 40 q
+    chomp_rest: tuple[float, float] = (0.53, 1.05)   # SMB3 $20–$3F q
+    chomp_free_after: int = 50             # SMB3 $32 investidas
+    fish_chase: float = 8.5                # SMW $FF × 2 q
+    leaper_spawn: tuple[float, float] = (0.27, 1.6)  # SMB1 16–96 q
+
+@dataclass(frozen=True, slots=True)
+class MotionProfile:              # px/s e px/s²
+    crusher_accel: float = 880.0           # 900 px/s² × (1550/1575)
+    crusher_max_fall: float = 700.0        # entre SMW 232 e SMB3 420 px/s × 2,44
+    crusher_rise: float = 112.0            # 60 px/s × 1,875
+    boo_accel: float = 550.0               # SMB3 225 px/s² × 2,44
+    boo_max: float = 130.0                 # SMB3 60 px/s × 2,44 → arredondado
+    boo_stop_decel: float = 300.0          # estilo SMW (parada suave)
+    hammer_vx: float = 120.0; hammer_vy: float = -230.0; hammer_gravity: float = 430.0   # ápice 60 px, voo 1,1 s
+    turret_bullet: float = 220.0           # = caminhada (SMB1 1,5 px/q = andar)
+    lakitu_base: tuple[float, float, float] = (190.0, 440.0, 590.0)   # parado/andando/correndo
+    lakitu_distance_slope: float = 0.8     # px/s por px de distância (SMB1: 1/4 unid. por px)
+    chomp_lunges: tuple[tuple[float, float], ...] = ((600, -290), (360, -590), (480, -440), (240, -740))
+    bomb_kick_vx: float = 365.0; bomb_kick_vy: float = -300.0; bomb_radius: float = 56.0
+    leaper_vy: float = -550.0; leaper_gravity: float = 300.0; leaper_vx: tuple[float, float] = (45.0, 130.0)
+    fish_accel: float = 70.0; fish_max: float = 146.0
+    hop_vy: float = -440.0                 # Planador pulante: SMB1 −3 px/q × 2,46
+```
+
+### 7.2 Pseudocódigo das decisões por quadro (1/120 s)
+
+```python
+def think(enemy, bb: Blackboard, prof):
+    # 1) trânsito e bordas (todos os terrestres)
+    if bb.wall_ahead or (bb.edge_ahead and prof.flags.turn_at_edges) or (bb.hit_enemy and prof.flags.turn_on_enemy_contact):
+        enemy.facing *= -1
+    if bb.just_landed and prof.flags.face_player_on_land:
+        enemy.facing = 1 if bb.player_dx > 0 else -1          # SMB1 ProcEnemyDirection
+    # 2) janelas de percepção (sem linha de visão)
+    bb.flags["in_drop_zone"] = bb.on_screen and prof.zones.crusher_drop[0] <= bb.player_dx < prof.zones.crusher_drop[1]
+    bb.flags["too_close_to_emerge"] = abs(bb.player_dx) < prof.zones.piranha_hide
+    bb.flags["player_hidden_from_boo"] = not bb.player_looking_at_me   # Perception.reaction_time = 0,33 s faz o resto
+    # 3) a FSM escolhe o estado; cada estado de ataque é precedido de PREPARE_ATTACK com telegraph=True
+```
+
+---
+
+## 8. Testes propostos (pytest, sem pygame)
+
+1. **Velocidades relativas**: `walker.walk_speed / PLAYER_WALK ≈ 0,33 ± 0,02`; `shell_speed / PLAYER_RUN ≈ 1,24 ± 0,05`; `turret_bullet == PLAYER_WALK` (razões dos originais [D-SMB1]).
+2. **Casco**: pisar → `SHELL`; após 5,5 s → `PATROL`; aos 4,0 s restantes `telegraph` falso, aos 1,5 s verdadeiro; tocar o casco → `SLIDE` a 420 px/s afastando-se do jogador; `SLIDE` × inimigo → inimigo derrotado, casco continua; `SLIDE` × parede → inverte e emite `ricochet`.
+3. **Borda**: Casqueiro vermelho inverte na borda; verde cai e, ao pousar, fica virado para o jogador; Trotador cai e **não** vira; Planador vermelho pisado mantém `turn_at_edges=True`.
+4. **Emboscada**: com |dx| = 60 px não emerge por ≥ 3 ciclos; com |dx| = 64 px emerge em ≤ 1,07 s; contato em qualquer estado fere.
+5. **Torre**: com |dx| = 70 px não dispara; com |dx| = 80 px dispara entre 2,0 e 2,6 s; evento `telegraph` 0,17 s antes do projétil; projétil a 220 px/s para o lado do jogador; pisão derrota o projétil; fogo não.
+6. **Esmagador**: `dx = −70` → `ALERT`; `dx = −60` → `DROP`; `dx = +90` → `IDLE`; queda atinge ≤ 700 px/s; impacto gera `impact` e 1,07 s de `RECOVER`; sobe a 112 px/s; fogo não derrota; estrela derrota.
+7. **Sombra**: jogador de costas por 0,32 s → ainda `IDLE`; 0,34 s → `CHASE`; virar para a Sombra → `IDLE` e |v| decresce 300 px/s²; nunca excede 130 px/s; pisão não a afeta.
+8. **Faísca**: pisão → `FUSE`; `telegraph` verdadeiro só nos últimos 1,07 s; explode em 4,25 ± 0,01 s; raio 56 px derrota um Casqueiro e quebra `brick`, não `ground`; bola de fogo também acende; lava explode imediatamente.
+9. **Esqueleto**: pisão → `STUNNED` 5,2 s; tremor nos últimos 0,8 s; levanta virado para o jogador; pisão durante a remontagem reinicia; fogo ignorado.
+10. **Acorrentado**: |dx| = 20 px → investida (600, −290); |dx| = 110 px → (240, −740); nunca ultrapassa 90 px do poste; 50 investidas → `FREE`.
+11. **Arremessador aéreo**: jogador parado → |vx| ≤ 190 px/s; correndo → ≤ 590 px/s; passa de 112 px → desacelera e inverte; um ovo a cada 2,1 s com `telegraph` 0,27 s antes; nunca mais de 3 filhotes.
+12. **Determinismo**: duas simulações com a mesma semente produzem a mesma `history` da `StateMachine` (os originais usam LFSR; o Lume usa `random.Random(seed)` por fase).
+
+---

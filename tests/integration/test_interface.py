@@ -14,16 +14,16 @@ import pygame
 import pytest
 
 from game.core.game import Game
+from game.levels.loader import load_levels
 from game.paths import data_path
 from game.rendering.painter import parse_color
 from game.settings import VIEW_HEIGHT, VIEW_WIDTH
 from game.systems.localization import Localization
-from game.systems.save import DEFAULT_BINDINGS, SaveData, Settings
 from game.systems.progression import ACHIEVEMENT_IDS
+from game.systems.save import DEFAULT_BINDINGS, SaveData, Settings
 from game.ui.interface import SCREENS, TOAST_SECONDS, Handlers, Interface
 from game.ui.settings import SettingsScreen
 from game.ui.widgets import Button, Toggle
-from game.levels.loader import load_levels
 
 pytestmark = pytest.mark.graphics
 
@@ -666,12 +666,16 @@ def test_toast_is_visible_for_4_2_seconds_and_drawn_over_screens() -> None:
     ui.hide()
     ui.toast("Checkpoint!")
     assert ui.toast_text == "Checkpoint!"
-    ui.update(None, TOAST_SECONDS - 0.1)
-    assert ui.toast_text == "Checkpoint!"
+    ui.update(None, 2.0)
     game = game_at("1-1")
     with_toast = new_surface()
     ui.draw(with_toast, game)
     assert packed("#254e49") in packed_colors(with_toast)
+    ui.update(None, TOAST_SECONDS - 2.1)
+    assert ui.toast_text == "Checkpoint!"
+    fading = new_surface()
+    ui.draw(fading, game)  # esmaecendo: ainda desenha, com alpha
+    assert mean_difference(fading, new_surface()) > 0
     ui.update(None, 0.2)
     assert ui.toast_text is None
     without = new_surface()
