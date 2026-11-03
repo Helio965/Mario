@@ -9,6 +9,7 @@ they are drawn 1:1 on screen — nothing is rendered small and enlarged.
 
 from __future__ import annotations
 
+import gc
 import os
 from dataclasses import dataclass
 from typing import Optional
@@ -37,6 +38,9 @@ class DisplayInfo:
     size: tuple[int, int]
     scale: float
     max_texture: int
+
+
+_LINGERING: list = []  # closed displays: renderers outlive every texture made from them
 
 
 class Display:
@@ -141,10 +145,19 @@ class Display:
         return self.renderer.to_surface()
 
     def close(self) -> None:
+        """Hide the window; the renderer stays alive until the process exits.
+
+        Destroying the renderer while any texture created from it is still
+        referenced (an ArtStore, a scene held by a caller) makes SDL free
+        those textures against a dead renderer, which corrupted memory and
+        crashed later inside unrelated garbage collection. Hidden displays are
+        cheap; SDL releases them at exit."""
+        gc.collect()
         try:
-            self.window.destroy()
+            self.window.hide()
         except Exception:  # pragma: no cover
             pass
+        _LINGERING.append(self)
 
 
 def choose_resolution(setting: str, desktop: tuple[int, int]) -> tuple[int, int]:

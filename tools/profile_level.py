@@ -85,6 +85,10 @@ def profile(level_id: str, res: tuple[int, int], seconds: float, quality: str = 
         "raster_ms_total": round(scene.store.stats["load_ms"], 1),
         "preload_ms": round(preload_ms, 1),
         "python_heap_peak_mb": round(peak / 1024 / 1024, 1),
+        # 1-minute load average of the machine at the end of the run: values well above
+        # the CPU count mean the frame times were inflated by other processes
+        "load_avg_1m": round(os.getloadavg()[0], 2) if hasattr(os, "getloadavg") else None,
+        "cpus": os.cpu_count(),
     }
     display.close()
     return result

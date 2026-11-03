@@ -45,9 +45,11 @@ def compute(render: bool = False, profile: bool = False) -> list[dict]:
     profiles = load_profiles()
     biomes = {w.id: w.biome for w in campaign.worlds}
     planned = set()
+    plan_by_id: dict[str, dict] = {}
     if PLAN.exists():
         try:
-            planned = {lvl["id"] for lvl in json.loads(PLAN.read_text(encoding="utf-8")).get("levels", [])}
+            plan_by_id = {lvl["id"]: lvl for lvl in json.loads(PLAN.read_text(encoding="utf-8")).get("levels", [])}
+            planned = set(plan_by_id)
         except (ValueError, KeyError):
             planned = set()
     dedicated_world = {w.id: not getattr(world_art(w.id), "provisional", False) for w in campaign.worlds}
@@ -59,7 +61,8 @@ def compute(render: bool = False, profile: bool = False) -> list[dict]:
                "planned": entry.id in planned, "implemented": entry.implemented}
         if not entry.implemented:
             row.update(structure="pendente", art="pendente", enemies="pendente", gameplay="pendente", graphics="pendente",
-                       performance="pendente", relics=0, documented="sim" if row["planned"] else "não",
+                       performance="pendente", relics=0, plan="pendente", audio="pendente",
+                       documented="sim" if row["planned"] else "não",
                        state="Planejada" if row["planned"] else "Não iniciada", notes=[])
             rows.append(row)
             continue
@@ -89,6 +92,25 @@ def compute(render: bool = False, profile: bool = False) -> list[dict]:
         if row["relics"] < 3:
             notes.append(f"{row['relics']} relíquia(s) (meta 3)")
         row["audio"] = "ok" if track_for(level.music) is not LEGACY[0] or level.music == "menu" else "faixa genérica"
+        if row["audio"] != "ok":
+            notes.append("áudio: faixa genérica")
+        # conformance with the level's sheet in the 60-level plan (criteria 5, 10, 11)
+        plan = plan_by_id.get(level.id)
+        gaps = []
+        if plan is not None:
+            regular = [e for e in level.enemies if not profiles[e.species].boss]
+            want = int(plan.get("planned_enemy_count", {}).get("min", 0))
+            if len(regular) < want:
+                gaps.append(f"inimigos {len(regular)}/{want}")
+            want_cp = int(plan.get("checkpoints", 0))
+            if len(level.checkpoints) < want_cp:
+                gaps.append(f"checkpoints {len(level.checkpoints)}/{want_cp}")
+            want_secrets = len(plan.get("secrets", []))
+            if len(level.secrets) < want_secrets:
+                gaps.append(f"segredos {len(level.secrets)}/{want_secrets}")
+        row["plan"] = "ok" if plan is not None and not gaps else ("sem plano" if plan is None else "parcial")
+        if gaps:
+            notes.append("abaixo do plano: " + ", ".join(gaps))
         if render:
             from lume.core.game import Game
             from lume.render.display import Display
@@ -124,6 +146,7 @@ def compute(render: bool = False, profile: bool = False) -> list[dict]:
         complete = all([
             row["structure"] == "ok", row["art"] == "dedicada", row["enemies"] == "ok", row["gameplay"] == "ok",
             row["graphics"] == "ok", row["performance"].startswith("medido"), row["relics"] >= 3, row["planned"],
+            row["plan"] == "ok", row["audio"] == "ok",
         ])
         row["state"] = "Concluída" if complete else "Parcial"
         row["notes"] = notes
@@ -134,16 +157,24 @@ def compute(render: bool = False, profile: bool = False) -> list[dict]:
 
 
 def markdown(rows: list[dict]) -> str:
-    out = ["| Mundo | Fase | Nome | Estrutura | Arte HD | Inimigos | Gameplay | Gráficos | Desempenho | Relíquias | Documentada | Estado |",
-           "| ----- | ---- | ---- | --------- | ------- | -------- | -------- | -------- | ---------- | --------- | ----------- | ------ |"]
+    out = ["| Mundo | Fase | Nome | Estrutura | Arte HD | Inimigos | Gameplay | Gráficos | Desempenho | Relíquias | Plano | Áudio | Documentada | Estado |",
+           "| ----- | ---- | ---- | --------- | ------- | -------- | -------- | -------- | ---------- | --------- | ----- | ----- | ----------- | ------ |"]
     for r in rows:
         out.append(f"| {r['world']} | {r['slot']} | {r['name']} | {r['structure']} | {r['art']} | {r['enemies']} | {r['gameplay']} | "
-                   f"{r['graphics']} | {r['performance']} | {r['relics']} | {r['documented']} | {r['state']} |")
+                   f"{r['graphics']} | {r['performance']} | {r['relics']} | {r.get('plan', '-')} | {r.get('audio', '-')} | "
+                   f"{r['documented']} | {r['state']} |")
     counts: dict[str, int] = {}
     for r in rows:
         counts[r["state"]] = counts.get(r["state"], 0) + 1
     out.append("")
     out.append("Resumo: " + ", ".join(f"{k}: {v}" for k, v in sorted(counts.items())))
+    notes = [r for r in rows if r.get("notes")]
+    if notes:
+        out.append("")
+        out.append("Pendências por fase (geradas pelas verificações):")
+        out.append("")
+        for r in notes:
+            out.append(f"- `{r['id']}`: " + "; ".join(r["notes"]))
     return "\n".join(out)
 
 
