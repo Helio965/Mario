@@ -1,6 +1,7 @@
 """Render gameplay frames of a level to PNG files (graphics QA).
 
     python tools/capture_level.py first_steps out_dir --res 1920x1080 --at 0,900,2200 [--play 6]
+    python tools/capture_level.py path/to/level.json out_dir --at 300   # a level file outside the campaign
 
 Frames are produced by the real renderer (SDL software renderer under the
 dummy video driver when no display is available).
@@ -12,6 +13,7 @@ import argparse
 import os
 import sys
 import time
+from pathlib import Path
 
 os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
 os.environ.setdefault("SDL_AUDIODRIVER", "dummy")
@@ -22,14 +24,17 @@ import pygame  # noqa: E402
 from lume.core.constants import FIXED_DT  # noqa: E402
 from lume.core.game import Game  # noqa: E402
 from lume.core.input import InputState  # noqa: E402
-from lume.levels.campaign import load_campaign  # noqa: E402
+from lume.levels.campaign import load_campaign, load_level_file  # noqa: E402
 from lume.render.display import Display  # noqa: E402
 from lume.render.scene import Scene  # noqa: E402
 
 
 def capture(level_id: str, out_dir: str, res: tuple[int, int], xs: list[float], play: float = 0.0, quality: str = "high") -> list[str]:
-    campaign = load_campaign()
-    level = campaign.level(level_id)
+    if level_id.endswith(".json"):
+        level = load_level_file(Path(level_id))
+        level_id = level.id
+    else:
+        level = load_campaign().level(level_id)
     os.makedirs(out_dir, exist_ok=True)
     display = Display(res, hidden=True)
     scene = Scene(display, quality=quality)

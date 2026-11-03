@@ -92,10 +92,17 @@ class Display:
 
     def draw(self, tex: video.Texture, x: float, y: float, w: float, h: float, *, angle: float = 0.0,
              origin: Optional[tuple[float, float]] = None, flip_x: bool = False, flip_y: bool = False,
-             alpha: float = 1.0, tint: Optional[tuple[int, int, int]] = None, additive: bool = False) -> None:
-        """Draw ``tex`` into the canvas rectangle (x, y, w, h); ``origin`` in canvas units relative to it."""
+             alpha: float = 1.0, tint: Optional[tuple[int, int, int]] = None, additive: bool = False,
+             src: Optional[tuple[float, float, float, float]] = None) -> None:
+        """Draw ``tex`` into the canvas rectangle (x, y, w, h); ``origin`` in canvas units relative to it.
+        ``src`` = (u0, v0, u1, v1) draws only that fraction of the texture (clipping, not squashing)."""
         s = self.scale
         dst = pygame.FRect(self.offset_x + x * s, self.offset_y + y * s, w * s, h * s)
+        if src is not None:
+            tw, th = tex.width, tex.height
+            u0, v0, u1, v1 = src
+            tex.draw(srcrect=pygame.FRect(u0 * tw, v0 * th, (u1 - u0) * tw, (v1 - v0) * th), dstrect=dst)
+            return
         tex.alpha = max(0, min(255, int(alpha * 255)))
         if tint is not None:
             tex.color = tint

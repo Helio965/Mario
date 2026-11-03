@@ -95,7 +95,15 @@ class WorldArt:
         return s
 
     def interior(self, variant: str):
-        """(backdrop Svg builder, layer Svg builder or None) for indoor areas."""
+        """(backdrop Svg builder, layer Svg builder or None) for indoor areas.
+
+        Called with every area ``variant`` of the level (plus "fortress").
+        Returning a pair makes that variant indoor: the 960×540 backdrop is
+        drawn instead of the sky and parallax layers, and the optional layer
+        (900×420) scrolls at 0.45× behind the terrain.  Typical variants:
+        "fortress", "underwater", "factory", "mansion", "sanctum".  "cave"
+        always uses ``cave_sky()``.
+        """
         return None
 
     def cave_sky(self) -> Svg:

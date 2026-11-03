@@ -141,3 +141,29 @@ def test_dark_zone_draws_lantern_halo(display_720):
     lit_scene.render(lit_game, 1 / 60)
     lit = sum(display_720.screenshot().get_at((1200, 420))[:3])
     assert game.darkness() > 0 and far < lit * 0.35  # 85% darkness away from the lantern
+
+
+def test_decor_and_terrain_layout_is_identical_across_processes():
+    """Seeds must not depend on the per-process ``hash()`` salt: the layout of
+    decor and terrain detail (and the raster disk cache keys) must be stable."""
+    import subprocess
+    import sys
+
+    code = (
+        "import os; os.environ['SDL_VIDEODRIVER']='dummy'\n"
+        "from lume.core.game import Game\n"
+        "from lume.levels.campaign import load_campaign\n"
+        "from lume.render.display import Display\n"
+        "from lume.render.scene import Scene\n"
+        "lvl = load_campaign().level('first_steps')\n"
+        "scene = Scene(Display((640, 360), hidden=True))\n"
+        "scene.prepare(Game([lvl]))\n"
+        "print([(d.art, round(d.x, 2)) for d in scene.decor][:40])\n"
+    )
+    outputs = set()
+    for salt in ("1", "2"):
+        env = {**os.environ, "PYTHONHASHSEED": salt, "SDL_VIDEODRIVER": "dummy", "SDL_AUDIODRIVER": "dummy"}
+        run = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=env, cwd=os.getcwd(), timeout=120)
+        assert run.returncode == 0, run.stderr
+        outputs.add(run.stdout.strip().splitlines()[-1])
+    assert len(outputs) == 1

@@ -12,6 +12,7 @@ texture is rasterized for exactly that density, so nothing is upscaled.
 from __future__ import annotations
 
 import math
+import zlib
 from dataclasses import dataclass
 from typing import Optional
 
@@ -30,6 +31,12 @@ from .worlds.base import WorldArt
 
 CHUNK = 320.0
 
+
+
+def stable_seed(*parts) -> int:
+    """Process-independent seed (``hash()`` of str is salted per process, which
+    made decor/terrain differ between runs and defeated the raster disk cache)."""
+    return zlib.crc32("\x1f".join(map(str, parts)).encode("utf-8"))
 
 @dataclass
 class TerrainPiece:
@@ -104,12 +111,13 @@ class Scene:
         w = self.world
         self._canvas_spec(f"{w.id}.sky", w.sky, group="world", floor=0.5)
         self._canvas_spec(f"{w.id}.cave_sky", w.cave_sky, group="world", floor=0.5)
-        interior = w.interior("fortress")
-        if interior is not None:
-            back, layer = interior
-            self._canvas_spec(f"{w.id}.interior.fortress", back, group="world", floor=0.5)
-            if layer is not None:
-                self._canvas_spec(f"{w.id}.interior.fortress.layer", layer, group="world", floor=0.5)
+        for variant in sorted({a.variant for a in level.areas} | {"fortress"}):
+            interior = w.interior(variant)
+            if interior is not None:
+                back, layer = interior
+                self._canvas_spec(f"{w.id}.interior.{variant}", back, group="world", floor=0.5)
+                if layer is not None:
+                    self._canvas_spec(f"{w.id}.interior.{variant}.layer", layer, group="world", floor=0.5)
         for art_id, prop in {**w.sky_extras(), **w.layer_art()}.items():
             self._canvas_spec(art_id, prop.build, prop.pivot, "world", floor=0.5)
         for name, prop in w.props().items():
@@ -146,7 +154,8 @@ class Scene:
         for h in game.hazards:
             if h.kind == "spikes":
                 ids.append(self._spikes_art(h.w))
-        ids += [a for a in (f"{w.id}.interior.fortress", f"{w.id}.interior.fortress.layer") if self.store.has(a)]
+        for variant in {a.variant for a in game.level.areas}:
+            ids += [a for a in (f"{w.id}.interior.{variant}", f"{w.id}.interior.{variant}.layer") if self.store.has(a)]
         for species in {e.species for e in game.enemies}:
             rig = self._rig(species, game)
             ids += [rig.part_id(n) for n in rig.parts()]
@@ -183,7 +192,7 @@ class Scene:
                             if o is not p and abs((o.y + o.h) - p.y) < 2)
                 covered = cover > cw * 0.6
                 art = f"terrain.{level.id}.{p.id}.{i}"
-                seed = abs(hash((level.id, p.id, i))) % 100000
+                seed = stable_seed(level.id, p.id, i) % 100000
                 left, right = i == 0, i == n - 1
                 gx = p.x + i * cw
                 # chunks overlap by 1.5 u so texture filtering never shows a seam
@@ -204,7 +213,7 @@ class Scene:
                 self.decor.append(Decor(f"{w.id}.prop.{d.prop}", d.x, d.y, d.scale, d.flip, d.layer))
         if level.decor:
             return
-        rng = Rand(abs(hash(level.id)) % 99991)
+        rng = Rand(stable_seed(level.id) % 99991)
         blocked = [(p.x - 30, p.x + p.w + 30) for p in level.platforms if p.kind == "pipe"]
         blocked += [(c.x - 40, c.x + 60) for c in level.checkpoints]
         blocked += [(level.exit.x - 60, level.exit.x + 180)]
@@ -272,6 +281,26 @@ class Scene:
                           origin=(px * z, py * z) if angle else None, flip_x=flip, alpha=alpha, tint=tint, additive=additive)
         self.stats["draws"] += 1
 
+    def _strips(self, art_id: str, x0: float, x1: float, y: float, offset: float, alpha: float = 1.0) -> None:
+        """Tile a horizontal strip art between world x0..x1 (scrolling by
+        ``offset``), clipping the end pieces instead of letting them spill
+        over neighbouring banks or squashing them."""
+        e = self.store.get(art_id)
+        if e is None or x1 <= x0:
+            return
+        z = self.zoom
+        ww, hh = e.w * e.unit, e.h * e.unit
+        x = x0 - (offset % ww)
+        while x < x1:
+            a, b = max(x, x0), min(x + ww, x1)
+            if b > a and self.visible(a, y, b - a, hh):
+                cx, cy = self.w2c(a, y)
+                full = a == x and b == x + ww
+                self.display.draw(e.tex, cx, cy, (b - a) * z, hh * z, alpha=alpha,
+                                  src=None if full else ((a - x) / ww, 0.0, (b - x) / ww, 1.0))
+                self.stats["draws"] += 1
+            x += ww
+
     def draw_canvas(self, art_id: str, x: float, y: float, w: float, h: float, alpha: float = 1.0, flip: bool = False,
                     tint=None, additive: bool = False, angle: float = 0.0) -> None:
         e = self.store.get(art_id)
@@ -338,7 +367,9 @@ class Scene:
         self.view = self.compute_view(game)
         p = game.player
         area = level.area_at(p.x + p.w / 2, min(p.y + p.h / 2, level.height - 1))
-        indoor = area.variant in ("cave", "fortress")
+        interior = f"{self.world.id}.interior.{area.variant}"
+        has_interior = self.store.has(interior)
+        indoor = area.variant in ("cave", "fortress") or has_interior
         outdoor = not indoor
         shake_x = shake_y = 0.0
         if self.effects and game.shake > 0:
@@ -351,12 +382,12 @@ class Scene:
             self.draw_canvas(f"{w.id}.sky", 0, 0, 960, 540)
             self._clouds()
             self._layers(level)
-        elif area.variant == "fortress" and self.store.has(f"{w.id}.interior.fortress"):
-            self.draw_canvas(f"{w.id}.interior.fortress", 0, 0, 960, 540)
-            if self.store.has(f"{w.id}.interior.fortress.layer"):
+        elif has_interior:
+            self.draw_canvas(interior, 0, 0, 960, 540)
+            if self.store.has(f"{interior}.layer"):
                 off = (self.view[0] * self.zoom * 0.45) % 900
                 for k in range(-1, 2):
-                    self.draw_canvas(f"{w.id}.interior.fortress.layer", k * 900 - off, 120, 900, 420)
+                    self.draw_canvas(f"{interior}.layer", k * 900 - off, 120, 900, 420)
         else:
             self.draw_canvas(f"{w.id}.cave_sky", 0, 0, 960, 540)
         self._decor("back")
@@ -378,6 +409,8 @@ class Scene:
             self._darkness(game, darkness)
         if outdoor and self.effects:
             self._weather(dt)
+        if self.effects and w.vignette > 0:
+            self._vignette(w.vignette)
         d.letterbox()
         if hud:
             self.hud(game)
@@ -514,12 +547,7 @@ class Scene:
                     continue
                 alpha = 0.86 if h.kind == "water" else 1.0
                 self.draw_art(f"liquid.{h.kind}.body", hx, hy + 6, w=h.w, h=h.h + 120, pivot=False, alpha=alpha)
-                strip = 64.0
-                off = (self.time * (18 if h.kind == "water" else 9)) % strip
-                x = hx - off
-                while x < hx + h.w:
-                    self.draw_art(f"liquid.{h.kind}.surface", x, hy - 2, pivot=False, alpha=alpha)
-                    x += strip
+                self._strips(f"liquid.{h.kind}.surface", hx, hx + h.w, hy - 2, self.time * (18 if h.kind == "water" else 9), alpha)
                 if h.kind == "lava" and self.effects:
                     self.draw_art("particle.soft", hx + h.w / 2, hy, scale=h.w / 12, alpha=0.35, tint=(255, 140, 60), additive=True)
             elif liquids:
@@ -549,19 +577,9 @@ class Scene:
                 continue
             if z.kind == "swim":
                 self.draw_art("liquid.water.body", z.x, z.y + 6, w=z.w, h=z.h, pivot=False, alpha=0.55)
-                strip, off = 64.0, (t * 14) % 64.0
-                x = z.x - off
-                while x < z.x + z.w:
-                    self.draw_art("liquid.water.surface", max(x, z.x), z.y - 2, pivot=False, alpha=0.8,
-                                  w=min(64.0, z.x + z.w - max(x, z.x)))
-                    x += strip
+                self._strips("liquid.water.surface", z.x, z.x + z.w, z.y - 2, t * 14, 0.8)
             elif z.kind == "quicksand":
-                off = (t * 6) % 64.0
-                x = z.x - off
-                while x < z.x + z.w:
-                    self.draw_art("quicksand.surface", max(x, z.x), z.y - 4, pivot=False, w=min(64.0, z.x + z.w - max(x, z.x)))
-                    x += 64.0
-                self.draw_art("liquid.lava.body", z.x, z.y + 10, w=z.w, h=z.h, pivot=False, alpha=0.0)
+                self._strips("quicksand.surface", z.x, z.x + z.w, z.y - 4, t * 6)
             elif z.kind in ("wind", "current") and self.effects and game.zone_active(z) and z.force_x:
                 # streaks travel with the drift; deterministic positions so the effect never flickers
                 n = max(3, int(z.w * z.h / 26000))
@@ -731,6 +749,19 @@ class Scene:
         self.display.draw(self._halo_tex, cx - size / 2, cy - size / 2, size, size, alpha=min(1.0, level))
         self.draw_art("particle.soft", p.x + p.w / 2 + p.facing * 9, p.y + p.h * 0.62, scale=2.4, alpha=0.6,
                       tint=(255, 214, 140), additive=True)
+
+    def _vignette(self, strength: float) -> None:
+        """Soft darkening of the frame corners (per-world ``WorldArt.vignette``).
+        A smooth gradient without detail, so one small texture stretched to
+        the canvas is visually exact at every resolution."""
+        if getattr(self, "_vignette_tex", None) is None:
+            from .raster import rasterize
+
+            v = Svg(960, 540)
+            v.rect(0, 0, 960, 540, fill=v.radial(480, 270, 560, [
+                (0, "#05060c", 0.0), (0.55, "#05060c", 0.0), (0.8, "#05060c", 0.35), (1, "#05060c", 0.8)]))
+            self._vignette_tex = self.display.texture(rasterize(v, 1.0))
+        self.display.draw(self._vignette_tex, 0, 0, 960, 540, alpha=min(1.0, strength))
 
     # ------------------------------------------------------------------ HUD
     def hud(self, game) -> None:
