@@ -576,6 +576,14 @@
     "relic_room"
    ],
    "entry": "pipe_room_entry"
+  },
+  {
+   "id": "mill_ledge",
+   "kind": "optional_challenge",
+   "clue": "Uma relíquia brilha acima da pá mais alta do moinho",
+   "rewards": [
+    "relic_mill"
+   ]
   }
  ],
  "hints": [
@@ -601,6 +609,11 @@
   {
    "id": "cp_mill",
    "x": 2700,
+   "y": 418
+  },
+  {
+   "id": "cp_meadow",
+   "x": 4640,
    "y": 418
   }
  ],

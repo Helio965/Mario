@@ -389,16 +389,6 @@
    ]
   },
   {
-   "id": "enemy06",
-   "species": "bolota",
-   "x": 3000,
-   "y": 448,
-   "patrol": [
-    2960,
-    3160
-   ]
-  },
-  {
    "id": "enemy07",
    "species": "javali_espinheiro",
    "x": 3760,
@@ -406,6 +396,36 @@
    "patrol": [
     3240,
     4040
+   ]
+  },
+  {
+   "id": "enemy_gate_acorn",
+   "species": "bolota",
+   "x": 330,
+   "y": 448,
+   "patrol": [
+    230,
+    470
+   ]
+  },
+  {
+   "id": "enemy_hedge_beetle",
+   "species": "besouro",
+   "x": 1900,
+   "y": 300,
+   "patrol": [
+    1820,
+    2020
+   ]
+  },
+  {
+   "id": "enemy_bed_hedgehog",
+   "species": "ourico_espinho",
+   "x": 2840,
+   "y": 448,
+   "patrol": [
+    2780,
+    2900
    ]
   }
  ],
@@ -511,6 +531,11 @@
   {
    "id": "cp_hall",
    "x": 2200,
+   "y": 418
+  },
+  {
+   "id": "cp_arena",
+   "x": 3100,
    "y": 418
   }
  ],

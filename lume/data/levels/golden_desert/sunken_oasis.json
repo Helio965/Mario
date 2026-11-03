@@ -383,6 +383,16 @@
   },
   {
    "id": "enemy02",
+   "species": "escaravelho_areia",
+   "x": 1250,
+   "y": 448,
+   "patrol": [
+    1100,
+    1450
+   ]
+  },
+  {
+   "id": "enemy03",
    "species": "escaravelho_lancador",
    "x": 2480,
    "y": 448,
@@ -392,17 +402,27 @@
    ]
   },
   {
-   "id": "enemy03",
-   "species": "serpente_duna",
-   "x": 3620,
+   "id": "enemy04",
+   "species": "cacto_sentinela",
+   "x": 2760,
    "y": 448,
    "patrol": [
-    3320,
+    2750,
+    2790
+   ]
+  },
+  {
+   "id": "enemy05",
+   "species": "serpente_duna",
+   "x": 3760,
+   "y": 448,
+   "patrol": [
+    3660,
     4190
    ]
   },
   {
-   "id": "enemy04",
+   "id": "enemy06",
    "species": "escaravelho_areia",
    "x": 3950,
    "y": 448,
@@ -412,7 +432,7 @@
    ]
   },
   {
-   "id": "enemy05",
+   "id": "enemy07",
    "species": "escaravelho_lancador",
    "x": 4420,
    "y": 400,
@@ -422,7 +442,17 @@
    ]
   },
   {
-   "id": "enemy06",
+   "id": "enemy08",
+   "species": "abutre_filhote",
+   "x": 4400,
+   "y": 300,
+   "patrol": [
+    4250,
+    4580
+   ]
+  },
+  {
+   "id": "enemy09",
    "species": "tatu_bola",
    "x": 4760,
    "y": 448,
@@ -432,13 +462,33 @@
    ]
   },
   {
-   "id": "enemy07",
+   "id": "enemy10",
    "species": "abutre_filhote",
    "x": 4980,
    "y": 340,
    "patrol": [
     4800,
     5200
+   ]
+  },
+  {
+   "id": "enemy11",
+   "species": "escaravelho_areia",
+   "x": 5150,
+   "y": 448,
+   "patrol": [
+    5050,
+    5290
+   ]
+  },
+  {
+   "id": "enemy12",
+   "species": "escorpiao_couraca",
+   "x": 5640,
+   "y": 448,
+   "patrol": [
+    5540,
+    5790
    ]
   }
  ],
@@ -531,6 +581,11 @@
   {
    "id": "cp_oasis",
    "x": 2000,
+   "y": 418
+  },
+  {
+   "id": "cp_dunes",
+   "x": 3330,
    "y": 418
   }
  ],

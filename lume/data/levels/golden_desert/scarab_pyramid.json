@@ -347,15 +347,35 @@
   {
    "id": "enemy04",
    "species": "escaravelho_areia",
-   "x": 2760,
+   "x": 2860,
    "y": 448,
    "patrol": [
-    2700,
+    2800,
     2950
    ]
   },
   {
    "id": "enemy05",
+   "species": "tatu_bola",
+   "x": 3980,
+   "y": 448,
+   "patrol": [
+    3940,
+    4120
+   ]
+  },
+  {
+   "id": "enemy06",
+   "species": "escorpiao_couraca",
+   "x": 4250,
+   "y": 448,
+   "patrol": [
+    4150,
+    4340
+   ]
+  },
+  {
+   "id": "enemy07",
    "species": "escaravelho_rei",
    "x": 3460,
    "y": 448,
@@ -472,6 +492,11 @@
   {
    "id": "cp_hall",
    "x": 1650,
+   "y": 418
+  },
+  {
+   "id": "cp_gallery",
+   "x": 2420,
    "y": 418
   }
  ],

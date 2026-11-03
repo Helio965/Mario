@@ -905,6 +905,26 @@
   },
   {
    "id": "enemy12",
+   "species": "caracol_cristal",
+   "x": 950,
+   "y": 448,
+   "patrol": [
+    900,
+    1050
+   ]
+  },
+  {
+   "id": "enemy13",
+   "species": "pinguim_patrulha",
+   "x": 4180,
+   "y": 448,
+   "patrol": [
+    4100,
+    4290
+   ]
+  },
+  {
+   "id": "enemy14",
    "species": "coruja_nevada",
    "x": 880,
    "y": 300,

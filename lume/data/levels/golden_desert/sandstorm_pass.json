@@ -291,6 +291,16 @@
   {
    "id": "enemy02",
    "species": "cacto_sentinela",
+   "x": 1310,
+   "y": 448,
+   "patrol": [
+    1300,
+    1320
+   ]
+  },
+  {
+   "id": "enemy03",
+   "species": "cacto_sentinela",
    "x": 1820,
    "y": 448,
    "patrol": [
@@ -299,7 +309,17 @@
    ]
   },
   {
-   "id": "enemy03",
+   "id": "enemy04",
+   "species": "abutre_filhote",
+   "x": 1900,
+   "y": 330,
+   "patrol": [
+    1700,
+    2060
+   ]
+  },
+  {
+   "id": "enemy05",
    "species": "serpente_duna",
    "x": 2560,
    "y": 448,
@@ -309,7 +329,7 @@
    ]
   },
   {
-   "id": "enemy04",
+   "id": "enemy06",
    "species": "escorpiao_couraca",
    "x": 3520,
    "y": 448,
@@ -319,7 +339,17 @@
    ]
   },
   {
-   "id": "enemy05",
+   "id": "enemy07",
+   "species": "abutre_filhote",
+   "x": 3450,
+   "y": 330,
+   "patrol": [
+    3300,
+    3650
+   ]
+  },
+  {
+   "id": "enemy08",
    "species": "abutre_filhote",
    "x": 4320,
    "y": 340,
@@ -329,13 +359,23 @@
    ]
   },
   {
-   "id": "enemy06",
+   "id": "enemy09",
    "species": "serpente_duna",
    "x": 4900,
    "y": 448,
    "patrol": [
     4660,
     5200
+   ]
+  },
+  {
+   "id": "enemy10",
+   "species": "escaravelho_areia",
+   "x": 5300,
+   "y": 448,
+   "patrol": [
+    5240,
+    5400
    ]
   }
  ],
@@ -428,6 +468,11 @@
   {
    "id": "cp_dunes",
    "x": 2150,
+   "y": 418
+  },
+  {
+   "id": "cp_storm",
+   "x": 4040,
    "y": 418
   }
  ],

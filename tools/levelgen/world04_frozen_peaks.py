@@ -98,6 +98,8 @@ l.cave_room(820, 1010, 5600, reward_item="star", relic_id="relic_sled", secret_i
             secret_kind="hidden_area", clue="Trilhas de trenó entram num cano coberto de neve")
 l.enemy("coruja_nevada", 2400, 320, 2300, 2520)
 l.enemy("boneco_neve", 2480, 416, 2460, 2500)
+l.enemy("caracol_cristal", 950, 448, 900, 1050)        # rock plateau of section 1 (kick practice)
+l.enemy("pinguim_patrulha", 4180, 448, 4100, 4290)     # rock shelf before the inverted slope
 l.enemy("coruja_nevada", 880, 300, 740, 1040)
 l.d["notes"] = ("Fase nova (Mundo 4-4): mecânica especial — encostas de gelo como terraços descendentes "
                 "(o motor não tem rampas), vãos no fim das rampas, escada de gelo invertida; estreia do Yeti-Mirim.")
@@ -127,6 +129,7 @@ l.plat("question", 260, 330, 40, 28, reward="grow")
 l.ground(520, 220, 0, 200, id="overhang_a")        # rock overhang (ceiling bottom y 200)
 icicle(l, 600, 200)
 l.hint(420, "O pingente treme antes de cair. Depois de cair, o topo dele é um degrau seguro.")
+l.enemy("pinguim_patrulha", 400, 448, 330, 500)
 l.coins("row", 560, 410, 4, 30)
 # icicle niche: coins above the icicle; the fallen icicle is the step up to the niche
 l.relic("relic_icicle", 690, 228)
@@ -165,6 +168,7 @@ icicle(l, 3330, 230)
 l.enemy("caracol_cristal", 3220, 448, 3170, 3290)
 l.ground(3480, 400, surface="ice")                 # icy floor 3480..3880
 l.ground(3880, 120)                                # rock again before the corridor: a place to stop
+l.enemy("caracol_cristal", 3930, 448, 3885, 3995)
 l.enemy("pinguim_patrulha", 3760, 448, 3640, 3900)
 l.enemy("carneiro_glacial", 5940, 448, 5900, 5995)  # guards the summit marker on open ground
 l.coins("row", 3520, 410, 6, 40)
@@ -214,6 +218,7 @@ l.d["areas"] = [{"id": "main", "x": 0, "y": 0, "w": 1400, "h": 540, "variant": "
 # 1. introduction: the citadel gate — a brittle ice drawbridge over a shallow frozen moat (no death)
 l.ground(0, 520)
 l.plat("question", 300, 330, 40, 28, reward="grow")
+l.enemy("pinguim_patrulha", 430, 448, 370, 515)
 l.ground(520, 360, 520, 80, id="moat_floor", surface="ice")   # shallow moat: falling only costs time
 for k, x in enumerate((520, 640, 760)):
     l.plat("crumble", x, 448, 120, 20)            # brittle ice drawbridge
@@ -224,9 +229,10 @@ l.ground(1240, 50, 384, 64, id="granite_block")    # the ram stuns itself on the
 l.hint(960, "O carneiro investe e fica tonto ao bater no bloco de granito: pise nele nessa hora.")
 # 2. demonstration: courtyard with an icicle chandelier over rock floor
 l.ground(1400, 800, style=F)                       # 1400..2200 (rock)
-l.ground(1520, 360, 0, 190, style=F, id="chandelier_beam")
-for x in (1560, 1680, 1800):
+l.ground(1520, 460, 0, 190, style=F, id="chandelier_beam")
+for x in (1560, 1680, 1800, 1930):
     icicle(l, x, 190)
+l.enemy("caracol_cristal", 1960, 448, 1880, 2040)
 l.coins("row", 1540, 410, 9, 36)
 # 3. first challenge: stained-glass hall — rock bands (light) between ice floors
 l.d["checkpoints"].append({"id": "cp_hall", "x": 2260, "y": 418})
@@ -238,9 +244,11 @@ l.ground(2760, 240, style=F, surface="ice")        # ice
 l.ground(3000, 120, style=F)                       # rock band
 l.enemy("pinguim_patrulha", 2560, 448, 2420, 2630)
 l.enemy("caracol_cristal", 2880, 448, 2780, 2990)
+l.enemy("coruja_nevada", 2700, 300, 2600, 2900)
 l.hint(2400, "Onde a luz do vitral pinta o chão, é pedra: ali dá para parar.")
 # 4. escalation: window corridor — alternating gusts over brittle ice bridges
 l.ground(3120, 160, style=F)                       # 3120..3280
+l.enemy("caracol_cristal", 3200, 448, 3130, 3275)
 for k, x in enumerate((3280, 3400, 3520, 3640)):
     l.plat("crumble", x, 448, 120, 20)
 l.ground(3760, 300, style=F)                       # 3760..4060
@@ -248,6 +256,7 @@ wind(l, 3280, 480, 70, period=4.0, duty=0.4)
 wind(l, 3280, 480, -70, period=4.0, duty=0.4, phase=2.0)
 l.coins("row", 3300, 400, 10, 44)
 l.enemy("coruja_nevada", 3900, 300, 3800, 4040)
+l.enemy("pinguim_patrulha", 3960, 448, 3800, 4055)
 # 5. combination: the tower — ledges with a yeti on the landing, icicles under the roof
 l.ground(4060, 100, 408, style=F)
 l.ground(4160, 100, 368, style=F)
@@ -285,6 +294,7 @@ l.d["events"].append({"id": "arena", "kind": "boss_arena", "x": ax + 120,
                                  "text": "A Morsa Gelomar guarda o salão do trono!"}})
 l.ground(ax + 880, 6800 - (ax + 880), style=F)     # exit hall after the right gate (the fountain-beacon)
 l.coins("arc", ax + 1000, 380, 6, 34, 40)
+l.enemy("pinguim_patrulha", ax + 1040, 448, ax + 940, ax + 1140)
 # secrets
 l.relic("relic_window", 3460, 300)
 l.secret("window_relic", "high_route", "Um vitral com uma estrela aponta para o alto do corredor das janelas", ["relic_window"])

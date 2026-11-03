@@ -122,7 +122,7 @@
    "style": "fortress",
    "x": 1520,
    "y": 0,
-   "w": 360,
+   "w": 460,
    "h": 190
   },
   {
@@ -544,6 +544,16 @@
  "enemies": [
   {
    "id": "enemy01",
+   "species": "pinguim_patrulha",
+   "x": 430,
+   "y": 448,
+   "patrol": [
+    370,
+    515
+   ]
+  },
+  {
+   "id": "enemy02",
    "species": "carneiro_glacial",
    "x": 1150,
    "y": 448,
@@ -553,7 +563,7 @@
    ]
   },
   {
-   "id": "enemy02",
+   "id": "enemy03",
    "species": "pingente_queda",
    "x": 1560,
    "y": 230,
@@ -567,7 +577,7 @@
    }
   },
   {
-   "id": "enemy03",
+   "id": "enemy04",
    "species": "pingente_queda",
    "x": 1680,
    "y": 230,
@@ -581,7 +591,7 @@
    }
   },
   {
-   "id": "enemy04",
+   "id": "enemy05",
    "species": "pingente_queda",
    "x": 1800,
    "y": 230,
@@ -595,7 +605,31 @@
    }
   },
   {
-   "id": "enemy05",
+   "id": "enemy06",
+   "species": "pingente_queda",
+   "x": 1930,
+   "y": 230,
+   "patrol": [
+    1926,
+    1968
+   ],
+   "params": {
+    "rest": 1.4,
+    "telegraph": 0.45
+   }
+  },
+  {
+   "id": "enemy07",
+   "species": "caracol_cristal",
+   "x": 1960,
+   "y": 448,
+   "patrol": [
+    1880,
+    2040
+   ]
+  },
+  {
+   "id": "enemy08",
    "species": "pinguim_patrulha",
    "x": 2560,
    "y": 448,
@@ -605,7 +639,7 @@
    ]
   },
   {
-   "id": "enemy06",
+   "id": "enemy09",
    "species": "caracol_cristal",
    "x": 2880,
    "y": 448,
@@ -615,7 +649,27 @@
    ]
   },
   {
-   "id": "enemy07",
+   "id": "enemy10",
+   "species": "coruja_nevada",
+   "x": 2700,
+   "y": 300,
+   "patrol": [
+    2600,
+    2900
+   ]
+  },
+  {
+   "id": "enemy11",
+   "species": "caracol_cristal",
+   "x": 3200,
+   "y": 448,
+   "patrol": [
+    3130,
+    3275
+   ]
+  },
+  {
+   "id": "enemy12",
    "species": "coruja_nevada",
    "x": 3900,
    "y": 300,
@@ -625,7 +679,17 @@
    ]
   },
   {
-   "id": "enemy08",
+   "id": "enemy13",
+   "species": "pinguim_patrulha",
+   "x": 3960,
+   "y": 448,
+   "patrol": [
+    3800,
+    4055
+   ]
+  },
+  {
+   "id": "enemy14",
    "species": "pingente_queda",
    "x": 4340,
    "y": 190,
@@ -639,7 +703,7 @@
    }
   },
   {
-   "id": "enemy09",
+   "id": "enemy15",
    "species": "yeti_mirim",
    "x": 4440,
    "y": 328,
@@ -649,7 +713,7 @@
    ]
   },
   {
-   "id": "enemy10",
+   "id": "enemy16",
    "species": "carneiro_glacial",
    "x": 5100,
    "y": 512,
@@ -659,7 +723,7 @@
    ]
   },
   {
-   "id": "enemy11",
+   "id": "enemy17",
    "species": "morsa_gelomar",
    "x": 5920,
    "y": 448,
@@ -681,6 +745,16 @@
     "ceiling": 130,
     "wake_range": 520
    }
+  },
+  {
+   "id": "enemy18",
+   "species": "pinguim_patrulha",
+   "x": 6400,
+   "y": 448,
+   "patrol": [
+    6300,
+    6500
+   ]
   }
  ],
  "hazards": [

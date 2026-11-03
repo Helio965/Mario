@@ -463,6 +463,16 @@
   },
   {
    "id": "enemy02",
+   "species": "pinguim_patrulha",
+   "x": 400,
+   "y": 448,
+   "patrol": [
+    330,
+    500
+   ]
+  },
+  {
+   "id": "enemy03",
    "species": "pingente_queda",
    "x": 900,
    "y": 250,
@@ -476,7 +486,7 @@
    }
   },
   {
-   "id": "enemy03",
+   "id": "enemy04",
    "species": "pingente_queda",
    "x": 1010,
    "y": 250,
@@ -490,7 +500,7 @@
    }
   },
   {
-   "id": "enemy04",
+   "id": "enemy05",
    "species": "pingente_queda",
    "x": 1120,
    "y": 250,
@@ -504,7 +514,7 @@
    }
   },
   {
-   "id": "enemy05",
+   "id": "enemy06",
    "species": "pinguim_patrulha",
    "x": 1220,
    "y": 448,
@@ -514,7 +524,7 @@
    ]
   },
   {
-   "id": "enemy06",
+   "id": "enemy07",
    "species": "caracol_cristal",
    "x": 1850,
    "y": 448,
@@ -524,7 +534,7 @@
    ]
   },
   {
-   "id": "enemy07",
+   "id": "enemy08",
    "species": "coruja_nevada",
    "x": 1880,
    "y": 300,
@@ -534,7 +544,7 @@
    ]
   },
   {
-   "id": "enemy08",
+   "id": "enemy09",
    "species": "pingente_queda",
    "x": 3100,
    "y": 270,
@@ -548,7 +558,7 @@
    }
   },
   {
-   "id": "enemy09",
+   "id": "enemy10",
    "species": "pingente_queda",
    "x": 3330,
    "y": 270,
@@ -562,7 +572,7 @@
    }
   },
   {
-   "id": "enemy10",
+   "id": "enemy11",
    "species": "caracol_cristal",
    "x": 3220,
    "y": 448,
@@ -572,7 +582,17 @@
    ]
   },
   {
-   "id": "enemy11",
+   "id": "enemy12",
+   "species": "caracol_cristal",
+   "x": 3930,
+   "y": 448,
+   "patrol": [
+    3885,
+    3995
+   ]
+  },
+  {
+   "id": "enemy13",
    "species": "pinguim_patrulha",
    "x": 3760,
    "y": 448,
@@ -582,7 +602,7 @@
    ]
   },
   {
-   "id": "enemy12",
+   "id": "enemy14",
    "species": "carneiro_glacial",
    "x": 5940,
    "y": 448,
@@ -592,7 +612,7 @@
    ]
   },
   {
-   "id": "enemy13",
+   "id": "enemy15",
    "species": "pingente_queda",
    "x": 5570,
    "y": 200,
@@ -606,7 +626,7 @@
    }
   },
   {
-   "id": "enemy14",
+   "id": "enemy16",
    "species": "yeti_mirim",
    "x": 5650,
    "y": 328,
@@ -616,7 +636,7 @@
    ]
   },
   {
-   "id": "enemy15",
+   "id": "enemy17",
    "species": "coruja_nevada",
    "x": 5250,
    "y": 250,
@@ -626,7 +646,7 @@
    ]
   },
   {
-   "id": "enemy16",
+   "id": "enemy18",
    "species": "boneco_neve",
    "x": 5420,
    "y": 368,
