@@ -225,6 +225,10 @@ class Scene:
         blocked += [(level.exit.x - 60, level.exit.x + 180)]
         blocked += [(h.x - 20, h.x + 40) for h in level.hints]
         blocked += [(level.spawn.x - 60, level.spawn.x + 90)]
+        def indoor(x: float, y: float) -> bool:
+            area = level.area_at(x, min(y - 1, level.height - 1))
+            return area.variant in ("cave", "fortress") or w.interior(area.variant) is not None
+
         for p in level.platforms:
             if p.kind != "ground" or p.style == "cave" or not (main.y <= p.y < main.y + main.h):
                 continue
@@ -234,6 +238,8 @@ class Scene:
                 x = p.x + dx
                 if any(a <= x <= b for a, b in blocked):
                     continue
+                if indoor(x, p.y):
+                    continue  # outdoor props (trees, lamp posts) never sprout inside halls and mansions
                 if any(o.kind in ("brick", "question", "pipe") and o.x - 20 < x < o.x + o.w + 20 and o.y < p.y and o.y > p.y - 90
                        for o in level.platforms):
                     if layer == "back" and prop.startswith("tree"):

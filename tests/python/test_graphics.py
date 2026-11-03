@@ -183,3 +183,15 @@ def test_world_art_receives_the_level_art_variant(display_720):
     assert scene.world.variant == (b.art_variant or "default")
     assert a.art_variant != b.art_variant
     assert f"{scene.world.id}.sky" not in scene.store.cache  # rebuilt for the new variant
+
+
+def test_outdoor_auto_decor_stays_out_of_indoor_areas(display_720):
+    """Trees and lamp posts must not sprout inside fortress halls or mansions."""
+    level = CAMPAIGN.level("frost_citadel")
+    scene = Scene(display_720)
+    scene.prepare(Game([level]))
+    indoor = [a for a in level.areas if a.variant in ("fortress", "throne")]
+    assert indoor
+    for d in scene.decor:
+        for a in indoor:
+            assert not (a.x <= d.x < a.x + a.w and a.y <= d.y - 1 < a.y + a.h), (d.art, d.x)
