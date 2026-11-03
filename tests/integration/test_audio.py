@@ -136,7 +136,7 @@ def test_track_tables_match_original_and_render_full_loops() -> None:
         assert np.array_equal(stereo[:, 0], stereo[:, 1])
 
 
-def test_cues_cover_all_fourteen_event_types() -> None:
+def test_cues_cover_all_event_types() -> None:
     assert set(synth.CUES) == set(EVENT_TYPES)
     assert len(synth.CUES) == 14
     assert synth.CUES["jump"].slide == 14

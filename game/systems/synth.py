@@ -167,6 +167,11 @@ CUES: Final[dict[str, Cue]] = {
     "complete": Cue(notes=(72, 76, 79, 84, 79, 84, 88, 91), duration=0.12),
     "boss": Cue(notes=(40, 39, 38, 36), duration=0.14, wave="sawtooth"),
     "life": Cue(notes=(79, 84, 88, 91), duration=0.09),
+    # Eventos novos do motor Python (chefes com fases, NPCs e diálogos) — timbres originais.
+    "boss_intro": Cue(notes=(36, 43, 48), duration=0.18, slide=-5, wave="sawtooth"),
+    "boss_phase": Cue(notes=(50, 57, 62, 69), duration=0.1, slide=6),
+    "talk": Cue(notes=(84, 91), duration=0.05, wave="triangle"),
+    "npc_say": Cue(notes=(88,), duration=0.08, slide=9, wave="triangle"),
 }
 
 
