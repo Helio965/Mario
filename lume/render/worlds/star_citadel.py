@@ -112,6 +112,27 @@ def _crystal(s: Svg, bx: float, by: float, angle: float, length: float, width: f
            by - ny * hw * 0.55 + uy * shoulder, "#ffffff", max(0.4, width * 0.06), 0.4 * opacity)
 
 
+def _geode(s: Svg, gx: float, gy: float, gr: float, color: str, seed: int) -> None:
+    """Open geode: a rough rock rim around a glowing cavity whose lower wall
+    is lined with crystals growing up toward the light (not a ring of teeth)."""
+    r = Rand(seed)
+    _glow(s, gx, gy, gr * 2.4, color, 0.32)
+    s.path(blob(gx, gy, gr * 1.42, gr * 1.1, 0.12, points=14, seed=seed), fill=s.linear(0, gy - gr, 0, gy + gr, [(0, "#b8b2de"), (1, "#56507c")]),
+           stroke="#0c0a18", width=max(0.8, gr * 0.045))
+    s.path(blob(gx, gy + gr * 0.04, gr * 1.16, gr * 0.84, 0.1, points=12, seed=seed + 1),
+           fill=s.radial(gx, gy - gr * 0.2, gr * 1.25, [(0, shade(color, 0.65)), (0.5, color), (1, shade(color, -0.6))]))
+    for k in range(11):  # lining: short crystals on the lower wall
+        a = math.pi * (0.06 + 0.88 * k / 10) + r.uniform(-0.05, 0.05)
+        bx, by = gx + math.cos(a) * gr * 1.08, gy + gr * 0.04 + math.sin(a) * gr * 0.78
+        toward = math.degrees(math.atan2(gx - bx, -(gy - gr * 0.3 - by)))
+        _crystal(s, bx, by, toward, gr * r.uniform(0.28, 0.48), gr * r.uniform(0.2, 0.28), "#ffffff", shade(color, -0.1), shade(color, -0.65),
+                 max(0.4, gr * 0.02))
+    for k in range(3):  # a taller cluster rising from the bottom of the cavity
+        _crystal(s, gx + (k - 1) * gr * 0.3, gy + gr * 0.66, (k - 1) * 20, gr * (0.9 if k == 1 else 0.6), gr * 0.3, "#ffffff", color,
+                 shade(color, -0.65), max(0.5, gr * 0.025))
+    _sparkle(s, gx - gr * 0.35, gy - gr * 0.3, gr * 0.22, 0.95)
+
+
 def _constellation_shape(n: int, salt: int, x0: float, x1: float, y0: float, y1: float) -> tuple[list[Pt], list[tuple[int, int]]]:
     """Deterministic constellation inside a box: a chain of stars with one branch."""
     k = 4 + int(_hash(n, salt) * 3)
@@ -1079,17 +1100,7 @@ class StarCitadel(WorldArt):
                 if w < gr * 3 + 10:
                     break
                 gx, gy = r.uniform(gr * 1.5 + 4, w - gr * 1.5 - 4), r.uniform(y0 + gr + 14, min(bottom - gr - 6, y0 + 110))
-                color = r.choice([GLOW_TEAL, GLOW_VIOLET, "#ff9ae6"])
-                _glow(s, gx, gy, gr * 2.4, color, 0.3)
-                s.ellipse(gx, gy, gr * 1.42, gr * 1.1, fill="#9a94c4", stroke="#1a1630", width=1.0)
-                s.ellipse(gx, gy, gr * 1.22, gr * 0.92, fill=s.radial(gx, gy, gr * 1.3, [(0, shade(color, 0.45)), (0.45, color),
-                                                                                       (1, shade(color, -0.55))]))
-                for k in range(10):
-                    a = k * 2 * math.pi / 10 + r.uniform(-0.15, 0.15)
-                    bx, by = gx + math.cos(a) * gr * 1.15, gy + math.sin(a) * gr * 0.86
-                    _crystal(s, bx, by, math.degrees(math.atan2(gx - bx, -(gy - by))), gr * r.uniform(0.35, 0.55), gr * 0.3, "#ffffff",
-                             shade(color, -0.15), shade(color, -0.6), 0.4)
-                _sparkle(s, gx - gr * 0.2, gy - gr * 0.15, gr * 0.35, 0.95)
+                _geode(s, gx, gy, gr, r.choice([GLOW_TEAL, GLOW_VIOLET, "#ff9ae6"]), int(gx * 13 + gy))
         # glowing crystal veins (continuous across chunks)
         for k, (base, amp, freq) in enumerate(((0.42, 9, 0.019), (0.75, 6, 0.031))):
             yb = y0 + min(h - 8, max(16, h * base))
@@ -1675,8 +1686,8 @@ class StarCitadel(WorldArt):
         if throne:
             self._eclipse_throne(s, r)
         else:
-            for wx in (135.0, 825.0):
-                self._space_window(s, wx, 58, 360, 128, int(wx))
+            for k, wx in enumerate((135.0, 825.0)):
+                self._space_window(s, wx, 58, 360, 128, k)
             for cx in (262.0, 698.0):
                 self._star_chart(s, cx, 96, 92, 196, int(cx))
             self._astrolabe(s, 480, 214, 150)
@@ -1705,15 +1716,24 @@ class StarCitadel(WorldArt):
                    f"Q{x1:.1f} {top + wd * 0.08:.1f} {x1:.1f} {spring:.1f} L{x1:.1f} {bottom:.1f} Z")
         s.polygon([(x0 + 10, bottom), (x1 - 10, bottom), (x1 + 120, 540), (x0 + 60, 540)], fill="#bcc8ff", opacity=0.06)
         s.path(outline, fill=s.linear(0, top, 0, bottom, [(0, "#05061c"), (0.6, "#1c1650"), (1, "#3a2470")]))
-        _soft(s, cx + r.uniform(-20, 20), (spring + bottom) / 2, wd * 0.45, 40, NEBULA_TEAL if seed % 2 else NEBULA_MAGENTA, 0.3, 0.2, -30)
+        _soft(s, cx + r.uniform(-14, 14), (spring + bottom) / 2, wd * 0.42, 34, NEBULA_TEAL if seed % 2 else NEBULA_MAGENTA, 0.3, 0.2, -30)
         for _ in range(28):
             s.circle(r.uniform(x0 + 6, x1 - 6), r.uniform(spring - 30, bottom - 8), r.uniform(0.5, 1.3), fill="#ffffff", opacity=r.uniform(0.4, 0.95))
         for _ in range(3):
             _sparkle(s, r.uniform(x0 + 14, x1 - 14), r.uniform(spring, bottom - 40), r.uniform(2.5, 4), 0.9)
-        if seed % 2:  # a slice of the ringed planet
-            px, py, pr = x1 - 22, bottom - 70, 34
-            s.circle(px, py, pr, fill=s.radial(px - pr * 0.4, py - pr * 0.4, pr * 1.5, [(0, "#ffe6c8"), (0.4, "#d88aa6"), (1, "#3a2468")]))
-            s.ellipse(px, py + 4, pr * 1.9, pr * 0.32, stroke="#e2d4fb", width=3, opacity=0.6)
+        if seed % 2:  # the ringed planet seen through the glass (kept inside the frame)
+            pr = 20.0
+            px, py = cx + 10, bottom - 62
+            with s.group(transform=f"rotate(-14 {px:.1f} {py:.1f})"):
+                s.path(f"M{px - pr * 1.9:.1f} {py:.1f} A{pr * 1.9:.1f} {pr * 0.4:.1f} 0 0 1 {px + pr * 1.9:.1f} {py:.1f}", stroke="#cbb8f2",
+                       width=2.4, opacity=0.5)
+                s.circle(px, py, pr, fill=s.radial(px - pr * 0.4, py - pr * 0.4, pr * 1.5, [(0, "#ffe6c8"), (0.4, "#d88aa6"), (1, "#3a2468")]))
+                s.path(f"M{px + pr * 1.9:.1f} {py:.1f} A{pr * 1.9:.1f} {pr * 0.4:.1f} 0 0 1 {px - pr * 1.9:.1f} {py:.1f}", stroke="#e2d4fb",
+                       width=2.4, opacity=0.75)
+        else:  # a small moon instead
+            mx, my = cx - 18, spring + 30
+            _glow(s, mx, my, 20, "#d6dcff", 0.3)
+            s.circle(mx, my, 8, fill=s.radial(mx - 3, my - 3, 12, [(0, "#ffffff"), (1, "#a9a8d6")]))
         # mullions and tracery in gold over star-stone
         for lx in (cx - wd / 6, cx + wd / 6):
             s.line(lx, spring - 12, lx, bottom, "#05061a", 5)
@@ -1803,20 +1823,22 @@ class StarCitadel(WorldArt):
         """The eclipse behind the throne: a black sun with a ragged corona,
         light raking across the hall, and the throne on its stepped dais."""
         cx, cy, rad = 480.0, 196.0, 104.0
-        for k in range(10):  # rays of the corona raking across the hall
+        rays = s.radial(cx, cy, 620, [(0, "#ffe2a0", 0.12), (0.5, "#ffe2a0", 0.05), (1, "#ffe2a0", 0)])
+        for k in range(10):  # rays of the corona raking across the hall, fading out
             a = math.radians(-160 + k * 15 + r.uniform(-4, 4))
             ln = r.uniform(420, 620)
             wd = math.radians(r.uniform(2.0, 4.0))
             s.polygon([(cx, cy), (cx + math.cos(a - wd) * ln, cy + math.sin(a - wd) * ln), (cx + math.cos(a + wd) * ln, cy + math.sin(a + wd) * ln)],
-                      fill="#ffe2a0", opacity=0.05)
+                      fill=rays)
         _glow(s, cx, cy, rad * 3.2, "#ff7ad0", 0.22)
         _glow(s, cx, cy, rad * 2.0, "#ffd890", 0.45)
-        for k in range(36):  # ragged streamers
+        streamer = s.radial(cx, cy, rad * 2.0, [(0.45, "#fff2cc", 0.6), (0.7, "#fff2cc", 0.22), (1, "#fff2cc", 0)])
+        for k in range(36):  # ragged streamers, soft toward their tips
             a = k * math.pi / 18 + 0.07
             ln = rad * (0.25 + 0.75 * _hash(k, 151) ** 2)
             w0 = 0.05 + 0.05 * _hash(k, 152)
             s.polygon([(cx + math.cos(a - w0) * rad * 0.98, cy + math.sin(a - w0) * rad * 0.98), (cx + math.cos(a) * (rad + ln), cy + math.sin(a) * (rad + ln)),
-                       (cx + math.cos(a + w0) * rad * 0.98, cy + math.sin(a + w0) * rad * 0.98)], fill="#fff2cc", opacity=0.3)
+                       (cx + math.cos(a + w0) * rad * 0.98, cy + math.sin(a + w0) * rad * 0.98)], fill=streamer)
         s.circle(cx, cy, rad * 1.05, fill="#fff8e6", opacity=0.9)
         s.circle(cx, cy, rad, fill=s.radial(cx, cy, rad, [(0, "#020108"), (0.86, "#08041a"), (1, "#2a1036")]))
         _glow(s, cx - rad * 0.72, cy + rad * 0.7, 26, "#ffffff", 0.9)  # the diamond-ring flash
@@ -1868,7 +1890,7 @@ class StarCitadel(WorldArt):
             self._arch(s, a + cw / 2 + 8, b - cw / 2 - 8, cap)
         for x in cols:
             self._crystal_column(s, x, cap, h, cw)
-        for bx in (375.0, 825.0, -75.0):
+        for bx in (375.0, 825.0):
             self._banner(s, bx, cap + 34, 190, 54, torn=throne)
         return s
 
@@ -1957,17 +1979,9 @@ class StarCitadel(WorldArt):
             x = 0.0 if side < 0 else 960.0
             s.path(f"M{x:.1f} 0 L{x + side * -300:.1f} 0 Q{x + side * -150:.1f} 60 {x + side * -40:.1f} 300 L{x:.1f} 360 Z", fill="#120f22")
         # glowing geodes in the walls
-        for gx, gy, gr, color in ((150.0, 250.0, 46.0, GLOW_TEAL), (812.0, 210.0, 54.0, GLOW_VIOLET), (560.0, 330.0, 34.0, "#ff8ae0"),
-                                  (330.0, 360.0, 28.0, GLOW_TEAL)):
-            _glow(s, gx, gy, gr * 2.6, color, 0.35)
-            s.ellipse(gx, gy, gr * 1.3, gr, fill="#8a84b4", stroke="#0c0a18", width=2)
-            s.ellipse(gx, gy, gr * 1.12, gr * 0.84, fill=s.radial(gx, gy, gr * 1.2, [(0, shade(color, 0.55)), (0.5, color), (1, shade(color, -0.6))]))
-            for k in range(14):
-                a = k * 2 * math.pi / 14 + r.uniform(-0.12, 0.12)
-                bx, by = gx + math.cos(a) * gr * 1.08, gy + math.sin(a) * gr * 0.8
-                _crystal(s, bx, by, math.degrees(math.atan2(gx - bx, -(gy - by))), gr * r.uniform(0.3, 0.5), gr * 0.2, "#ffffff", color,
-                         shade(color, -0.6), 0.6)
-            _sparkle(s, gx - gr * 0.25, gy - gr * 0.2, gr * 0.25, 0.95)
+        for k, (gx, gy, gr, color) in enumerate(((150.0, 250.0, 46.0, GLOW_TEAL), (812.0, 210.0, 54.0, GLOW_VIOLET), (560.0, 330.0, 34.0, "#ff8ae0"),
+                                                 (330.0, 360.0, 28.0, GLOW_TEAL))):
+            _geode(s, gx, gy, gr, color, 300 + k * 17)
         # floating rocks in the low gravity of the hollow
         for _ in range(7):
             x, y = r.uniform(60, 900), r.uniform(120, 330)
