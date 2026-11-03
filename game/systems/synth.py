@@ -16,18 +16,23 @@ from typing import Any, Final, Literal
 import numpy as np
 from numpy.typing import NDArray
 
+from game.core.types import EVENT_TYPES
+
 SAMPLE_RATE: Final = 44100
 Waveform = Literal["square", "triangle", "sawtooth", "sine"]
 FloatArray = NDArray[np.float64]
 
-# Níveis do mix original (Web Audio); MASTER_GAIN compensa a saída direta em int16
-# mantendo o equilíbrio relativo entre música e efeitos.
+# Níveis do mix original (Web Audio). MASTER_GAIN levanta música e efeitos juntos
+# (o original era muito baixo) preservando o equilíbrio relativo entre eles. O valor
+# deixa folga para a soma do SDL_mixer, que satura: com os volumes padrão (música 0,45,
+# efeitos 0,75, voz 0,8, ambiente 0,6×0,6), música + ambiente + um cue + uma voz com
+# picos alinhados ficam abaixo de 1,0 (medido em ``tests/integration/test_audio.py``).
 MELODY_LEVEL: Final = 0.058
 BASS_LEVEL: Final = 0.13
 HARMONY_LEVEL: Final = 0.045
 HAT_LEVEL: Final = 0.07
 CUE_LEVEL: Final = 0.12
-MASTER_GAIN: Final = 3.4
+MASTER_GAIN: Final = 2.4
 ENVELOPE_FLOOR: Final = 0.001
 EDGE_FADE_SECONDS: Final = 0.002
 
@@ -186,11 +191,17 @@ def midi_to_hz(midi: float) -> float:
 
 
 def frequency_ramp(start_hz: float, end_hz: float, samples: int) -> FloatArray:
-    """Rampa exponencial de frequência (portamento), uma amostra por ponto."""
+    """Rampa exponencial de frequência (portamento), uma amostra por ponto.
+
+    Com uma das pontas em zero (ou negativa) a rampa exponencial não existe; cai
+    para linear em vez de dividir por zero.
+    """
     if samples <= 0:
         return np.zeros(0)
     if end_hz == start_hz:
         return np.full(samples, start_hz)
+    if start_hz <= 0.0 or end_hz <= 0.0:
+        return np.linspace(start_hz, end_hz, samples, endpoint=False)
     return start_hz * (end_hz / start_hz) ** (np.arange(samples) / samples)
 
 
@@ -229,9 +240,12 @@ def envelope_ad(
     """Ataque linear até ``loudness`` e decaimento exponencial até 0,001 (como no original).
 
     Termina com um fade curto até zero exato para não deixar degrau na borda.
+    ``loudness <= 0`` é silêncio (o decaimento exponencial exige nível positivo).
     """
     if samples <= 0:
         return np.zeros(0)
+    if loudness <= 0.0:
+        return np.zeros(samples)
     attack_samples = min(samples, max(1, round(attack * sample_rate)))
     env = np.empty(samples)
     env[:attack_samples] = np.linspace(0.0, 1.0, attack_samples, endpoint=False) * loudness
@@ -263,9 +277,10 @@ def adsr(
     total = a + d + r
     if total > samples:  # encurta proporcionalmente quando o som é mais curto que o envelope
         scale = samples / total
-        a, d = max(1, int(a * scale)), int(d * scale)
-        r = max(1, samples - a - d)
-    s = samples - a - d - r
+        a = min(samples, max(1, int(a * scale)))
+        d = min(samples - a, int(d * scale))
+        r = samples - a - d  # pode ser 0 em sons de uma ou duas amostras
+    s = max(0, samples - a - d - r)
     parts = [
         np.linspace(0.0, 1.0, a, endpoint=False),
         np.linspace(1.0, sustain, d, endpoint=False),
@@ -370,7 +385,7 @@ def render_cue(cue: Cue, sample_rate: int = SAMPLE_RATE) -> FloatArray:
             start,
             wrap=False,
         )
-    return out * MASTER_GAIN
+    return out * (MASTER_GAIN * cue.gain)
 
 
 # ------------------------------------------------------------------- vozes

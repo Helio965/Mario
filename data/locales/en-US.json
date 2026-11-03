@@ -1,0 +1,429 @@
+{
+  "game": {
+    "title": "LUME",
+    "subtitle": "THE FIVE FRONTIERS",
+    "tagline": "There is a light beyond every horizon.\nJump, explore and find yours.",
+    "eyebrow": "2D PLATFORM ADVENTURE"
+  },
+  "format": {
+    "thousands": ","
+  },
+  "common": {
+    "back": "Back",
+    "back_to_pause": "Back to pause",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "on": "On",
+    "off": "Off"
+  },
+  "menu": {
+    "play": "PLAY",
+    "continue": "Continue · {world}-{stage}",
+    "start_here": "Your journey starts here",
+    "map": "Select world",
+    "controls": "Controls",
+    "settings": "Settings",
+    "credits": "Credits",
+    "quit": "Quit",
+    "saved_locally": "Your progress is saved on this computer.",
+    "next_frontier": "YOUR NEXT FRONTIER",
+    "first_destination": "YOUR FIRST DESTINATION",
+    "scene_subtitle": "{subtitle}.",
+    "world_counter": "{current} / {total}"
+  },
+  "screens": {
+    "map": {
+      "label": "ADVENTURE MAP",
+      "title": "Choose your horizon."
+    },
+    "controls": {
+      "label": "CONTROLS",
+      "title": "One jump at a time."
+    },
+    "settings": {
+      "label": "SETTINGS",
+      "title": "Your way."
+    },
+    "credits": {
+      "label": "CREDITS & LICENSES",
+      "title": "A new light."
+    },
+    "pause": {
+      "label": "GAME PAUSED",
+      "title": "Breathe. The adventure waits."
+    },
+    "complete": {
+      "label": "LEVEL COMPLETE",
+      "title": "Another horizon reached!",
+      "title_final": "You lit up the five frontiers!"
+    },
+    "gameover": {
+      "label": "GAME OVER",
+      "title": "Every adventure has new beginnings."
+    }
+  },
+  "map": {
+    "progress": "{percent}% of the journey",
+    "relics": "{count} / {total} relics",
+    "achievements": "ACHIEVEMENTS",
+    "achievements_count": "{count} / {total}",
+    "no_achievements": "Your first achievement awaits at the end of the first level.",
+    "world_number": "0{world}",
+    "node": {
+      "record": "{score} pts",
+      "next": "Next destination",
+      "again": "Explore again",
+      "locked_hint": "Complete the previous one"
+    }
+  },
+  "achievements": {
+    "first-clear": "First light",
+    "all-clear": "The five frontiers",
+    "relic-hunter": "Relic hunter",
+    "secret-path": "Secret path",
+    "world-1": "Guardian of the valley",
+    "world-2": "Beyond the dunes",
+    "world-3": "Crystal heart",
+    "world-4": "Light in the forest",
+    "world-5": "The last flame"
+  },
+  "levels": {
+    "1-1": "First Steps",
+    "1-2": "Valley Channels",
+    "1-3": "Guardian of the Orchard",
+    "2-1": "Windswept Dunes",
+    "2-2": "Canyon Bridges",
+    "2-3": "Temple of the Sands",
+    "3-1": "Crystal Lake",
+    "3-2": "Blue Ascent",
+    "3-3": "Heart of the Blizzard",
+    "4-1": "Luminous Canopies",
+    "4-2": "Firefly Ruins",
+    "4-3": "The Ancestral Tree",
+    "5-1": "Basalt Bridges",
+    "5-2": "Furnace of Echoes",
+    "5-3": "The Last Flame"
+  },
+  "themes": {
+    "1": {
+      "name": "Green Realm",
+      "subtitle": "Hills, channels and orchards"
+    },
+    "2": {
+      "name": "Golden Desert",
+      "subtitle": "Dunes and temples under the sun"
+    },
+    "3": {
+      "name": "Frozen Mountains",
+      "subtitle": "Slopes, bridges and snow"
+    },
+    "4": {
+      "name": "Enchanted Forest",
+      "subtitle": "Glowing canopies and ruins"
+    },
+    "5": {
+      "name": "Volcanic Fortress",
+      "subtitle": "Basalt, embers and the last light"
+    }
+  },
+  "controls": {
+    "keyboard": "Keyboard",
+    "gamepad": "Gamepad",
+    "actions": {
+      "left": "Move left",
+      "right": "Move right",
+      "jump": "Jump",
+      "run": "Run",
+      "ability": "Ability (fire flower)",
+      "down": "Enter pipes",
+      "pause": "Pause",
+      "move": "Move",
+      "menus": "Menus"
+    },
+    "gamepad_move": "D-pad / left stick",
+    "gamepad_jump": "A / ✕ button",
+    "gamepad_run": "X / □ button or right trigger",
+    "gamepad_ability": "B / ○ button",
+    "gamepad_pause": "Start / Options",
+    "gamepad_menus": "A confirms · B goes back · LB/RB cycle",
+    "remap": "Remap keys in Settings",
+    "ui_hint": "In menus: arrows or WASD navigate, Tab cycles, Enter or Space confirm, Esc goes back and M mutes the audio.",
+    "tip_title": "The secret is in the jump.",
+    "tip": "Hold to jump higher and release for a short hop. Run before a gap. On a pipe with a passage, press down."
+  },
+  "settings": {
+    "sound": "The sound of the adventure",
+    "music": "Music volume",
+    "sfx": "Sound effects",
+    "voice": "Voices",
+    "ambient": "Ambient sounds",
+    "sound_note": "Each channel has its own volume: muting the music never mutes the effects.",
+    "percent": "{value}%",
+    "experience": "Your experience",
+    "effects": "Visual effects",
+    "effects_desc": "Particles, weather and camera shake.",
+    "fullscreen": "Fullscreen",
+    "fullscreen_desc": "Fills the whole monitor (F11 also toggles).",
+    "show_fps": "Show FPS",
+    "show_fps_desc": "Shows frames per second in the corner of the screen.",
+    "subtitles": "Subtitles",
+    "subtitles_desc": "Shows character lines and voices as text.",
+    "reduced_motion": "Reduced motion",
+    "reduced_motion_desc": "Turns off interface animations and transitions.",
+    "high_contrast": "High contrast",
+    "high_contrast_desc": "Maximum-contrast palette for easier reading.",
+    "display": "Display",
+    "scale": "Window scale",
+    "scale_desc": "Window size in multiples of 960 × 540.",
+    "scale_fit": "Fit to window",
+    "scale_value": "{scale}×",
+    "fps_limit": "Frame limit",
+    "fps_limit_desc": "Maximum frames per second.",
+    "fps_unlimited": "Unlimited",
+    "fps_value": "{fps} FPS",
+    "quality": "Quality",
+    "quality_desc": "Weather, particles and camera shake.",
+    "quality_high": "High",
+    "quality_medium": "Medium",
+    "quality_low": "Low",
+    "language": "Language",
+    "language_desc": "Language of the game texts.",
+    "languages": {
+      "pt-BR": "Português (Brasil)",
+      "en-US": "English (US)"
+    },
+    "bindings": "Keys",
+    "bindings_desc": "Select an action and press its new primary key. A key used by another action is moved.",
+    "press_key": "Press a key…",
+    "press_key_hint": "Esc cancels",
+    "bindings_reset": "Restore default keys",
+    "reset_title": "A new journey",
+    "reset_desc": "Erase completed levels, records, relics and achievements on this computer.",
+    "reset": "Reset progress",
+    "reset_confirm_title": "Reset all progress?",
+    "reset_confirm_desc": "Saved levels, records, relics and achievements will be erased. Settings are kept.",
+    "reset_yes": "Yes, reset",
+    "reset_no": "Cancel"
+  },
+  "credits": {
+    "title": "Lume · The Five Frontiers",
+    "intro": "An original platform adventure, made to celebrate exploration and the pleasure of a precise jump.",
+    "art_label": "ART & CHARACTERS",
+    "art": "Original pixel art drawn by code. Five worlds, fifteen paths and an identity of its own.",
+    "music_label": "MUSIC & EFFECTS",
+    "music": "Original tracks and effects synthesized in real time, with no proprietary audio files.",
+    "license": "Original code and assets under the MIT license.\nIndependent, unofficial project with no affiliation with Nintendo. Super Mario Bros. belongs to its respective owners."
+  },
+  "pause": {
+    "description": "{level} · World {world}, level {stage}",
+    "journey": "Your journey",
+    "resume": "Continue",
+    "restart": "Restart level",
+    "settings": "Settings",
+    "menu": "Back to menu",
+    "footnote": "Press {button} to continue."
+  },
+  "complete": {
+    "unlocked": "Your next path is already unlocked.",
+    "final": "The last flame is lit. The journey is yours.",
+    "relic_found": "✦ Found",
+    "relic_missing": "To explore",
+    "next": "Next level",
+    "map": "Explore the map",
+    "world_map": "World map",
+    "menu": "Back to menu"
+  },
+  "gameover": {
+    "description": "The light is still here. Try a new route.",
+    "retry": "Try again",
+    "menu": "Back to menu"
+  },
+  "stats": {
+    "score": "SCORE",
+    "coins": "COINS",
+    "relic": "RELIC"
+  },
+  "hud": {
+    "lives": "LIVES",
+    "score": "SCORE",
+    "coins": "COINS",
+    "stage": "WORLD / LEVEL",
+    "time": "TIME",
+    "guardian": "GUARDIAN",
+    "power_small": "Explorer",
+    "power_grown": "Growth",
+    "power_fire": "Fire flower",
+    "power_star": "Invincible · {seconds}s",
+    "fps": "{fps} FPS",
+    "stage_value": "{world} — {stage}",
+    "boss_health": "{health} / {max}"
+  },
+  "events": {
+    "checkpoint": "Checkpoint reached",
+    "secret": "A secret passage!",
+    "relic": "Relic found!",
+    "complete": "Level complete!",
+    "boss": "Guardian defeated!",
+    "life_coins": "100 coins: extra life!",
+    "life_heart": "An extra life!",
+    "power_grow": "Stronger!",
+    "power_fire": "Flame active — press {button}",
+    "power_star": "12 seconds of invincibility",
+    "save_blocked": "Progress could not be saved. It counts for this session.",
+    "progress_reset": "A new journey begins. Progress reset.",
+    "audio_on": "Audio on.",
+    "audio_off": "Audio off."
+  },
+  "voice": {
+    "jump": "Hup!",
+    "hurt": "Ouch!",
+    "victory": "We did it!",
+    "defeat": "It's okay. I'll be back.",
+    "hello": "Hello!",
+    "surprise": "Whoa!"
+  },
+  "keys": {
+    "space": "SPACE",
+    "left shift": "SHIFT",
+    "right shift": "R. SHIFT",
+    "up": "↑",
+    "down": "↓",
+    "left": "←",
+    "right": "→",
+    "escape": "ESC",
+    "return": "ENTER",
+    "enter": "ENTER",
+    "tab": "TAB",
+    "backspace": "BACKSPACE",
+    "left ctrl": "CTRL",
+    "right ctrl": "R. CTRL",
+    "left alt": "ALT",
+    "right alt": "R. ALT",
+    "delete": "DELETE",
+    "page up": "PAGE UP",
+    "page down": "PAGE DOWN",
+    "home": "HOME",
+    "end": "END",
+    "insert": "INSERT",
+    "caps lock": "CAPS LOCK"
+  },
+  "dialogues": {
+    "intro_1-1": {
+      "0": "So this is where the light begins... The whole valley is glowing!",
+      "1": "Coins, glowing blocks and ancient pipes. Someone left clues for me.",
+      "2": "Five frontiers, five guardians. Let's find out what lies beyond the horizon."
+    }
+  },
+  "reactions": {
+    "lume": {
+      "jump": [
+        "Hup!",
+        "Here I go!",
+        "Higher!"
+      ],
+      "hurt": [
+        "Ouch!",
+        "That hurt...",
+        "I need to be more careful."
+      ],
+      "stomp": [
+        "Sorry!",
+        "Got you!",
+        "Out of the way!"
+      ],
+      "coin_streak": [
+        "So shiny!",
+        "That will add up.",
+        "One more for the collection."
+      ],
+      "relic": [
+        "A relic! It's warm with light.",
+        "Look what was hidden here!",
+        "The ancients left this for someone to find."
+      ],
+      "checkpoint": [
+        "No turning back from here.",
+        "A breath, and onward.",
+        "The light marked this place."
+      ],
+      "secret": [
+        "A passage! I knew this pipe was hiding something.",
+        "Whoever built this loved secrets.",
+        "Nobody has passed through here in a long time."
+      ],
+      "power_grow": [
+        "I feel the light growing in me!",
+        "Stronger!",
+        "Now I can take a tumble."
+      ],
+      "power_fire": [
+        "Flame in hand! Watch out, guardians.",
+        "Hot, hot, hot!",
+        "I'll light the way... literally."
+      ],
+      "power_star": [
+        "Nothing stops me now!",
+        "I'm glowing!",
+        "Quick, before it fades!"
+      ],
+      "boss_intro": [
+        "So you're the one guarding this frontier.",
+        "I didn't come to fight. But I'm not leaving either.",
+        "Show me what you've got, guardian."
+      ],
+      "boss_hit": [
+        "Found the opening!",
+        "One more time!",
+        "Can you feel the light?"
+      ],
+      "boss_defeated": [
+        "The frontier is open.",
+        "Rest, guardian. I'll take care of the rest.",
+        "One less light put out."
+      ],
+      "victory": [
+        "Another horizon!",
+        "We did it!",
+        "What comes next?"
+      ],
+      "defeat": [
+        "It's okay. I'll be back.",
+        "The light is still here.",
+        "Next time, I'll make it."
+      ],
+      "world_unlock": [
+        "A new frontier... the air has changed.",
+        "I've never been this far from home.",
+        "Every world has its own light."
+      ],
+      "idle_long": [
+        "Hmm... which way?",
+        "This wind carries a new scent.",
+        "Did I hear something?"
+      ]
+    }
+  },
+  "characters": {
+    "lume": {
+      "name": "Lume",
+      "description": "Bearer of the light. Balanced in everything: jumping, running and courage."
+    },
+    "vento": {
+      "name": "Vento",
+      "description": "The taller, shy brother. Jumps higher, slides more and descends slowly while holding jump."
+    },
+    "fagulha": {
+      "name": "Fagulha",
+      "description": "Fast and small. Jumps lower, but after crouching for half a second she fires a charged jump."
+    },
+    "aurora": {
+      "name": "Aurora",
+      "description": "A glider. Runs a little slower and can float for a moment in the air, once per jump."
+    },
+    "pirilampo": {
+      "name": "Pirilampo",
+      "description": "For those just starting: enemies don't hurt, but pits, lava and the timer still count."
+    }
+  }
+}

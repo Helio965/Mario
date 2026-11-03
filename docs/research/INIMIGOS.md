@@ -323,3 +323,261 @@ Consequência de design: as "inteligências" dos Mario 2D são **previsíveis e 
 - **Tela**: Thwomp (SMB3) e Boo só agem com os sprites em tela; Lakitu (SMB3) renasce 2 telas atrás; Bullet Bills de fora da tela nascem na borda direita [D-SMB3][D-SMB1].
 
 ---
+## 6. Biblioteca de arquétipos para o Lume
+
+### 6.0 Método de conversão (ESTIMADO — decisão nossa, não valor oficial)
+
+Os originais são 16 px de altura (Mario pequeno) e andam a 90 px/s; o Lume tem 30 px (pequeno) e anda a 220 px/s. Em vez de um fator único, usamos três, porque o que importa para a jogabilidade é a **razão** entre inimigo e jogador:
+
+| Grandeza | Fator | Justificativa |
+| --- | --- | --- |
+| Distâncias (zonas de percepção, amplitudes, correntes) | **× 1,875** (16 → 30 px) | igual ao fator corporal usado em FISICA.md |
+| Velocidades horizontais | **× 2,44** (90 → 220 px/s de caminhada) | preserva "o Goomba anda a 1/3 do jogador", "o casco é 1,2× a corrida" |
+| Velocidades verticais de impulso | **× 2,46** (240 → 590 px/s de salto) | preserva "o rebote do pisão ≈ salto" |
+| Tempos (timers, telegraphs, cadências) | **× 1** | ritmo é percebido em segundos, não em pixels (a Nintendo recalibrou os cascos PAL para manter px/s [D-SMW]) |
+| Acelerações de queda de objetos | pela razão com a gravidade do jogador | SMB1 Mario cai a ~1575 px/s², Lume 1550: aplicar a mesma razão (ex.: Thwomp 900/1575 = 0,57 → 880 px/s²) |
+
+Nomes dos arquétipos do Lume são originais (nenhum nome, forma ou sprite da Nintendo): **Trotador** (terrestre), **Casqueiro** (com casco), **Planador** (voador), **Arremessador** (lançador), **Sentinela** (blindado), **Sombra** (furtivo), **Faísca** (explosivo), **Saltador-do-lago** (aquático). Todos usam a `StateMachine`/`Blackboard` de `game/enemies/state_machine.py`; abaixo só os estados que **fazem sentido** para cada um. Novos fatos de `Blackboard` necessários: `player_looking_at_me` (sign(dx) oposto a `player.facing`), `player_speed` (|vx| do jogador), `player_below`/`player_above`, `on_screen`, `in_zone(lo, hi)` (janela assimétrica em dx), `player_star`, `player_grounded`.
+
+Flags por arquétipo (equivalente das tabelas `OAT_/OA2_/OA3_` de SMB3 [D-SMB3]): `stompable` (pisar derrota/atordoa), `stomp_hurts` (pisar fere — espinhos), `fireproof`, `star_kills`, `shell_kills`, `explosion_kills`, `turn_at_edges`, `turn_on_enemy_contact`, `face_player_on_land`, `blocks_player` (pode-se ficar em cima — Konk/Shy Guy), `carryable` (se o Lume ganhar "pegar").
+
+### 6.1 Trotador (terrestre) — originais: Goomba (SMB1/SMB3), Galoomba (SMW), Shy Guy (SMB2), Dry Bones sem a imortalidade
+
+```
+PATROL ──(parede | inimigo | borda se turn_at_edges)──▶ PATROL (inverte)
+PATROL ──(pisão, stompable)──▶ DEFEATED (achatado 0,5 s, remove)          # Goomba
+PATROL ──(pisão, variante tombável)──▶ STUNNED (4,25 s; animação 2× nos últimos 0,8 s) ──▶ PATROL (virado para o jogador)
+STUNNED ──(toque lateral)──▶ SLIDE (sem ricochete, 0,5 s) ──▶ STUNNED
+PATROL/STUNNED ──(fogo | casco | estrela | bloco por baixo | explosão)──▶ DEFEATED (pop-up −440 px/s, ±146 px/s)
+```
+
+| Parâmetro | Original | Lume proposto | Confiança |
+| --- | --- | --- | --- |
+| `walk_speed` | 0,5 px/q = 30 px/s (SMB1/3/SMW) | **72 px/s** + 6 px/s por mundo (hoje 55 + 7·mundo) | DOCUMENTADO → ESTIMADO |
+| `fast_walk_speed` (variante) | 0,75 px/q = 45 px/s | **110 px/s** | DOCUMENTADO → ESTIMADO |
+| `turn_at_edges` | Goomba não; Shy Guy rosa sim | parâmetro por instância; sonda atual de 2×7 px à frente dos pés (manter) | DOCUMENTADO |
+| `face_player_on_land` | Koopas sim, Goomba não (SMB1) | padrão `False` para o Trotador | DOCUMENTADO |
+| `squash_time` | ≈0,35–0,7 s | **0,5 s** | DOCUMENTADO → ESTIMADO |
+| `stun_time` (tombável) | 255 q = 4,25 s | **4,25 s**, telegraph nos últimos **0,8 s** | DOCUMENTADO |
+| `stomp_bounce` | −240 px/s (= salto parado SMB1) | manter **−390 px/s**; se o botão de salto estiver pressionado no instante do pisão, usar **−590 px/s** (pisão-salto) | ESTIMADO (design) |
+| `knockback_on_hit` | vy −180 px/s, vx ±60 px/s | **−440 px/s**, **±146 px/s** | DOCUMENTADO → ESTIMADO |
+| Expressão (Wonder) | olhar/pânico/sono | opcional: `ALERT` puramente visual quando |dx| < 150 px (não altera movimento) | OFICIAL [ATD-2] → ESTIMADO |
+
+### 6.2 Casqueiro (com casco) — originais: Koopa Troopa verde/vermelho (SMB1), Buzzy Beetle (casco à prova de fogo)
+
+```
+PATROL ──(borda & red)──▶ PATROL (inverte)      PATROL ──(borda & green)──▶ FALL ──(pousa)──▶ PATROL (virado para o jogador)
+PATROL ──(pisão)──▶ SHELL (timer 5,5 s; pernas em 1,5 s) ──(timer)──▶ PATROL (direção pseudoaleatória)
+SHELL ──(toque do jogador)──▶ SLIDE (420 px/s para longe do jogador; quica em paredes; mata inimigos em cadeia; fere o jogador)
+SLIDE ──(pisão)──▶ SHELL           SLIDE ──(parede)──▶ SLIDE (inverte, som "ricochete")
+PATROL/SHELL/SLIDE ──(bloco por baixo | casco | estrela)──▶ STUNNED_FLIPPED (de cabeça para baixo, 5,5 s) ──▶ PATROL
+PATROL ──(fogo, se não fireproof)──▶ DEFEATED
+```
+
+| Parâmetro | Original | Lume proposto | Confiança |
+| --- | --- | --- | --- |
+| `walk_speed` | 30 px/s | **72 px/s** | DOCUMENTADO → ESTIMADO |
+| `shell_speed` | 180 px/s (SMB1: 1,2× a corrida de 150) ; 172–195 px/s (SMW) | **420 px/s** (1,24× a corrida de 340; hoje 360) | DOCUMENTADO → ESTIMADO |
+| `shell_revive_time` | 5,3–5,6 s (3,9 s na 2.ª volta) | **5,5 s** nos mundos 1–3, **4,0 s** nos mundos 4–5 | DOCUMENTADO |
+| `shell_legs_telegraph` | ≈1,5–1,75 s | **1,5 s** (frame com pernas) | DOCUMENTADO |
+| `slide_kick_offset` | o casco nasce já em movimento | manter o deslocamento de 14 px do código atual | — |
+| `shell_hits_player` | sim, sempre que em movimento | sim | OFICIAL [M-SMB1] |
+| `demote_paratroopa_keeps_edge_rule` | não (bug do ID $01) | **sim** | DOCUMENTADO → decisão |
+| `fireproof` (variante Buzzy) | sim | sim; o `armored` atual (44 px/s, 2 HP) vira esta variante | OFICIAL/DOCUMENTADO |
+| `ceiling_variant` (Buzzy de teto) | cai quando o jogador se aproxima (janela não extraída) | HIDDEN no teto → DROP quando |dx| < 60 px e jogador abaixo → SLIDE a 420 px/s em direção ao jogador | OBSERVADO → ESTIMADO |
+| Pontos | 100 → cadeia | manter 200 por abate, cadeia ×2 até 1600 | ESTIMADO |
+
+Variante SMW ("sai do casco") fica fora do escopo: dobra a quantidade de estados e exige "pegar/carregar".
+
+### 6.3 Planador (voador) — originais: Paratroopa vermelho (vertical), verde pulante, verde horizontal (SMB1); Cheep voadora pertence ao §6.8
+
+```
+FLY_OSCILLATE (senoide vertical ou horizontal; sem percepção) ──(pisão)──▶ demote → Casqueiro.PATROL (virado para o jogador)
+HOP (anda 72 px/s; ao pousar, salta) ──(pisão)──▶ demote
+FLY/HOP ──(fogo | casco | estrela)──▶ DEFEATED
+```
+
+| Parâmetro | Original | Lume proposto | Confiança |
+| --- | --- | --- | --- |
+| Oscilação vertical: percurso / velocidade de pico / período | ≈96 px / ≈1,06 px/q (64 px/s) / ≈6 s (SMB1, ESTIMADO) | **±90 px** em torno do centro, pico **160 px/s**, período **6 s**; hoje ±38 px a 2,2 rad/s (período 2,9 s) — alargar | ESTIMADO |
+| Oscilação horizontal | contador triangular máx. $13 + ondulação ±1 px/4 q | **±120 px**, período **4 s**, ondulação vertical ±4 px | ESTIMADO |
+| Pulo do verde pulante | vy −3 px/q = −180 px/s (≈41 px de altura) | **−440 px/s** (≈62 px = 2 corpos pequenos); gravidade do jogador | DOCUMENTADO → ESTIMADO |
+| Pulo na água (SMB3) | −1,5 px/q | não se aplica (água letal) | — |
+| `face_player_on_land` (pulante) | sim | sim | DOCUMENTADO |
+| Demote | pisão tira as asas; 400 pts | pisão → Casqueiro (mantém cor/regra de borda) | DOCUMENTADO |
+
+### 6.4 Arremessador (lançador) — quatro variantes
+
+**(a) Torre** — original: Bill Blaster/Bullet Bill (SMB1); é o `shooter` atual.
+
+```
+IDLE ──(timer ≥ intervalo & |dx| ≥ zona morta & jogador não acima & |dx| < alcance)──▶ ATTACK (flash 0,17 s + som) ──▶ IDLE
+Projétil: PATROL reto a 220 px/s para o lado do jogador; pisável (rebote −390); fireproof; morre em casco só se "externo"; vida = 1 largura de tela
+```
+
+| Parâmetro | Original | Lume | Confiança |
+| --- | --- | --- | --- |
+| Zona morta | ±40 px | **±75 px**; e não atirar com o jogador diretamente acima | DOCUMENTADO/OBSERVADO → ESTIMADO |
+| Velocidade do projétil | 90 px/s (= caminhada) | **220 px/s** (= caminhada; hoje 180) | DOCUMENTADO → ESTIMADO |
+| Intervalo | ≈1,25 s + aleatório (SMB1 ESTIMADO) | **2,0–2,6 s** aleatório (hoje 2,2 fixo) | ESTIMADO |
+| Alcance | tela | **650 px** (manter) | — |
+
+**(b) Emboscada** — original: Piranha Plant (SMB1/SMB3/SMW), Venus Fire Trap.
+
+```
+HIDDEN (1,07 s) ──(|dx| ≥ 62 px)──▶ EMERGE (0,8 s, 56 px/s) ──▶ ATTACK (1,07 s parado; variante cuspidora: 2 projéteis mirados em 0,53 s e 1,33 s) ──▶ RETREAT (0,8 s) ──▶ HIDDEN
+HIDDEN ──(|dx| < 62 px)──▶ HIDDEN (re-espera)        * contato sempre fere; sem pisão; fogo/casco/estrela derrotam
+```
+
+| Parâmetro | Original | Lume | Confiança |
+| --- | --- | --- | --- |
+| Zona de "não sair" | ±33 px (SMB1); −27…+28 (SMB3/SMW) | **±62 px** | DOCUMENTADO → ESTIMADO |
+| Velocidade/percurso | 30 px/s × 0,8 s = 24 px (SMB1); 60 px/s (SMB3/SMW) | **56 px/s × 0,8 s = 45 px** (altura do sprite do Lume) | DOCUMENTADO → ESTIMADO |
+| Espera dentro/fora | 1,07 s / 1,07 s (SMB1); 0,8 / 0,8 (SMB3); 0,53 / 0,53 (SMW) | **1,07 s / 1,07 s** nos mundos iniciais, 0,8 nos finais | DOCUMENTADO |
+| Projétil (Venus) | 2 bolas/saída, mira cima/baixo | **150 px/s** diagonal, vida 2 s | OBSERVADO → ESTIMADO |
+
+**(c) Arremessador saltador** — original: Hammer Bro (SMB1/SMB3).
+
+```
+PATROL (shimmy ±37 px/s invertendo a cada 1,07 s; sempre de frente para o jogador)
+  ──(timer_throw)──▶ PREPARE_ATTACK (0,25 s braço levantado) ──▶ ATTACK (martelo) ──▶ RECOVER (0,2 s) ──▶ PATROL
+  ──(timer_jump 3,2–4,25 s)──▶ LEAP (−520 ou −760 px/s; atravessa plataformas por 0,5 s) ──▶ PATROL
+  ──(após 20 s em tela)──▶ CHASE (72 px/s, só se o jogador estiver do lado "de fuga")
+  ──(pisão | fogo | casco | estrela | bloco por baixo)──▶ DEFEATED (não entra em casco)
+```
+
+| Parâmetro | Original | Lume | Confiança |
+| --- | --- | --- | --- |
+| Shimmy | 15 px/s (SMB1) / 22,5 px/s (SMB3), inverte a cada 64 q | **37 px/s**, inverte a cada **1,07 s** | DOCUMENTADO → ESTIMADO |
+| Cadência de arremesso | 0,8 s (0,47 s difícil) / ≈0,6 s | **0,8 s** (0,5 s no mundo 5) + telegraph **0,25 s** (adição) | DOCUMENTADO → ESTIMADO |
+| Martelo | vx 60 px/s, vy −120 px/s, g 225 px/s² → ápice 32 px, ≈1,1 s de voo, alcance ≈4 tiles | **vx ±120 px/s, vy −230 px/s, g 430 px/s²** → ápice 60 px, voo 1,1 s, alcance ≈130 px | DOCUMENTADO → ESTIMADO |
+| Entre saltos | 192–255 q | **3,2–4,25 s** aleatório | DOCUMENTADO |
+| Impulso do salto | −3 ou −6 px/q (−180/−360 px/s) | **−520 / −760 px/s** | DOCUMENTADO → ESTIMADO |
+| Avanço | 44,8 s (SMB1) | **20 s** (fases do Lume são curtas); opcional | DOCUMENTADO → ESTIMADO |
+
+**(d) Arremessador aéreo** — original: Lakitu (SMB1/SMB3).
+
+```
+CHASE_X (altura fixa; alvo = x do jogador; velocidade-base escolhida pelo estado do jogador; desacelera e inverte se passar de 112 px)
+  ──(timer 2,1 s)──▶ PREPARE_ATTACK (0,27 s afundando) ──▶ ATTACK (solta ovo: vy −300 px/s, vx 60 px/s para o lado do jogador) ──▶ CHASE_X
+  ──(pisão | fogo | casco | estrela)──▶ DEFEATED ──(15 s)──▶ respawn fora da tela
+Ovo: cai; ao pousar vira Trotador com stomp_hurts=True (espinhos), 72 px/s, vira-se para o jogador em 7/8 dos pousos
+```
+
+| Parâmetro | Original | Lume | Confiança |
+| --- | --- | --- | --- |
+| Velocidade-base parado / andando / correndo | 79 / 180 / 240 px/s − (|dx| & 60)/4 unid. | **190 / 440 / 590 px/s** − 0,8·|dx| (px/s, |dx| ≤ 112) | DOCUMENTADO → ESTIMADO |
+| Teto de distância | 60 px | **112 px** | DOCUMENTADO → ESTIMADO |
+| Intervalo / telegraph | 2,13 s / 0,27 s (SMB1); 1,07 s / 0,25 s (SMB3) | **2,1 s / 0,27 s** | DOCUMENTADO |
+| Limite de "filhotes" | 4 (5 slots) | **3** por Arremessador aéreo | DOCUMENTADO → ESTIMADO |
+| Não lançar se jogador no topo | y < 44 px | jogador acima do Arremessador | DOCUMENTADO → ESTIMADO |
+
+### 6.5 Sentinela (blindado) — três variantes com `fireproof=True`
+
+**(a) Esmagador** — originais: Thwomp (SMB3/SMW), Konk (Wonder).
+
+```
+IDLE (flutua no teto/origem)
+  ──(|dx| < 120 px & on_screen)──▶ ALERT (muda a cara; sem movimento)       ──(|dx| ≥ 120)──▶ IDLE
+  ──(−68 ≤ dx < 83 px, i.e. ≈ ±75 px & on_screen)──▶ DROP (acel. 880 px/s², teto 700 px/s; cara brava)
+DROP ──(chão)──▶ RECOVER (tremor 0,4 s + som; espera 1,07 s)  ──▶ RISE (112 px/s até a origem) ──▶ IDLE
+Contato lateral/inferior fere; em cima: fere (espinhos) ou `blocks_player` (Konk); só estrela/explosão derrotam
+```
+
+| Parâmetro | Original | Lume | Confiança |
+| --- | --- | --- | --- |
+| Zona de alerta / de queda | ±64 px / −36…+44 px (SMW); só queda em SMB3 | **±120 px / −68…+83 px** (assimetria preservada) | DOCUMENTADO → ESTIMADO |
+| Aceleração / teto | 900 px/s² ; 232 (SMW) ou 420 (SMB3) px/s | **880 px/s² ; 700 px/s** (entre as duas, ×2,44 ≈ 566–1025) | DOCUMENTADO → ESTIMADO |
+| Tremor / espera / subida | 0,4 s / 1,07 s / 60 px/s | **0,4 s / 1,07 s / 112 px/s** | DOCUMENTADO |
+| Variante Konk | anda esq./dir.; azul sobe quando o jogador está acima; superfície segura | parâmetros `patrol_speed` (37 px/s), `inverted`, `blocks_player=True` | OBSERVADO → ESTIMADO |
+
+**(b) Esqueleto** — original: Dry Bones (SMB3/SMW).
+
+```
+PATROL (72 px/s; turn_at_edges=True; bounce em outros inimigos)
+  ──(pisão)──▶ STUNNED (pilha de ossos 4,4 s; sem colisão hostil; som de "desmontar")
+  ──(últimos 0,8 s)──▶ RECOVER (remontagem com tremor) ──▶ PATROL (virado para o jogador)
+  ──(estrela | explosão | casco pesado)──▶ DEFEATED        * fogo e projéteis comuns: imune
+```
+
+| Parâmetro | Original | Lume | Confiança |
+| --- | --- | --- | --- |
+| Tempo caído total | ≈5,25 s (SMB3) | **5,2 s** = 4,4 s de pilha + 0,8 s de remontagem | DOCUMENTADO |
+| Telegraph | cabeça sobe/desce 4×6 q (SMB3); tremor de 64 q (SMW) | tremor de **0,8 s** | DOCUMENTADO |
+| Pisável durante a remontagem | sim (NSMBW) | sim: reinicia o timer | OBSERVADO |
+| Vira-se para o jogador ao levantar | sim | sim | DOCUMENTADO |
+
+**(c) Acorrentado** — original: Chain Chomp (SMB3/NSMB).
+
+```
+IDLE (volta ao poste a 72 px/s; mordidas constantes) ──(timer 0,53–1,05 s)──▶ PREPARE_ATTACK (0,2 s recuo)
+PREPARE_ATTACK ──▶ LEAP (se |dx| < 120 px: faixa = |dx|/30 → (vx,vy) ∈ {(600,−290),(360,−590),(480,−440),(240,−740)}; senão faixa aleatória; corrente de 90 px limita)
+LEAP ──(0,67 s)──▶ RECOVER (0,53–1,05 s) ──▶ IDLE
+IDLE ──(50 investidas | poste golpeado 3×)──▶ FREE (Trotador pulante: vx ±290 px/s, vy −440/−590 px/s, corrente piscando 2 s antes)
+Pisão fere; fogo imune; só estrela/casco/explosão derrotam
+```
+
+| Parâmetro | Original | Lume | Confiança |
+| --- | --- | --- | --- |
+| Zona de mira | 64 px (4 faixas de 16 px) | **120 px** (4 faixas de 30 px) | DOCUMENTADO → ESTIMADO |
+| Investidas (vx, vy) | (300,−120) (180,−240) (240,−180) (120,−300) px/s | ×2,44 / ×2,46 → tabela acima (teto 600 px/s por legibilidade) | DOCUMENTADO → ESTIMADO |
+| Investida / espera | 0,67 s / 0,53–1,05 s | iguais | DOCUMENTADO |
+| Corrente | ≈4 elos (SMB3) | **90 px** de raio | ESTIMADO |
+| Soltar-se | 50 investidas (≈160 s) | **50** ou 3 golpes no poste; corrente pisca 2 s antes | DOCUMENTADO/OBSERVADO |
+
+### 6.6 Sombra (furtivo) — original: Boo (SMB3/SMW)
+
+```
+IDLE (rosto coberto; para suavemente: −300 px/s²)
+  ──(not player_looking_at_me por ≥ 0,33 s)──▶ CHASE (acel. 550 px/s² em X e Y até 130 px/s; zona morta vertical 8 px)
+CHASE ──(player_looking_at_me)──▶ IDLE (SMB3: parada instantânea; Lume: desaceleração suave estilo SMW)
+Troca de lado: giro de 0,5 s antes de inverter o sprite; |dx| < 19 px mantém o estado (evita pisca-pisca)
+Sem pisão (atravessa); fogo imune; derrota só com estrela/explosão/"luz" (Wonder)
+```
+
+| Parâmetro | Original | Lume | Confiança |
+| --- | --- | --- | --- |
+| Atraso de reação | 20 q = 0,33 s (SMB3) ; decisão a cada 32 q (SMW) | **0,33 s** (`reaction_time` do `PerceptionProfile`) | DOCUMENTADO |
+| Aceleração / máx. | 225 px/s², 60 px/s (SMB3) ; 28 px/s², 30 px/s (SMW) | **550 px/s², 130 px/s** (0,6 × caminhada, como SMB3) | DOCUMENTADO → ESTIMADO |
+| Zona morta | 4 px vertical (SMB3); 10 px horizontal (SMW) | **8 px vertical, 19 px horizontal** | DOCUMENTADO → ESTIMADO |
+| Giro | 31 q | **0,5 s** | DOCUMENTADO |
+| `needs_line_of_sight` | não | **False**; `sight_range` ilimitado dentro da tela | DOCUMENTADO |
+
+### 6.7 Faísca (explosivo) — original: Bob-omb (SMB3/SMW/NSMB)
+
+```
+PATROL (110 px/s; `face_player_on_spawn`; reorienta para o jogador a cada 1,07 s; pulinhos de passo)
+  ──(pisão | bola de fogo)──▶ FUSE (4,25 s; chutável: SLIDE 365 px/s + ½ vx do jogador, vy −300 px/s; pisca nos últimos 1,07 s)
+FUSE ──(timer | lava/fogo do cenário: imediato)──▶ EXPLODE (0,67 s; raio 56 px; fere jogador; derrota inimigos — inclusive Sentinelas; quebra `brick`)
+EXPLODE ──▶ DEFEATED        * estrela/casco: explode na hora
+```
+
+| Parâmetro | Original | Lume | Confiança |
+| --- | --- | --- | --- |
+| Velocidade | 0,75 px/q = 45 px/s (SMW rápido) ; SMB3 1 px/q ao nascer | **110 px/s** | DOCUMENTADO → ESTIMADO |
+| Pavio / piscar / explosão | 4,25 s / 1,07 s / 0,67 s (SMB3) ; 1,07 s (SMW) | **4,25 s / 1,07 s / 0,67 s** | DOCUMENTADO |
+| Chute | 150 px/s + ½ vx ; vy −120 px/s | **365 px/s + ½ vx ; vy −300 px/s** | DOCUMENTADO → ESTIMADO |
+| Raio da explosão | ≈1,5 tile (OBSERVADO) | **56 px** | ESTIMADO |
+| Quebra tijolos | não (SMB3) / sim (NSMB) | **sim** (`brick`), não `question`/`ground` | OBSERVADO → decisão |
+
+### 6.8 Saltador-do-lago (aquático) — originais: Cheep voadora (SMB1), Chargin' Cheep (SMB3), Rip Van Fish/Deep Cheep (SMW/NSMB)
+
+Como a água do Lume é um perigo letal (README: "Água, lava e quedas custam uma vida"), a forma principal é a **saltadora**; a forma **nadadora/perseguidora** fica parametrizada para uma eventual fase com água navegável.
+
+```
+Saltador:  HIDDEN (abaixo da água/tela; spawn 0,27–1,6 s aleatório; máx. 3) ──▶ LEAP (vy −550 px/s, g 300 px/s², vx 45–130 px/s enviesado pela vx do jogador) ──(sai da tela)──▶ remove
+           LEAP ──(pisão)──▶ DEFEATED (rebote −390)        fogo/estrela derrotam
+Nadador:   SWIM (37–73 px/s reto ou senoide ±28 px, período 8 s; qualquer contato fere) ──(fogo | estrela)──▶ DEFEATED
+Perseguidor: IDLE (dorme) ──(|dx| < 90 & |dy| < 90)──▶ ALERT (0,2 s) ──▶ CHASE (acel. 70 px/s², máx. 146 px/s em X e Y; 8,5 s ou jogador atrás) ──▶ RETREAT (desacelera) ──▶ IDLE ; player_star → foge
+```
+
+| Parâmetro | Original | Lume | Confiança |
+| --- | --- | --- | --- |
+| Salto | vy −300 px/s, g 183 px/s² → ápice ≈ tela (240 px), ≈3,3 s de voo | **vy −550, g 300** → ápice ≈ 500 px (tela de 540), voo 3,7 s | DOCUMENTADO → ESTIMADO |
+| Spawn / máximo | 16–96 q / 3 (4 difícil) | **0,27–1,6 s / 3** | DOCUMENTADO |
+| vx do saltador | 19–52 px/s, enviesado pela vx do jogador | **45–130 px/s**, +25 % se o jogador corre | DOCUMENTADO → ESTIMADO |
+| Nadadora | 15 / 30 px/s; onda 7,5 px/s ±15 px | **37 / 73 px/s; ±28 px, 8 s** | DOCUMENTADO → ESTIMADO |
+| Perseguidora: zona / acel. / máx. / duração | ±48 px (X,Y) / 28 px/s² / 60 px/s / 8,5 s | **±90 px / 70 px/s² / 146 px/s / 8,5 s** | DOCUMENTADO → ESTIMADO |
+| Pisável debaixo d'água | não (SMB1/3/SMW), sim (Wonder) | **não** (coerente com água letal) | OFICIAL [M-SMB1] → decisão |
+
+---
