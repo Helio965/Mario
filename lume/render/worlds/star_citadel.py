@@ -1639,6 +1639,355 @@ class StarCitadel(WorldArt):
             x += rng.uniform(110, 220)
         return out
 
+    # ------------------------------------------------------------------ indoor halls
+    def interior(self, variant: str):
+        """Indoor halls of the citadel. Only these variants are indoor; every
+        outdoor variant of this world must keep returning None."""
+        if variant in ("sanctum", "fortress"):
+            return (lambda: self._hall(False)), (lambda: self._colonnade(False))
+        if variant == "throne":
+            return (lambda: self._hall(True)), (lambda: self._colonnade(True))
+        return None
+
+    def _hall(self, throne: bool) -> Svg:
+        """960×540 backdrop. Grand hall: star-stone walls, tall windows on
+        space, star charts, a giant astrolabe and a mirror floor reflecting it.
+        Throne room: an eclipse — a black sun and its corona — behind the
+        throne on a stepped dais, the same mirror floor."""
+        s = Svg(960, 540)
+        r = Rand(57 if throne else 59)
+        top_c, mid_c, low_c = ("#06041a", "#120a30", "#0a0620") if throne else ("#0a0b2e", "#18184e", "#0c0c2c")
+        s.rect(0, 0, 960, 540, fill=s.linear(0, 0, 0, 540, [(0, top_c), (0.6, mid_c), (1, low_c)]))
+        # back wall: big star-stone blocks, a few tonal ones, gold-flecked joints
+        for row in range(12):
+            y = row * 46 - 6
+            off = (row % 2) * 64
+            for col in range(-1, 9):
+                x = col * 128 + off
+                v = _hash(row * 17 + col, 81 if not throne else 83)
+                if v > 0.6:
+                    s.rect(x + 2, y + 2, 124, 42, fill="#2a3070" if v > 0.82 else "#1a1c50", opacity=0.55 if not throne else 0.4)
+                s.line(x + 1, y + 1, x + 1, y + 45, "#05061a", 2.2, 0.6)
+            s.line(0, y + 1, 960, y + 1, "#05061a", 2.2, 0.6)
+            s.line(0, y + 3.5, 960, y + 3.5, "#7f8ad8", 1.0, 0.16)
+        for _ in range(60):
+            s.circle(r.uniform(0, 960), r.uniform(0, 420), r.uniform(0.5, 1.0), fill=GOLD_LIGHT, opacity=r.uniform(0.25, 0.6))
+        if throne:
+            self._eclipse_throne(s, r)
+        else:
+            for wx in (135.0, 825.0):
+                self._space_window(s, wx, 58, 360, 128, int(wx))
+            for cx in (262.0, 698.0):
+                self._star_chart(s, cx, 96, 92, 196, int(cx))
+            self._astrolabe(s, 480, 214, 150)
+        # mirror floor: a dark polished band with reflections of what stands above
+        s.rect(0, 430, 960, 110, fill=s.linear(0, 430, 0, 540, [(0, "#2a2a6a"), (0.25, "#14143e"), (1, "#0a0a24")]))
+        s.line(0, 431, 960, 431, "#c8d0ff", 1.6, 0.7)
+        if throne:
+            _soft(s, 480, 470, 200, 26, "#ffd890", 0.3, 0.1)
+            _soft(s, 480, 470, 90, 14, "#ffffff", 0.25, 0.1)
+        else:
+            _soft(s, 480, 468, 170, 22, GOLD_LIGHT, 0.22, 0.1)
+            for wx in (135.0, 825.0):
+                s.rect(wx - 40, 436, 80, 70, fill=s.linear(0, 436, 0, 506, [(0, "#9fb4ff", 0.22), (1, "#9fb4ff", 0)]))
+        for k in range(14):
+            y = 440 + k * 7
+            s.line(0, y, 960, y, "#ffffff", 0.8, 0.05 + 0.02 * (k % 3))
+        return s
+
+    def _space_window(self, s: Svg, cx: float, top: float, bottom: float, wd: float, seed: int) -> None:
+        """Tall lancet window open on space (stars, nebula, a slice of the
+        ringed planet), gold mullions, a shaft of starlight."""
+        r = Rand(seed)
+        x0, x1 = cx - wd / 2, cx + wd / 2
+        spring = top + wd * 0.55
+        outline = (f"M{x0:.1f} {bottom:.1f} L{x0:.1f} {spring:.1f} Q{x0:.1f} {top + wd * 0.08:.1f} {cx:.1f} {top:.1f} "
+                   f"Q{x1:.1f} {top + wd * 0.08:.1f} {x1:.1f} {spring:.1f} L{x1:.1f} {bottom:.1f} Z")
+        s.polygon([(x0 + 10, bottom), (x1 - 10, bottom), (x1 + 120, 540), (x0 + 60, 540)], fill="#bcc8ff", opacity=0.06)
+        s.path(outline, fill=s.linear(0, top, 0, bottom, [(0, "#05061c"), (0.6, "#1c1650"), (1, "#3a2470")]))
+        _soft(s, cx + r.uniform(-20, 20), (spring + bottom) / 2, wd * 0.45, 40, NEBULA_TEAL if seed % 2 else NEBULA_MAGENTA, 0.3, 0.2, -30)
+        for _ in range(28):
+            s.circle(r.uniform(x0 + 6, x1 - 6), r.uniform(spring - 30, bottom - 8), r.uniform(0.5, 1.3), fill="#ffffff", opacity=r.uniform(0.4, 0.95))
+        for _ in range(3):
+            _sparkle(s, r.uniform(x0 + 14, x1 - 14), r.uniform(spring, bottom - 40), r.uniform(2.5, 4), 0.9)
+        if seed % 2:  # a slice of the ringed planet
+            px, py, pr = x1 - 22, bottom - 70, 34
+            s.circle(px, py, pr, fill=s.radial(px - pr * 0.4, py - pr * 0.4, pr * 1.5, [(0, "#ffe6c8"), (0.4, "#d88aa6"), (1, "#3a2468")]))
+            s.ellipse(px, py + 4, pr * 1.9, pr * 0.32, stroke="#e2d4fb", width=3, opacity=0.6)
+        # mullions and tracery in gold over star-stone
+        for lx in (cx - wd / 6, cx + wd / 6):
+            s.line(lx, spring - 12, lx, bottom, "#05061a", 5)
+            s.line(lx, spring - 12, lx, bottom, GOLD_DARK, 2.0)
+        for y in (spring + (bottom - spring) * 0.4, spring + (bottom - spring) * 0.75):
+            s.line(x0, y, x1, y, "#05061a", 4)
+            s.line(x0, y, x1, y, GOLD_DARK, 1.6)
+        s.circle(cx, top + wd * 0.34, wd * 0.18, stroke=GOLD, width=2.4)
+        s.polygon(star_points(cx, top + wd * 0.34, wd * 0.15, wd * 0.05, 8), fill=None, stroke=GOLD, width=1.2)
+        s.path(outline, stroke="#05061a", width=13)
+        s.path(outline, stroke="#3a4496", width=9)
+        s.path(outline, stroke=GOLD, width=1.8)
+        s.rect(x0 - 16, bottom - 1, wd + 32, 13, fill=s.linear(0, bottom, 0, bottom + 13, [(0, "#6a76cc"), (1, "#1e2462")]), stroke="#05061a",
+               width=1.6, rx=2)
+        s.line(x0 - 15, bottom + 0.5, x1 + 15, bottom + 0.5, GOLD, 1.4)
+
+    def _star_chart(self, s: Svg, cx: float, top: float, wd: float, ht: float, seed: int) -> None:
+        """Framed star chart on deep-blue vellum: a constellation, a few
+        orbits and graduation marks."""
+        x0 = cx - wd / 2
+        s.rect(x0 + 4, top + 6, wd, ht, fill="#05061a", opacity=0.45)
+        s.rect(x0, top, wd, ht, fill=s.linear(0, top, 0, top + ht, [(0, "#1e2a6e"), (1, "#121848")]), stroke=GOLD, width=3)
+        s.rect(x0 + 5, top + 5, wd - 10, ht - 10, stroke=GOLD_DARK, width=0.8, opacity=0.8)
+        c = (cx, top + ht * 0.4)
+        for k, rr in enumerate((wd * 0.38, wd * 0.26)):
+            s.circle(c[0], c[1], rr, stroke="#8a96e0", width=0.7, opacity=0.6)
+        for k in range(12):
+            a = k * math.pi / 6
+            s.line(c[0] + math.cos(a) * wd * 0.38, c[1] + math.sin(a) * wd * 0.38, c[0] + math.cos(a) * wd * 0.42, c[1] + math.sin(a) * wd * 0.42,
+                   GOLD_LIGHT, 0.8, 0.8)
+        pts, edges = _constellation_shape(seed, 17, x0 + 12, x0 + wd - 12, top + ht * 0.6, top + ht - 14)
+        _inlay(s, pts, edges, 0.9, 0.45, groove=False)
+        r = Rand(seed)
+        for _ in range(14):
+            s.circle(r.uniform(x0 + 8, x0 + wd - 8), r.uniform(top + 8, top + ht - 8), r.uniform(0.5, 1.0), fill="#ffffff", opacity=0.7)
+        _sparkle(s, c[0], c[1], 6, 0.9, GOLD_HI)
+        for ex in (x0, x0 + wd):
+            s.circle(ex, top, 3.2, fill=GOLD_LIGHT, stroke="#05061a", width=1)
+            s.circle(ex, top + ht, 3.2, fill=GOLD_LIGHT, stroke="#05061a", width=1)
+
+    def _astrolabe(self, s: Svg, cx: float, cy: float, rad: float) -> None:
+        """Giant gold astrolabe: graduated mater, engraved plate, an openwork
+        rete with star pointers, the rule across it and a central boss."""
+        _glow(s, cx, cy, rad * 1.5, "#ffd88a", 0.25)
+        s.circle(cx, cy, rad, fill=s.radial(cx - rad * 0.3, cy - rad * 0.3, rad * 1.4, [(0, "#2a3480"), (1, "#0e1240")]))
+        for k, rr in enumerate((0.82, 0.62, 0.42)):  # engraved plate circles and arcs
+            s.circle(cx, cy, rad * rr, stroke=GOLD_LIGHT, width=0.8, opacity=0.35)
+        for k in range(5):
+            s.path(f"M{cx - rad * 0.86:.1f} {cy + rad * (0.1 + 0.12 * k):.1f} Q{cx:.1f} {cy - rad * (0.5 - 0.15 * k):.1f} "
+                   f"{cx + rad * 0.86:.1f} {cy + rad * (0.1 + 0.12 * k):.1f}", stroke=GOLD_LIGHT, width=0.7, opacity=0.25)
+        # mater: graduated gold ring
+        s.circle(cx, cy, rad, stroke=GOLD_DEEP, width=16)
+        s.circle(cx, cy, rad, stroke=s.linear(cx - rad, cy - rad, cx + rad, cy + rad, [(0, GOLD_HI), (0.5, GOLD), (1, GOLD_DARK)]), width=13)
+        for k in range(72):
+            a = k * math.pi / 36
+            ln = 6.0 if k % 6 == 0 else 3.0
+            s.line(cx + math.cos(a) * (rad - 6), cy + math.sin(a) * (rad - 6), cx + math.cos(a) * (rad - 6 + ln), cy + math.sin(a) * (rad - 6 + ln),
+                   GOLD_DEEP, 0.9 if k % 6 else 1.4)
+        for k in range(12):
+            a = k * math.pi / 6 + math.pi / 12
+            s.polygon(star_points(cx + math.cos(a) * (rad + 1.5), cy + math.sin(a) * (rad + 1.5), 2.6, 1.0, 4), fill=GOLD_DEEP)
+        # rete: an eccentric ecliptic ring and curved pointers ending in stars
+        ex, ey, er = cx + rad * 0.12, cy - rad * 0.1, rad * 0.62
+        s.circle(ex, ey, er, stroke=GOLD, width=5)
+        s.circle(ex, ey, er, stroke=GOLD_HI, width=1.2, opacity=0.8)
+        for k in range(7):
+            a = k * 2 * math.pi / 7 + 0.4
+            sx, sy = cx + math.cos(a) * rad * 0.2, cy + math.sin(a) * rad * 0.2
+            tx, ty = cx + math.cos(a + 0.5) * rad * 0.74, cy + math.sin(a + 0.5) * rad * 0.74
+            mx, my = cx + math.cos(a + 0.15) * rad * 0.55, cy + math.sin(a + 0.15) * rad * 0.55
+            s.path(f"M{sx:.1f} {sy:.1f} Q{mx:.1f} {my:.1f} {tx:.1f} {ty:.1f}", stroke=GOLD, width=3)
+            _glow(s, tx, ty, 9, "#fff0b8", 0.6)
+            _sparkle(s, tx, ty, 6, 1.0, "#fffaf0")
+        # the rule (alidade)
+        a = math.radians(-28)
+        dx, dy = math.cos(a) * rad * 0.98, math.sin(a) * rad * 0.98
+        nx, ny = -math.sin(a) * 5, math.cos(a) * 5
+        s.polygon([(cx - dx, cy - dy), (cx - nx, cy - ny), (cx + dx, cy + dy), (cx + nx, cy + ny)],
+                  fill=s.linear(cx - dx, cy - dy, cx + dx, cy + dy, [(0, GOLD_LIGHT), (1, GOLD_DARK)]), stroke=GOLD_DEEP, width=1.0)
+        s.circle(cx, cy, 13, fill=s.radial(cx - 3, cy - 3, 14, [(0, GOLD_HI), (0.6, GOLD), (1, GOLD_DARK)]), stroke=GOLD_DEEP, width=1.2)
+        s.polygon(star_points(cx, cy, 8, 3, 8), fill="#fffaf0")
+        # suspension ring and chain to the vault
+        s.circle(cx, cy - rad - 14, 9, stroke=GOLD, width=3.2)
+        s.line(cx, cy - rad - 23, cx, 0, GOLD_DARK, 3)
+
+    def _eclipse_throne(self, s: Svg, r: Rand) -> None:
+        """The eclipse behind the throne: a black sun with a ragged corona,
+        light raking across the hall, and the throne on its stepped dais."""
+        cx, cy, rad = 480.0, 196.0, 104.0
+        for k in range(10):  # rays of the corona raking across the hall
+            a = math.radians(-160 + k * 15 + r.uniform(-4, 4))
+            ln = r.uniform(420, 620)
+            wd = math.radians(r.uniform(2.0, 4.0))
+            s.polygon([(cx, cy), (cx + math.cos(a - wd) * ln, cy + math.sin(a - wd) * ln), (cx + math.cos(a + wd) * ln, cy + math.sin(a + wd) * ln)],
+                      fill="#ffe2a0", opacity=0.05)
+        _glow(s, cx, cy, rad * 3.2, "#ff7ad0", 0.22)
+        _glow(s, cx, cy, rad * 2.0, "#ffd890", 0.45)
+        for k in range(36):  # ragged streamers
+            a = k * math.pi / 18 + 0.07
+            ln = rad * (0.25 + 0.75 * _hash(k, 151) ** 2)
+            w0 = 0.05 + 0.05 * _hash(k, 152)
+            s.polygon([(cx + math.cos(a - w0) * rad * 0.98, cy + math.sin(a - w0) * rad * 0.98), (cx + math.cos(a) * (rad + ln), cy + math.sin(a) * (rad + ln)),
+                       (cx + math.cos(a + w0) * rad * 0.98, cy + math.sin(a + w0) * rad * 0.98)], fill="#fff2cc", opacity=0.3)
+        s.circle(cx, cy, rad * 1.05, fill="#fff8e6", opacity=0.9)
+        s.circle(cx, cy, rad, fill=s.radial(cx, cy, rad, [(0, "#020108"), (0.86, "#08041a"), (1, "#2a1036")]))
+        _glow(s, cx - rad * 0.72, cy + rad * 0.7, 26, "#ffffff", 0.9)  # the diamond-ring flash
+        _sparkle(s, cx - rad * 0.72, cy + rad * 0.7, 16, 1.0)
+        # crystal braziers flanking the dais
+        for bx in (250.0, 710.0):
+            _glow(s, bx, 300, 70, GLOW_MAGENTA, 0.35)
+            s.path(f"M{bx - 16:.1f} 316 L{bx + 16:.1f} 316 L{bx + 9:.1f} 334 L{bx - 9:.1f} 334 Z", fill=s.linear(0, 316, 0, 334, [(0, GOLD_LIGHT), (1, GOLD_DARK)]),
+                   stroke="#05061a", width=1.4)
+            s.rect(bx - 4, 334, 8, 96, fill=s.linear(bx - 4, 0, bx + 4, 0, [(0, "#4a56a8"), (1, "#121646")]), stroke="#05061a", width=1.2)
+            for k in range(3):
+                _crystal(s, bx + (k - 1) * 7, 318, (k - 1) * 20, 26 - abs(k - 1) * 8, 8, "#fff0fb", "#b04ab8", "#3a0a3a", 0.8)
+        # stepped dais with gold nosings
+        for k in range(4):
+            wd = 420 - k * 80
+            y = 430 - 16 * (k + 1)
+            s.rect(480 - wd / 2, y, wd, 16, fill=mix("#141646", "#232a68", k / 4), stroke="#05061a", width=1.2)
+            s.line(480 - wd / 2, y + 0.8, 480 + wd / 2, y + 0.8, GOLD, 1.6)
+        # the throne: a tall dark back with a gold rim and a crystal eclipse emblem
+        seat = 366.0
+        back = (f"M{480 - 58:.1f} {seat:.1f} L{480 - 54:.1f} 170 Q480 104 {480 + 54:.1f} 170 L{480 + 58:.1f} {seat:.1f} Z")
+        s.path(back, fill=s.linear(0, 120, 0, seat, [(0, "#1a1a50"), (1, "#0a0a28")]), stroke=GOLD, width=2.4)
+        s.path(f"M{480 - 40:.1f} {seat - 20:.1f} L{480 - 38:.1f} 182 Q480 132 {480 + 38:.1f} 182 L{480 + 40:.1f} {seat - 20:.1f} Z", fill="#06061c",
+               opacity=0.7)
+        for k in range(5):  # crown of spikes on the backrest
+            a = math.radians(-90 + (k - 2) * 24)
+            bx, by = 480 + math.cos(a) * 40, 150 + math.sin(a) * 8
+            tip = (bx + math.cos(a) * (46 - abs(k - 2) * 10), by + math.sin(a) * (46 - abs(k - 2) * 10))
+            nx, ny = -math.sin(a) * 7, math.cos(a) * 7
+            s.polygon([(bx + nx, by + ny), tip, (bx - nx, by - ny)], fill="#121244", stroke=GOLD, width=1.2)
+        s.circle(480, 200, 16, fill=s.radial(480, 200, 16, [(0, "#05030c"), (0.8, "#120a26"), (1, "#3a1a3a")]), stroke=GOLD_LIGHT, width=2)
+        s.circle(480, 200, 19, stroke="#fff2c8", width=1.2, opacity=0.8)
+        s.rect(480 - 82, seat - 8, 164, 24, fill=s.linear(0, seat - 8, 0, seat + 16, [(0, "#2a3070"), (1, "#10123a")]), stroke=GOLD, width=1.6, rx=4)
+        for side in (-1, 1):
+            ax = 480 + side * 72
+            s.rect(ax - 12, seat - 44, 24, 58, fill="#16184a", stroke=GOLD, width=1.4, rx=5)
+            s.circle(ax, seat - 44, 7, fill=s.radial(ax - 2, seat - 46, 8, [(0, "#ffffff"), (0.5, GLOW_VIOLET), (1, "#4a2a9a")]), stroke=GOLD_DEEP, width=1)
+
+    def _colonnade(self, throne: bool) -> Svg:
+        """900×420 layer (scrolls at 0.45×): crystal columns with gold capitals
+        carrying star-stone arches, constellation banners hanging between them
+        (torn in the throne room). Tiles horizontally."""
+        w, h = 900.0, 420.0
+        s = Svg(w, h)
+        cols = (150.0, 600.0)
+        cw = 58.0
+        cap = 64.0
+        for a, b in ((-300.0, 150.0), (150.0, 600.0), (600.0, 1050.0)):
+            self._arch(s, a + cw / 2 + 8, b - cw / 2 - 8, cap)
+        for x in cols:
+            self._crystal_column(s, x, cap, h, cw)
+        for bx in (375.0, 825.0, -75.0):
+            self._banner(s, bx, cap + 34, 190, 54, torn=throne)
+        return s
+
+    def _arch(self, s: Svg, xa: float, xb: float, spring: float) -> None:
+        span = xb - xa
+        rise = spring - 6
+        thick = 18.0
+        outer = [(xa - 8 + (span + 16) * t, spring - (rise + 4) * math.sin(math.pi * t)) for t in [i / 24 for i in range(25)]]
+        inner = [(xa + span * t, spring + thick - (rise - thick + 8) * math.sin(math.pi * t)) for t in [i / 24 for i in range(25)]]
+        s.path(_poly(outer + list(reversed(inner))), fill=s.linear(0, 0, 0, spring + thick, [(0, "#3a4496"), (1, "#1a1e56")]), stroke="#05061a",
+               width=1.6)
+        for t in [i / 10 for i in range(1, 10)]:
+            ox, oy = xa - 8 + (span + 16) * t, spring - (rise + 4) * math.sin(math.pi * t)
+            ix, iy = xa + span * t, spring + thick - (rise - thick + 8) * math.sin(math.pi * t)
+            s.line(ox, oy, ix, iy, "#0a0b2c", 1.2, 0.8)
+        s.path(_line(inner[1:-1]), stroke=GOLD, width=1.6, opacity=0.85)
+        s.path(_line(outer[1:-1]), stroke="#8a96e0", width=1.4, opacity=0.5)
+        mid = inner[12]
+        s.polygon(star_points(mid[0], mid[1] + 6, 6, 2.2, 4), fill=GOLD_LIGHT)
+
+    def _crystal_column(self, s: Svg, x: float, cap: float, h: float, cw: float) -> None:
+        """Faceted crystal shaft between a gold capital and a star-stone base."""
+        y0, y1 = cap + 16, h - 30
+        s.rect(x - cw / 2, y0, cw, y1 - y0, fill=s.linear(x - cw / 2, 0, x + cw / 2, 0, [(0, "#8a80d8"), (0.3, "#4c40a0"), (0.55, "#2c2470"),
+                                                                                    (1, "#140f40")]), stroke="#05061a", width=1.6)
+        for fx, op in ((-0.3, 0.35), (-0.05, 0.18), (0.22, 0.12)):
+            s.line(x + fx * cw, y0 + 2, x + fx * cw, y1 - 2, "#ffffff", 1.2, op)
+        for k in range(4):  # inner light motes rising in the crystal
+            yy = y0 + 30 + k * (y1 - y0 - 40) / 4
+            _glow(s, x - cw * 0.1, yy, 9, "#c8f0ff", 0.35)
+        s.rect(x - cw / 2 - 9, cap, cw + 18, 16, fill=s.linear(0, cap, 0, cap + 16, [(0, GOLD_HI), (0.5, GOLD), (1, GOLD_DARK)]), stroke="#05061a",
+               width=1.6, rx=2)
+        for k in range(5):
+            s.circle(x - cw / 2 - 2 + (cw + 4) * (k + 0.5) / 5, cap + 8, 1.4, fill=GOLD_DEEP)
+        s.rect(x - cw / 2 - 7, y1, cw + 14, 30, fill=s.linear(0, y1, 0, h, [(0, "#4a56a8"), (1, "#141846")]), stroke="#05061a", width=1.6, rx=2)
+        s.line(x - cw / 2 - 6, y1 + 2, x + cw / 2 + 6, y1 + 2, GOLD, 1.6)
+        # star lamp on the shaft
+        _glow(s, x, cap + 70, 26, "#fff0b8", 0.55)
+        s.polygon(star_points(x, cap + 70, 9, 3.4, 4), fill="#fffaf0", stroke=GOLD, width=1.0)
+
+    def _banner(self, s: Svg, x: float, top: float, length: float, wd: float, torn: bool) -> None:
+        """Deep-blue banner with a gold constellation and a forked tail."""
+        s.line(x - wd * 0.7, top, x + wd * 0.7, top, "#05061a", 5)
+        s.line(x - wd * 0.7, top - 1, x + wd * 0.7, top - 1, GOLD, 1.6)
+        for ex in (x - wd * 0.7, x + wd * 0.7):
+            s.circle(ex, top, 3.6, fill=GOLD_LIGHT, stroke="#05061a", width=1.2)
+        tail = top + length
+        if torn:
+            d = (f"M{x - wd / 2:.1f} {top:.1f} L{x + wd / 2:.1f} {top:.1f} L{x + wd / 2:.1f} {tail - 40:.1f} L{x + wd * 0.18:.1f} {tail - 16:.1f} "
+                 f"L{x + wd * 0.02:.1f} {tail - 48:.1f} L{x - wd * 0.2:.1f} {tail - 6:.1f} L{x - wd / 2:.1f} {tail - 30:.1f} Z")
+        else:
+            d = (f"M{x - wd / 2:.1f} {top:.1f} L{x + wd / 2:.1f} {top:.1f} L{x + wd / 2:.1f} {tail:.1f} L{x:.1f} {tail - wd * 0.45:.1f} "
+                 f"L{x - wd / 2:.1f} {tail:.1f} Z")
+        s.path(d, fill=s.linear(x - wd / 2, 0, x + wd / 2, 0, [(0, "#2a3488"), (0.45, "#1e2670"), (1, "#0e1240")]), stroke="#05061a", width=2.0)
+        s.line(x - wd / 2 + 3, top + 8, x + wd / 2 - 3, top + 8, GOLD, 1.4, 0.9)
+        pts = [(x - wd * 0.28, top + 40), (x - wd * 0.05, top + 30), (x + wd * 0.22, top + 46), (x + wd * 0.08, top + 72), (x - wd * 0.2, top + 88)]
+        _inlay(s, pts, [(0, 1), (1, 2), (2, 3), (3, 4)], 1.1, 0.45, groove=False)
+        s.path(_line([(x - wd / 2 + 2, top + 4), (x - wd / 2 + 2, tail - 36)]), stroke="#ffffff", width=2.0, opacity=0.18)
+
+    # ------------------------------------------------------------------ cave rooms: inside a hollow asteroid
+    def cave_sky(self) -> Svg:
+        """Inside a hollow asteroid: craggy shell walls, glowing geodes, a rift
+        open on the stars, floating rocks and crystal clusters."""
+        s = Svg(960, 540)
+        r = Rand(71)
+        s.rect(0, 0, 960, 540, fill=s.linear(0, 0, 0, 540, [(0, "#0a0816"), (0.5, "#16122a"), (1, "#0a0812")]))
+        # the rift: a jagged opening in the shell showing space
+        rift = [(300, 0), (330, 40), (372, 62), (420, 58), (470, 86), (530, 72), (590, 90), (640, 60), (690, 44), (720, 0)]
+        s.path(_poly(rift), fill=s.linear(0, 0, 0, 90, [(0, "#05061c"), (1, "#24185a")]))
+        _soft(s, 520, 50, 170, 28, NEBULA_MAGENTA, 0.35, 0.2, 8)
+        _soft(s, 420, 40, 120, 22, NEBULA_TEAL, 0.3, 0.2, -6)
+        for _ in range(40):
+            x, y = r.uniform(320, 700), r.uniform(4, 70)
+            s.circle(x, y, r.uniform(0.5, 1.2), fill="#ffffff", opacity=r.uniform(0.5, 1.0))
+        s.path(_line(rift[1:-1]), stroke="#b8b0e6", width=2.0, opacity=0.6)
+        # shell walls: layered craggy silhouettes, rim-lit by the geodes
+        for layer, (color, rim, base, amp) in enumerate((("#1c1830", "#4a4270", 300.0, 120.0), ("#241f3c", "#5a5288", 380.0, 90.0))):
+            pts = [(0.0, 540.0)]
+            for k in range(25):
+                x = k * 40.0
+                pts.append((x, base - amp * (0.5 + 0.5 * math.cos(x / 960 * 2 * math.pi)) + r.uniform(-18, 18)))
+            pts.append((960.0, 540.0))
+            s.path(_poly(pts), fill=color)
+            s.path(_line(pts[1:-1]), stroke=rim, width=2.0, opacity=0.5)
+        for side in (-1, 1):  # the curve of the shell closing overhead
+            x = 0.0 if side < 0 else 960.0
+            s.path(f"M{x:.1f} 0 L{x + side * -300:.1f} 0 Q{x + side * -150:.1f} 60 {x + side * -40:.1f} 300 L{x:.1f} 360 Z", fill="#120f22")
+        # glowing geodes in the walls
+        for gx, gy, gr, color in ((150.0, 250.0, 46.0, GLOW_TEAL), (812.0, 210.0, 54.0, GLOW_VIOLET), (560.0, 330.0, 34.0, "#ff8ae0"),
+                                  (330.0, 360.0, 28.0, GLOW_TEAL)):
+            _glow(s, gx, gy, gr * 2.6, color, 0.35)
+            s.ellipse(gx, gy, gr * 1.3, gr, fill="#8a84b4", stroke="#0c0a18", width=2)
+            s.ellipse(gx, gy, gr * 1.12, gr * 0.84, fill=s.radial(gx, gy, gr * 1.2, [(0, shade(color, 0.55)), (0.5, color), (1, shade(color, -0.6))]))
+            for k in range(14):
+                a = k * 2 * math.pi / 14 + r.uniform(-0.12, 0.12)
+                bx, by = gx + math.cos(a) * gr * 1.08, gy + math.sin(a) * gr * 0.8
+                _crystal(s, bx, by, math.degrees(math.atan2(gx - bx, -(gy - by))), gr * r.uniform(0.3, 0.5), gr * 0.2, "#ffffff", color,
+                         shade(color, -0.6), 0.6)
+            _sparkle(s, gx - gr * 0.25, gy - gr * 0.2, gr * 0.25, 0.95)
+        # floating rocks in the low gravity of the hollow
+        for _ in range(7):
+            x, y = r.uniform(60, 900), r.uniform(120, 330)
+            rr = r.uniform(6, 16)
+            s.path(blob(x, y, rr * 1.4, rr, 0.22, seed=x), fill=s.linear(0, y - rr, 0, y + rr, [(0, "#4a4470"), (1, "#16122a")]), stroke="#0c0a18", width=1.2)
+            s.path(f"M{x - rr * 1.2:.1f} {y - rr * 0.3:.1f} Q{x - rr * 0.6:.1f} {y - rr * 1.0:.1f} {x + rr * 0.4:.1f} {y - rr * 0.95:.1f}",
+                   stroke="#a8a0d8", width=1.2, opacity=0.6)
+        # crystal clusters on the far floor
+        for k in range(6):
+            cx = 80 + k * 160 + r.uniform(-30, 30)
+            color = r.choice([GLOW_TEAL, GLOW_VIOLET])
+            _glow(s, cx, 470, 46, color, 0.3)
+            for j in range(3):
+                _crystal(s, cx + (j - 1) * 10, 482, (j - 1) * 18 + r.uniform(-6, 6), r.uniform(26, 44) * (1.2 if j == 1 else 0.8), 12,
+                         "#f2fffd", shade(color, -0.4), "#0c0a18", 1.0, 0.85)
+        for _ in range(40):
+            x, y = r.uniform(0, 960), r.uniform(90, 500)
+            s.circle(x, y, r.uniform(0.6, 1.4), fill=r.choice(["#c8fff6", "#e6dcff"]), opacity=r.uniform(0.3, 0.7))
+        return s
+
     # ------------------------------------------------------------------ arena gate
     def gate(self, w: float, h: float) -> Svg:
         """Arena portcullis: translucent crystal bars between gilded posts,

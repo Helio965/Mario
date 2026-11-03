@@ -119,7 +119,7 @@ def _crystal(s: Svg, x: float, y: float, angle: float, length: float, width: flo
     a = math.radians(angle)
     ux, uy = math.cos(a), math.sin(a)
     nx, ny = -uy * width / 2, ux * width / 2
-    if nx > 0 or (nx == 0 and ny > 0):  # make (x - nx, y - ny) the lit (left/up) side
+    if nx < 0 or (nx == 0 and ny < 0):  # make (x - nx, y - ny) the lit (left/up) side
         nx, ny = -nx, -ny
     shoulder = max(0.0, length - width * 0.8)
     sx, sy = x + ux * shoulder, y + uy * shoulder
@@ -127,8 +127,8 @@ def _crystal(s: Svg, x: float, y: float, angle: float, length: float, width: flo
     body = [(x + nx, y + ny), (sx + nx, sy + ny), (tx, ty), (sx - nx, sy - ny), (x - nx, y - ny)]
     s.polygon(body, fill=s.linear(x - nx, y - ny, x + nx, y + ny, [(0, CRYSTAL_HI), (0.45, tone), (1, shade(tone, -0.42))]),
               stroke=CRYSTAL_LINE, width=0.6, opacity=opacity)
-    s.polygon([(x + nx * 0.1, y + ny * 0.1), (sx + nx * 0.1, sy + ny * 0.1), (tx, ty), (sx + nx * 0.7, sy + ny * 0.7),
-               (x + nx * 0.7, y + ny * 0.7)], fill="#ffffff", opacity=0.42 * opacity)
+    s.polygon([(x - nx * 0.1, y - ny * 0.1), (sx - nx * 0.1, sy - ny * 0.1), (tx, ty), (sx - nx * 0.7, sy - ny * 0.7),
+               (x - nx * 0.7, y - ny * 0.7)], fill="#ffffff", opacity=0.42 * opacity)
 
 
 def _cluster(s: Svg, x: float, y: float, size: float, seed: int, tone: str = CRYSTAL, hanging: bool = False,
@@ -138,8 +138,11 @@ def _cluster(s: Svg, x: float, y: float, size: float, seed: int, tone: str = CRY
     sign = 1 if hanging else -1
     if glow > 0:
         _glow(s, x, y + sign * size * 0.45, size * 1.25, tone, glow)
-    for da, lk, wk in ((-30, 0.62, 0.42), (26, 0.7, 0.42), (0, 1.0, 0.52))[: 2 + (seed % 2)] if seed % 3 else \
-            ((-34, 0.55, 0.4), (-8, 0.95, 0.5), (22, 0.74, 0.44)):
+    if seed % 3:
+        shapes = ((-30, 0.62, 0.42), (26, 0.7, 0.42), (0, 1.0, 0.52))[: 2 + seed % 2]
+    else:
+        shapes = ((-34, 0.55, 0.4), (22, 0.74, 0.44), (-8, 0.95, 0.5))
+    for da, lk, wk in shapes:
         _crystal(s, x + da * size * 0.012, y, sign * 90 + da + r.uniform(-6, 6), size * lk, size * wk, tone)
 
 
@@ -281,8 +284,8 @@ def _balloon(s: Svg, x: float, y: float, size: float, colors: tuple[str, str], s
     bw, bh = size * 0.26, size * 0.17
     s.rect(x - bw / 2, basket_y, bw, bh, fill=s.linear(0, basket_y, 0, basket_y + bh, [(0, WICKER_HI), (1, WICKER_DEEP)]), rx=size * 0.03)
     s.line(x - bw / 2, basket_y + bh * 0.4, x + bw / 2, basket_y + bh * 0.4, WICKER_DEEP, max(0.5, size * 0.012), 0.8)
-    if r.next() < 2:  # flame glow in the mouth
-        _glow(s, x, mouth, size * 0.12, "#ffd27a", 0.7)
+    _glow(s, x, mouth + size * 0.04, size * 0.12, "#ffd27a", 0.7)  # burner flame in the mouth
+    del r
 
 
 def _banner(s: Svg, x: float, base: float, height: float, length: float, color: str, stripe: str, seed: int, ink: str = "#5a4a5a",
@@ -1245,8 +1248,9 @@ class SkyArchipelago(WorldArt):
                 if abs(theta) > 1.5:
                     continue
                 x = 480 + 500 * math.sin(theta)
-                yj = y + 14 - 20 * math.cos(theta) + 20 * 0.0
-                s.line(x, yj + 4, x, yj + 40, joint, 2.0, 0.5)
+                t = x / 960
+                yj = y + 14 - 40 * t * (1 - t)  # on this course's arc; the next one is 40 lower
+                s.line(x, yj, x, yj + 40, joint, 2.0, 0.5)
             if r.next() < 0.5:
                 bx = r.uniform(60, 900)
                 s.rect(bx, y + 14, r.uniform(40, 90), 24, fill="#ffffff" if not storm else "#7a84b8", opacity=0.05)
@@ -1609,10 +1613,11 @@ class SkyArchipelago(WorldArt):
         for k, fx in enumerate((0.3, 0.62, 0.8)):
             x = w * fx + r.uniform(-4, 4)
             depth = max(0.0, 1 - abs(x - tipx) / (w * 0.5))
-            yb = y1 - cut + cut * math.sin(math.pi * (x - cut * 1.6) / max(1.0, w - cut * 3.2)) ** 0.6 + tip_depth * depth ** 3
+            t = min(1.0, max(0.0, (x - cut * 1.6) / max(1.0, w - cut * 3.2)))
+            yb = y1 - cut + cut * math.sin(math.pi * t) ** 0.6 + tip_depth * depth ** 3
             _dangle(s, x, yb - 1.5, r.uniform(6, 14) if floating else r.uniform(4, 8), int(x * 3) + k, 0.9)
         if floating:
-            _cluster(s, tipx, y1 - cut + cut + tip_depth - 2.5, 7, int(w) + 5, CRYSTAL, hanging=True, glow=0.3)
+            _cluster(s, tipx, y1 + tip_depth - 2.5, 7, int(w) + 5, CRYSTAL, hanging=True, glow=0.3)
         if wet:
             self._wet_cap(s, r, w, y0, True, True, 0.0)
         else:
@@ -1652,8 +1657,6 @@ class SkyArchipelago(WorldArt):
         s.line(2.5, 1.7, w - 2.5, 1.7, "#ffe2b8", 0.8, 0.8)
         for ex in (3.0, w - 3.0):  # bronze cleats
             s.circle(ex, deck + 1.0, 1.5, fill=BRONZE, stroke=BRONZE_LINE, width=0.6)
-        # pennant streaming from the stern (to the right, downwind)
-        s.path(f"M{w - 2:.1f} {deck + 2:.1f} Q{w - 2:.1f} {deck + 2:.1f} {w - 2:.1f} {deck + 2:.1f}", stroke=INK, width=0.1)
         return s
 
     def _crumble_cloud(self, w: float, h: float) -> Svg:

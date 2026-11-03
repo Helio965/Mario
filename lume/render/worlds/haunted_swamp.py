@@ -1908,61 +1908,64 @@ class HauntedSwamp(WorldArt):
         _moss_hang(s, w * 0.3, band + 1, 10, 12, w, ("#6a7a62", "#9aa88c"), 0.7)
 
     def _spring_mushroom(self, s: Svg, w: float, h: float) -> None:
-        """Spring: a squat swamp puffball — a leathery ash-violet cushion cap pored with
-        teal-green bioluminescence and glowing gill lines underneath, on a short rubbery
-        bellows stalk whose folds say 'it squashes' (no spotted dome)."""
+        """Spring: a squat swamp puffball — a leathery ash-violet cushion cap with a fine
+        band of teal-green bioluminescent pores and a glowing spore pore on its crown,
+        teal gills underneath, on a short rubbery bellows stalk whose folds say
+        'it squashes' (deliberately no spotted dome)."""
         r = Rand(int(w * 13 + h))
         cx = w / 2
-        cap_bot = h * 0.56
-        foot = h + 1.5
-        # rubbery bellows stalk: stacked bulging folds with dark creases
+        rim = h * 0.5
+        foot = h + 1.2
+        # rubbery bellows stalk: three bulging folds with dark creases
         folds = 3
-        ring = (foot - cap_bot + 1.0) / folds
+        top = rim + 1.0
+        ring = (foot - top) / folds
         for i in range(folds):
             y1 = foot - i * ring
-            y0 = y1 - ring - 0.6
-            half = w * (0.2 - 0.025 * i)
-            bulge = half * 1.22
-            s.path(f"M{cx - half:.2f} {y1:.2f} Q{cx - bulge:.2f} {(y0 + y1) / 2:.2f} {cx - half * 0.9:.2f} {y0:.2f} L{cx + half * 0.9:.2f} {y0:.2f} "
+            y0 = y1 - ring - 0.5
+            half = w * (0.19 - 0.022 * i)
+            bulge = half * 1.25
+            s.path(f"M{cx - half:.2f} {y1:.2f} Q{cx - bulge:.2f} {(y0 + y1) / 2:.2f} {cx - half * 0.88:.2f} {y0:.2f} L{cx + half * 0.88:.2f} {y0:.2f} "
                    f"Q{cx + bulge:.2f} {(y0 + y1) / 2:.2f} {cx + half:.2f} {y1:.2f} Z",
-                   fill=s.linear(cx - bulge, 0, cx + bulge, 0, [(0, "#7c748a"), (0.38, "#dcd6e4"), (1, "#625a74")]), stroke=INK, width=0.8)
-            s.path(f"M{cx - half * 0.75:.2f} {y1 - 0.5:.2f} Q{cx:.2f} {y1 + 0.7:.2f} {cx + half * 0.75:.2f} {y1 - 0.5:.2f}", stroke="#3e3650", width=0.7,
-                   opacity=0.75)
-        s.path(blob(cx, foot - 0.2, w * 0.3, 1.6, 0.3, seed=w), fill=MOSS["normal"][2])
-        # glowing gills under the cap
-        _haze(s, cx, cap_bot + 0.6, w * 0.44, 2.6, "#7ff0c8", 0.8)
+                   fill=s.linear(cx - bulge, 0, cx + bulge, 0, [(0, "#7c748a"), (0.36, "#e2dcea"), (1, "#5e566e")]), stroke=INK, width=0.8)
+            s.path(f"M{cx - half * 0.8:.2f} {y0 + 0.5:.2f} Q{cx:.2f} {y0 + 1.6:.2f} {cx + half * 0.8:.2f} {y0 + 0.5:.2f}", stroke="#3e3650", width=0.7,
+                   opacity=0.7)
+        s.path(blob(cx, foot + 0.2, w * 0.24, 0.9, 0.3, seed=w), fill=MOSS["normal"][2])
+        # gill band under the rim, glowing teal (drawn below the cap so it stays visible)
+        _haze(s, cx, rim + 1.6, w * 0.42, 2.4, "#7ff0c8", 0.75)
+        s.path(f"M{2.6:.2f} {rim:.2f} Q{cx:.2f} {rim + 4.2:.2f} {w - 2.6:.2f} {rim:.2f} Z", fill="#3a3452", stroke=INK, width=0.7)
         gills = []
-        for k in range(11):
-            u = (k + 0.5) / 11
-            gx = cx - w * 0.43 + w * 0.86 * u
-            gills.append(f"M{cx + (gx - cx) * 0.25:.2f} {cap_bot + 1.6:.2f}L{gx:.2f} {cap_bot + 0.2 + 0.9 * math.sin(math.pi * u):.2f}")
-        s.path("".join(gills), stroke="#b4ffe2", width=0.6, opacity=0.9)
-        # the cushion cap: low, wide, slightly lumpy, with a convex puffball underside
-        cap = (f"M{0.8:.2f} {cap_bot:.2f} C{-0.2:.2f} {cap_bot - h * 0.36:.2f} {cx - w * 0.36:.2f} 0.8 {cx - w * 0.08:.2f} 0.9 "
-               f"Q{cx:.2f} 0.5 {cx + w * 0.08:.2f} 0.9 C{cx + w * 0.36:.2f} 0.8 {w + 0.2:.2f} {cap_bot - h * 0.36:.2f} {w - 0.8:.2f} {cap_bot:.2f} "
-               f"Q{cx:.2f} {cap_bot + 2.8:.2f} 0.8 {cap_bot:.2f} Z")
-        s.path(cap, fill=s.radial(cx - w * 0.18, h * 0.08, w * 0.72, [(0, "#e8e2f2"), (0.45, "#a99fc4"), (1, "#5a5080")]), stroke=INK, width=1.2)
-        # leathery skin: fine darker cracks
+        for k in range(13):
+            u = (k + 0.5) / 13
+            gx = 3.2 + (w - 6.4) * u
+            gills.append(f"M{gx:.2f} {rim + 0.3:.2f}L{cx + (gx - cx) * 0.35:.2f} {rim + 1.2 + 1.6 * math.sin(math.pi * u):.2f}")
+        s.path("".join(gills), stroke="#a8ffe0", width=0.55, opacity=0.9)
+        # the cushion cap: a broad rounded puffball crown over a flat rim
+        cap = (f"M1.4 {rim:.2f} C0.2 {rim - h * 0.4:.2f} {cx - w * 0.3:.2f} 0.6 {cx:.2f} 0.6 "
+               f"C{cx + w * 0.3:.2f} 0.6 {w - 0.2:.2f} {rim - h * 0.4:.2f} {w - 1.4:.2f} {rim:.2f} Q{cx:.2f} {rim + 0.9:.2f} 1.4 {rim:.2f} Z")
+        s.path(cap, fill=s.radial(cx - w * 0.16, h * 0.06, w * 0.66, [(0, "#ebe6f3"), (0.45, "#aca2c6"), (1, "#5c5282")]), stroke=INK, width=1.2)
+        # leathery skin: a few fine cracks
+        cracks = []
         for _ in range(5):
-            x0 = r.uniform(w * 0.18, w * 0.8)
-            y0 = r.uniform(h * 0.12, cap_bot - 1.5)
-            s.path(f"M{x0:.2f} {y0:.2f} l{r.uniform(1.2, 2.6):.2f} {r.uniform(-0.6, 0.6):.2f} l{r.uniform(0.6, 1.6):.2f} {r.uniform(0.4, 1.0):.2f}",
-                   stroke="#5e5482", width=0.45, opacity=0.6)
-        # bioluminescent pores: tiny teal-green specks in a band (a glow, not polka dots)
-        _haze(s, cx, h * 0.3, w * 0.36, h * 0.13, "#7ff0c8", 0.35)
+            x0 = r.uniform(w * 0.2, w * 0.78)
+            y0 = r.uniform(h * 0.14, rim - 1.6)
+            cracks.append(f"M{x0:.2f} {y0:.2f} l{r.uniform(1.2, 2.4):.2f} {r.uniform(-0.5, 0.5):.2f} l{r.uniform(0.6, 1.4):.2f} {r.uniform(0.3, 0.9):.2f}")
+        s.path("".join(cracks), stroke="#5e5482", width=0.45, opacity=0.55)
+        # a fine band of bioluminescent pores following the cap's curve
         pores = []
-        for _ in range(16):
-            u = r.uniform(-0.82, 0.82)
-            px = cx + u * w * 0.42
-            top = cap_bot - (cap_bot - 1.0) * math.sqrt(max(0.0, 1 - u * u)) * 0.92
-            py = r.uniform(top + 0.8, cap_bot - 0.6)
-            pores.append(_dot(px, py, r.uniform(0.32, 0.6)))
-        s.path("".join(pores), fill="#c8fff0", opacity=0.95)
-        # bouncy sheen on the crown: the top reads as a soft rubbery cushion
-        s.path(f"M{cx - w * 0.34:.2f} {h * 0.24:.2f} Q{cx - w * 0.14:.2f} {h * 0.05:.2f} {cx + w * 0.12:.2f} {h * 0.07:.2f}", stroke="#f6f2ff", width=1.1,
+        for k in range(17):
+            u = -0.86 + 1.72 * k / 16
+            py = rim - (rim - 0.6) * 0.42 * math.sqrt(max(0.0, 1 - u * u)) + r.uniform(-0.25, 0.25)
+            pores.append(_dot(cx + u * (w / 2 - 2.0), py, 0.3 + 0.12 * (k % 3 == 1)))
+        _haze(s, cx, rim - h * 0.17, w * 0.4, h * 0.08, "#7ff0c8", 0.3)
+        s.path("".join(pores), fill="#9cf7d2", opacity=0.95)
+        # the spore pore on the crown, softly glowing
+        _glow(s, cx + 0.4, 1.6, 3.4, "#7ff0c8", 0.6)
+        s.path(f"M{cx - 1.6:.2f} 1.5 Q{cx + 0.4:.2f} 0.8 {cx + 2.2:.2f} 1.6 Q{cx + 0.4:.2f} 2.3 {cx - 1.6:.2f} 1.5 Z", fill="#d6fff0", stroke="#2e2848",
+               width=0.4)
+        # bouncy sheen: the crown reads as a soft rubbery cushion
+        s.path(f"M{cx - w * 0.36:.2f} {h * 0.3:.2f} Q{cx - w * 0.22:.2f} {h * 0.08:.2f} {cx - w * 0.04:.2f} {h * 0.07:.2f}", stroke="#f6f2ff", width=1.1,
                opacity=0.85)
-        s.path(f"M{cx + w * 0.2:.2f} {h * 0.1:.2f} Q{cx + w * 0.3:.2f} {h * 0.14:.2f} {cx + w * 0.36:.2f} {h * 0.22:.2f}", stroke="#f6f2ff", width=0.7,
-               opacity=0.5)
 
     def _root_shelf(self, w: float, h: float, slick: bool = False) -> Svg:
         """Ledge: a shelf of twisted roots packed with peat, moss on top, rootlets dangling (foxfire tips)."""
