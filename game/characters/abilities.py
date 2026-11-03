@@ -24,6 +24,14 @@ POWER_TEXT: dict[str, str | None] = {
 
 def grant_power(game: Game, kind: ItemKind) -> None:
     p = game.player
+    if game.invincible_model and kind in ("grow", "fire"):
+        # Pirilampo não usa poderes: o item vira pontos e uma moeda (Wonder/NSMBU Deluxe).
+        from game.core.interactions import collect_coin
+
+        collect_coin(game, p.x, p.y, False)
+        game.score += 250
+        game.events.append(GameEvent("power", text=None))
+        return
     if kind == "grow" and p.power == "small":
         p.power = "grown"
     elif kind == "fire":
@@ -67,7 +75,12 @@ def update_powers(game: Game, dt: float, input_state: object) -> None:
         if overlaps(p, i):
             i.alive = False
             grant_power(game, i.kind)
-    if getattr(input_state, "ability", False) and p.power == "fire" and p.shoot_cooldown <= 0:
+    if (
+        getattr(input_state, "ability", False)
+        and p.power == "fire"
+        and p.shoot_cooldown <= 0
+        and "none" not in game.abilities
+    ):
         game.projectiles.append(
             Projectile(
                 x=p.x + (p.w if p.facing > 0 else -10),

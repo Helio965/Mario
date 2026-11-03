@@ -35,6 +35,8 @@ EventType = Literal[
     "complete",
     "boss",
     "life",
+    "boss_intro",
+    "boss_phase",
 ]
 
 PLATFORM_KINDS: tuple[str, ...] = (
@@ -325,6 +327,13 @@ class Player:
     run_grace: float = 0.0
     skidding: bool = False
     hit_ceiling: bool = False
+    crouching: bool = False
+    charge: float = 0.0  # salto carregado (Fagulha): tempo agachada parada
+    charged: bool = False
+    float_time: float = 0.0  # flutuação (Aurora): tempo restante no ar
+    float_used: bool = False
+    floating: bool = False
+    stun: float = 0.0  # Pirilampo: sem controle após o empurrão
 
 
 @dataclass(slots=True)

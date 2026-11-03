@@ -5,6 +5,18 @@ from __future__ import annotations
 import math
 
 from game.characters.abilities import update_powers
+from game.characters.roster import (
+    CHARGED_JUMP_HOLD,
+    CHARGED_JUMP_SPEED_MUL,
+    FLOAT_AIR_SPEED_CAP,
+    FLOAT_FALL_SPEED,
+    FLOAT_MAX_DURATION,
+    INVINCIBLE_KNOCKBACK,
+    INVINCIBLE_STUN,
+    SCUTTLE_FALL_GRAVITY_MUL,
+    Character,
+    get_character,
+)
 from game.core.interactions import burst, interact_world, update_platforms
 from game.core.types import (
     Coin,
@@ -41,14 +53,23 @@ class Game:
     """Estado completo de uma partida: fase carregada, jogador, entidades, eventos."""
 
     def __init__(
-        self, levels: list[Level] | None = None, profile: MovementProfile = LEGACY_PROFILE
+        self,
+        levels: list[Level] | None = None,
+        profile: MovementProfile = LEGACY_PROFILE,
+        character: str | Character = "lume",
     ) -> None:
         if levels is None:
             from game.levels.loader import load_levels
 
             levels = load_levels()
         self.levels: list[Level] = levels
-        self.profile = profile
+        self.character: Character = (
+            character if isinstance(character, Character) else get_character(character)
+        )
+        self.base_profile = profile
+        self.profile = self.character.profile(profile)
+        self.abilities = frozenset(self.character.delta.abilities)
+        self.invincible_model = self.character.delta.damage_model == "invincible"
         self.level: Level = levels[0]
         self.level_index = 0
         self.player: Player = Player(x=0, y=0)
@@ -123,7 +144,7 @@ class Game:
         self.checkpoint_reached = False
         self.found_relic = False
         self.elapsed = 0.0
-        self.time = self.level.time
+        self.time = self.level.time + self.character.delta.time_bonus
         self.status = "playing"
         self._accumulator = 0.0
         self._previous_jump = False
@@ -184,6 +205,12 @@ class Game:
         p.shoot_cooldown = max(0, p.shoot_cooldown - dt)
         self.shake = max(0, self.shake - dt)
         direction = int(input_state.right) - int(input_state.left)
+        if p.stun > 0:  # Pirilampo empurrado: sem controle por um instante
+            p.stun = max(0, p.stun - dt)
+            direction = 0
+            input_state = InputState(jump=False, run=input_state.run)
+        p.crouching = p.grounded and input_state.down and direction == 0
+        self._update_charge(p, input_state, dt)
         floor = next((s for s in self.platforms if s.id == p.standing_on), None)
         on_ice = floor is not None and floor.kind == "ice"
         if prof.model == "legacy":
@@ -201,7 +228,13 @@ class Game:
             speed = prof.jump_speed
             if prof.run_jump_speed is not None and abs(p.vx) >= prof.run_jump_threshold:
                 speed = prof.run_jump_speed
+            if p.charged:
+                speed *= CHARGED_JUMP_SPEED_MUL
+                p.charged = False
+                p.charge = 0.0
             p.vy = -speed
+            p.float_used = False
+            p.float_time = FLOAT_MAX_DURATION if "float" in self.abilities else 0.0
             p.grounded = False
             p.standing_on = None
             p.coyote = 0
@@ -210,7 +243,10 @@ class Game:
         if not input_state.jump and p.vy < -prof.jump_cut_speed:
             p.vy = -prof.jump_cut_speed
         gravity = prof.gravity if (p.vy < 0 and input_state.jump) else prof.fall_gravity
+        if "scuttle" in self.abilities and p.vy > 0 and input_state.jump and not p.grounded:
+            gravity *= SCUTTLE_FALL_GRAVITY_MUL
         p.vy = min(prof.terminal_velocity, p.vy + gravity * dt)
+        self._update_float(p, input_state, dt)
         collision = move_body(p, self.platforms, dt)
         p.grounded = collision.grounded
         p.standing_on = collision.standing_on
@@ -238,6 +274,37 @@ class Game:
         target_y = max(0, min(self.level.height - VIEW_HEIGHT, p.y - 250))
         self.camera.x += (target_x - self.camera.x) * (1 - math.exp(-6 * dt))
         self.camera.y += (target_y - self.camera.y) * (1 - math.exp(-6 * dt))
+
+    def _update_charge(self, p: Player, input_state: InputState, dt: float) -> None:
+        """Salto carregado (Fagulha): agachada parada por 0,5 s; mover cancela (SMB2 Power Squat).
+
+        Pressionar o salto no mesmo passo em que solta o agachamento ainda usa a carga.
+        """
+        if "charged_jump" not in self.abilities:
+            return
+        if p.crouching and abs(p.vx) < 1:
+            p.charge = min(CHARGED_JUMP_HOLD, p.charge + dt)
+            p.charged = p.charge >= CHARGED_JUMP_HOLD
+        elif p.grounded and not input_state.jump:
+            p.charge = 0.0
+            p.charged = False
+        # No ar a carga é mantida até ser consumida no impulso.
+
+    def _update_float(self, p: Player, input_state: InputState, dt: float) -> None:
+        """Flutuação (Aurora): após o ápice, segurando o salto, por até 0,8 s, uma vez por salto."""
+        p.floating = False
+        if "float" not in self.abilities or p.grounded or p.float_used:
+            return
+        if p.vy >= 0 and input_state.jump and p.float_time > 0:
+            p.floating = True
+            p.float_time = max(0.0, p.float_time - dt)
+            p.vy = min(p.vy, FLOAT_FALL_SPEED)
+            if abs(p.vx) > FLOAT_AIR_SPEED_CAP:
+                p.vx = FLOAT_AIR_SPEED_CAP if p.vx > 0 else -FLOAT_AIR_SPEED_CAP
+            if p.float_time <= 0:
+                p.float_used = True
+        elif p.vy >= 0 and not input_state.jump and p.float_time < FLOAT_MAX_DURATION:
+            p.float_used = True  # soltar encerra a flutuação desta queda
 
     def _horizontal_legacy(
         self, p: Player, input_state: InputState, direction: int, on_ice: bool, dt: float
@@ -315,6 +382,16 @@ class Game:
     def hurt(self) -> None:
         p = self.player
         if self.status != "playing" or p.invulnerable > 0 or p.star > 0:
+            return
+        if self.invincible_model:
+            # Pirilampo: inimigos não ferem; apenas empurram e atordoam (Nabbit/Yoshi).
+            if p.stun > 0:
+                return
+            p.stun = INVINCIBLE_STUN
+            p.vx = -p.facing * INVINCIBLE_KNOCKBACK
+            p.vy = min(p.vy, -120)
+            burst(self, p.x, p.y, "#c7f464", 6)
+            self.events.append(GameEvent("hurt"))
             return
         self.events.append(GameEvent("hurt"))
         self.shake = 0.12
