@@ -185,14 +185,26 @@ def main() -> int:
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--markdown")
     ap.add_argument("--json")
+    ap.add_argument("--from-json", help="reuse rows computed earlier instead of recomputing")
+    ap.add_argument("--update-report", action="store_true",
+                    help="replace the matrix block in docs/RELATORIO_EXPANSAO.md")
     a = ap.parse_args()
     if a.profile:
         sys.path.insert(0, str(ROOT / "tools"))
         import importlib
 
         sys.modules["tools_profile"] = importlib.import_module("profile_level")
-    rows = compute(render=a.render, profile=a.profile)
+    if a.from_json:
+        rows = json.loads(Path(a.from_json).read_text(encoding="utf-8"))
+    else:
+        rows = compute(render=a.render, profile=a.profile)
     md = markdown(rows)
+    if a.update_report:
+        report = ROOT / "docs" / "RELATORIO_EXPANSAO.md"
+        text = report.read_text(encoding="utf-8")
+        begin, end = "<!-- matriz:inicio -->", "<!-- matriz:fim -->"
+        start, stop = text.index(begin) + len(begin), text.index(end)
+        report.write_text(text[:start] + "\n" + md + "\n" + text[stop:], encoding="utf-8")
     print(md)
     if a.markdown:
         Path(a.markdown).write_text(md + "\n", encoding="utf-8")

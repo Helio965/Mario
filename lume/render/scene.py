@@ -102,10 +102,13 @@ class Scene:
         level = game.level
         if self.level_id == level.id:
             return
-        previous = self.world.id if self.world else None
+        previous = (self.world.id, self.world.variant) if self.world else None
         self.level_id = level.id
         self.world = world_art(level.art_set or level.world)
-        if previous and previous != self.world.id:
+        # the level's art variant (e.g. "storm", "oasis", "blizzard") lets a world vary
+        # its sky, layers and weather per level; world art is rebuilt when it changes
+        self.world.variant = level.art_variant or "default"
+        if previous and previous != (self.world.id, self.world.variant):
             self.store.clear("world")
         self.store.clear("level")
         w = self.world

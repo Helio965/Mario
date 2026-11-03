@@ -44,6 +44,9 @@ class WorldArt:
     ambient = (255, 255, 255)  # colour modulation for world sprites (dark worlds dim them)
     vignette = 0.28
     wind_tint = (255, 236, 200)  # colour of the wind-zone streaks (sand by default)
+    # The level's ``art.variant`` (set by Scene.prepare before any art is built), so a
+    # world can vary sky, layers, props and weather per level ("storm", "oasis", ...).
+    variant = "default"
 
     def sky(self) -> Svg:
         raise NotImplementedError

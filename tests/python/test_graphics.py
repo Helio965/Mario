@@ -167,3 +167,19 @@ def test_decor_and_terrain_layout_is_identical_across_processes():
         assert run.returncode == 0, run.stderr
         outputs.add(run.stdout.strip().splitlines()[-1])
     assert len(outputs) == 1
+
+
+def test_world_art_receives_the_level_art_variant(display_720):
+    """World art sets can vary per level: Scene.prepare hands them art.variant
+    and rebuilds world-level art when the variant changes within a world."""
+    a = CAMPAIGN.level("windswept_dunes")
+    b = CAMPAIGN.level("sunken_oasis")
+    scene = Scene(display_720)
+    scene.prepare(Game([a]))
+    assert scene.world.variant == (a.art_variant or "default")
+    scene.store.get(f"{scene.world.id}.sky")
+    assert scene.store.cache, "sky should be cached"
+    scene.prepare(Game([b]))
+    assert scene.world.variant == (b.art_variant or "default")
+    assert a.art_variant != b.art_variant
+    assert f"{scene.world.id}.sky" not in scene.store.cache  # rebuilt for the new variant
