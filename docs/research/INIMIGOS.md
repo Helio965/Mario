@@ -179,3 +179,147 @@ Cada ficha segue a mesma grade: movimento · percepção · ataque · obstáculo
 - **Telegraphing**: piscar nos últimos 64 q (SMB3/SMW), som de pavio/explosão.
 - **Para o Lume**: arquétipo "explosivo" (§6.7): PATROL (rápido) → FUSE (4,25 s, pisca no último 1,07 s; pisão/fogo acendem; chutável) → EXPLODE (0,67 s, raio ≈56 px, quebra tijolos, fere jogador e inimigos) → DEFEATED.
 
+### 3.11 Lakitu (e Spiny)
+
+- **OFICIAL** — Manual SMB1 (p. 11–13): "The mysterious turtle who controls the clouds. He chases after Mario and drops Spiny's eggs on top of him. 800 PTS."; Spiny: "Lakitu's pet, but a wild fighter. You can't kill him by jumping on top of him."; ovos: "You can't destroy them by jumping on them." [M-SMB1][W-LakituProf][W-SpinyEgg].
+- **Perseguição em SMB1 (DOCUMENTADO [D-SMB1])**: `PlayerLakituDiff` limita |dx| a `$3C` = **60 px**; se Lakitu está além disso **e se afastando**, desacelera 1 unidade/q até zero e inverte. `ChkPSpeed` escolhe a velocidade-base por **estado do jogador**: `LakituDiffAdj = $15,$30,$40` → **21 unid. (1,31 px/q = 79 px/s)** com o jogador parado, **48 (3 px/q = 180 px/s)** andando com a tela rolando, **64 (4 px/q = 240 px/s)** correndo (`Player_X_Speed ≥ $19`) com rolagem ≥ 2; de cada base subtrai-se `(|dx| & $3C)/4` (até 15 unid.). Ou seja, Lakitu só é mais rápido que Mario (2,5 px/q correndo) quando Mario corre — para conseguir passar à frente. Ao ser derrotado, reaparece quando `LakituReappearTimer` chega a 7 (incrementado a cada 128 q) ≈ **15 s**; sai da tela a 1 px/q quando o nível o desativa; "moves offscreen whenever the player character is about to activate the flagpole" [W-Lakitu].
+- **Arremesso em SMB1 (DOCUMENTADO [D-SMB1])**: `LakituAndSpinyHandler` roda quando `FrenzyEnemyTimer` expira e o recarrega com `$80` = **128 q (2,13 s)**; não lança se o jogador estiver acima de `Player_Y_Position < $2C` (44 px do topo) nem se Lakitu não estiver no estado normal. **Telegraph**: o desenhador usa o frame alternativo "escondido na nuvem" quando `FrenzyEnemyTimer < $10`, isto é, nos **16 q (0,27 s)** anteriores ao lançamento (a wiki fala em "about one second" — divergência, §10). O ovo nasce 8 px acima da nuvem com `vy = −3 px/q` e cai com gravidade `$20/256` (0,125 px/q² = 450 px/s², máx. 3 px/q); a velocidade horizontal calculada por `PRDiffAdjustData` é **perdida** ("set horizontal speed to zero because previous contents of A were lost") — o ovo cai reto; a wiki registra que "code leftovers suggest the eggs were meant to move horizontally" [W-SpinyEgg]. Spiny eclodido: 0,5 px/q, vira-se para o jogador em 7/8 dos pousos, não pisável (`EnemyStomped` → `InjurePlayer`), morre com fogo/estrela/casco/bloco por baixo [D-SMB1][W-Spiny]. Limite prático: com 4 Spinies em tela, Lakitu para de lançar (5 slots) [W-Spiny].
+- **SMB3 (DOCUMENTADO [D-SMB3])**: acelera 1/16 px/q a cada 2 q (≈112 px/s²) até `±$20` = **2 px/q = 120 px/s** na direção do jogador (foge quando um objeto de evento o desativa); acompanha a rolagem da tela; lançamento: a cada **64 q** (128 q em fases com rampas) o timer recebe `$1F` = 31 q e o inimigo é lançado quando chega a 1; entre 31 e 16 o sprite **afunda na nuvem** (~15 q de telegraph); fases com rampas usam "ovo verde" inofensivo que rola ("throw at half the rate of the red-throwing ones" [W-Lakitu]); com ~4 Spinies/ovos presentes "it will stop throwing new ones, but continue to mime doing so" [W-Lakitu]. Derrotado, cai e respawna "two screens behind".
+- **SMW**: "Lakitus follow the player character directly"; derrotá-lo com projétil deixa a nuvem utilizável; Lakitus em canos emergem como Piranhas e não saem com Mario em cima do cano [W-Lakitu]. Spiny Eggs e Spinies podem ser pisados com spin jump [W-SpinyEgg][W-Spiny].
+- **NSMB/Wii/U/Wonder**: cuidar da nuvem (1000 pts no DS); no Wii o pisão pode deixar a nuvem; alguns jogam moedas; U: Piranha Pods; Wonder: trio numa nuvem jogando moedas/1-UPs [W-Lakitu]. Spiny no DS vira ovo na água [W-Spiny].
+- **Para o Lume**: "lançador aéreo" (§6.4): CHASE em X com velocidade escalonada pelo estado do jogador (parado/andando/correndo) e teto de distância; ATTACK a cada ~2,1 s com PREPARE_ATTACK de ≈0,27 s (afundar). Ovos devem ter leve componente horizontal (intenção original).
+
+### 3.12 Thwomp (e Konk)
+
+- **OFICIAL** — Manual SMB3: "If Mario comes close, Thwomp will try to crush him. Since Thwomp is covered with thorns, Mario can't touch him." [M-SMB3]; manual SMW: "A nasty stone ghost that guards the castles and fortresses for the Koopas. If Mario comes close, Thwomp will try to crush him. The trouble is, if you don't pass it, you can't go on." [M-SMW]; cartão NSMBW: "These killer crushers don't have a sense of humor" [W-ThwompProf].
+- **SMB3 (DOCUMENTADO [D-SMB3])**: máquina de 3 estados. `Thwomp_WaitForPlayer`: exige todos os sprites **em tela** e `dx + $24 < $50` → **−36 ≤ dx < 44 px** (≈ ±40 px = 2,5 tiles, assimetria de 4 px porque o X foi centrado com +4). `Thwomp_FallToGround`: `vy += 4` unid./q (0,25 px/q² = **900 px/s²**) até `$70` = **7 px/q = 420 px/s**; ao tocar o chão: `Level_Vibration = $18` (tremor de 24 q), som `SND_LEVELBABOOM`, timer `$40` = **64 q (1,07 s)**. `Thwomp_ReturnToOrigin`: sobe a `−$10` = **1 px/q = 60 px/s** até o Y original e volta a esperar. Flags: `FIREIMMUNITY`; contato sempre fere (`Player_HitEnemy` sem pisão). Variantes deslizantes (esquerda/direita, vertical, diagonal). Derrota: estrela, martelo (Hammer Suit), estátua Tanooki [W-Thwomp].
+- **SMW (DOCUMENTADO [D-SMW])**: mesma máquina com **duas zonas**: `dx + $40 < $80` (≈ **±64 px**) muda a expressão para "olhando para baixo" (`$1528 = 1`) e `dx + $24 < $50` (≈ **±40 px**) dispara a queda com a expressão "bravo" (`$1528 = 2`); queda `vy += 4` até `$3E` = **3,875 px/q = 232 px/s** (metade do SMB3); impacto: `ScreenShakeTimer = $18`, `SFX_KAPOW`, espera `$40` = 64 q; subida `$F0` = −1 px/q. A wiki descreve: "peer down at the player's character when he approaches" e "enraged expression when falling" [W-Thwomp]. Pode-se dar spin jump em cima [W-Thwomp].
+- **NSMB/Wii/U**: "act as in SMB3"; Big Thwomps quebram blocos; NSMBW "can only be defeated by the Star power-up or a Simultaneous Ground Pound" [W-Thwomp]. Super Mario Maker: param na altura em que foram colocados [W-Thwomp]. Wonder: **Konk** "function very similarly to Thwomps, as their main form of attack is dropping downwards when the player is beneath them"; Konk azul "attack from below, flying upwards when the player is above them"; "Both colors are also capable of moving left and right"; "They can be stood on or touched by their sides without taking damage" [W-Konk].
+- **Telegraphing**: SMW em dois estágios (olhar a ±64 px, raiva a ±40 px); SMB3 só a queda; o tremor + som no impacto são o aviso de "pode passar agora" (1,07 s de janela).
+- **Para o Lume**: arquétipo "blindado" na variante **esmagador** (§6.5): IDLE → ALERT (|dx| < 120 px: muda a cara) → ATTACK/DROP (|dx| < 75 px; 880 px/s², teto 700 px/s) → RECOVER (tremor 0,4 s + espera 1,07 s) → RISE (112 px/s). Opção Konk: superfície segura em cima/laterais.
+
+### 3.13 Dry Bones
+
+- **OFICIAL** — Manual SMB3: "A mummified turtle? No matter how many times you jump on it, it'll come back to life." [M-SMB3]; cartão NSMBW: "These boney Koopas will pace back and forth endlessly" [W-DryProf].
+- **SMB3 (DOCUMENTADO [D-SMB3])**: anda a `$08` = 0,5 px/q (`$0A` contra esteira); `OAT_BOUNCEOFFOTHERS`, `FIREIMMUNITY`, `TAILATKIMMUNE`. **Pisão** (`ObjHit_DryBones`): `Var5 = 9`, `vx = 0`, rebote −4 px/q, som `SND_LEVELCRUMBLE` (o mesmo de quebrar tijolo, [W-DryBones]) e conta como abate. **Remontagem**: `Var5` decresce com `DryBones_ReassembleTimers = $10,$0A,$06,$06,$06,$06,$FF,$0A` → frame "desmontando" por 10 q, **pilha de ossos por 255 q (4,25 s)**, 4×6 q de "chacoalhar" (cabeça sobe e desce — `DryBones_HeadYOff`), 10 q, 16 q de levantar → total ≈ **315 q ≈ 5,25 s**, dos quais os últimos ≈50 q (0,8 s) são a animação-telegraph; ao levantar, **vira-se para o jogador** (`Object_CalcCoarseXDiff`). Derrota: estrela ou martelos [W-DryBones].
+- **SMW (DOCUMENTADO [D-SMW])**: 0,5 px/q; "turns around at ledges, like Red Koopa Troopas" [W-DryBones]; caído, o sprite **treme horizontalmente nos últimos $40 = 64 q** antes de levantar e então `FaceMario`; variantes jogam ossos; Bony Beetle usa a mesma rotina com ciclo de espinhos de `$A0` = 160 q. Derrota: estrela ou capa [W-DryBones].
+- **NSMB/Wii/U/2/Run/Wonder**: a cabeça se separa; se cai em lava/poço "takes longer to revive"; no Wii um Dry Bones em recuperação pode ser pisado; NSMBU "flash a red glare" ao remontar; derrota por Mega Mushroom, estrela, Blue Shell, POW, casco, Ice Ball; Wonder: tromba de elefante derrota permanentemente [W-DryBones].
+- **Para o Lume**: "blindado" na variante **esqueleto** (§6.5): PATROL (vira na borda) → stomp → STUNNED (4,4 s + 0,8 s de remontagem com tremor) → PATROL virado para o jogador; imune a fogo; só estrela/explosão matam.
+
+### 3.14 Cheep Cheep (e parentes aquáticos)
+
+- **OFICIAL** — Manual SMB1 (p. 13): "Usually found in the water, but also sprouts wings and flies so you have to be careful in the air too. Can't be killed from above while she's in the water. 200 PTS." [M-SMB1][W-CheepProf]; manual SMW (Rip Van Fish): "This little fellow is always taking a nap, but when Mario comes along, he wakes up, and sets off in hot pursuit." [M-SMW].
+- **SMB1 nadadora (DOCUMENTADO [D-SMB1])**: `SwimCCXMoveData = $40/$80` subtraídos da força horizontal por quadro → cinza **0,25 px/q = 15 px/s**, vermelha **0,5 px/q = 30 px/s**, sempre para a esquerda; onda vertical de **0,125 px/q (7,5 px/s)** invertendo a **±15 px** do Y original (período ≈ 8 s — ESTIMADO); os dois primeiros slots nadam reto; bit do LFSR decide se começa subindo ou descendo. Em área aquática **qualquer contato fere** (`AreaType == 0 → InjurePlayer`); fogo/estrela matam [D-SMB1]. Wiki: "swim towards the player character in either a straight line or a wavy pattern"; vermelhas "move moderately fast", cinzas "move slower" [W-Cheep].
+- **SMB1 voadora (DOCUMENTADO [D-SMB1])**: `InitFlyingCheepCheep` só com `FrenzyEnemyTimer` expirado (recarga aleatória `$10,$60,$20,$48` = 16–96 q), máx. 3 em tela (4 a partir de 5-3); `vy = $FB` = **−5 px/q = −300 px/s** com gravidade `$0D/256` = 0,0508 px/q² (183 px/s²) e teto 5 px/q → ápice ≈ 246 px = a tela inteira (ESTIMADO); `FlyCCXSpeedData` 0,31–0,875 px/q (19–52 px/s) sorteados e enviesados pela velocidade do jogador; pisável (200 pts); aparecem em 2-3, 7-3 e 8-4 [W-Cheep].
+- **SMB3 (DOCUMENTADO [D-SMB3])**: Spiny Cheep: nasce a ±8 unid. (0,5 px/q) **em direção ao jogador**, patrulha 96 px (origem −48…+48), onda vertical acelerando 1/16 a cada 8 q até ±0,5 px/q, inverte em paredes; `NOTSTOMPABLE`. "Chargin'" Cheep (Big Bertha): acelera 1/16 por q até 2 ou 6 px/q, inverte nos limites grossos 16/112, **salta** (`vy = −$28` = −2,5 px/q) quando a ≤ 6 unidades grossas (≈96 px) horizontais e ≤ 24 px verticais do jogador. Cheep de poça em poça: `vx = ±1 px/q`, `vy = −3,4/−4,4/−3,9 px/q`. Wiki: vermelhas "swim before leaping from the water to hit Mario" [W-Cheep].
+- **SMW (DOCUMENTADO [D-SMW])**: `InitFish` dá **±$10 = 1 px/q = 60 px/s** para o lado do jogador; variante vertical vira-se para Mario; fora da água, pulos aleatórios. **Rip Van Fish**: dorme até `−48 ≤ dx < 48` **e** `−48 ≤ dy < 48` (ou apito do Chargin' Chuck); perseguindo, acelera 1/16 a cada 8 q (≈28 px/s²) em X e Y até **±1 px/q (60 px/s)**; a perseguição dura um contador de `$FF` decrementado a cada 2 q → **≈510 q ≈ 8,5 s**, depois volta a dormir (a wiki descreve como "once Mario swims a far enough distance [...] goes back to sleep" [W-RipVan]); com estrela, as velocidades são **invertidas** (foge) [D-SMW][W-RipVan]. Fora da água cai a 1 px/q.
+- **NSMB/Wii/U/Wonder**: Deep Cheep "swim toward Mario or Luigi" e "give up pursuing [...] if they swim behind or far enough from them"; no Wii as Cheep Cheeps "can now collide with each other and can push one another"; Wonder: "can be defeated by stomping, 'unlike previous appearances'" debaixo d'água, mas ferem pelos lados/baixo [W-Cheep][W-DeepCheep].
+- **Para o Lume**: **a água do Lume é letal** ("Água, lava e quedas custam uma vida", README), então o arquétipo "aquático" (§6.8) tem duas formas: **saltador** (Cheep voadora: LEAP de baixo da tela, pisável) e, para uma eventual fase nadável, **nadador/perseguidor** (Rip Van Fish/Deep Cheep: SWIM ↔ CHASE 8,5 s).
+
+### 3.15 Chain Chomp
+
+- **OFICIAL** — Manual SMB3: "Although tied to a block by a chain, Chain Chomp is quite a tough enemy. Only invincible Mario is able to defeat him." [M-SMB3]; cartão NSMBW: "Chain Chomps act much like bad-tempered dogs on leashes." [W-ChompProf].
+- **SMB3 (DOCUMENTADO [D-SMB3])**: 3 estados. `ChainChomp_ChooseLunge`: com o timer zerado, calcula |dx|; se **< 64 px**, o índice é `|dx|/16` (0–3) e a investida usa `ChainChomp_ChaseXVel = $50,$30,$40,$20` (5, 3, 4, 2 px/q = 300, 180, 240, 120 px/s) e `ChaseYVel = −$20,−$40,−$30,−$50` (−2, −4, −3, −5 px/q) — **quanto mais perto o jogador, mais rasa e rápida a investida**; se ≥ 64 px, índice aleatório ("just sort of dart about randomly"); timer `$28` = **40 q (0,67 s)**; `Var1++` e, ao chegar a `$32` = **50 investidas**, `ChainChomp_BreakFree`. `ChainChomp_DoMove`: ao fim do timer, espera aleatória `$20–$3F` (32–63 q), zera `vy` e volta ao X do poste a ±0,5 px/q; a corrente (4 elos) limita X/Y (`Var10/Var11/Var12`). Flags: `FIREIMMUNITY`, `NOTSTOMPABLE`, `TAILATKIMMUNE`, `NOSHELLORSQUASH`. Solto, "hop forward along the ground" com `Chomp_JumpYVels = −4/−6 px/q` e `Chomp_XVels = ±3 px/q`. A wiki: "A Chain Chomp can break free after 160 seconds, though it sometimes takes longer" e "When about to break free, their chains begin flashing" — coerente com 50 × (0,67 + 0,5–1,05 s + investida) ≈ 150–170 s (ESTIMADO) [W-ChainChomp]. Derrota: estrela, casco, martelo, estátua [W-ChainChomp].
+- **NSMB/Wii/U/2**: "Their post can now be ground-pounded to release them and drop three coins" (DS: 3 golpes; U: "need only one ground-pound"); solto, destrói tijolos e pode ferir outros jogadores (Wii); NSMB2 "Only Invincible Mario or Gold Mario can defeat" [W-ChainChomp]. SMW: só em dados não usados [W-ChainChomp].
+- **Telegraphing**: pausa de 0,5–1 s entre investidas, "chomping" constante, corrente piscando antes de soltar [W-ChainChomp].
+- **Para o Lume**: variante **acorrentado** do arquétipo "blindado" (§6.5): IDLE (volta ao poste) → PREPARE_ATTACK (0,2 s) → ATTACK/LEAP (tabela por distância) → RECOVER (0,53–1,05 s); corrente de ≈90 px; opcional soltar-se após N investidas ou ao bater no poste 3×.
+
+---
+## 4. Tabela consolidada de parâmetros (DOCUMENTADO, derivados de análise de terceiros; conversões ESTIMADAS a 60 Hz)
+
+| Parâmetro | Título | Valor bruto | Conversão | Fonte |
+| --- | --- | --- | --- | --- |
+| Velocidade de andar (Goomba/Koopa/Buzzy/Spiny/Dry Bones) | SMB1, SMB3, SMW | `$08` (1/16 px/q) | 0,5 px/q = 30 px/s | [D-SMB1][D-SMB3][D-SMW] |
+| Andar "rápido" (2.ª volta SMB1; Koopa azul/amarelo, Bob-omb SMW) | SMB1, SMW | `$0C` | 0,75 px/q = 45 px/s | [D-SMB1][D-SMW] |
+| Hammer Bro "shimmy" | SMB1 / SMB3 | `±$04` / `±$06`, inverte a cada 64 q | 15 px/s / 22,5 px/s | [D-SMB1][D-SMB3] |
+| Casco chutado | SMB1 / SMW | `$30` / `$2E`,`$34` | 180 px/s / 172,5 e 195 px/s (PAL 206/232) | [D-SMB1][D-SMW] |
+| Bob-omb chutado | SMB3 | `±$28` (+½ vx do jogador) ; `vy = −$20` | 150 px/s ; −120 px/s | [D-SMB3] |
+| Bullet Bill | SMB1 / SMB3 / SMW | `$18` / `$18` (acel. 1 a cada 2 q) / `$20` | 90 / 90 / 120 px/s | [D-SMB1][D-SMB3][D-SMW] |
+| Zona morta do canhão | SMB1 | `dx + 40 < 80` | ±40 px (2,5 tiles) | [D-SMB1] |
+| Piranha: zona de "não sair" | SMB1 / SMB3 / SMW | `|dx| < $21` / `dx + $1B < $37` / idem | ±33 px / −27…+28 px / −27…+28 px | [D-SMB1][D-SMB3][D-SMW] |
+| Piranha: velocidade e percurso | SMB1 / SMB3 / SMW | 1 px a cada 2 q, 24 px / `$10` / `$10` | 30 px/s (0,8 s) / 60 px/s / 60 px/s (48 q) | idem |
+| Piranha: espera nos extremos | SMB1 / SMB3 / SMW | `$40` / `$30` (`$60` fogo) / `$20` dentro, `$20` fora | 1,07 s / 0,8 s (1,6 s) / 0,53 s | idem |
+| Thwomp: gatilho de queda | SMB3 / SMW | `dx + $24 < $50` | −36…+44 px (≈ ±40 px) | [D-SMB3][D-SMW] |
+| Thwomp: gatilho de "olhar" | SMW | `dx + $40 < $80` | ≈ ±64 px | [D-SMW] |
+| Thwomp: aceleração / teto de queda | SMB3 / SMW | +4 unid./q ; `$70` / `$3E` | 900 px/s² ; 420 / 232 px/s | [D-SMB3][D-SMW] |
+| Thwomp: tremor, espera, subida | SMB3 / SMW | `$18` q, `$40` q, `−$10` | 0,4 s, 1,07 s, 60 px/s | [D-SMB3][D-SMW] |
+| Boo: atraso para perseguir | SMB3 | `$14` q sem ser olhado | 0,33 s | [D-SMB3] |
+| Boo: aceleração / máx. | SMB3 / SMW | 1 unid./q, `$10` / 1 unid. por 8 q, `$08` | 225 px/s², 60 px/s / 28 px/s², 30 px/s | [D-SMB3][D-SMW] |
+| Boo: decisão / giro | SMW | a cada `$20` q ; giro `$1F` q | 0,53 s ; 0,52 s | [D-SMW] |
+| Lakitu: velocidade-base por estado do jogador | SMB1 | 21 / 48 / 64 unid. − |dx|/4 (teto 60 px) | 79 / 180 / 240 px/s | [D-SMB1] |
+| Lakitu: acel. e máx. | SMB3 | 1 unid. a cada 2 q até `$20` | 112 px/s², 120 px/s | [D-SMB3] |
+| Lakitu: intervalo de lançamento / telegraph | SMB1 / SMB3 | 128 q / 16 q ; 64 q (128 em rampas) / ~15 q | 2,13 s / 0,27 s ; 1,07 s / 0,25 s | [D-SMB1][D-SMB3] |
+| Lakitu: reaparecimento | SMB1 | 7 × 128 q | ≈ 15 s | [D-SMB1] |
+| Spiny egg: `vy`, gravidade | SMB1 | `−3 px/q`, `$20/256`, teto 3 px/q | −180 px/s, 450 px/s² | [D-SMB1] |
+| Hammer Bro: entre saltos / `vy` | SMB1 e SMB3 | aleatório `$C0–$FF` q ; `−6` ou `−3 px/q` | 3,2–4,25 s ; −360 / −180 px/s | [D-SMB1][D-SMB3] |
+| Hammer Bro: entre martelos | SMB1 / SMB3 | `$30` (`$1C` difícil) / ≈37 q chão, ≈73 q ar | 0,8 s (0,47 s) / 0,6 s, 1,2 s | [D-SMB1][D-SMB3] |
+| Martelo: `vx`, `vy`, gravidade, teto | SMB1 | `$10`, `$FE`, `$10/256`, 4 px/q | 60 px/s, −120 px/s, 225 px/s², 240 px/s | [D-SMB1] |
+| Hammer Bro: começa a avançar | SMB1 | `$80` (`$50`) ticks × 21 q | 44,8 s (28 s); só se jogador à esquerda | [D-SMB1] |
+| Casco pisado: revive | SMB1 | `$10` (`$0B`) ticks × 21 q ; pernas quando < 5 ticks | 5,3–5,6 s (3,9 s) ; ≈1,5 s antes | [D-SMB1] |
+| Goomba achatado | SMB1 | timer de `$10` até `$0E` | ≈0,35–0,7 s | [D-SMB1] |
+| Atordoamento (Galoomba/Buzzy/Mechakoopa/Bob-omb) | SMW | `$FF` q (acelera animação < `$30`, pulinho em 8) | 4,25 s (telegraph 0,8 s) | [D-SMW] |
+| Dry Bones: caído / remontagem | SMB3 / SMW | ≈315 q (255 de pilha + ≈50 de animação) / tremor nos últimos `$40` q | 5,25 s (0,8 s) / 1,07 s de tremor | [D-SMB3][D-SMW] |
+| Bob-omb: pavio / piscar / explosão | SMB3 / SMW | `$FF` q / < `$40` / `$28` q ; `$40` q | 4,25 s / 1,07 s / 0,67 s ; 1,07 s | [D-SMB3][D-SMW] |
+| Chain Chomp: zona de mira / investida / espera / soltar | SMB3 | 64 px ; `$28` q ; `$20–$3F` q ; 50 investidas | 0,67 s ; 0,53–1,05 s ; ≈150–170 s | [D-SMB3] |
+| Chain Chomp: investida (vx, vy) por faixa de 16 px | SMB3 | (5,−2) (3,−4) (4,−3) (2,−5) px/q | (300,−120) (180,−240) (240,−180) (120,−300) px/s | [D-SMB3] |
+| Cheep nadadora | SMB1 / SMW | `$40`/`$80` de força ; onda 0,125 px/q ±15 px / `$10` | 15 / 30 px/s ; 7,5 px/s / 60 px/s | [D-SMB1][D-SMW] |
+| Cheep voadora | SMB1 | `vy = −5 px/q`, g `$0D/256`, vx 5–14 unid., 16–96 q, máx. 3 | −300 px/s, 183 px/s², 19–52 px/s | [D-SMB1] |
+| Rip Van Fish: zona de despertar / acel. / máx. / duração | SMW | ±48 px (X e Y) / 1 unid. por 8 q / `$10` / `$FF` a cada 2 q | 90 px → ; 28 px/s² ; 60 px/s ; 8,5 s | [D-SMW] |
+| Chargin' Cheep: zona de salto | SMB3 | 6 unid. grossas (16 px) horiz., 24 px vert.; `vy = −$28` | ≈96 px ; −150 px/s | [D-SMB3] |
+| Paratroopa verde pulante | SMB1 / SMB3 | `vy = −3 px/q` (SMB3: −1,5 na água) | −180 px/s (−90 na água) | [D-SMB1][D-SMB3] |
+| Rebote do pisão | SMB1 / SMB3 | `−4`/`−3 px/q` / `−$40`,`−$30` | −240/−180 px/s / −240, −180 px/s | [D-SMB1][D-SMB3] |
+| Pop-up ao ser batido por baixo/casco | SMB1 | `vy = −3 px/q`, `vx = ±1 px/q` | −180 px/s, ±60 px/s | [D-SMB1] |
+
+---
+
+## 5. Padrões transversais
+
+### 5.1 Seis tipos de percepção (todos sem linha de visão)
+
+| Tipo | Quem usa | Como funciona | Rótulo |
+| --- | --- | --- | --- |
+| **Nenhuma** | Goomba, Koopa, Buzzy, Shy Guy, Cheep nadadora, Spiny | só paredes, bordas e outros inimigos mudam a direção | DOCUMENTADO [D-SMB1] |
+| **Janela horizontal fixa** | Piranha (±33/±27 px), Bill Blaster (±40 px), Thwomp (±40 px; SMW +±64 px), Chain Chomp (64 px), Hoppycat ("gets in range") | comparação de `|dx|` com uma constante; a janela vertical raramente existe (Thwomp exige só "em tela") | DOCUMENTADO [D-SMB1][D-SMB3][D-SMW] |
+| **Janela X e Y** | Rip Van Fish (±48 px nos dois eixos), Chargin' Cheep (96 px × 24 px), Konk (jogador "beneath") | caixa em torno do inimigo | DOCUMENTADO [D-SMW][D-SMB3]; OBSERVADO [W-Konk] |
+| **Direção do olhar do jogador** | Boo (e Big Boo); negado em Boo Buddies/NSMB2 | compara `sign(dx)` com `player.facing`; atraso de 20 q (SMB3) ou decisão a cada 32 q (SMW) | DOCUMENTADO [D-SMB3][D-SMW] |
+| **Lado do jogador** | Hammer Bro, Bullet Bill, Venus, Dry Bones ao reviver, Koopas ao pousar, Bob-omb ao nascer, Spiny Cheep ao nascer | `EnemyFacePlayer`/`Level_ObjCalcXDiffs`: vira-se para o jogador em momentos discretos (nascer, pousar, reviver, atirar) | DOCUMENTADO [D-SMB1][D-SMB3] |
+| **Estado do jogador** | Lakitu (velocidade escalonada por `Player_X_Speed` e rolagem), Cheep voadora (vx enviesado pela velocidade do jogador), Hoppycat (pula quando o jogador pula), Rip Van Fish (foge com estrela) | lê a entrada/velocidade do jogador, não a posição | DOCUMENTADO [D-SMB1][D-SMW]; OBSERVADO [W-Hoppycat] |
+
+Consequência de design: as "inteligências" dos Mario 2D são **previsíveis e simétricas** — a mesma distância produz sempre a mesma reação — e por isso aprendíveis. O `PerceptionProfile` atual do Lume (linha de visão amostrada, campo de visão atrás, tempo de reação e esquecimento) é mais rico do que qualquer inimigo clássico; a recomendação (§7) é manter a infraestrutura, mas configurar os perfis clássicos com `needs_line_of_sight=False`, `field_of_view_behind=∞` e `reaction_time` ∈ {0; 0,33 s}.
+
+### 5.2 Catálogo de telegraphing (o que avisa, quanto antes)
+
+| Inimigo | Sinal | Antecedência | Fonte |
+| --- | --- | --- | --- |
+| Koopa pisado | pernas saem do casco | ≈1,5–1,75 s (SMB1) | [D-SMB1][W-Koopa] |
+| Buzzy pisado | nenhum (SMB1); chacoalha (SMB3+) | — / ~0,5 s (OBSERVADO) | [W-Buzzy] |
+| Galoomba tombado | animação 2× mais rápida, pulinho | 0,8 s | [D-SMW] |
+| Lakitu | afunda na nuvem | 0,27 s (SMB1), ≈0,25 s (SMB3) | [D-SMB1][D-SMB3] |
+| Thwomp | olhar para baixo (±64 px), cara brava (±40 px), tremor + som no impacto | ~0,1–0,5 s dependendo da aproximação; janela de 1,07 s | [D-SMW][D-SMB3] |
+| Bob-omb | piscar | 1,07 s | [D-SMB3] |
+| Dry Bones | ossos chacoalham / cabeça sobe e desce / "red glare" (NSMBU) | 0,8 s (SMB3), 1,07 s (SMW) | [D-SMB3][D-SMW][W-DryBones] |
+| Chain Chomp | pausa + mordidas; corrente pisca antes de soltar | 0,53–1,05 s por investida | [D-SMB3][W-ChainChomp] |
+| Piranha | subida lenta visível; som de mordida (NSMB) | 0,8 s | [D-SMB1][W-Piranha] |
+| Bill Blaster | som "blast" + flash de 10 q; canhão "expande" (NSMBW) | ≈0,17 s | [D-SMB1][W-BillBlaster] |
+| Hammer Bro | braço levantado no quadro do arremesso | 0 s (SMB1) | [D-SMB1] |
+| Boo | rosto coberto ↔ aberto; giro de 31 q (SMW) | 0,33–0,5 s | [D-SMB3][D-SMW] |
+| Casco em movimento | som de ricochete ("If you hear the sound of a ricochet, jump right away") | o tempo de o casco voltar | [M-SMB1] |
+| Goombas (Wonder) | olhar, pânico, bocejo/sono; mordida no momento do dano | contínuo | [W-Goomba][ATD-2] |
+
+### 5.3 Interações entre inimigos e com o cenário
+
+- **Casco como projétil universal**: SMB1 mata todo inimigo tocado (cadeia 500→8000), quica em paredes, mata até Bullet Bills de fora da tela; SMB3 mata Boos e Chain Chomps; SMW cascos de Koopa amarelo invencíveis, Koopa azul chuta cascos, Paratroopa amarelo pula cascos [D-SMB1][W-Boo][W-ChainChomp][W-Koopa][W-Para].
+- **Trânsito**: inimigos se viram ao colidir (SMB1 `EnemyTurnAround`; SMB3 `OAT_BOUNCEOFFOTHERS` em Buzzy/Dry Bones; NSMBW Cheep Cheeps "push one another") [D-SMB1][D-SMB3][W-Cheep].
+- **Blocos**: bater no bloco sob o inimigo mata Goomba e vira Koopas/Buzzies de cabeça para baixo (SMB1); explosões de Bob-omb quebram tijolos a partir de NSMB (não em SMB3); Thwomps grandes quebram blocos (NSMB); Chain Chomp solto quebra tijolos (NSMBW) [D-SMB1][W-Bobomb][W-Thwomp][W-ChainChomp].
+- **Imunidades cruzadas**: fogo não afeta Buzzy (SMB1), nem Boo/Thwomp/Dry Bones/Bob-omb/Bullet Bill/Chain Chomp (SMB3); fogo **acende** o Bob-omb em NSMBW; gelo congela quase tudo em NSMBW (Spiny fica congelado até quebrar) [D-SMB1][D-SMB3][W-Bobomb][W-Spiny].
+- **Pontuação como reforço**: 100 (Goomba) → 200 (padrão) → 400 (asas) → 800 (Lakitu) → 1000 (Hammer Bro, casco em cadeia) [D-SMB1].
+
+### 5.4 Ambiente
+
+- **Água**: em SMB1 qualquer toque em área aquática fere (não há pisão); Spiny vira ovo na água (NSMB); Paratroopa pulante salta a −1,5 px/q na água (SMB3); Lakitu derrotado "na água" não acelera a queda (SMB3); Rip Van Fish fora da água cai a 1 px/q (SMW) [D-SMB1][W-Spiny][D-SMB3][D-SMW].
+- **Lava/fogo**: Bob-omb explode na hora (NSMBW); Buzzy nada em lava (Wonder); Dry Bones não é afetado por lava (NSMBU) [W-Bobomb][W-Buzzy][W-DryBones].
+- **Gelo**: SMW halves a desaceleração de Koopas sem casco em fases escorregadias; NSMBW congela inimigos em blocos de gelo carregáveis [D-SMW][W-Piranha].
+- **Esteiras/rampas**: SMB3 ajusta a velocidade dos terrestres contra esteiras (0,375/0,3125 px/q; Dry Bones 0,625) e corrige o "virar na borda" dos Koopas vermelhos ao descer rampas [D-SMB3].
+- **Tela**: Thwomp (SMB3) e Boo só agem com os sprites em tela; Lakitu (SMB3) renasce 2 telas atrás; Bullet Bills de fora da tela nascem na borda direita [D-SMB3][D-SMB1].
+
+---
